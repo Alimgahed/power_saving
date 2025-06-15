@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:power_saving/controller/auth/login.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 

@@ -5,8 +5,8 @@ import 'package:power_saving/model/Counter_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 
 class AddElectricMeterScreen extends StatelessWidget {
-  const AddElectricMeterScreen({super.key});
-
+   AddElectricMeterScreen({super.key});
+     final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +44,7 @@ class AddElectricMeterScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Form(
+                child: Form(key: _globalKey,
                   child: Column(
                     children: [
                       const Icon(Icons.electric_meter, size: 64, color: Colors.blue),
@@ -59,12 +59,14 @@ class AddElectricMeterScreen extends StatelessWidget {
                         label: 'رقم الحساب',
                         hintText: 'أدخل رقم الحساب',
                         icon: Icons.numbers,
+                        allowOnlyDigits: true,
                         controller: controller.Counter_number,
                       ),
                       const SizedBox(height: 16),
 
                       CustomTextFormField(
                         label: 'معرّف العداد',
+                        allowOnlyDigits: true,
                         hintText: 'أدخل معرف العداد',
                         icon: Icons.confirmation_number,
                         controller: controller.meterId,
@@ -94,6 +96,7 @@ class AddElectricMeterScreen extends StatelessWidget {
                         label: 'القراءة النهائية',
                         hintText: 'أدخل القراءة النهائية',
                         icon: Icons.speed,
+                        allowOnlyDigits: true,
                         controller: controller.finalReading,
                         keyboardType: TextInputType.number,
                       ),
@@ -103,6 +106,7 @@ class AddElectricMeterScreen extends StatelessWidget {
                         label: 'معامل العداد',
                         hintText: 'أدخل معامل العداد',
                         icon: Icons.straighten,
+                        allowOnlyDigits: true,
                         controller: controller.meterFactor,
                         keyboardType: TextInputType.number,
                       ),
@@ -112,8 +116,10 @@ class AddElectricMeterScreen extends StatelessWidget {
                         width: double.infinity,
                         child: ElevatedButton.icon(
                           onPressed: () async {
-                           
-                              await controller.addCounter(counter: ElectricMeter(accountNumber:controller.Counter_number.text, finalReading:int.parse( controller.finalReading.text), meterFactor:int.parse(controller.meterFactor.text), meterId:controller.meterId.text, voltageid: controller.voltage!));
+                           if (_globalKey.currentState!.validate()) {
+                                                          await controller.addCounter(counter: ElectricMeter(accountNumber:controller.Counter_number.text, finalReading:int.parse( controller.finalReading.text), meterFactor:int.parse(controller.meterFactor.text), meterId:controller.meterId.text, voltageid: controller.voltage!));
+
+                           }
                             
                           },
                           icon: const Icon(Icons.save),

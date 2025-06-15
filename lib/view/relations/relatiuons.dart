@@ -6,7 +6,7 @@ import 'package:power_saving/controller/relations/relation.dart';
 
 
 class RelatiuonsSCREAN extends StatelessWidget {
-  RelatiuonsSCREAN({super.key});
+  const RelatiuonsSCREAN({super.key});
 
  
   @override

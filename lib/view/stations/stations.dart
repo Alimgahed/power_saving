@@ -7,7 +7,7 @@ import 'package:power_saving/controller/Stations/Stations.dart';
 
 
 class StationsScreen extends StatelessWidget {
-  StationsScreen({super.key});
+  const StationsScreen({super.key});
 
  
   @override

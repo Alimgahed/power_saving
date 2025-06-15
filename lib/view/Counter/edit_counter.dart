@@ -7,7 +7,8 @@ import 'package:power_saving/my_widget/sharable.dart';
 class editCounter extends StatelessWidget {
    editCounter({super.key});
 
-    final ElectricMeter meter = Get.arguments["meter"]; // ✅ Correct object retrieval
+    final ElectricMeter meter = Get.arguments["meter"]; 
+  final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   @override
 
   Widget build(BuildContext context) {
@@ -59,7 +60,7 @@ class editCounter extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Form(
+                child: Form(key: _globalKey,
                   child: Column(
                     children: [
                       const Icon(Icons.electric_meter, size: 64, color: Colors.blue),
@@ -72,6 +73,7 @@ class editCounter extends StatelessWidget {
 
                       CustomTextFormField(
                         label: 'رقم الحساب',
+                        allowOnlyDigits: true,
                         hintText: 'أدخل رقم الحساب',
                         icon: Icons.numbers,
                         controller: controller.Counter_number,
@@ -80,6 +82,7 @@ class editCounter extends StatelessWidget {
 
                       CustomTextFormField(
                         label: 'معرّف العداد',
+                        allowOnlyDigits: true,
                         hintText: 'أدخل معرف العداد',
                         icon: Icons.confirmation_number,
                         controller: controller.meterId,
@@ -109,6 +112,7 @@ class editCounter extends StatelessWidget {
                         label: 'القراءة النهائية',
                         hintText: 'أدخل القراءة النهائية',
                         icon: Icons.speed,
+                        allowOnlyDigits: true,
                         controller: controller.finalReading,
                         keyboardType: TextInputType.number,
                       ),
@@ -118,6 +122,7 @@ class editCounter extends StatelessWidget {
                         label: 'معامل العداد',
                         hintText: 'أدخل معامل العداد',
                         icon: Icons.straighten,
+                        allowOnlyDigits: true,
                         controller: controller.meterFactor,
                         keyboardType: TextInputType.number,
                       ),
@@ -127,9 +132,11 @@ class editCounter extends StatelessWidget {
                         width: double.infinity,
                         child: ElevatedButton.icon(
                           onPressed: () async {
-                           
+                            if (_globalKey.currentState!.validate()) {
                               await controller.editCounter(serial: controller.Counter_number.text,
                                  counter: ElectricMeter( finalReading:int.parse( controller.finalReading.text), meterFactor:int.parse(controller.meterFactor.text), meterId:controller.meterId.text, voltageid: controller.voltage!));
+                            }
+                              
                             
                           },
                           icon: const Icon(Icons.save),

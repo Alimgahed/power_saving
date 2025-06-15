@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:power_saving/controller/Stations/Stations.dart';
+import 'package:power_saving/controller/relations/relation.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 
 class AddStationScreen extends StatelessWidget {
@@ -9,6 +9,7 @@ class AddStationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: const Color(0xFFEFF6FC),
       appBar: AppBar(
@@ -19,16 +20,16 @@ class AddStationScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
            
-              Get.offNamed('/Stations');
+              Get.offNamed('/Relatiuons');
             
           },
         ),
-        title: const Text("إضافة محطة جديدة", style: TextStyle(fontSize: 20)),
+        title: const Text("إضافة ربط جديد", style: TextStyle(fontSize: 20)),
       ),
       body: Center(
         child: SingleChildScrollView(
-          child: GetBuilder<AddStationController>(
-            init: AddStationController(),
+          child: GetBuilder<Relation>(
+            init: Relation(),
             builder: (controller) {
               return Container(
                 constraints: const BoxConstraints(maxWidth: 500),
@@ -50,53 +51,22 @@ class AddStationScreen extends StatelessWidget {
                       const Icon(Icons.add_location_alt, size: 64, color: Colors.blue),
                       const SizedBox(height: 16),
                       const Text(
-                        'إدخال بيانات المحطة',
+                        'إدخال بيانات الربط',
                         style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 32),
 
-                      CustomTextFormField(
-                        label: 'اسم المحطة',
-                        hintText: 'أدخل اسم المحطة',
-                        icon: Icons.location_city,
-                        controller: controller.name,
-                      ),
-                      const SizedBox(height: 16),
-
-                      CustomDropdownFormField<String>(
-                        items: [
-                          const DropdownMenuItem(value: "مياة", child: Text("مياة")),
-                          const DropdownMenuItem(value: "صرف", child: Text("صرف")),
-                        ],
-                        onChanged: (val) {
-                          controller.stationTypeId = val!;
-                        },
-                        labelText: 'نوع المحطة',
-                        hintText: 'اختر نوع المحطة',
-                        prefixIcon: Icons.category,
-                        validator: (val) => val == null ? 'الرجاء اختيار نوع المحطة' : null,
-                      ),
-
-                      const SizedBox(height: 16),
-                      CustomTextFormField(
-                        label: 'الكفاءة التصميمية',
-                        hintText: 'ادخل كفاءة المحطه',
-                        icon: Icons.water,
-                        allowOnlyDigits: true,
-                        controller: controller.capacity,
-                        keyboardType: TextInputType.number,
-                      ),
-                      const SizedBox(height: 16),
+                    
 
                       CustomDropdownFormField<int>(
-                        items: controller.branchList.map((branch) {
+                        items: controller.stationlist.map((branch) {
                           return DropdownMenuItem<int>(
                             value: branch.branchId,
                             child: Text(branch.branchName),
                           );
                         }).toList(),
                         onChanged: (value) {
-                          controller.branchId = value;
+                          controller.stationid = value;
                         },
                         labelText: 'الفرع',
                         hintText: 'اختر الفرع',
@@ -105,20 +75,39 @@ class AddStationScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 32),
 
-                      CustomDropdownFormField<int>(
-                        items: controller.waterSourceList.map((source) {
-                          return DropdownMenuItem<int>(
-                            value: source.waterSourceId,
-                            child: Text(source.waterSourceName),
+                      CustomDropdownFormField<String>(
+                        items: controller.electricMeterList.map((source) {
+                          return DropdownMenuItem<String>(
+                            value: source.accountNumber,
+                            child: Text(source.accountNumber??""),
                           );
                         }).toList(),
                         onChanged: (value) {
-                          controller.sourceId = value;
+                          controller.counterid = value;
                         },
-                        labelText: 'مصدر المياه',
-                        hintText: 'اختر مصدر المياه',
+                        labelText: 'العداد',
+                        hintText: 'اختر  العداد',
                         prefixIcon: Icons.water_drop,
-                        validator: (val) => val == null ? 'الرجاء اختيار مصدر المياه' : null,
+                        validator: (val) => val == null ? 'الرجاء اختيار  العداد' : null,
+                      ),
+
+                       const SizedBox(height: 32),
+
+                      CustomDropdownFormField<int>(
+                        items: controller.technologylist.map((source)
+                         {
+                          return DropdownMenuItem<int>(
+                            value: source.technologyId,
+                            child: Text(source.technologyName),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          controller.techid = value;
+                        },
+                        labelText: 'التكونولوجيا',
+                        hintText: 'اختر التكونولوجيا',
+                        prefixIcon: Icons.water_drop,
+                        validator: (val) => val == null ? 'الرجاء اختيار  التكونولوجيا' : null,
                       ),
 
                       const SizedBox(height: 32),
@@ -127,16 +116,15 @@ class AddStationScreen extends StatelessWidget {
                         width: double.infinity,
                         child: ElevatedButton.icon(
                           onPressed: () async{
-                                                           if (_globalKey.currentState!.validate()){
-                                                                                      await  controller.addStation(name: controller.name.text, branchId: controller.branchId!, sourceId: controller.sourceId!, typeId: controller.stationTypeId!, capacity:int.parse(controller.capacity.text) );
-
-
-                                                           }
-
+                               if (_globalKey.currentState!.validate())
+                               {print(
+                                "a;i"
+                               );}
+                          // await  controller.addStation(name: controller.name.text, branchId: controller.branchId!, sourceId: controller.sourceId!, typeId: controller.stationTypeId!, capacity:int.parse(controller.capacity.text) );
                         
                           },
                           icon: const Icon(Icons.save),
-                          label: const Text('حفظ المحطة'),
+                          label: const Text('حفظ '),
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             backgroundColor: Colors.blue,

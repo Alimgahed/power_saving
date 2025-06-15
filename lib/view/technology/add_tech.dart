@@ -5,7 +5,9 @@ import 'package:power_saving/model/tech_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 
 class AddTech extends StatelessWidget {
-  const AddTech({super.key});
+   AddTech({super.key});
+     final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,7 @@ class AddTech extends StatelessWidget {
                   ],
                 ),
                 child: Form(
+                  key: _globalKey,
                   
                   child: Column(
                     children: [
@@ -63,6 +66,7 @@ class AddTech extends StatelessWidget {
                    
                      
                       CustomTextFormField(controller: controller.power,
+                      allowOnlyDigits: true,
                         label: 'نسبة الكهرباء', hintText: 'ادخل نسبة الكهرباء', icon: Icons.electric_bolt_outlined,),
 
                     
@@ -70,7 +74,10 @@ class AddTech extends StatelessWidget {
                         width: double.infinity,
                         child: ElevatedButton.icon(
                           onPressed: () async{
-                            controller.addtech(tech: TechnologyModel(powerPerWater:double.parse( controller.power.text),technologyName:controller.name.text ));
+                            if (_globalKey.currentState!.validate()) {
+                                                         controller.addtech(tech: TechnologyModel(powerPerWater:double.parse( controller.power.text),technologyName:controller.name.text ));
+ 
+                            }
                         // controller.addtech(tech: TechnologyModel(  powerPerWater: double.parse(controller.power.text), technologyName: controller.name.text));
                           },
                           icon: const Icon(Icons.save),

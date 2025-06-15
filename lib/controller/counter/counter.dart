@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/Counter_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 
@@ -75,6 +76,7 @@ Future<void> all_counter() async {
       for (var i in responseData) {
         ElectricMeter meter = ElectricMeter.fromJson(i);
         allcounter.add(meter);
+        conters= allcounter; // Update the global list
         update();
       }
     }

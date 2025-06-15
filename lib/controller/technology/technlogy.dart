@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/tech_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:http/http.dart' as http;
@@ -46,6 +47,7 @@ class TechnlogyController extends GetxController {
         for (var i in responseData) {
           TechnologyModel tech = TechnologyModel.fromJson(i);
           all_technology.add(tech);
+          technologies= all_technology; // Update the global list
           update();
         }
       } else {

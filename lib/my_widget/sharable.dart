@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class CustomTextFormField extends StatelessWidget {
@@ -8,16 +9,18 @@ class CustomTextFormField extends StatelessWidget {
   final TextEditingController? controller;
   final TextInputType keyboardType;
   final bool obscureText;
+  final bool allowOnlyDigits;
 
   const CustomTextFormField({
-    Key? key,
+    super.key,
     required this.label,
     required this.hintText,
-     this.icon,
+    this.allowOnlyDigits = false,
+    this.icon,
     this.controller,
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +28,17 @@ class CustomTextFormField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 12.0),
       child: TextFormField(
         controller: controller,
-        keyboardType: keyboardType,
-        obscureText: obscureText,
+ keyboardType: allowOnlyDigits ? TextInputType.number : TextInputType.text,
+    inputFormatters:
+        allowOnlyDigits
+            ? <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(
+                RegExp(
+                  r'^\d*\.?\d*$',
+                ), // Allow digits and optional decimal point
+              ),
+            ]
+            : null, obscureText: obscureText,
         style: const TextStyle(fontSize: 16),
         decoration: InputDecoration(
           labelText: label,

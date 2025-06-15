@@ -7,7 +7,7 @@ import 'package:power_saving/controller/technology/technlogy.dart';
 
 
 class Technology extends StatelessWidget {
-  Technology({super.key});
+  const Technology({super.key});
 
  
   @override

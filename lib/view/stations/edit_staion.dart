@@ -6,6 +6,7 @@ import 'package:power_saving/my_widget/sharable.dart';
 
 class EditStationsScreen extends StatelessWidget {
   EditStationsScreen({super.key});
+  final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
 
   final Station station = Get.arguments["Stations"]; // ✅ Correct object retrieval
 
@@ -55,7 +56,7 @@ class EditStationsScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Form(
+                child: Form(key: _globalKey,
                   child: Column(
                     children: [
                       const Icon(Icons.add_location_alt, size: 64, color: Colors.blue),
@@ -93,6 +94,7 @@ class EditStationsScreen extends StatelessWidget {
                       CustomTextFormField(
                         label: 'الكفاءة التصميمية',
                         hintText: 'ادخل كفاءة المحطة',
+                        allowOnlyDigits: true,
                         icon: Icons.water,
                         controller: controller.capacity,
                         keyboardType: TextInputType.number,
@@ -140,7 +142,8 @@ class EditStationsScreen extends StatelessWidget {
                         width: double.infinity,
                         child: ElevatedButton.icon(
                           onPressed: () async {
-                            await controller.edit_Stations(
+                            if (_globalKey.currentState!.validate()) {
+                                await controller.edit_Stations(
                               
                               name: controller.name.text,
                               branchId: station.branchid!,
@@ -148,6 +151,8 @@ class EditStationsScreen extends StatelessWidget {
                               typeId: controller.stationTypeId!,
                               capacity: int.parse(controller.capacity.text), Stations_id: station.stationId!,
                             );
+                            }
+                          
                           },
                           icon: const Icon(Icons.save),
                           label: const Text('حفظ المحطة'),
