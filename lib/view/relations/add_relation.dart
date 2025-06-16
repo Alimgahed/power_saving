@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/controller/relations/relation.dart';
+import 'package:power_saving/model/relations.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 
-class AddStationScreen extends StatelessWidget {
-   AddStationScreen({super.key});
+class AddRelation extends StatelessWidget {
+  AddRelation({super.key});
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: const Color(0xFFEFF6FC),
       appBar: AppBar(
@@ -17,19 +17,17 @@ class AddStationScreen extends StatelessWidget {
         foregroundColor: Colors.white,
         automaticallyImplyLeading: false,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-           
-              Get.offNamed('/Relatiuons');
-            
+            Get.offNamed('/Relations');
           },
         ),
         title: const Text("إضافة ربط جديد", style: TextStyle(fontSize: 20)),
       ),
       body: Center(
         child: SingleChildScrollView(
-          child: GetBuilder<Relation>(
-            init: Relation(),
+          child: GetBuilder<addrelationcontroller>(
+            init: addrelationcontroller(),
             builder: (controller) {
               return Container(
                 constraints: const BoxConstraints(maxWidth: 500),
@@ -45,69 +43,85 @@ class AddStationScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Form(key: _globalKey,
+                child: Form(
+                  key: _globalKey,
                   child: Column(
                     children: [
-                      const Icon(Icons.add_location_alt, size: 64, color: Colors.blue),
+                      const Icon(
+                        Icons.add_location_alt,
+                        size: 64,
+                        color: Colors.blue,
+                      ),
                       const SizedBox(height: 16),
                       const Text(
                         'إدخال بيانات الربط',
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const SizedBox(height: 32),
 
-                    
-
                       CustomDropdownFormField<int>(
-                        items: controller.stationlist.map((branch) {
-                          return DropdownMenuItem<int>(
-                            value: branch.branchId,
-                            child: Text(branch.branchName),
-                          );
-                        }).toList(),
+                        items:
+                            controller.stationlist.map((branch) {
+                              return DropdownMenuItem<int>(
+                                value: branch.branchId,
+                                child: Text(branch.branchName),
+                              );
+                            }).toList(),
                         onChanged: (value) {
                           controller.stationid = value;
                         },
-                        labelText: 'الفرع',
-                        hintText: 'اختر الفرع',
+                        labelText: 'المحطة',
+                        hintText: 'اختر المحطة',
                         prefixIcon: Icons.map,
-                        validator: (val) => val == null ? 'الرجاء اختيار الفرع' : null,
+                        validator:
+                            (val) =>
+                                val == null ? 'الرجاء اختيار المحطة' : null,
                       ),
                       const SizedBox(height: 32),
 
                       CustomDropdownFormField<String>(
-                        items: controller.electricMeterList.map((source) {
-                          return DropdownMenuItem<String>(
-                            value: source.accountNumber,
-                            child: Text(source.accountNumber??""),
-                          );
-                        }).toList(),
+                        items:
+                            controller.electricMeterList.map((source) {
+                              return DropdownMenuItem<String>(
+                                value: source.accountNumber,
+                                child: Text(source.accountNumber ?? ""),
+                              );
+                            }).toList(),
                         onChanged: (value) {
                           controller.counterid = value;
                         },
                         labelText: 'العداد',
                         hintText: 'اختر  العداد',
                         prefixIcon: Icons.water_drop,
-                        validator: (val) => val == null ? 'الرجاء اختيار  العداد' : null,
+                        validator:
+                            (val) =>
+                                val == null ? 'الرجاء اختيار  العداد' : null,
                       ),
 
-                       const SizedBox(height: 32),
+                      const SizedBox(height: 32),
 
                       CustomDropdownFormField<int>(
-                        items: controller.technologylist.map((source)
-                         {
-                          return DropdownMenuItem<int>(
-                            value: source.technologyId,
-                            child: Text(source.technologyName),
-                          );
-                        }).toList(),
+                        items:
+                            controller.technologylist.map((source) {
+                              return DropdownMenuItem<int>(
+                                value: source.technologyId,
+                                child: Text(source.technologyName),
+                              );
+                            }).toList(),
                         onChanged: (value) {
                           controller.techid = value;
                         },
                         labelText: 'التكونولوجيا',
                         hintText: 'اختر التكونولوجيا',
                         prefixIcon: Icons.water_drop,
-                        validator: (val) => val == null ? 'الرجاء اختيار  التكونولوجيا' : null,
+                        validator:
+                            (val) =>
+                                val == null
+                                    ? 'الرجاء اختيار  التكونولوجيا'
+                                    : null,
                       ),
 
                       const SizedBox(height: 32),
@@ -115,13 +129,17 @@ class AddStationScreen extends StatelessWidget {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton.icon(
-                          onPressed: () async{
-                               if (_globalKey.currentState!.validate())
-                               {print(
-                                "a;i"
-                               );}
-                          // await  controller.addStation(name: controller.name.text, branchId: controller.branchId!, sourceId: controller.sourceId!, typeId: controller.stationTypeId!, capacity:int.parse(controller.capacity.text) );
-                        
+                          onPressed: () async {
+                            if (_globalKey.currentState!.validate()) {
+                              await controller.addRelations(
+                                StationGaugeTechnologyRelation(
+                                  accountNumber: controller.counterid!,
+                                  relationStatus: true,
+                                  stationId: controller.stationid!,
+                                  technologyId: controller.techid!,
+                                ),
+                              );
+                            }
                           },
                           icon: const Icon(Icons.save),
                           label: const Text('حفظ '),
