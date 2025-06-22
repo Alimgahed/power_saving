@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:power_saving/gloable/data.dart';
 
 class LoginController extends GetxController {
   late TextEditingController name;
@@ -28,7 +29,7 @@ class LoginController extends GetxController {
   Future<void> Login(String name, String password) async {
     try {
       final res = await http.post(
-        Uri.parse("http://172.16.0.10:3000/login"),
+        Uri.parse("http://$ip/login"),
         body: {
           "name": name,
           "password": password,
