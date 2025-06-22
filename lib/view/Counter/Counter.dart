@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/controller/counter/counter.dart';
+import 'package:power_saving/my_widget/sharable.dart';
 
 class Counterscreen extends StatelessWidget {
   const Counterscreen({super.key});
@@ -30,7 +31,7 @@ class Counterscreen extends StatelessWidget {
                 },
               ),
             ],
-          )
+          ),
         ],
         automaticallyImplyLeading: false,
       ),
@@ -86,25 +87,27 @@ class Counterscreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        _buildInfoRow('رقم الحساب', meter.accountNumber!),
-                     
-                        _buildInfoRow(
+                        infoRowWidget('رقم الحساب', meter.accountNumber!),
+
+                        infoRowWidget(
                           'القراءة النهائية',
                           meter.finalReading.toString(),
                         ),
-                        _buildInfoRow(
+                        infoRowWidget(
                           'معامل العداد',
                           meter.meterFactor.toString(),
                         ),
-                        _buildInfoRow('معرّف العداد', meter.meterId),
+                        infoRowWidget('معرّف العداد', meter.meterId),
                         const SizedBox(height: 12),
                         Align(
                           alignment: Alignment.centerRight,
                           child: IconButton(
                             onPressed: () {
-                              
                               // Implement navigation to edit screen with meter as argument
-                              Get.offNamed('/editMeter', arguments: {"meter": meter});
+                              Get.offNamed(
+                                '/editMeter',
+                                arguments: {"meter": meter},
+                              );
                             },
                             icon: const Icon(Icons.edit, color: Colors.blue),
                           ),
@@ -120,23 +123,4 @@ class Counterscreen extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget _buildInfoRow(String key, String value) {
-  return Padding(
-    padding: const EdgeInsets.only(bottom: 8.0),
-    child: Row(
-      children: [
-        Text(
-          key,
-          style: const TextStyle(color: Colors.black54),
-        ),
-        const Spacer(),
-        Text(
-          value,
-          style: const TextStyle(color: Colors.black87),
-        ),
-      ],
-    ),
-  );
 }

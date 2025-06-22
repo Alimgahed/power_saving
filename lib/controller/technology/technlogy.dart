@@ -8,7 +8,8 @@ import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/tech_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:http/http.dart' as http;
-class TechnlogyController extends GetxController { 
+
+class TechnlogyController extends GetxController {
   List<TechnologyModel> all_technology = [];
   late TextEditingController name;
   late TextEditingController chlorine;
@@ -47,7 +48,7 @@ class TechnlogyController extends GetxController {
         for (var i in responseData) {
           TechnologyModel tech = TechnologyModel.fromJson(i);
           all_technology.add(tech);
-          technologies= all_technology; // Update the global list
+          technologies = all_technology; // Update the global list
           update();
         }
       } else {
@@ -58,33 +59,38 @@ class TechnlogyController extends GetxController {
     }
   }
 
-  Future<void> addtech({ 
-    required TechnologyModel tech,
-  }) async {
+  Future<void> addtech({required TechnologyModel tech}) async {
     try {
       final res = await http.post(
         Uri.parse("http://172.16.144.197:5000/new-tech"),
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: {"Content-Type": "application/json"},
         body: jsonEncode(tech.toJson()), // ✅ Proper JSON encoding
       );
 
       if (res.statusCode == 200) {
         showSuccessToast("تم اضافة التقنية بنجاح");
       } else {
-        print(res.body);
-        Get.snackbar("خطأ", "فشل في إضافة المحطة: ${res.body}",
-            backgroundColor: Colors.red.shade100, colorText: Colors.black87);
+        final errorBody = jsonDecode(res.body);
+
+        // Extract Arabic error message
+        final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';
+
+        // Show custom dialog or toast with Arabic error
+        showCustomErrorDialog(errorMessage: errorMessage);
       }
     } catch (e) {
       print("Error adding station: $e");
-      Get.snackbar("خطأ", "حدث خطأ أثناء الإضافة",
-          backgroundColor: Colors.red.shade100, colorText: Colors.black87);
+      Get.snackbar(
+        "خطأ",
+        "حدث خطأ أثناء الإضافة",
+        backgroundColor: Colors.red.shade100,
+        colorText: Colors.black87,
+      );
     }
   }
 }
-class edit_tech extends GetxController { 
+
+class edit_tech extends GetxController {
   late TextEditingController name;
   late TextEditingController chlorine;
   late TextEditingController liquid;
@@ -107,32 +113,36 @@ class edit_tech extends GetxController {
     super.onClose();
   }
 
-
-
-  Future<void> edittech({ 
+  Future<void> edittech({
     required TechnologyModel tech,
     required int id,
   }) async {
     try {
       final res = await http.post(
         Uri.parse("http://172.16.144.197:5000/edit-tech/$id"),
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: {"Content-Type": "application/json"},
         body: jsonEncode(tech.toJson()), // ✅ Proper JSON encoding
       );
 
       if (res.statusCode == 200) {
         showSuccessToast("تم تعديل التقنية بنجاح");
       } else {
-        print(res.body);
-        Get.snackbar("خطأ", "فشل في إضافة المحطة: ${res.body}",
-            backgroundColor: Colors.red.shade100, colorText: Colors.black87);
+        final errorBody = jsonDecode(res.body);
+
+        // Extract Arabic error message
+        final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';
+
+        // Show custom dialog or toast with Arabic error
+        showCustomErrorDialog(errorMessage: errorMessage);
       }
     } catch (e) {
       print("Error adding station: $e");
-      Get.snackbar("خطأ", "حدث خطأ أثناء الإضافة",
-          backgroundColor: Colors.red.shade100, colorText: Colors.black87);
+      Get.snackbar(
+        "خطأ",
+        "حدث خطأ أثناء الإضافة",
+        backgroundColor: Colors.red.shade100,
+        colorText: Colors.black87,
+      );
     }
   }
 }
