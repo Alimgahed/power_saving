@@ -10,18 +10,27 @@ class AddStationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFEFF6FC),
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
         foregroundColor: Colors.white,
         automaticallyImplyLeading: false,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Get.offNamed('/Stations');
-          },
-        ),
-        title: const Text("إضافة محطة جديدة", style: TextStyle(fontSize: 20)),
+        actions: [
+          Row(
+            children: [
+              const Text(
+                "إضافة محطة جديدة",
+                style: TextStyle(fontSize: 20, color: Colors.blue),
+              ),
+              SizedBox(width: 20),
+              IconButton(
+                icon: const Icon(Icons.arrow_forward, color: Colors.blue),
+                onPressed: () {
+                  Get.offNamed('/Stations');
+                },
+              ),
+            ],
+          ),
+        ],
       ),
       body: Center(
         child: SingleChildScrollView(

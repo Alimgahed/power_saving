@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 class CustomTextFormField extends StatelessWidget {
   final String label;
-  final String hintText;
+  final String? hintText;
   final IconData? icon;
   final TextEditingController? controller;
   final TextInputType keyboardType;
@@ -14,7 +14,7 @@ class CustomTextFormField extends StatelessWidget {
   const CustomTextFormField({
     super.key,
     required this.label,
-    required this.hintText,
+    this.hintText,
     this.allowOnlyDigits = false,
     this.icon,
     this.controller,

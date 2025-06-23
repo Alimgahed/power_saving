@@ -51,6 +51,7 @@ class StationsScreen extends StatelessWidget {
                   maxCrossAxisExtent: 250, // show exactly 3 per row
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
+                  mainAxisExtent: 270,
                 ),
                 itemBuilder: (context, index) {
                   final station = controller.allstations[index];

@@ -8,6 +8,7 @@ import 'package:power_saving/view/Counter/add_Counter.dart';
 
 import 'package:power_saving/view/auth/login.dart';
 import 'package:power_saving/view/auth/new_user.dart';
+import 'package:power_saving/view/bill/add_bill.dart';
 import 'package:power_saving/view/home.dart';
 import 'package:power_saving/view/relations/add_relation.dart';
 import 'package:power_saving/view/relations/relatiuons.dart';
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/addCounter', page: () => AddElectricMeterScreen()),
         GetPage(name: '/Relations', page: () => RelatiuonsSCREAN()),
         GetPage(name: '/Addrelation', page: () => AddRelation()),
+        GetPage(name: '/AddBill', page: () => AddBill()),
       ],
     );
   }
