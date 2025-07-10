@@ -1,23 +1,22 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:power_saving/controller/Stations/Stations.dart';
+import 'package:power_saving/controller/chemcaial/chemacial.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 
-class StationsScreen extends StatelessWidget {
-  const StationsScreen({super.key});
+class Chemicals extends StatelessWidget {
+  const Chemicals({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Get.put(get_all_stations());
+    Get.put(Chemacialcontroller());
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: const Color(0xFFF8FAFC),
         appBar: AppBar(
           title: const Text(
-            'قائمة المحطات',
+            'قائمة المواد الكيميائية',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
@@ -33,11 +32,11 @@ class StationsScreen extends StatelessWidget {
                 children: [
                   ElevatedButton.icon(
                     onPressed: () {
-                      Get.offNamed('/addstations');
+                      Get.offNamed('/AddChemicalScreen');
                     },
                     icon: const Icon(Icons.add, size: 18),
                     label: const Text(
-                      "إضافة محطة جديدة",
+                      "إضافة مرجع جديد",
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
@@ -75,9 +74,9 @@ class StationsScreen extends StatelessWidget {
           ],
           automaticallyImplyLeading: false,
         ),
-        body: GetBuilder<get_all_stations>(
+        body: GetBuilder<Chemacialcontroller>(
           builder: (controller) {
-            if (controller.allstations.isEmpty) {
+            if (controller.chemicals.isEmpty) {
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -89,14 +88,14 @@ class StationsScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(50),
                       ),
                       child: Icon(
-                        Icons.location_on,
+                        Icons.science,
                         size: 48,
                         color: Colors.blue.shade300,
                       ),
                     ),
                     const SizedBox(height: 24),
                     const Text(
-                      'لا توجد محطات',
+                      'لا توجد مواد كيميائية',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
@@ -105,7 +104,7 @@ class StationsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      'ابدأ بإضافة محطة جديدة',
+                      'ابدأ بإضافة مرجع كيميائي جديد',
                       style: TextStyle(fontSize: 14, color: Colors.black54),
                     ),
                   ],
@@ -139,7 +138,7 @@ class StationsScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Icon(
-                            Icons.location_on,
+                            Icons.science,
                             color: Colors.blue.shade700,
                             size: 24,
                           ),
@@ -150,7 +149,7 @@ class StationsScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                'إجمالي المحطات',
+                                'إجمالي المراجع الكيميائية',
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.black54,
@@ -159,7 +158,7 @@ class StationsScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                '${controller.allstations.length} محطة',
+                                '${controller.chemicals.length} مرجع',
                                 style: const TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
@@ -179,16 +178,16 @@ class StationsScreen extends StatelessWidget {
                   GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: controller.allstations.length,
+                    itemCount: controller.chemicals.length,
                     gridDelegate:
                         const SliverGridDelegateWithMaxCrossAxisExtent(
                           maxCrossAxisExtent: 400,
                           crossAxisSpacing: 20,
                           mainAxisSpacing: 20,
-                          childAspectRatio: 1.2,
+                          childAspectRatio: 0.54, // Adjusted for more content
                         ),
                     itemBuilder: (context, index) {
-                      final station = controller.allstations[index];
+                      final chemical = controller.chemicals[index];
 
                       return Container(
                         decoration: BoxDecoration(
@@ -235,7 +234,7 @@ class StationsScreen extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(6),
                                     ),
                                     child: const Icon(
-                                      Icons.location_on,
+                                      Icons.science,
                                       color: Colors.white,
                                       size: 16,
                                     ),
@@ -243,14 +242,12 @@ class StationsScreen extends StatelessWidget {
                                   const SizedBox(width: 8),
                                   Expanded(
                                     child: Text(
-                                      station.stationName,
+                                      'مرجع رقم ${index + 1}',
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
                                         color: Colors.white,
                                       ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ],
@@ -263,12 +260,39 @@ class StationsScreen extends StatelessWidget {
                                 padding: const EdgeInsets.all(16),
                                 child: Column(
                                   children: [
-                                    // Station Information
-                                    _buildStationInfo(
-                                      station.branchName ?? 'غير محدد',
-                                      station.stationType,
-                                      station.waterSourceName ?? 'غير محدد',
-                                      station.stationWaterCapacity.toString(),
+                                    // Water Source, Technology, and Season Info
+                                    _buildInfoSection(
+                                      chemical.source ?? 'غير محدد',
+                                      chemical.tech ?? 'غير محدد',
+                                      chemical.season == "winter"
+                                          ? 'الشتاء'
+                                          : 'الصيف',
+                                    ),
+                                    const SizedBox(height: 12),
+
+                                    // Chemical Ranges
+                                    _buildChemicalSection(
+                                      'الكلور',
+                                      chemical.chlorineRangeFrom.toString(),
+                                      chemical.chlorineRangeTo.toString(),
+                                      Icons.water_drop,
+                                      Colors.cyan,
+                                    ),
+                                    const SizedBox(height: 12),
+                                    _buildChemicalSection(
+                                      'الشبة السائلة',
+                                      chemical.liquidAlumRangeFrom.toString(),
+                                      chemical.liquidAlumRangeTo.toString(),
+                                      Icons.opacity,
+                                      Colors.orange,
+                                    ),
+                                    const SizedBox(height: 12),
+                                    _buildChemicalSection(
+                                      'الشبة الصلبة',
+                                      chemical.solidAlumRangeFrom.toString(),
+                                      chemical.solidAlumRangeTo.toString(),
+                                      Icons.grain,
+                                      Colors.brown,
                                     ),
                                   ],
                                 ),
@@ -290,7 +314,7 @@ class StationsScreen extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text(
-                                    'تعديل المحطة',
+                                    'تعديل المرجع',
                                     style: TextStyle(
                                       fontSize: 16,
                                       color: Colors.black54,
@@ -300,8 +324,8 @@ class StationsScreen extends StatelessWidget {
                                   ElevatedButton.icon(
                                     onPressed: () {
                                       Get.offNamed(
-                                        '/editStations',
-                                        arguments: {"Stations": station},
+                                        '/EditChemcials',
+                                        arguments: {"chemical": chemical},
                                       );
                                     },
                                     icon: const Icon(Icons.edit, size: 14),
@@ -342,67 +366,112 @@ class StationsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStationInfo(
-    String branchName,
-    String stationType,
+  Widget _buildInfoSection(
     String waterSource,
-    String capacity,
+    String technology,
+    String season,
   ) {
-    return Column(
-      children: [
-        // Branch and Type
-        Row(
-          children: [
-            Expanded(
-              child: _buildInfoCard(
-                'الفرع',
-                branchName,
-                Icons.business,
-                Colors.purple,
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.purple.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.purple.withOpacity(0.1)),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Icon(Icons.info_outline, size: 16, color: Colors.purple),
+              const SizedBox(width: 6),
+              const Text(
+                'معلومات المرجع',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  color: Colors.purple,
+                ),
               ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: _buildInfoCard(
-                'نوع المحطة',
-                stationType,
-                Icons.settings,
-                Colors.green,
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: _buildInfoItem(
+                  'مصدر المياه',
+                  waterSource,
+                  Icons.water,
+                  Colors.blue,
+                ),
               ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-
-        // Water Source and Capacity
-        Row(
-          children: [
-            Expanded(
-              child: _buildInfoCard(
-                'مصدر المياه',
-                waterSource,
-                Icons.water,
-                Colors.blue,
+              const SizedBox(width: 8),
+              Expanded(
+                child: _buildInfoItem(
+                  'التقنية',
+                  technology,
+                  Icons.engineering,
+                  Colors.green,
+                ),
               ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: _buildInfoCard(
-                'الكفاءة التصميمية',
-                capacity,
-                Icons.speed,
-                Colors.orange,
-              ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+          const SizedBox(height: 8),
+          _buildInfoItem('الموسم', season, Icons.calendar_today, Colors.orange),
+        ],
+      ),
     );
   }
 
-  Widget _buildInfoCard(
+  Widget _buildInfoItem(
     String label,
     String value,
+    IconData icon,
+    Color color,
+  ) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, size: 16, color: color),
+              const SizedBox(width: 4),
+              Expanded(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: color,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChemicalSection(
+    String title,
+    String fromValue,
+    String toValue,
     IconData icon,
     Color color,
   ) {
@@ -420,33 +489,50 @@ class StationsScreen extends StatelessWidget {
             children: [
               Icon(icon, size: 16, color: color),
               const SizedBox(width: 6),
-              Expanded(
-                child: Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: color,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+              Text(
+                title,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: color.withOpacity(0.8),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 6),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
+          Row(
+            children: [
+              Expanded(child: _buildRangeItem('من', fromValue, color)),
+              const SizedBox(width: 8),
+              Expanded(child: _buildRangeItem('إلى', toValue, color)),
+            ],
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildRangeItem(String label, String value, Color color) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 16,
+            color: Colors.black54,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
+        ),
+      ],
     );
   }
 }

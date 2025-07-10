@@ -9,182 +9,302 @@ class AddStationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-        actions: [
-          Row(
-            children: [
-              const Text(
-                "إضافة محطة جديدة",
-                style: TextStyle(fontSize: 20, color: Colors.blue),
-              ),
-              SizedBox(width: 20),
-              IconButton(
-                icon: const Icon(Icons.arrow_forward, color: Colors.blue),
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF8FAFC),
+        appBar: AppBar(
+          title: const Text(
+            "إضافة محطة جديدة",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          backgroundColor: const Color(0xFF1E40AF),
+          elevation: 0,
+          centerTitle: true,
+          actions: [
+            Container(
+              margin: const EdgeInsets.only(left: 16),
+              child: IconButton(
+                icon: const Icon(Icons.arrow_forward, color: Colors.white),
                 onPressed: () {
                   Get.offNamed('/Stations');
                 },
+                style: IconButton.styleFrom(
+                  backgroundColor: Colors.white.withOpacity(0.1),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
               ),
-            ],
-          ),
-        ],
-      ),
-      body: Center(
-        child: SingleChildScrollView(
+            ),
+          ],
+          automaticallyImplyLeading: false,
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
           child: GetBuilder<AddStationController>(
             init: AddStationController(),
             builder: (controller) {
-              return Container(
-                constraints: const BoxConstraints(maxWidth: 500),
-                padding: const EdgeInsets.all(24.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.blue.withOpacity(0.1),
-                      blurRadius: 20,
-                      offset: const Offset(0, 10),
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header Card
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.blue.shade50, Colors.blue.shade300],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Colors.blue.shade100),
                     ),
-                  ],
-                ),
-                child: Form(
-                  key: _globalKey,
-                  child: Column(
-                    children: [
-                      const Icon(
-                        Icons.add_location_alt,
-                        size: 64,
-                        color: Colors.blue,
-                      ),
-                      const SizedBox(height: 16),
-                      const Text(
-                        'إدخال بيانات المحطة',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.blue.shade100,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: Icon(
+                            Icons.add_location_alt,
+                            size: 32,
+                            color: Colors.blue.shade700,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 32),
-
-                      CustomTextFormField(
-                        label: 'اسم المحطة',
-                        hintText: 'أدخل اسم المحطة',
-                        icon: Icons.location_city,
-                        controller: controller.name,
-                      ),
-                      const SizedBox(height: 16),
-
-                      CustomDropdownFormField<String>(
-                        items: [
-                          const DropdownMenuItem(
-                            value: "مياة",
-                            child: Text("مياة"),
+                        const SizedBox(height: 16),
+                        Text(
+                          'إدخال بيانات المحطة',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue.shade900,
                           ),
-                          const DropdownMenuItem(
-                            value: "صرف",
-                            child: Text("صرف"),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'أدخل المعلومات الأساسية للمحطة الجديدة',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.blue.shade600,
                           ),
-                        ],
-                        onChanged: (val) {
-                          controller.stationTypeId = val!;
-                        },
-                        labelText: 'نوع المحطة',
-                        hintText: 'اختر نوع المحطة',
-                        prefixIcon: Icons.category,
-                        validator:
-                            (val) =>
-                                val == null ? 'الرجاء اختيار نوع المحطة' : null,
-                      ),
+                        ),
+                      ],
+                    ),
+                  ),
 
-                      const SizedBox(height: 16),
-                      CustomTextFormField(
-                        label: 'الكفاءة التصميمية',
-                        hintText: 'ادخل كفاءة المحطه',
-                        icon: Icons.water,
-                        allowOnlyDigits: true,
-                        controller: controller.capacity,
-                        keyboardType: TextInputType.number,
-                      ),
-                      const SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
-                      CustomDropdownFormField<int>(
-                        items:
-                            controller.branchList.map((branch) {
-                              return DropdownMenuItem<int>(
-                                value: branch.branchId,
-                                child: Text(branch.branchName!),
-                              );
-                            }).toList(),
-                        onChanged: (value) {
-                          controller.branchId = value;
-                        },
-                        labelText: 'الفرع',
-                        hintText: 'اختر الفرع',
-                        prefixIcon: Icons.map,
-                        validator:
-                            (val) => val == null ? 'الرجاء اختيار الفرع' : null,
-                      ),
-                      const SizedBox(height: 32),
+                  // Form Card
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.04),
+                          spreadRadius: 0,
+                          blurRadius: 20,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                      border: Border.all(color: Colors.grey.shade100),
+                    ),
+                    child: Form(
+                      key: _globalKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Station Information Section
+                          _buildSectionHeader(
+                            'معلومات المحطة',
+                            Icons.location_city,
+                            Colors.blue,
+                          ),
 
-                      CustomDropdownFormField<int>(
-                        items:
-                            controller.waterSourceList.map((source) {
-                              return DropdownMenuItem<int>(
-                                value: source.waterSourceId,
-                                child: Text(source.waterSourceName!),
-                              );
-                            }).toList(),
-                        onChanged: (value) {
-                          controller.sourceId = value;
-                        },
-                        labelText: 'مصدر المياه',
-                        hintText: 'اختر مصدر المياه',
-                        prefixIcon: Icons.water_drop,
-                        validator:
-                            (val) =>
-                                val == null
-                                    ? 'الرجاء اختيار مصدر المياه'
-                                    : null,
-                      ),
+                          CustomTextFormField(
+                            label: 'اسم المحطة',
+                            hintText: 'أدخل اسم المحطة',
+                            icon: Icons.location_city,
+                            controller: controller.name,
+                          ),
 
-                      const SizedBox(height: 32),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: CustomDropdownFormField<String>(
+                                  items: [
+                                    const DropdownMenuItem(
+                                      value: "مياة",
+                                      child: Text("مياة"),
+                                    ),
+                                    const DropdownMenuItem(
+                                      value: "صرف",
+                                      child: Text("صرف"),
+                                    ),
+                                  ],
+                                  onChanged: (val) {
+                                    controller.stationTypeId = val!;
+                                  },
+                                  labelText: 'نوع المحطة',
+                                  hintText: 'اختر نوع المحطة',
+                                  prefixIcon: Icons.category,
+                                  validator:
+                                      (val) =>
+                                          val == null
+                                              ? 'الرجاء اختيار نوع المحطة'
+                                              : null,
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: CustomTextFormField(
+                                  label: 'الكفاءة التصميمية',
+                                  hintText: 'ادخل كفاءة المحطه',
+                                  icon: Icons.water,
+                                  allowOnlyDigits: true,
+                                  controller: controller.capacity,
+                                  keyboardType: TextInputType.number,
+                                ),
+                              ),
+                            ],
+                          ),
 
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton.icon(
-                          onPressed: () async {
-                            if (_globalKey.currentState!.validate()) {
-                              await controller.addStation(
-                                name: controller.name.text,
-                                branchId: controller.branchId!,
-                                sourceId: controller.sourceId!,
-                                typeId: controller.stationTypeId!,
-                                capacity: int.parse(controller.capacity.text),
-                              );
-                            }
-                          },
-                          icon: const Icon(Icons.save),
-                          label: const Text('حفظ المحطة'),
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            backgroundColor: Colors.blue,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                          // Location Information Section
+                          Row(
+                            children: [
+                              Expanded(
+                                child: CustomDropdownFormField<int>(
+                                  items:
+                                      controller.branchList.map((branch) {
+                                        return DropdownMenuItem<int>(
+                                          value: branch.branchId,
+                                          child: Text(branch.branchName),
+                                        );
+                                      }).toList(),
+                                  onChanged: (value) {
+                                    controller.branchId = value;
+                                  },
+                                  labelText: 'الفرع',
+                                  hintText: 'اختر الفرع',
+                                  prefixIcon: Icons.map,
+                                  validator:
+                                      (val) =>
+                                          val == null
+                                              ? 'الرجاء اختيار الفرع'
+                                              : null,
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: CustomDropdownFormField<int>(
+                                  items:
+                                      controller.waterSourceList.map((source) {
+                                        return DropdownMenuItem<int>(
+                                          value: source.waterSourceId,
+                                          child: Text(source.waterSourceName!),
+                                        );
+                                      }).toList(),
+                                  onChanged: (value) {
+                                    controller.sourceId = value;
+                                  },
+                                  labelText: 'مصدر المياه',
+                                  hintText: 'اختر مصدر المياه',
+                                  prefixIcon: Icons.water_drop,
+                                  validator:
+                                      (val) =>
+                                          val == null
+                                              ? 'الرجاء اختيار مصدر المياه'
+                                              : null,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 16),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                              onPressed: () async {
+                                if (_globalKey.currentState!.validate()) {
+                                  await controller.addStation(
+                                    name: controller.name.text,
+                                    branchId: controller.branchId!,
+                                    sourceId: controller.sourceId!,
+                                    typeId: controller.stationTypeId!,
+                                    capacity: int.parse(
+                                      controller.capacity.text,
+                                    ),
+                                  );
+                                }
+                              },
+                              icon: const Icon(Icons.save, size: 20),
+                              label: const Text(
+                                'حفظ المحطة',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                ),
+                                backgroundColor: Colors.blue.shade600,
+                                foregroundColor: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               );
             },
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildSectionHeader(String title, IconData icon, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, color: color, size: 20),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: color.withOpacity(0.8),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(child: Container(height: 1, color: color.withOpacity(0.2))),
+        ],
       ),
     );
   }

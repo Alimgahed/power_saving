@@ -74,9 +74,9 @@ class AddElectricMeterScreen extends StatelessWidget {
                       const SizedBox(height: 16),
 
                       CustomTextFormField(
-                        label: 'معرّف العداد',
+                        label: 'الرقم التسلسي للعداد',
                         allowOnlyDigits: true,
-                        hintText: 'أدخل معرف العداد',
+                        hintText: 'أدخل الرقم التسلسلي للعداد',
                         icon: Icons.confirmation_number,
                         controller: controller.meterId,
                       ),

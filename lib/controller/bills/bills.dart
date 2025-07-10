@@ -83,6 +83,7 @@ class Bills extends GetxController {
 
   Future<void> newbill(String number) async {
     try {
+      gauges = [];
       final res = await http.get(
         Uri.parse("http://172.16.144.197:5000/new-bill/$number"),
       );
@@ -131,6 +132,8 @@ class Bills extends GetxController {
 
       if (res.statusCode == 200) {
         showSuccessToast("تم تسجيل الفاتورة بنجاح");
+        isLoading.value = false;
+
         // Optional: clear or populate text fields here if needed
       } else {
         isLoading.value = false;

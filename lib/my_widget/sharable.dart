@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  final String label;
+  final String? label;
   final String? hintText;
   final IconData? icon;
   final TextEditingController? controller;
@@ -13,7 +13,7 @@ class CustomTextFormField extends StatelessWidget {
 
   const CustomTextFormField({
     super.key,
-    required this.label,
+    this.label,
     this.hintText,
     this.allowOnlyDigits = false,
     this.icon,
@@ -191,19 +191,45 @@ void showCustomErrorDialog({
   );
 }
 
-void showSuccessToast(String message) {
-  Get.snackbar(
-    'تم', // Title of the snackbar (can be omitted or localized)
-    message, // The message to show
-    snackPosition: SnackPosition.BOTTOM, // Position of the snackbar
-    backgroundColor: Colors.green, // Background color
-    colorText: Colors.white, // Text color
-    duration: const Duration(
-      seconds: 2,
-    ), // Duration for how long it should be displayed
-    margin: const EdgeInsets.all(10), // Margin around the snackbar
-    borderRadius: 8, // Border radius
-    icon: const Icon(Icons.check_circle, color: Colors.white), // Optional icon
+void showSuccessToast(
+  String successMessage,
+  // You can change the icon if needed
+) {
+  Get.defaultDialog(
+    title: "تم",
+    titleStyle: TextStyle(
+      color: Colors.green, // Color for the title
+      fontSize: 24,
+      fontWeight: FontWeight.bold,
+    ),
+    content: Column(
+      children: [
+        Icon(Icons.check_circle_outline, color: Colors.green, size: 50),
+        const SizedBox(height: 10),
+        Text(
+          successMessage.tr,
+          style: const TextStyle(fontSize: 18, color: Colors.black87),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    ),
+    radius: 15,
+    backgroundColor: Colors.white,
+    barrierDismissible: false,
+    confirm: ElevatedButton(
+      onPressed: () {
+        Get.back();
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.green,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      ),
+      child: const Text(
+        'موافق',
+        style: TextStyle(color: Colors.white, fontSize: 18),
+      ),
+    ),
   );
 }
 

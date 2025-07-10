@@ -3,9 +3,10 @@ import 'package:get/get.dart';
 import 'package:power_saving/controller/technology/technlogy.dart';
 import 'package:power_saving/model/tech_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
+
 class Edittech extends StatelessWidget {
   Edittech({super.key});
-  final TechnologyModel tech = Get.arguments["Tech"]; 
+  final TechnologyModel tech = Get.arguments["Tech"];
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,10 @@ class Edittech extends StatelessWidget {
             Get.offNamed('/Technology');
           },
         ),
-        title: const Text("تعديل بيانات التقنية", style: TextStyle(fontSize: 20)),
+        title: const Text(
+          "تعديل بيانات التقنية",
+          style: TextStyle(fontSize: 20),
+        ),
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -29,8 +33,8 @@ class Edittech extends StatelessWidget {
             init: edit_tech(),
             builder: (controller) {
               // Initialize the controllers when entering the screen
-              controller.name.text = tech.technologyName;
-              controller.power.text = tech.powerPerWater.toString();
+              // controller.name.text = tech.technologyName;
+              // controller.power.text = tech.powerPerWater.toString();
 
               return Container(
                 constraints: const BoxConstraints(maxWidth: 500),
@@ -54,7 +58,10 @@ class Edittech extends StatelessWidget {
                       const SizedBox(height: 16),
                       const Text(
                         'إدخال بيانات التقنية',
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const SizedBox(height: 32),
                       CustomTextFormField(
@@ -64,7 +71,7 @@ class Edittech extends StatelessWidget {
                         icon: Icons.memory,
                       ),
                       const SizedBox(height: 16),
-                  
+
                       CustomTextFormField(
                         controller: controller.power,
                         label: 'نسبة الكهرباء',
@@ -79,13 +86,15 @@ class Edittech extends StatelessWidget {
                             if (_globalKey.currentState!.validate()) {
                               // Call the edit method with the updated technology model
                               controller.edittech(
-                              tech: TechnologyModel(
-                                powerPerWater: double.parse(controller.power.text),
-                                technologyName: controller.name.text,
-                              ), id:tech.technologyId! ,
-                            );
+                                tech: TechnologyModel(
+                                  powerPerWater: double.parse(
+                                    controller.power.text,
+                                  ),
+                                  technologyName: controller.name.text,
+                                ),
+                                id: tech.technologyId!,
+                              );
                             }
-                           
                           },
                           icon: const Icon(Icons.save),
                           label: const Text('حفظ التقنية'),

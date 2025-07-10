@@ -5,16 +5,21 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:power_saving/view/Counter/Counter.dart';
 import 'package:power_saving/view/Counter/add_Counter.dart';
+import 'package:power_saving/view/Counter/edit_counter.dart';
 
 import 'package:power_saving/view/auth/login.dart';
 import 'package:power_saving/view/auth/new_user.dart';
 import 'package:power_saving/view/bill/add_bill.dart';
+import 'package:power_saving/view/chemcails/add_cemicals.dart';
+import 'package:power_saving/view/chemcails/chemicals.dart';
+import 'package:power_saving/view/chemcails/edit_chemcials.dart';
 import 'package:power_saving/view/home.dart';
 import 'package:power_saving/view/relations/add_relation.dart';
 import 'package:power_saving/view/relations/relatiuons.dart';
 import 'package:power_saving/view/stations/add_station.dart';
 import 'package:power_saving/view/stations/edit_staion.dart';
 import 'package:power_saving/view/stations/stations.dart';
+import 'package:power_saving/view/tech_bills/tech_bills.dart';
 import 'package:power_saving/view/technology/add_tech.dart';
 import 'package:power_saving/view/technology/edittech.dart';
 import 'package:power_saving/view/technology/technology.dart';
@@ -40,12 +45,14 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(textTheme: GoogleFonts.amiriTextTheme()),
+      theme: ThemeData(textTheme: GoogleFonts.almaraiTextTheme()),
       initialRoute: '/home',
       getPages: [
         GetPage(name: '/home', page: () => Home()),
         GetPage(name: '/Stations', page: () => StationsScreen()),
         GetPage(name: '/Login', page: () => const Login()),
+        GetPage(name: '/editMeter', page: () => editCounter()),
+
         GetPage(name: '/editStations', page: () => EditStationsScreen()),
 
         GetPage(name: '/NewUser', page: () => const NewUser()),
@@ -57,6 +64,12 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/addCounter', page: () => AddElectricMeterScreen()),
         GetPage(name: '/Relations', page: () => RelatiuonsSCREAN()),
         GetPage(name: '/Addrelation', page: () => AddRelation()),
+        GetPage(name: '/Chemicals', page: () => Chemicals()),
+        GetPage(name: '/AddChemicalScreen', page: () => AddChemicalScreen()),
+        GetPage(name: '/techbills', page: () => TechBills()),
+
+        GetPage(name: '/EditChemcials', page: () => EditChemcials()),
+
         GetPage(name: '/AddBill', page: () => AddBill()),
       ],
     );

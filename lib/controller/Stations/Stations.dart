@@ -168,15 +168,13 @@ class get_all_stations extends GetxController {
       );
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
-        print(jsonData);
         List<dynamic> responseData = jsonData;
 
         for (var i in responseData) {
           station = Station.fromJson(i);
           allstations.add(station!);
-          update();
         }
-        print(jsonData);
+        update();
       }
     } catch (e) {
       print(e.toString());
