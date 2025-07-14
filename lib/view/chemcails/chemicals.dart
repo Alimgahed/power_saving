@@ -174,189 +174,175 @@ class Chemicals extends StatelessWidget {
 
                   const SizedBox(height: 24),
 
-                  // Grid Section
-                  GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: controller.chemicals.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 400,
-                          crossAxisSpacing: 20,
-                          mainAxisSpacing: 20,
-                          childAspectRatio: 0.54, // Adjusted for more content
-                        ),
-                    itemBuilder: (context, index) {
-                      final chemical = controller.chemicals[index];
-
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.04),
-                              spreadRadius: 0,
-                              blurRadius: 20,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                          border: Border.all(
-                            color: Colors.grey.shade100,
-                            width: 1,
-                          ),
-                        ),
-                        child: Column(
-                          children: [
-                            // Header
-                            Container(
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Colors.blue.shade600,
-                                    Colors.blue.shade700,
-                                  ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                ),
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(6),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white.withOpacity(0.2),
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: const Icon(
-                                      Icons.science,
-                                      color: Colors.white,
-                                      size: 16,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: Text(
-                                      'مرجع رقم ${index + 1}',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-
-                            // Content
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: Column(
-                                  children: [
-                                    // Water Source, Technology, and Season Info
-                                    _buildInfoSection(
-                                      chemical.source ?? 'غير محدد',
-                                      chemical.tech ?? 'غير محدد',
-                                      chemical.season == "winter"
-                                          ? 'الشتاء'
-                                          : 'الصيف',
-                                    ),
-                                    const SizedBox(height: 12),
-
-                                    // Chemical Ranges
-                                    _buildChemicalSection(
-                                      'الكلور',
-                                      chemical.chlorineRangeFrom.toString(),
-                                      chemical.chlorineRangeTo.toString(),
-                                      Icons.water_drop,
-                                      Colors.cyan,
-                                    ),
-                                    const SizedBox(height: 12),
-                                    _buildChemicalSection(
-                                      'الشبة السائلة',
-                                      chemical.liquidAlumRangeFrom.toString(),
-                                      chemical.liquidAlumRangeTo.toString(),
-                                      Icons.opacity,
-                                      Colors.orange,
-                                    ),
-                                    const SizedBox(height: 12),
-                                    _buildChemicalSection(
-                                      'الشبة الصلبة',
-                                      chemical.solidAlumRangeFrom.toString(),
-                                      chemical.solidAlumRangeTo.toString(),
-                                      Icons.grain,
-                                      Colors.brown,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-
-                            // Footer
-                            Container(
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade50,
-                                borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(20),
-                                  bottomRight: Radius.circular(20),
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    'تعديل المرجع',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black54,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  ElevatedButton.icon(
-                                    onPressed: () {
-                                      Get.offNamed(
-                                        '/EditChemcials',
-                                        arguments: {"chemical": chemical},
-                                      );
-                                    },
-                                    icon: const Icon(Icons.edit, size: 14),
-                                    label: const Text(
-                                      'تعديل',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.blue.shade600,
-                                      foregroundColor: Colors.white,
-                                      elevation: 0,
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 12,
-                                        vertical: 6,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
+              SingleChildScrollView(
+  child: Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 16),
+    child: Wrap(
+      spacing: 20,
+      runSpacing: 20,
+      children: controller.chemicals.map((chemical) {
+        return Container(
+          width: 400, // Match maxCrossAxisExtent
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.04),
+                spreadRadius: 0,
+                blurRadius: 20,
+                offset: const Offset(0, 4),
+              ),
+            ],
+            border: Border.all(
+              color: Colors.grey.shade100,
+              width: 1,
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // Allow dynamic height
+            children: [
+              // Header
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.blue.shade600, Colors.blue.shade700],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: const Icon(
+                        Icons.science,
+                        color: Colors.white,
+                        size: 16,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'مرجع رقم ${controller.chemicals.indexOf(chemical) + 1}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // Content
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    _buildInfoSection(
+                      chemical.source ?? 'غير محدد',
+                      chemical.tech ?? 'غير محدد',
+                      chemical.season == "winter" ? 'الشتاء' : 'الصيف',
+                    ),
+                    const SizedBox(height: 12),
+                    _buildChemicalSection(
+                      'الكلور',
+                      chemical.chlorineRangeFrom.toString(),
+                      chemical.chlorineRangeTo.toString(),
+                      Icons.water_drop,
+                      Colors.cyan,
+                    ),
+                    const SizedBox(height: 12),
+                    _buildChemicalSection(
+                      'الشبة السائلة',
+                      chemical.liquidAlumRangeFrom.toString(),
+                      chemical.liquidAlumRangeTo.toString(),
+                      Icons.opacity,
+                      Colors.orange,
+                    ),
+                    const SizedBox(height: 12),
+                    _buildChemicalSection(
+                      'الشبة الصلبة',
+                      chemical.solidAlumRangeFrom.toString(),
+                      chemical.solidAlumRangeTo.toString(),
+                      Icons.grain,
+                      Colors.brown,
+                    ),
+                  ],
+                ),
+              ),
+
+              // Footer
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade50,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'تعديل المرجع',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        Get.offNamed(
+                          '/EditChemcials',
+                          arguments: {"chemical": chemical},
+                        );
+                      },
+                      icon: const Icon(Icons.edit, size: 14),
+                      label: const Text(
+                        'تعديل',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue.shade600,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      }).toList(),
+    ),
+  ),
+)
+
                 ],
               ),
             );

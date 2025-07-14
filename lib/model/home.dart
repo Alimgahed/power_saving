@@ -68,7 +68,7 @@ class OverConsump {
   final String technologyBillTotal;
   final num technologyChlorineConsump;
   final int technologyId;
-  final int technologyLiquidAlumConsump;
+  final num technologyLiquidAlumConsump;
   final String technologyName;
   final num technologyPowerConsump;
   final num technologySolidAlumConsump;
