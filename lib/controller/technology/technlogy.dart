@@ -37,7 +37,7 @@ class TechnlogyController extends GetxController {
   Future<void> alltechnology() async {
     try {
       final res = await http.get(
-        Uri.parse("http://172.16.144.197:5000/technologies"),
+        Uri.parse("http://$ip/technologies"),
       );
 
       if (res.statusCode == 200) {
@@ -62,7 +62,7 @@ class TechnlogyController extends GetxController {
   Future<void> addtech({required TechnologyModel tech}) async {
     try {
       final res = await http.post(
-        Uri.parse("http://172.16.144.197:5000/new-tech"),
+        Uri.parse("http://$ip/new-tech"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(tech.toJson()), // ✅ Proper JSON encoding
       );
@@ -119,7 +119,7 @@ class edit_tech extends GetxController {
   }) async {
     try {
       final res = await http.post(
-        Uri.parse("http://172.16.144.197:5000/edit-tech/$id"),
+        Uri.parse("http://$ip/edit-tech/$id"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(tech.toJson()), // ✅ Proper JSON encoding
       );

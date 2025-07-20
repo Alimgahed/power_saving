@@ -27,7 +27,7 @@ class Counter_controller extends GetxController {
   Future<void> addCounter({required ElectricMeter counter}) async {
     try {
       final res = await http.post(
-        Uri.parse("http://172.16.144.197:5000/new-station"),
+        Uri.parse("http://$ip/new-station"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(counter.toJson()),
       );
@@ -57,7 +57,7 @@ class Counter_controller extends GetxController {
   Future<void> all_counter() async {
     try {
       final res = await http.get(
-        Uri.parse("http://172.16.144.197:5000/gauges"),
+        Uri.parse("http://$ip/gauges"),
       );
 
       if (res.statusCode == 200) {
@@ -116,7 +116,7 @@ class addcounter extends GetxController {
   Future<void> addCounter({required ElectricMeter counter}) async {
     try {
       final res = await http.post(
-        Uri.parse("http://172.16.144.197:5000/new-gauge"),
+        Uri.parse("http://$ip/new-gauge"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(counter.toJson()),
       );
@@ -146,7 +146,7 @@ class addcounter extends GetxController {
   Future<void> allVoltige() async {
     try {
       final res = await http.get(
-        Uri.parse("http://172.16.144.197:5000/new-gauge"),
+        Uri.parse("http://$ip/new-gauge"),
         headers: {"Content-Type": "application/json"},
       );
 
@@ -219,7 +219,7 @@ class EditCounter extends GetxController {
   }) async {
     try {
       final res = await http.post(
-        Uri.parse("http://172.16.144.197:5000/edit-gauge/$serial"),
+        Uri.parse("http://$ip/edit-gauge/$serial"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(counter.toJson()),
       );
@@ -249,7 +249,7 @@ class EditCounter extends GetxController {
   Future<void> allVoltige() async {
     try {
       final res = await http.get(
-        Uri.parse("http://172.16.144.197:5000/new-gauge"),
+        Uri.parse("http://$ip/new-gauge"),
         headers: {"Content-Type": "application/json"},
       );
 

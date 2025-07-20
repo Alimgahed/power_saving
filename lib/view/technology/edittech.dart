@@ -7,11 +7,15 @@ import 'package:power_saving/my_widget/sharable.dart';
 class Edittech extends StatelessWidget {
   Edittech({super.key});
 
-  final TechnologyModel tech = Get.arguments["Tech"];
+  final TechnologyModel? tech = Get.arguments!=null?Get.arguments["Tech"]:null;
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+      if (tech == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Get.offAllNamed('/Technology');
+      });}
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -42,8 +46,8 @@ class Edittech extends StatelessWidget {
             init: edit_tech(),
             
             builder: (controller) {
-                controller.name.text = tech.technologyName;
-              controller.power.text = tech.powerPerWater.toString();
+                controller.name.text = tech!.technologyName;
+              controller.power.text = tech!.powerPerWater.toString();
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -152,12 +156,12 @@ class Edittech extends StatelessWidget {
                                 if (_globalKey.currentState!.validate()) {
                                   await controller.edittech(
                                     tech: TechnologyModel(
-                                      technologyId: tech.technologyId,
+                                      technologyId: tech!.technologyId,
                                       technologyName: controller.name.text,
                                       powerPerWater:
                                           double.parse(controller.power.text),
                                     ),
-                                    id: tech.technologyId!,
+                                    id: tech!.technologyId!,
                                   );
                                 }
                               },

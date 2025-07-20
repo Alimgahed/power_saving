@@ -9,26 +9,30 @@ class EditChemcials extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final addchemical controller = Get.put(addchemical());
-  final AlumChlorineReference chemicals = Get.arguments["chemical"];
+  final AlumChlorineReference? chemicals = Get.arguments!=null?Get.arguments["chemical"]:null;
   int? id;
 
   @override
   Widget build(BuildContext context) {
+       if (chemicals == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Get.offAllNamed('/Chemicals');
+      });}
     controller.chlorineFromController.text =
-        chemicals.chlorineRangeFrom.toString();
-    controller.chlorineToController.text = chemicals.chlorineRangeTo.toString();
+        chemicals!.chlorineRangeFrom.toString();
+    controller.chlorineToController.text = chemicals!.chlorineRangeTo.toString();
     controller.liquidAlumFromController.text =
-        chemicals.liquidAlumRangeFrom.toString();
+        chemicals!.liquidAlumRangeFrom.toString();
     controller.liquidAlumToController.text =
-        chemicals.liquidAlumRangeTo.toString();
+        chemicals!.liquidAlumRangeTo.toString();
     controller.solidAlumFromController.text =
-        chemicals.solidAlumRangeFrom.toString();
+        chemicals!.solidAlumRangeFrom.toString();
     controller.solidAlumToController.text =
-        chemicals.solidAlumRangeTo.toString();
-    controller.season = chemicals.season;
-    id = chemicals.chemicalId;
-    controller.waterSourceId = chemicals.waterSourceId;
-    controller.technologyId = chemicals.technologyId;
+        chemicals!.solidAlumRangeTo.toString();
+    controller.season = chemicals!.season;
+    id = chemicals!.chemicalId;
+    controller.waterSourceId = chemicals!.waterSourceId;
+    controller.technologyId = chemicals!.technologyId;
 
     return Directionality(
       textDirection: TextDirection.rtl,

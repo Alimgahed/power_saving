@@ -3,17 +3,18 @@ class GuageBill {
   final String accountNumber;
   final int billMonth;
   final int billYear;
-  final int prevReading;
-  final int currentReading;
-  final int readingFactor;
-  final int powerConsump;
+  final num prevReading;
+  final num currentReading;
+  final num readingFactor;
+  final num powerConsump;
 
-  final double fixedInstallment;
-  final double settlements;
-  final double stamp;
-  final double prevPayments;
-  final double rounding;
-  final double billTotal;
+  final num fixedInstallment;
+  final num settlements;
+  final num settlementsratio;
+  final num stamp;
+  final num prevPayments;
+  final num rounding;
+  final num billTotal;
   final bool isPaid;
   List<double>? ratios;
 
@@ -27,6 +28,7 @@ class GuageBill {
     required this.readingFactor,
     required this.powerConsump,
     this.ratios,
+    required this.settlementsratio,
     required this.fixedInstallment,
     required this.settlements,
     required this.stamp,
@@ -38,6 +40,7 @@ class GuageBill {
 
   factory GuageBill.fromJson(Map<String, dynamic> json) {
     return GuageBill(
+      settlementsratio: json["settlement_qtY"],
       guageBillId: json['guage_bill_id'],
       accountNumber: json['account_number'],
       billMonth: json['bill_month'],
@@ -47,7 +50,7 @@ class GuageBill {
       readingFactor: json['reading_factor'],
       powerConsump: json['power_consump'],
       ratios: json["percent"],
-      fixedInstallment: json['fixed_installment'].toDouble(),
+      fixedInstallment: json['fixed_installment'],
       settlements: json['settlements'].toDouble(),
       stamp: json['stamp'].toDouble(),
       prevPayments: json['prev_payments'].toDouble(),

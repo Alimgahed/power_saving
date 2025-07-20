@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/chemacial.dart';
 import 'package:power_saving/model/station_model.dart';
 import 'package:power_saving/model/tech_model.dart';
@@ -24,7 +25,7 @@ class Chemacialcontroller extends GetxController {
       chemicals.clear();
       chemicals = []; // Clear the list before fetching new data
       final res = await http.get(
-        Uri.parse("http://172.16.144.197:5000/chemicals"),
+        Uri.parse("http://$ip/chemicals"),
       );
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
@@ -85,7 +86,7 @@ class addchemical extends GetxController {
   Future<void> addchemicals({required AlumChlorineReference reference}) async {
     try {
       final res = await http.post(
-        Uri.parse("http://172.16.144.197:5000/new-chemical"),
+        Uri.parse("http://$ip/new-chemical"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(reference.toJson()),
       );
@@ -119,7 +120,7 @@ class addchemical extends GetxController {
   }) async {
     try {
       final res = await http.post(
-        Uri.parse("http://172.16.144.197:5000/edit-chemical/$id"),
+        Uri.parse("http://$ip/edit-chemical/$id"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(reference.toJson()),
       );
@@ -150,7 +151,7 @@ class addchemical extends GetxController {
   void getchemicals() async {
     try {
       final res = await http.get(
-        Uri.parse("http://172.16.144.197:5000/new-chemical"),
+        Uri.parse("http://$ip/new-chemical"),
       );
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);

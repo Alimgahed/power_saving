@@ -6,6 +6,7 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:power_saving/view/Counter/Counter.dart';
 import 'package:power_saving/view/Counter/add_Counter.dart';
 import 'package:power_saving/view/Counter/edit_counter.dart';
+import 'package:power_saving/view/analysis/analysis.dart';
 import 'package:power_saving/view/auth/login.dart';
 import 'package:power_saving/view/auth/new_user.dart';
 import 'package:power_saving/view/bill/add_bill.dart';
@@ -60,6 +61,10 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/addstations', page: () => AddStationScreen()),
         GetPage(name: '/Technology', page: () => Technology()),
         GetPage(name: '/Edittech', page: () => Edittech()),
+
+                GetPage(name: '/analysis', page: () => AnalysisView()),
+
+        
         GetPage(name: '/addTech', page: () => AddTech()),
         GetPage(name: '/Countrts', page: () => Counterscreen()),
         GetPage(name: '/addCounter', page: () => AddElectricMeterScreen()),

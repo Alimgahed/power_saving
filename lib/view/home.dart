@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart' show NumberFormat;
+import 'package:power_saving/controller/analysis/analysis.dart';
 import 'package:power_saving/controller/home/home.dart';
 import 'package:power_saving/controller/voltage/voltage.dart';
 import 'package:power_saving/model/home.dart';
 import 'package:power_saving/model/vlotage.dart';
 import 'package:power_saving/my_widget/home.dart';
 import 'package:power_saving/my_widget/sharable.dart';
+import 'package:power_saving/view/analysis/analysis.dart';
 
 class Home extends StatelessWidget {
   Home({super.key});
@@ -358,7 +361,7 @@ class Home extends StatelessWidget {
         body: GetBuilder<homecontroller>(
           init: homecontroller(),
           builder: (controller) {
-            if (controller.consumptionModel == null) {
+            if (controller.looading.value==true) {
               return const Center(
                 child: CircularProgressIndicator(color: Color(0xFF1E40AF)),
               );
@@ -398,7 +401,7 @@ class Home extends StatelessWidget {
                               child: Obx(
                                 () => _buildStatCard(
                                   'إجمالي التكلفة',
-                                  '${controller.animatedMoney.value?.toStringAsFixed(2) ?? '0.00'} جنيه',
+                                 '${NumberFormat('#,###').format(controller.animatedMoney.value??0)} جنيه',
                                   Icons.attach_money,
                                   Colors.green,
                                 ),
@@ -409,7 +412,7 @@ class Home extends StatelessWidget {
                               child: Obx(
                                 () => _buildStatCard(
                                   'كمية المياة المنتجة',
-                                  '${controller.animatedWater.value?.toStringAsFixed(2) ?? '0.00'} م³',
+                                  '${NumberFormat('#,###').format(controller.animatedWater.value??0)} م³',
                                   Icons.opacity,
                                   Colors.blue,
                                 ),
@@ -420,7 +423,7 @@ class Home extends StatelessWidget {
                               child: Obx(
                                 () => _buildStatCard(
                                   'كمية الكهرياء المستهلكة',
-                                  '${controller.animatedPower.value?.toStringAsFixed(2) ?? '0.00'} واط',
+                                  '${NumberFormat('#,###').format(controller.animatedPower.value??0)} واط',
                                   Icons.electrical_services,
                                   Colors.amber,
                                 ),
@@ -431,7 +434,7 @@ class Home extends StatelessWidget {
                               child: Obx(
                                 () => _buildStatCard(
                                   'كمية الكلور',
-                                  '${controller.animatedChlorine.value?.toStringAsFixed(2) ?? '0.00'} مجم/لتر',
+                                  '${NumberFormat('#,###').format(controller.animatedChlorine.value??0)} جرام',
                                   Icons.science,
                                   Colors.cyan,
                                 ),
@@ -442,7 +445,7 @@ class Home extends StatelessWidget {
                               child: Obx(
                                 () => _buildStatCard(
                                   'كمية الشبة السائلة',
-                                  '${controller.animatedLiquidAlum.value?.toStringAsFixed(2) ?? '0.00'} مجم/لتر',
+                                  '${NumberFormat('#,###').format(controller.animatedLiquidAlum.value??0)} جرام',
                                   Icons.liquor,
                                   Colors.orange,
                                 ),
@@ -453,7 +456,7 @@ class Home extends StatelessWidget {
                               child: Obx(
                                 () => _buildStatCard(
                                   'كمية الشبة الصلبة',
-                                  '${controller.animatedSolidAlum.value?.toStringAsFixed(2) ?? '0.00'} مجم/لتر',
+                                  '${NumberFormat('#,###').format(controller.animatedSolidAlum.value??0)} جرام',
                                   Icons.ac_unit,
                                   Colors.brown,
                                 ),
@@ -474,6 +477,7 @@ class Home extends StatelessWidget {
                if (data.overPowerConsump.isNotEmpty)
   _buildOverConsumptionSection(
     'الاستهلاك خارج الحد المسموح للطاقة',
+    
     data.overPowerConsump,
     "الكهرباء",
     "واط", // Remove fixed value since it varies per item
@@ -611,98 +615,112 @@ Widget _buildOverConsumptionSection(
     padding: const EdgeInsets.symmetric(horizontal: 16),
     child: Wrap(
       spacing: 10,
-      runSpacing: 10,
+      runSpacing: 20,
       children: data.map((item) {
-        return Container(
-          width: 250, // You control the width
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.04),
-                spreadRadius: 0,
-                blurRadius: 20,
-                offset: const Offset(0, 4),
-              ),
-            ],
-            border: Border.all(color: Colors.grey.shade100, width: 1),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min, // Allow dynamic height
-            children: [
-              // Header Section
-              Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.blue.shade600, Colors.blue.shade700],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+        return GestureDetector(
+          onTap: () {
+Get.toNamed(
+  '/analysis',
+  arguments: {
+    'station': item.stationId,
+    'tech': item.technologyId,
+  },
+);
+
+       
+
+          },
+          child: Container(
+            width: 250, // You control the width
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.04),
+                  spreadRadius: 0,
+                  blurRadius: 20,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+              border: Border.all(color: Colors.grey.shade100, width: 1),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min, // Allow dynamic height
+              children: [
+                // Header Section
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.blue.shade600, Colors.blue.shade700],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
                   ),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.electric_meter,
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'محطة ${item.stationName}',
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                child: Padding(
+          
+                const SizedBox(height: 8),
+          
+                // Content Section
+                Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Row(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(
-                        Icons.electric_meter,
-                        color: Colors.white,
-                        size: 16,
+                      _buildDetailItem(
+                        'الشهر/السنة',
+                        '${item.billMonth} / ${item.billYear}',
+                        Icons.date_range,
+                        Colors.blue,
                       ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          'محطة ${item.stationName}',
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                      const SizedBox(height: 4),
+                      _buildDetailItem(
+                        'التقنية',
+                        item.technologyName,
+                        Icons.memory,
+                        Colors.teal,
+                      ),
+                      const SizedBox(height: 4),
+                      _buildDetailItem(
+                        label,
+                        _getItemValue(item, label),
+                        icons,
+                        Colors.indigo,
                       ),
                     ],
                   ),
                 ),
-              ),
-
-              const SizedBox(height: 8),
-
-              // Content Section
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildDetailItem(
-                      'الشهر/السنة',
-                      '${item.billMonth} / ${item.billYear}',
-                      Icons.date_range,
-                      Colors.blue,
-                    ),
-                    const SizedBox(height: 4),
-                    _buildDetailItem(
-                      'التقنية',
-                      item.technologyName,
-                      Icons.memory,
-                      Colors.teal,
-                    ),
-                    const SizedBox(height: 4),
-                    _buildDetailItem(
-                      label,
-                      _getItemValue(item, label),
-                      icons,
-                      Colors.indigo,
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       }).toList(),
@@ -719,13 +737,13 @@ Widget _buildOverConsumptionSection(
 String _getItemValue(OverConsump item, String label) {
   switch (label) {
     case "الكهرباء":
-      return "${item.technologyPowerConsump} واط";
+      return "${NumberFormat('#,###').format(item.technologyPowerConsump)} واط";
     case "الكلور":
-      return "${item.technologyChlorineConsump } جرامق";
+      return "${NumberFormat('#,###').format(item.technologyChlorineConsump)} جرام";
     case "الشبة السائلة":
-      return "${item.technologyLiquidAlumConsump } جرام";
+      return "${NumberFormat('#,###').format(item.technologyLiquidAlumConsump)} جرام";
     case "الشبة الصلبة":
-      return "${item.technologySolidAlumConsump} جرام";
+      return "${NumberFormat('#,###').format(item.technologySolidAlumConsump)} جرام";
     default:
       return "";
   }

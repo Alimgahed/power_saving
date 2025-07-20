@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/vlotage.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 
@@ -39,7 +40,7 @@ class Voltage extends GetxController {
     try {
       vlotages = [];
       final res = await http.get(
-        Uri.parse("http://172.16.144.197:5000/voltage-costs"),
+        Uri.parse("http://$ip/voltage-costs"),
       );
 
       if (res.statusCode == 200) {
@@ -75,7 +76,7 @@ class Voltage extends GetxController {
     try {
       final res = await http.post(
         headers: {"Content-Type": "application/json"},
-        Uri.parse("http://172.16.144.197:5000/edit-v-cost/$voltid"),
+        Uri.parse("http://$ip/edit-v-cost/$voltid"),
         body: json.encode(volt.toJson()),
       );
 

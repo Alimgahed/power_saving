@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/Counter_model.dart';
 import 'package:power_saving/model/relations.dart';
 import 'package:power_saving/model/station_model.dart';
@@ -31,7 +32,7 @@ class Relation extends GetxController {
   Future<void> all_relations() async {
     try {
       final res = await http.get(
-        Uri.parse("http://172.16.144.197:5000/stg-relations"),
+        Uri.parse("http://$ip/stg-relations"),
       );
 
       if (res.statusCode == 200) {
@@ -58,7 +59,7 @@ class Relation extends GetxController {
     try {
       isLoading.value = true; // Start loading
       final res = await http.get(
-        Uri.parse("http://172.16.144.197:5000/edit-relation/$id"),
+        Uri.parse("http://$ip/edit-relation/$id"),
         headers: {"Content-Type": "application/json"},
       );
 
@@ -106,7 +107,7 @@ class addrelationcontroller extends GetxController {
   Future<void> new_relations() async {
     try {
       final res = await http.get(
-        Uri.parse("http://172.16.144.197:5000/new-relation"),
+        Uri.parse("http://$ip/new-relation"),
       );
 
       if (res.statusCode == 200) {
@@ -147,7 +148,7 @@ class addrelationcontroller extends GetxController {
   Future<void> addRelations(StationGaugeTechnologyRelation relation) async {
     try {
       final res = await http.post(
-        Uri.parse("http://172.16.144.197:5000/new-relation"),
+        Uri.parse("http://$ip/new-relation"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(relation.toJson()),
       );

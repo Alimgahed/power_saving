@@ -152,14 +152,14 @@ class TechBills extends StatelessWidget {
   child: Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16),
     child: Wrap(
-      spacing: 20,
+      spacing: 10,
       runSpacing: 20,
       children: controller.techBills.asMap().entries.map((entry) {
         final index = entry.key;
         final techBill = entry.value;
 
         return Container(
-          width: 400, // Same as maxCrossAxisExtent in original Grid
+          width: 300, // Same as maxCrossAxisExtent in original Grid
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),

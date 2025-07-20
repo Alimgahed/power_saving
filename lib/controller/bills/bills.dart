@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:power_saving/controller/technology/technlogy.dart';
+import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/bills_model.dart';
 import 'package:power_saving/model/relations.dart';
 import 'package:power_saving/my_widget/sharable.dart';
@@ -23,6 +23,8 @@ class Bills extends GetxController {
   late TextEditingController voltageCostController;
   late TextEditingController fixedInstallmentController;
   late TextEditingController settlementsController;
+    late TextEditingController settlementsControllerratio;
+
   late TextEditingController stampController;
   late TextEditingController prevPaymentsController;
   late TextEditingController roundingController;
@@ -38,7 +40,7 @@ class Bills extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
+settlementsControllerratio=TextEditingController();
     // Initialize controllers
     briefReadingController = TextEditingController();
     currentReadingController = TextEditingController();
@@ -61,6 +63,7 @@ class Bills extends GetxController {
 
   @override
   void onClose() {
+    settlementsControllerratio.dispose();
     billMonthController.dispose();
     billyearController.dispose();
     briefReadingController.dispose();
@@ -85,7 +88,7 @@ class Bills extends GetxController {
     try {
       gauges = [];
       final res = await http.get(
-        Uri.parse("http://172.16.144.197:5000/new-bill/$number"),
+        Uri.parse("http://$ip/new-bill/$number"),
       );
 
       if (res.statusCode == 200) {
@@ -126,7 +129,7 @@ class Bills extends GetxController {
       isLoading.value = true;
       final res = await http.post(
         headers: {"Content-Type": "application/json"},
-        Uri.parse("http://172.16.144.197:5000/new-bill/$number"),
+        Uri.parse("http://$ip/new-bill/$number"),
         body: json.encode(bill.toJson()),
       );
 

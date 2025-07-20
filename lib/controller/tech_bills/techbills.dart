@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/tech_bill.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 
@@ -74,7 +75,7 @@ class Techbills extends GetxController {
   void fetchTechBills() async {
     try {
       final res = await http.get(
-        Uri.parse("http://172.16.144.197:5000/tech-bills"),
+        Uri.parse("http://$ip/tech-bills"),
       );
 
       if (res.statusCode == 200) {
@@ -107,7 +108,7 @@ class Techbills extends GetxController {
 
       final res = await http.post(
         headers: {"Content-Type": "application/json"},
-        Uri.parse("http://172.16.144.197:5000/edit-tech-bill/$id"),
+        Uri.parse("http://$ip/edit-tech-bill/$id"),
         body: json.encode({
           "technology_chlorine_consump": chlorine,
           "technology_liquid_alum_consump": liquid,

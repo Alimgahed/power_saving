@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/home.dart';
 
 // ignore: camel_case_types
 class homecontroller extends GetxController {
+  RxBool looading=false.obs;
   ConsumptionModel? consumptionModel;
 
   // Reactive values using RxnNum
@@ -24,14 +26,19 @@ class homecontroller extends GetxController {
 
   void home() async {
     try {
-      final res = await http.get(Uri.parse("http://172.16.144.197:5000/"));
+      looading.value=true;
+      final res = await http.get(Uri.parse("http://$ip/"));
       if (res.statusCode == 200) {
+        
         final jsonData = json.decode(res.body);
         consumptionModel = ConsumptionModel.fromJson(jsonData);
+              looading.value=false;
+
         animateAll();
         update();
       }
     } catch (e) {
+      looading.value=false;
       print("Error: $e");
     }
   }
@@ -48,7 +55,7 @@ class homecontroller extends GetxController {
   }
 
   void animateValue(RxnNum rxValue, num targetValue) {
-    const duration = Duration(milliseconds: 900);
+    const duration = Duration(milliseconds: 700);
     const interval = Duration(milliseconds: 5);
     int steps = duration.inMilliseconds ~/ interval.inMilliseconds;
     num stepValue = targetValue / steps;

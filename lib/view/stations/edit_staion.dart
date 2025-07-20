@@ -8,10 +8,14 @@ class EditStationsScreen extends StatelessWidget {
   EditStationsScreen({super.key});
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
 
-  final Station station = Get.arguments["Stations"];
+  final Station? station = Get.arguments!=null?Get.arguments["Stations"]:null;
 
   @override
   Widget build(BuildContext context) {
+     if (station == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Get.offAllNamed('/Stations');
+      });}
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -55,12 +59,12 @@ class EditStationsScreen extends StatelessWidget {
               // Initialize controller with station data only once
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 if (controller.name.text.isEmpty) {
-                  controller.name.text = station.stationName;
+                  controller.name.text = station!.stationName;
                   controller.capacity.text =
-                      station.stationWaterCapacity.toString();
-                  controller.stationTypeId = station.stationType;
-                  controller.branchId = station.branchid;
-                  controller.sourceId = station.sourceid;
+                      station!.stationWaterCapacity.toString();
+                  controller.stationTypeId = station!.stationType;
+                  controller.branchId = station!.branchid;
+                  controller.sourceId = station!.sourceid;
                 }
               });
 
@@ -98,7 +102,7 @@ class EditStationsScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'المحطة الحالية: ${station.stationName}',
+                                'المحطة الحالية: ${station!.stationName}',
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
@@ -106,7 +110,7 @@ class EditStationsScreen extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                'معرف المحطة: ${station.stationId}',
+                                'معرف المحطة: ${station!.stationId}',
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.blue.shade600,
@@ -170,7 +174,7 @@ class EditStationsScreen extends StatelessWidget {
                                       child: Text("صرف"),
                                     ),
                                   ],
-                                  initialValue: station.stationType,
+                                  initialValue: station!.stationType,
                                   onChanged: (val) {
                                     controller.stationTypeId = val!;
                                   },
@@ -209,7 +213,7 @@ class EditStationsScreen extends StatelessWidget {
                                           child: Text(branch.branchName),
                                         );
                                       }).toList(),
-                                  initialValue: station.branchid,
+                                  initialValue: station!.branchid,
                                   onChanged: (value) {
                                     controller.branchId = value;
                                   },
@@ -233,7 +237,7 @@ class EditStationsScreen extends StatelessWidget {
                                           child: Text(source.waterSourceName!),
                                         );
                                       }).toList(),
-                                  initialValue: station.sourceid,
+                                  initialValue: station!.sourceid,
                                   onChanged: (value) {
                                     controller.sourceId = value;
                                   },
@@ -259,15 +263,15 @@ class EditStationsScreen extends StatelessWidget {
                                     name: controller.name.text,
                                     branchId:
                                         controller.branchId ??
-                                        station.branchid!,
+                                        station!.branchid!,
                                     sourceId:
                                         controller.sourceId ??
-                                        station.sourceid!,
+                                        station!.sourceid!,
                                     typeId: controller.stationTypeId!,
                                     capacity: int.parse(
                                       controller.capacity.text,
                                     ),
-                                    Stations_id: station.stationId!,
+                                    Stations_id: station!.stationId!,
                                   );
                                 }
                               },

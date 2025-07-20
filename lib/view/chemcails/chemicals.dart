@@ -178,7 +178,7 @@ class Chemicals extends StatelessWidget {
   child: Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16),
     child: Wrap(
-      spacing: 20,
+      spacing: 10,
       runSpacing: 20,
       children: controller.chemicals.map((chemical) {
         return Container(

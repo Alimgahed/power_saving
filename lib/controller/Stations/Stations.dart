@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/station_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 
@@ -47,7 +48,7 @@ class AddStationController extends GetxController {
   }) async {
     try {
       final res = await http.post(
-        Uri.parse("http://172.16.144.197:5000/new-station"),
+        Uri.parse("http://$ip/new-station"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
           "name": name,
@@ -90,7 +91,7 @@ class AddStationController extends GetxController {
   }) async {
     try {
       final res = await http.post(
-        Uri.parse("http://172.16.144.197:5000/edit-station/$Stations_id"),
+        Uri.parse("http://$ip/edit-station/$Stations_id"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
           "name": name,
@@ -130,7 +131,7 @@ class AddStationController extends GetxController {
   Future<void> allBranches() async {
     try {
       final res = await http.get(
-        Uri.parse("http://172.16.144.197:5000/new-station"),
+        Uri.parse("http://$ip/new-station"),
       );
 
       if (res.statusCode == 200) {
@@ -164,7 +165,7 @@ class get_all_stations extends GetxController {
   void get_stations() async {
     try {
       final res = await http.get(
-        Uri.parse("http://172.16.144.197:5000/stations"),
+        Uri.parse("http://$ip/stations"),
       );
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
