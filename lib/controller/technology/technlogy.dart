@@ -10,6 +10,7 @@ import 'package:power_saving/my_widget/sharable.dart';
 import 'package:http/http.dart' as http;
 
 class TechnlogyController extends GetxController {
+  RxBool looading=false.obs;
   List<TechnologyModel> all_technology = [];
   late TextEditingController name;
   late TextEditingController chlorine;
@@ -36,6 +37,7 @@ class TechnlogyController extends GetxController {
 
   Future<void> alltechnology() async {
     try {
+      
       final res = await http.get(
         Uri.parse("http://$ip/technologies"),
       );
@@ -60,16 +62,16 @@ class TechnlogyController extends GetxController {
   }
 
   Future<void> addtech({required TechnologyModel tech}) async {
-    try {
+    try {   looading.value=true;
       final res = await http.post(
         Uri.parse("http://$ip/new-tech"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(tech.toJson()), // ✅ Proper JSON encoding
       );
 
-      if (res.statusCode == 200) {
+      if (res.statusCode == 200) {   looading.value=false;
         showSuccessToast("تم اضافة التقنية بنجاح");
-      } else {
+      } else {   looading.value=false;
         final errorBody = jsonDecode(res.body);
 
         // Extract Arabic error message
@@ -78,7 +80,7 @@ class TechnlogyController extends GetxController {
         // Show custom dialog or toast with Arabic error
         showCustomErrorDialog(errorMessage: errorMessage);
       }
-    } catch (e) {
+    } catch (e) {   looading.value=false;
       print("Error adding station: $e");
       Get.snackbar(
         "خطأ",
@@ -91,6 +93,8 @@ class TechnlogyController extends GetxController {
 }
 
 class edit_tech extends GetxController {
+    RxBool looading=false.obs;
+
   late TextEditingController name;
   late TextEditingController chlorine;
   late TextEditingController liquid;
@@ -117,7 +121,7 @@ class edit_tech extends GetxController {
     required TechnologyModel tech,
     required int id,
   }) async {
-    try {
+    try {   looading.value=true;
       final res = await http.post(
         Uri.parse("http://$ip/edit-tech/$id"),
         headers: {"Content-Type": "application/json"},
@@ -125,8 +129,10 @@ class edit_tech extends GetxController {
       );
 
       if (res.statusCode == 200) {
+           looading.value=false;
         showSuccessToast("تم تعديل التقنية بنجاح");
       } else {
+           looading.value=false;
         final errorBody = jsonDecode(res.body);
 
         // Extract Arabic error message
@@ -136,6 +142,7 @@ class edit_tech extends GetxController {
         showCustomErrorDialog(errorMessage: errorMessage);
       }
     } catch (e) {
+         looading.value=false;
       print("Error adding station: $e");
       Get.snackbar(
         "خطأ",

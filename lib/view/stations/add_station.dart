@@ -230,7 +230,10 @@ class AddStationScreen extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: 16),
-                          SizedBox(
+                          Obx((){
+                            return controller.looading.value?
+                            Center(child: CircularProgressIndicator(color: Colors.blue,),):
+                             SizedBox(
                             width: double.infinity,
                             child: ElevatedButton.icon(
                               onPressed: () async {
@@ -266,7 +269,9 @@ class AddStationScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          ),
+                          );
+                          })
+                         
                         ],
                       ),
                     ),

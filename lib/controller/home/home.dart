@@ -46,12 +46,12 @@ class homecontroller extends GetxController {
   void animateAll() {
     if (consumptionModel == null) return;
 
-    animateValue(animatedMoney, consumptionModel!.money);
-    animateValue(animatedWater, consumptionModel!.water);
-    animateValue(animatedPower, consumptionModel!.power);
-    animateValue(animatedChlorine, consumptionModel!.chlorine);
-    animateValue(animatedLiquidAlum, consumptionModel!.liquidAlum);
-    animateValue(animatedSolidAlum, consumptionModel!.solidAlum);
+    animateValue(animatedMoney, consumptionModel!.money??0);
+    animateValue(animatedWater, consumptionModel!.water??0);
+    animateValue(animatedPower, consumptionModel!.power??0);
+    animateValue(animatedChlorine, consumptionModel!.chlorine??0);
+    animateValue(animatedLiquidAlum, consumptionModel!.liquidAlum??0);
+    animateValue(animatedSolidAlum, consumptionModel!.solidAlum??0);
   }
 
   void animateValue(RxnNum rxValue, num targetValue) {

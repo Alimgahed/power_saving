@@ -3,6 +3,8 @@ class ElectricMeter {
   final int? finalReading;
   final int? meterFactor;
   final int? voltageid;
+  final num?price;
+  final num?fixedprice;
 
   final String meterId;
   String? voltageType;
@@ -12,6 +14,8 @@ class ElectricMeter {
     this.accountNumber,
     this.finalReading,
     this.meterFactor,
+    this.price,
+    this.fixedprice,
     required this.meterId,
     this.voltageType,
   });
@@ -22,6 +26,8 @@ class ElectricMeter {
       accountNumber: json['account_number'],
       finalReading: json['final_reading'],
       meterFactor: json['meter_factor'],
+      price: json["voltage_cost"],
+      fixedprice: json["fixed_fee"],
       meterId: json['meter_id'],
       voltageType: json['voltage_type'],
     );

@@ -8,6 +8,7 @@ import 'package:power_saving/model/station_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 
 class AddStationController extends GetxController {
+  RxBool looading=false.obs;
   late TextEditingController name;
   late TextEditingController capacity;
 
@@ -46,6 +47,7 @@ class AddStationController extends GetxController {
     required String typeId,
     required int capacity,
   }) async {
+    looading.value=true;
     try {
       final res = await http.post(
         Uri.parse("http://$ip/new-station"),
@@ -60,8 +62,10 @@ class AddStationController extends GetxController {
       );
 
       if (res.statusCode == 200) {
+         looading.value=false;
         showSuccessToast("تم اضافة المحطة بنجاح");
       } else {
+         looading.value=false;
         final errorBody = jsonDecode(res.body);
 
         // Extract Arabic error message
@@ -71,6 +75,7 @@ class AddStationController extends GetxController {
         showCustomErrorDialog(errorMessage: errorMessage);
       }
     } catch (e) {
+     looading.value=false;
       print("Error adding station: $e");
       Get.snackbar(
         "خطأ",
@@ -90,6 +95,7 @@ class AddStationController extends GetxController {
     required int capacity,
   }) async {
     try {
+      looading.value=true;
       final res = await http.post(
         Uri.parse("http://$ip/edit-station/$Stations_id"),
         headers: {"Content-Type": "application/json"},
@@ -103,10 +109,12 @@ class AddStationController extends GetxController {
       );
 
       if (res.statusCode == 200) {
+         looading.value=false;
         showSuccessToast("تم تعديل المحطة بنجاح");
-        Get.offNamed('/Stations');
+        Get.offAllNamed('/Stations');
       } else {
         final errorBody = jsonDecode(res.body);
+         looading.value=false;
 
         // Extract Arabic error message
         final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';
@@ -115,6 +123,7 @@ class AddStationController extends GetxController {
         showCustomErrorDialog(errorMessage: errorMessage);
       }
     } catch (e) {
+       looading.value=false;
       print("Error adding station: $e");
       Get.snackbar(
         "خطأ",

@@ -309,6 +309,13 @@ if (Bill.gauges.isNotEmpty) {
         content: GetBuilder<Bills>(
           init:Bills() ,
         builder: (billsController) {
+          billsController.briefReadingController=TextEditingController(text:meter.finalReading.toString() );
+          billsController.calculatedEnergyCost.value=meter.price!.toDouble();
+                    billsController.fixed.value=meter.fixedprice!.toDouble();
+
+                    billsController.readingFactorController=TextEditingController(text:meter.meterFactor.toString() );
+
+          
           return SingleChildScrollView(
             child: Form(
               key: _globalKey,
@@ -512,12 +519,29 @@ if (Bill.gauges.isNotEmpty) {
                             ),
                           ],
                         ),
-                          CustomTextFormField(
-                            label: 'قيمة المطالبة',
-                            allowOnlyDigits: true,
-                            hintText: 'أدخل قيمة المطالبة',
-                            icon: Icons.receipt_long,
-                            controller: billsController.billTotalController,
+                          Row(
+                            children: [
+                              Expanded(
+                                child: CustomTextFormField(
+                                  label: 'قيمة المطالبة',
+                                  allowOnlyDigits: true,
+                                  hintText: 'أدخل قيمة المطالبة',
+                                  icon: Icons.receipt_long,
+                                  controller: billsController.billTotalController,
+                                ),
+                              ),
+                              SizedBox(width: 10,),
+                               Expanded(
+                                child: CustomTextFormField(
+                                  label: 'الملاحظات',
+                                  allowOnlyDigits: true,
+                                  hintText: 'ادخل الملاحظات',
+                                  icon: Icons.note_add,
+                                  useValidator: false,
+                                  controller: billsController.notes,
+                                ),
+                              ),
+                            ],
                           ),
                           
                         // Gauges Section
@@ -609,7 +633,7 @@ if (Bill.gauges.isNotEmpty) {
                         const SizedBox(height: 24),
 
                         Obx(() {
-                          return Center(
+                          return billsController.isLoading.value?Center(child: CircularProgressIndicator(color: Colors.blue,),): Center(
                             child: ElevatedButton(
                               onPressed: () {
                                 if (_globalKey.currentState!.validate()) {
@@ -688,21 +712,13 @@ if (Bill.gauges.isNotEmpty) {
                                       rounding: rounding,
                                       billTotal: billTotal,
                                       isPaid: isPaid,
+                                      notes:billsController.notes.text,
                                       ratios: ratios, // Add this to your model if needed
                                     ),
                                   );
                                 }
                               },
-                              child: billsController.isLoading.value
-                                  ? const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        color: Colors.blue,
-                                      ),
-                                    )
-                                  : const Text("تسجيل الفاتورة"),
+                              child: Text("تسجيل الفاتورة"),
                             ),
                           );
                         }),

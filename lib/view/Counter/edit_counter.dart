@@ -202,7 +202,9 @@ class editCounter extends StatelessWidget {
                           const SizedBox(height: 24),
 
                           // Save Button
-                          SizedBox(
+                          Obx((){
+                            return controller.looadig.value?Center(child: CircularProgressIndicator(color: Colors.blue,),):
+                              SizedBox(
                             width: double.infinity,
                             child: ElevatedButton.icon(
                               onPressed: () async {
@@ -236,7 +238,9 @@ class editCounter extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          ),
+                          );
+                          })
+                        
                         ],
                       ),
                     ),

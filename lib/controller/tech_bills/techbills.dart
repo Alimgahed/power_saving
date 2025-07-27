@@ -8,6 +8,7 @@ import 'package:power_saving/model/tech_bill.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 
 class Techbills extends GetxController {
+  RxBool looading=false.obs;
   // ignore: unused_field
   final Map<int, GlobalKey<FormState>> formKeys = {};
   GlobalKey<FormState> getFormKey(int index) {
@@ -104,6 +105,7 @@ class Techbills extends GetxController {
     required int index, // <-- Add this parameter
   }) async {
     try {
+      looading.value=true;
       loadingIndex.value = index; // mark current item as loading
 
       final res = await http.post(
@@ -118,13 +120,16 @@ class Techbills extends GetxController {
       );
 
       if (res.statusCode == 200) {
+          looading.value=false;
         showSuccessToast("تمت الإضافة بنجاح");
       } else {
+         looading.value=false;
         final errorBody = jsonDecode(res.body);
         final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';
         showCustomErrorDialog(errorMessage: errorMessage);
       }
     } catch (e) {
+       looading.value=false;
       print("Error during bill submission: $e");
     } finally {
       loadingIndex.value = null; // reset after done

@@ -1,10 +1,10 @@
 class ConsumptionModel {
-  final num chlorine;
-  final num liquidAlum;
-  final double money;
-  final num power;
-  final num solidAlum;
-  final num water;
+  final num? chlorine;
+  final num? liquidAlum;
+  final double? money;
+  final num? power;
+  final num? solidAlum;
+  final num? water;
   final List<OverConsump> overChlorineConsump;
   final List<OverConsump> overLiquidAlumConsump;
   final List<OverConsump> overPowerConsump;
@@ -54,25 +54,25 @@ class ConsumptionModel {
 class OverConsump {
   final int billMonth;
   final int billYear;
-  final num chlorineRangeFrom;
-  final num chlorineRangeTo;
-  final num liquidAlumRangeFrom;
-  final num liquidAlumRangeTo;
-  final num powerPerWater;
-  final num solidAlumRangeFrom;
-  final num solidAlumRangeTo;
+  final num? chlorineRangeFrom;
+  final num? chlorineRangeTo;
+  final num? liquidAlumRangeFrom;
+  final num? liquidAlumRangeTo;
+  final num? powerPerWater;
+  final num? solidAlumRangeFrom;
+  final num? solidAlumRangeTo;
   final int stationId;
   final String stationName;
   final int techBillId;
-  final num technologyBillPercentage;
+  final num? technologyBillPercentage;
   final String technologyBillTotal;
-  final num technologyChlorineConsump;
+  final num? technologyChlorineConsump;
   final int technologyId;
-  final num technologyLiquidAlumConsump;
+  final num? technologyLiquidAlumConsump;
   final String technologyName;
-  final num technologyPowerConsump;
-  final num technologySolidAlumConsump;
-  final num technologyWaterAmount;
+  final num? technologyPowerConsump;
+  final num? technologySolidAlumConsump;
+  final num? technologyWaterAmount;
 
   OverConsump({
     required this.billMonth,

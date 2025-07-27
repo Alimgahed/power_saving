@@ -7,7 +7,7 @@ class GuageBill {
   final num currentReading;
   final num readingFactor;
   final num powerConsump;
-
+final String ?notes;
   final num fixedInstallment;
   final num settlements;
   final num settlementsratio;
@@ -20,6 +20,7 @@ class GuageBill {
 
   GuageBill({
     this.guageBillId,
+    this.notes,
     required this.accountNumber,
     required this.billMonth,
     required this.billYear,
@@ -40,7 +41,7 @@ class GuageBill {
 
   factory GuageBill.fromJson(Map<String, dynamic> json) {
     return GuageBill(
-      settlementsratio: json["settlement_qtY"],
+      settlementsratio: json["settlement_qty"],
       guageBillId: json['guage_bill_id'],
       accountNumber: json['account_number'],
       billMonth: json['bill_month'],
@@ -57,11 +58,14 @@ class GuageBill {
       rounding: json['rounding'].toDouble(),
       billTotal: json['bill_total'].toDouble(),
       isPaid: json['is_paid'],
+      notes: json["notes"]
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      "notes":notes,
+      "settlement_qty":settlementsratio,
       'percent': ratios,
       'guage_bill_id': guageBillId,
       'account_number': accountNumber,

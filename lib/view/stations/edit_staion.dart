@@ -38,7 +38,7 @@ class EditStationsScreen extends StatelessWidget {
               child: IconButton(
                 icon: const Icon(Icons.arrow_forward, color: Colors.white),
                 onPressed: () {
-                  Get.offNamed('/Stations');
+                  Get.offAllNamed('/Stations');
                 },
                 style: IconButton.styleFrom(
                   backgroundColor: Colors.white.withOpacity(0.1),
@@ -254,6 +254,9 @@ class EditStationsScreen extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: 16),
+                          Obx((){
+                            return controller.looading.value?Center(child: CircularProgressIndicator(color: Colors.blue,)):
+                         
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton.icon(
@@ -295,7 +298,8 @@ class EditStationsScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          ),
+                           ); })
+                         
                         ],
                       ),
                     ),

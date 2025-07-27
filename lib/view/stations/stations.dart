@@ -116,7 +116,7 @@ class StationsScreen extends StatelessWidget {
             return SingleChildScrollView(
               padding: const EdgeInsets.all(20),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // Header Section
                   Container(
@@ -177,149 +177,146 @@ class StationsScreen extends StatelessWidget {
 
                   // Grid Section
             SingleChildScrollView(
-  child: Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: Wrap(
-      spacing: 10,
-      runSpacing: 10,
-      children: controller.allstations.map((station) {
-        return Container(
-          width: 280, // same as maxCrossAxisExtent
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.04),
-                spreadRadius: 0,
-                blurRadius: 20,
-                offset: const Offset(0, 4),
-              ),
-            ],
-            border: Border.all(
-              color: Colors.grey.shade100,
-              width: 1,
+  child: Wrap(
+    spacing: 10,
+    runSpacing: 10,
+    children: controller.allstations.map((station) {
+      return Container(
+        width: 290, // same as maxCrossAxisExtent
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              spreadRadius: 0,
+              blurRadius: 20,
+              offset: const Offset(0, 4),
             ),
+          ],
+          border: Border.all(
+            color: Colors.grey.shade100,
+            width: 1,
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Header
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.blue.shade600,
-                      Colors.blue.shade700,
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: const Icon(
-                        Icons.location_on,
-                        color: Colors.white,
-                        size: 16,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        station.stationName,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
+        ),
+        child: Column(
+          // mainAxisSize: MainAxisSize.min,
+          children: [
+            // Header
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.blue.shade600,
+                    Colors.blue.shade700,
                   ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
                 ),
               ),
-
-              // Content
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    _buildStationInfo(
-                      station.branchName ?? 'غير محدد',
-                      station.stationType,
-                      station.waterSourceName ?? 'غير محدد',
-                      station.stationWaterCapacity.toString(),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(6),
                     ),
-                  ],
-                ),
-              ),
-
-              // Footer
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade50,
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20),
+                    child: const Icon(
+                      Icons.location_on,
+                      color: Colors.white,
+                      size: 16,
+                    ),
                   ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'تعديل المحطة',
-                      style: TextStyle(
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      station.stationName,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
                         fontSize: 16,
-                        color: Colors.black54,
+                        color: Colors.white,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+  
+            // Content
+            Padding(
+              padding: const EdgeInsets.all(4),
+              child: Column(
+                children: [
+                  _buildStationInfo(
+                    station.branchName ?? 'غير محدد',
+                    station.stationType,
+                    station.waterSourceName ?? 'غير محدد',
+                    station.stationWaterCapacity.toString(),
+                  ),
+                ],
+              ),
+            ),
+  
+            // Footer
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade50,
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'تعديل المحطة',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black54,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Get.offNamed(
+                        '/editStations',
+                        arguments: {"Stations": station},
+                      );
+                    },
+                    icon: const Icon(Icons.edit, size: 14),
+                    label: const Text(
+                      'تعديل',
+                      style: TextStyle(
+                        fontSize: 12,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        Get.offNamed(
-                          '/editStations',
-                          arguments: {"Stations": station},
-                        );
-                      },
-                      icon: const Icon(Icons.edit, size: 14),
-                      label: const Text(
-                        'تعديل',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue.shade600,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue.shade600,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        );
-      }).toList(),
-    ),
+            ),
+          ],
+        ),
+      );
+    }).toList(),
   ),
 )
 
@@ -351,7 +348,7 @@ class StationsScreen extends StatelessWidget {
                 Colors.purple,
               ),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 4),
             Expanded(
               child: _buildInfoCard(
                 'نوع المحطة',
@@ -375,7 +372,7 @@ class StationsScreen extends StatelessWidget {
                 Colors.blue,
               ),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 4),
             Expanded(
               child: _buildInfoCard(
                 'الكفاءة التصميمية',
@@ -397,7 +394,7 @@ class StationsScreen extends StatelessWidget {
     Color color,
   ) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: color.withOpacity(0.05),
         borderRadius: BorderRadius.circular(8),

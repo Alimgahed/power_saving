@@ -80,6 +80,7 @@ class Counter_controller extends GetxController {
 
 // ignore: camel_case_types
 class addcounter extends GetxController {
+  RxBool looading=false.obs;
   List<VoltageType> allVoltage = [];
   int? voltage;
 
@@ -115,6 +116,7 @@ class addcounter extends GetxController {
 
   Future<void> addCounter({required ElectricMeter counter}) async {
     try {
+      looading.value=true;
       final res = await http.post(
         Uri.parse("http://$ip/new-gauge"),
         headers: {"Content-Type": "application/json"},
@@ -122,8 +124,10 @@ class addcounter extends GetxController {
       );
 
       if (res.statusCode == 200) {
+        looading.value=false;
         showSuccessToast("تم اضافة العداد بنجاح");
       } else {
+        looading.value=false;
         final errorBody = jsonDecode(res.body);
 
         // Extract Arabic error message
@@ -133,6 +137,7 @@ class addcounter extends GetxController {
         showCustomErrorDialog(errorMessage: errorMessage);
       }
     } catch (e) {
+      looading.value=false;
       print("Error adding station: $e");
       Get.snackbar(
         "خطأ",
@@ -180,6 +185,7 @@ class addcounter extends GetxController {
 }
 
 class EditCounter extends GetxController {
+  RxBool looadig=false.obs;
   List<VoltageType> allVoltage = [];
   int? voltage;
 
@@ -218,6 +224,7 @@ class EditCounter extends GetxController {
     required String serial,
   }) async {
     try {
+      looadig.value=true;
       final res = await http.post(
         Uri.parse("http://$ip/edit-gauge/$serial"),
         headers: {"Content-Type": "application/json"},
@@ -225,8 +232,10 @@ class EditCounter extends GetxController {
       );
 
       if (res.statusCode == 200) {
+        looadig.value=false;
         showSuccessToast("تم تعديل العداد بنجاح");
       } else {
+         looadig.value=false;
         print("Failed to add station: ${res.body}");
         Get.snackbar(
           "خطأ",
@@ -236,6 +245,7 @@ class EditCounter extends GetxController {
         );
       }
     } catch (e) {
+       looadig.value=false;
       print("Error adding station: $e");
       Get.snackbar(
         "خطأ",

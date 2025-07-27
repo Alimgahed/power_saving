@@ -85,6 +85,7 @@ class Relation extends GetxController {
 
 // ignore: camel_case_types
 class addrelationcontroller extends GetxController {
+  RxBool looading=false.obs;
   List<TechnologyModel> technologylist = [];
   List<ElectricMeter> electricMeterList = [];
   List<allstations> stationlist = [];
@@ -147,6 +148,8 @@ class addrelationcontroller extends GetxController {
 
   Future<void> addRelations(StationGaugeTechnologyRelation relation) async {
     try {
+            looading.value=true;
+
       final res = await http.post(
         Uri.parse("http://$ip/new-relation"),
         headers: {"Content-Type": "application/json"},
@@ -154,12 +157,16 @@ class addrelationcontroller extends GetxController {
       );
 
       if (res.statusCode == 200) {
+              looading.value=false;
+
         showSuccessToast('تمت الاضافة بنجاح');
         // Parse with the existing model
         // Assign to local lists
 
         // Debug prints
       } else {
+                      looading.value=false;
+
         final errorBody = jsonDecode(res.body);
 
         // Extract Arabic error message
@@ -169,6 +176,8 @@ class addrelationcontroller extends GetxController {
         showCustomErrorDialog(errorMessage: errorMessage);
       }
     } catch (e) {
+                    looading.value=false;
+
       print("Error fetching branches: $e");
     }
   }

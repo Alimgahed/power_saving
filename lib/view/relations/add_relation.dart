@@ -170,8 +170,9 @@ class AddRelation extends StatelessWidget {
                           ),
 
                           const SizedBox(height: 24),
-
-                          SizedBox(
+Obx((){
+  return controller.looading.value?Center(child: CircularProgressIndicator(color: Colors.blue,),):
+ SizedBox(
                             width: double.infinity,
                             child: ElevatedButton.icon(
                               onPressed: () async {
@@ -205,7 +206,9 @@ class AddRelation extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          ),
+                          );
+})
+                         
                         ],
                       ),
                     ),

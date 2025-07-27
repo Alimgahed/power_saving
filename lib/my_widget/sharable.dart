@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextFormField extends StatelessWidget {
   final String? label;
@@ -10,6 +12,7 @@ class CustomTextFormField extends StatelessWidget {
   final TextInputType keyboardType;
   final bool obscureText;
   final bool allowOnlyDigits;
+  final bool useValidator; // <-- NEW
 
   const CustomTextFormField({
     super.key,
@@ -20,6 +23,7 @@ class CustomTextFormField extends StatelessWidget {
     this.controller,
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
+    this.useValidator = true, // <-- DEFAULT true
   });
 
   @override
@@ -28,24 +32,20 @@ class CustomTextFormField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 12.0),
       child: TextFormField(
         controller: controller,
-        keyboardType:
-            allowOnlyDigits ? TextInputType.number : TextInputType.text,
-        inputFormatters:
-            allowOnlyDigits
-                ? <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(
-                    RegExp(
-                      r'^\d*\.?\d*$',
-                    ), // Allow digits and optional decimal point
-                  ),
-                ]
-                : null,
+        keyboardType: allowOnlyDigits ? TextInputType.number : keyboardType,
+        inputFormatters: allowOnlyDigits
+            ? <TextInputFormatter>[
+                FilteringTextInputFormatter.allow(
+                  RegExp(r'^\d*\.?\d*$'), // digits and optional decimal
+                ),
+              ]
+            : null,
         obscureText: obscureText,
         style: const TextStyle(fontSize: 16),
         decoration: InputDecoration(
           labelText: label,
           hintText: hintText,
-          prefixIcon: Icon(icon, color: Colors.blue),
+          prefixIcon: icon != null ? Icon(icon, color: Colors.blue) : null,
           contentPadding: const EdgeInsets.symmetric(
             vertical: 16,
             horizontal: 20,
@@ -69,85 +69,19 @@ class CustomTextFormField extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
         ),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'هذا الحقل مطلوب';
-          }
-          return null;
-        },
+        validator: useValidator
+            ? (value) {
+                if (value == null || value.isEmpty) {
+                  return 'هذا الحقل مطلوب';
+                }
+                return null;
+              }
+            : null,
       ),
     );
   }
 }
 
-Widget DropdownFormField<T>({
-  required List<DropdownMenuItem<T>> items,
-  required void Function(T?) onChanged,
-  T? initialValue,
-  required String labelText,
-  required String hintText,
-  IconData? prefixIcon,
-  IconData? dropdownIcon,
-  Color? iconEnabledColor,
-  String? Function(T?)? validator,
-  bool useValidator = true,
-}) {
-  return DropdownButtonFormField<T>(
-    value: initialValue,
-    items: items,
-    onChanged: onChanged,
-    validator:
-        useValidator
-            ? validator ??
-                (value) {
-                  if (value == null) {
-                    return 'This field cannot be empty';
-                  } else {
-                    return null;
-                  }
-                }
-            : null,
-    icon: dropdownIcon != null ? Icon(dropdownIcon) : null,
-    iconEnabledColor: iconEnabledColor,
-    iconDisabledColor: Colors.blue,
-    decoration: InputDecoration(
-      hoverColor: Colors.white,
-      focusColor: Colors.white,
-
-      // Optional prefixIcon if provided
-      prefixIcon:
-          prefixIcon != null
-              ? Icon(prefixIcon, color: Color(0xFF000C3E))
-              : null,
-
-      fillColor: Colors.white, // Fill color for the dropdown
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Colors.blue, width: 1.5),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Colors.blue, width: 2),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Colors.red, width: 2),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Colors.red, width: 2),
-      ),
-      // Ensure labelText and hintText are added correctly
-      labelStyle: const TextStyle(
-        fontWeight: FontWeight.bold,
-        color: Colors.black,
-        fontSize: 14, // Slightly larger font size for better visibility
-      ),
-      labelText: labelText, // Display the label text
-      hintText: hintText, // Display the hint text
-    ),
-  );
-}
 
 void showCustomErrorDialog({
   required String errorMessage,
