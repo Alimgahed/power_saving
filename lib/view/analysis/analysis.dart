@@ -41,7 +41,9 @@ class AnalysisView extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async {
         // Navigate to home instead of going back
-        Get.offAllNamed('/home'); // or Get.offAllNamed('/') depending on your home route
+        Get.offAllNamed(
+          '/home',
+        ); // or Get.offAllNamed('/') depending on your home route
         return false;
       },
       child: Directionality(
@@ -63,9 +65,14 @@ class AnalysisView extends StatelessWidget {
               Container(
                 margin: const EdgeInsets.only(left: 16),
                 child: IconButton(
-                  icon: const Icon(Icons.home, color: Colors.white), // Changed to home icon
+                  icon: const Icon(
+                    Icons.home,
+                    color: Colors.white,
+                  ), // Changed to home icon
                   onPressed: () {
-                    Get.offAllNamed('/home'); // Navigate to home instead of back
+                    Get.offAllNamed(
+                      '/home',
+                    ); // Navigate to home instead of back
                   },
                   style: IconButton.styleFrom(
                     backgroundColor: Colors.white.withOpacity(0.1),
@@ -86,7 +93,9 @@ class AnalysisView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF1E40AF)),
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Color(0xFF1E40AF),
+                        ),
                         strokeWidth: 3,
                       ),
                       SizedBox(height: 16),
@@ -105,7 +114,7 @@ class AnalysisView extends StatelessWidget {
 
               // Check if we have images
               List<String> images = _extractImages(controller.anl!);
-              
+
               if (images.isEmpty) {
                 return Center(
                   child: Column(
@@ -178,7 +187,7 @@ class AnalysisView extends StatelessWidget {
   // Extract base64 images from the analysis model
   List<String> _extractImages(AnalysisModel analysisModel) {
     List<String> images = [];
-    
+
     // Extract images based on your actual model structure
     try {
       if (analysisModel.clorhine.isNotEmpty) images.add(analysisModel.clorhine);
@@ -193,7 +202,7 @@ class AnalysisView extends StatelessWidget {
         Get.offAllNamed('/home');
       });
     }
-    
+
     return images;
   }
 
@@ -206,7 +215,11 @@ class AnalysisView extends StatelessWidget {
         return Container(
           width: (width - 30) / 2, // Responsive width for 2 columns
           height: 450, // Fixed height for consistent cards
-          child: _buildChartCard(images[index], index + 1, _getChartTitle(index)),
+          child: _buildChartCard(
+            images[index],
+            index + 1,
+            _getChartTitle(index),
+          ),
         );
       }),
     );
@@ -228,7 +241,11 @@ class AnalysisView extends StatelessWidget {
     }
   }
 
-  Widget _buildChartCard(String base64Image, int chartNumber, String chartTitle) {
+  Widget _buildChartCard(
+    String base64Image,
+    int chartNumber,
+    String chartTitle,
+  ) {
     return GestureDetector(
       onTap: () => _showFullScreenImage(base64Image, chartTitle),
       child: Container(
@@ -243,10 +260,7 @@ class AnalysisView extends StatelessWidget {
               offset: const Offset(0, 4),
             ),
           ],
-          border: Border.all(
-            color: Colors.grey.shade100,
-            width: 1,
-          ),
+          border: Border.all(color: Colors.grey.shade100, width: 1),
         ),
         child: Column(
           children: [
@@ -401,10 +415,7 @@ class AnalysisView extends StatelessWidget {
                           ),
                           IconButton(
                             onPressed: () => Get.back(),
-                            icon: const Icon(
-                              Icons.close,
-                              color: Colors.white,
-                            ),
+                            icon: const Icon(Icons.close, color: Colors.white),
                           ),
                         ],
                       ),

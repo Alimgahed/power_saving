@@ -14,6 +14,7 @@ import 'package:power_saving/view/chemcails/add_cemicals.dart';
 import 'package:power_saving/view/chemcails/chemicals.dart';
 import 'package:power_saving/view/chemcails/edit_chemcials.dart';
 import 'package:power_saving/view/home.dart';
+import 'package:power_saving/view/predaction/predaction.dart';
 import 'package:power_saving/view/relations/add_relation.dart';
 import 'package:power_saving/view/relations/relatiuons.dart';
 import 'package:power_saving/view/stations/add_station.dart';
@@ -25,9 +26,7 @@ import 'package:power_saving/view/technology/edittech.dart';
 import 'package:power_saving/view/technology/technology.dart';
 
 void main() {
-  setUrlStrategy(
-    const HashUrlStrategy(),
-  );
+  setUrlStrategy(const HashUrlStrategy());
   runApp(const MyApp());
 }
 
@@ -61,10 +60,10 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/addstations', page: () => AddStationScreen()),
         GetPage(name: '/Technology', page: () => Technology()),
         GetPage(name: '/Edittech', page: () => Edittech()),
+        GetPage(name: '/Predictions', page: () => Predaction()),
 
-                GetPage(name: '/analysis', page: () => AnalysisView()),
+        GetPage(name: '/analysis', page: () => AnalysisView()),
 
-        
         GetPage(name: '/addTech', page: () => AddTech()),
         GetPage(name: '/Countrts', page: () => Counterscreen()),
         GetPage(name: '/addCounter', page: () => AddElectricMeterScreen()),
@@ -100,7 +99,7 @@ class MyApp extends StatelessWidget {
 class ScreenUtils {
   static double get width => Get.width;
   static double get height => Get.height;
-  
+
   static void printDimensions() {
     print('Height: ${height}');
     print('Width: ${width}');
@@ -111,13 +110,13 @@ class ScreenUtils {
 class ScreenController extends GetxController {
   RxDouble screenWidth = 0.0.obs;
   RxDouble screenHeight = 0.0.obs;
-  
+
   @override
   void onInit() {
     super.onInit();
     updateDimensions();
   }
-  
+
   void updateDimensions() {
     screenWidth.value = Get.width;
     screenHeight.value = Get.height;
@@ -125,4 +124,3 @@ class ScreenController extends GetxController {
     print('Width: ${screenWidth.value}');
   }
 }
-

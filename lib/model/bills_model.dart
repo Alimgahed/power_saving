@@ -7,7 +7,8 @@ class GuageBill {
   final num currentReading;
   final num readingFactor;
   final num powerConsump;
-final String ?notes;
+  final String? notes;
+  final bool? isPaid;
   final num fixedInstallment;
   final num settlements;
   final num settlementsratio;
@@ -15,12 +16,13 @@ final String ?notes;
   final num prevPayments;
   final num rounding;
   final num billTotal;
-  final bool isPaid;
-  List<double>? ratios;
+  List<double>? percentMoney;
+  List<double>? percentPower;
 
   GuageBill({
     this.guageBillId,
     this.notes,
+    this.isPaid,
     required this.accountNumber,
     required this.billMonth,
     required this.billYear,
@@ -28,7 +30,8 @@ final String ?notes;
     required this.currentReading,
     required this.readingFactor,
     required this.powerConsump,
-    this.ratios,
+    this.percentMoney,
+    this.percentPower,
     required this.settlementsratio,
     required this.fixedInstallment,
     required this.settlements,
@@ -36,7 +39,6 @@ final String ?notes;
     required this.prevPayments,
     required this.rounding,
     required this.billTotal,
-    required this.isPaid,
   });
 
   factory GuageBill.fromJson(Map<String, dynamic> json) {
@@ -50,7 +52,8 @@ final String ?notes;
       currentReading: json['current_reading'],
       readingFactor: json['reading_factor'],
       powerConsump: json['power_consump'],
-      ratios: json["percent"],
+      percentMoney: json["percent_money"],
+      percentPower: json["percent_power"],
       fixedInstallment: json['fixed_installment'],
       settlements: json['settlements'].toDouble(),
       stamp: json['stamp'].toDouble(),
@@ -58,15 +61,16 @@ final String ?notes;
       rounding: json['rounding'].toDouble(),
       billTotal: json['bill_total'].toDouble(),
       isPaid: json['is_paid'],
-      notes: json["notes"]
+      notes: json["notes"],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "notes":notes,
-      "settlement_qty":settlementsratio,
-      'percent': ratios,
+      "notes": notes,
+      "settlement_qty": settlementsratio,
+      'percent_money': percentMoney,
+      'percent_power': percentPower,
       'guage_bill_id': guageBillId,
       'account_number': accountNumber,
       'bill_month': billMonth,

@@ -3,8 +3,8 @@ class ElectricMeter {
   final int? finalReading;
   final int? meterFactor;
   final int? voltageid;
-  final num?price;
-  final num?fixedprice;
+  final num? price;
+  final num? fixedprice;
 
   final String meterId;
   String? voltageType;
