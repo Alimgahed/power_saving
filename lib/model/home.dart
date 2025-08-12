@@ -5,10 +5,10 @@ class ConsumptionModel {
   final num? power;
   final num? solidAlum;
   final num? water;
-  final List<OverConsump> overChlorineConsump;
-  final List<OverConsump> overLiquidAlumConsump;
-  final List<OverConsump> overPowerConsump;
-  final List<OverConsump> overSolidAlumConsump;
+  final List<OverConsump>? overChlorineConsump;
+  final List<OverConsump>? overLiquidAlumConsump;
+  final List<OverConsump>? overPowerConsump;
+  final List<OverConsump>? overSolidAlumConsump;
 
   ConsumptionModel({
     required this.chlorine,
@@ -32,21 +32,29 @@ class ConsumptionModel {
       solidAlum: json['solid_alum'],
       water: json['water'],
       overChlorineConsump:
-          (json['over_chlorine_consump'] as List)
-              .map((e) => OverConsump.fromJson(e))
-              .toList(),
+          json['over_chlorine_consump'] == null
+              ? null
+              : (json['over_chlorine_consump'] as List)
+                  .map((e) => OverConsump.fromJson(e))
+                  .toList(),
       overLiquidAlumConsump:
-          (json['over_liquid_alum_consump'] as List)
-              .map((e) => OverConsump.fromJson(e))
-              .toList(),
+          json['over_liquid_alum_consump'] == null
+              ? null
+              : (json['over_liquid_alum_consump'] as List)
+                  .map((e) => OverConsump.fromJson(e))
+                  .toList(),
       overPowerConsump:
-          (json['over_power_consump'] as List)
-              .map((e) => OverConsump.fromJson(e))
-              .toList(),
+          json['over_power_consump'] == null
+              ? null
+              : (json['over_power_consump'] as List)
+                  .map((e) => OverConsump.fromJson(e))
+                  .toList(),
       overSolidAlumConsump:
-          (json['over_solid_alum_consump'] as List)
-              .map((e) => OverConsump.fromJson(e))
-              .toList(),
+          json['over_solid_alum_consump'] == null
+              ? null
+              : (json['over_solid_alum_consump'] as List)
+                  .map((e) => OverConsump.fromJson(e))
+                  .toList(),
     );
   }
 }

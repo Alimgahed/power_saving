@@ -801,6 +801,44 @@ class Counterscreen extends StatelessWidget {
                                                                             ),
                                                                           ],
                                                                         ),
+                                                                        Obx(() {
+                                                                          return billsController.isPaid.value ==
+                                                                                  false
+                                                                              ? Row(
+                                                                                children: [
+                                                                                  Expanded(
+                                                                                    child: CustomTextFormField(
+                                                                                      controller:
+                                                                                          billsController.delayMonthController,
+                                                                                      allowOnlyDigits:
+                                                                                          true,
+                                                                                      label:
+                                                                                          "شهر الترحيل",
+                                                                                      icon:
+                                                                                          Icons.calendar_today,
+                                                                                    ),
+                                                                                  ),
+                                                                                  SizedBox(
+                                                                                    width:
+                                                                                        10,
+                                                                                  ),
+
+                                                                                  Expanded(
+                                                                                    child: CustomTextFormField(
+                                                                                      allowOnlyDigits:
+                                                                                          true,
+                                                                                      label:
+                                                                                          "سنة الترحيل",
+                                                                                      controller:
+                                                                                          billsController.delayYearController,
+                                                                                      icon:
+                                                                                          Icons.calendar_today,
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              )
+                                                                              : SizedBox.shrink();
+                                                                        }),
 
                                                                         // Gauges Section
                                                                         // Column(
@@ -955,7 +993,7 @@ class Counterscreen extends StatelessWidget {
                                                                         //       ).toList(),
                                                                         //     ],
                                                                         //   ],
-                                                                        // ),
+                                                                        // ),,
                                                                         const SizedBox(
                                                                           height:
                                                                               24,
@@ -1085,40 +1123,6 @@ class Counterscreen extends StatelessWidget {
                                                                                         }
 
                                                                                         // Check if sum of ratios is 100
-                                                                                        double sumpower = percentPower.fold(
-                                                                                          0,
-                                                                                          (
-                                                                                            a,
-                                                                                            b,
-                                                                                          ) =>
-                                                                                              a +
-                                                                                              b,
-                                                                                        );
-                                                                                        if (sumpower !=
-                                                                                            powerConsump) {
-                                                                                          showCustomErrorDialog(
-                                                                                            errorMessage:
-                                                                                                "مجموع كميات الطاقة المدخلة لا يساوي كمية الطاقة المستهلكة",
-                                                                                          );
-                                                                                          return;
-                                                                                        }
-                                                                                      }
-                                                                                      double summoney = percentMoney.fold(
-                                                                                        0,
-                                                                                        (
-                                                                                          a,
-                                                                                          b,
-                                                                                        ) =>
-                                                                                            a +
-                                                                                            b,
-                                                                                      );
-                                                                                      if (summoney !=
-                                                                                          billTotal) {
-                                                                                        showCustomErrorDialog(
-                                                                                          errorMessage:
-                                                                                              "مجموع المبالغ المالية المدخلة لا يساوي المبلغ الإجمالي",
-                                                                                        );
-                                                                                        return;
                                                                                       }
 
                                                                                       final bool isPaid =
@@ -1145,12 +1149,27 @@ class Counterscreen extends StatelessWidget {
                                                                                         );
                                                                                         return;
                                                                                       }
+                                                                                      int? delayYear;
+                                                                                      int? delayMonth;
+                                                                                      if (isPaid ==
+                                                                                          false) {
+                                                                                        delayYear = int.tryParse(
+                                                                                          billsController.delayYearController.text,
+                                                                                        );
+                                                                                        delayMonth = int.tryParse(
+                                                                                          billsController.delayMonthController.text,
+                                                                                        );
+                                                                                      }
 
                                                                                       // Add ratios to controller
                                                                                       billsController.addnewbill(
                                                                                         number:
                                                                                             accountNumber,
                                                                                         bill: GuageBill(
+                                                                                          delayYear:
+                                                                                              delayYear,
+                                                                                          delayMonth:
+                                                                                              delayMonth,
                                                                                           settlementsratio:
                                                                                               settlementsControllerratio,
                                                                                           accountNumber:
@@ -1214,7 +1233,7 @@ class Counterscreen extends StatelessWidget {
                                               } else {
                                                 showCustomErrorDialog(
                                                   errorMessage:
-                                                      "لا يوجد عدادات مرتبطة بهذا الحساب",
+                                                      "لا يوجد عدادات محطات مرتبطة بهذا الحساب",
                                                 );
                                               }
                                             },

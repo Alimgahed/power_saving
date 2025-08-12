@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart' show NumberFormat;
-import 'package:power_saving/controller/analysis/analysis.dart';
 import 'package:power_saving/controller/home/home.dart';
 import 'package:power_saving/controller/voltage/voltage.dart';
 import 'package:power_saving/model/home.dart';
 import 'package:power_saving/model/vlotage.dart';
 import 'package:power_saving/my_widget/home.dart';
 import 'package:power_saving/my_widget/sharable.dart';
-import 'package:power_saving/view/analysis/analysis.dart';
 
 class Home extends StatelessWidget {
   Home({super.key});
@@ -482,11 +480,11 @@ class Home extends StatelessWidget {
 
                   // Over Consumption Sections
                   const SizedBox(height: 24),
-                  if (data.overPowerConsump.isNotEmpty)
+                  if (data.overPowerConsump?.isNotEmpty ?? false)
                     _buildOverConsumptionSection(
                       'الاستهلاك خارج الحد المسموح للطاقة',
 
-                      data.overPowerConsump,
+                      data.overPowerConsump ?? [],
                       "الكهرباء",
                       "واط", // Remove fixed value since it varies per item
                       Icons.electrical_services,
@@ -494,10 +492,10 @@ class Home extends StatelessWidget {
                       Colors.cyan,
                     ),
 
-                  if (data.overChlorineConsump.isNotEmpty)
+                  if (data.overChlorineConsump?.isNotEmpty ?? false)
                     _buildOverConsumptionSection(
                       'الاستهلاك خارج الحد المسموح للكلور',
-                      data.overChlorineConsump,
+                      data.overChlorineConsump ?? [],
                       "الكلور",
                       "مجم/لتر", // Remove fixed value since it varies per item
                       Icons.water_drop,
@@ -505,10 +503,10 @@ class Home extends StatelessWidget {
                       Colors.cyan,
                     ),
 
-                  if (data.overLiquidAlumConsump.isNotEmpty)
+                  if (data.overLiquidAlumConsump?.isNotEmpty ?? false)
                     _buildOverConsumptionSection(
                       'الاستهلاك خارج الحد المسموح للشبة السائلة',
-                      data.overLiquidAlumConsump,
+                      data.overLiquidAlumConsump ?? [],
                       "الشبة السائلة",
                       "مجم/لتر", // Remove the fixed value since it varies per item
                       Icons.opacity,
@@ -516,10 +514,10 @@ class Home extends StatelessWidget {
                       Colors.cyan,
                     ),
 
-                  if (data.overSolidAlumConsump.isNotEmpty)
+                  if (data.overSolidAlumConsump?.isNotEmpty ?? false)
                     _buildOverConsumptionSection(
                       'الاستهلاك خارج الحد المسموح للشبة الصلبة',
-                      data.overSolidAlumConsump,
+                      data.overSolidAlumConsump ?? [],
                       "الشبة الصلبة",
                       "مجم/لتر", // Remove fixed value since it varies per item
                       Icons.grain,

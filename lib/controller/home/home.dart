@@ -7,7 +7,7 @@ import 'package:power_saving/model/home.dart';
 
 // ignore: camel_case_types
 class homecontroller extends GetxController {
-  RxBool looading=false.obs;
+  RxBool looading = false.obs;
   ConsumptionModel? consumptionModel;
 
   // Reactive values using RxnNum
@@ -26,19 +26,19 @@ class homecontroller extends GetxController {
 
   void home() async {
     try {
-      looading.value=true;
+      looading.value = true;
       final res = await http.get(Uri.parse("http://$ip/"));
       if (res.statusCode == 200) {
-        
         final jsonData = json.decode(res.body);
         consumptionModel = ConsumptionModel.fromJson(jsonData);
-              looading.value=false;
+        looading.value = false;
 
         animateAll();
         update();
       }
     } catch (e) {
-      looading.value=false;
+      looading.value = false;
+      update();
       print("Error: $e");
     }
   }
@@ -46,12 +46,12 @@ class homecontroller extends GetxController {
   void animateAll() {
     if (consumptionModel == null) return;
 
-    animateValue(animatedMoney, consumptionModel!.money??0);
-    animateValue(animatedWater, consumptionModel!.water??0);
-    animateValue(animatedPower, consumptionModel!.power??0);
-    animateValue(animatedChlorine, consumptionModel!.chlorine??0);
-    animateValue(animatedLiquidAlum, consumptionModel!.liquidAlum??0);
-    animateValue(animatedSolidAlum, consumptionModel!.solidAlum??0);
+    animateValue(animatedMoney, consumptionModel!.money ?? 0);
+    animateValue(animatedWater, consumptionModel!.water ?? 0);
+    animateValue(animatedPower, consumptionModel!.power ?? 0);
+    animateValue(animatedChlorine, consumptionModel!.chlorine ?? 0);
+    animateValue(animatedLiquidAlum, consumptionModel!.liquidAlum ?? 0);
+    animateValue(animatedSolidAlum, consumptionModel!.solidAlum ?? 0);
   }
 
   void animateValue(RxnNum rxValue, num targetValue) {

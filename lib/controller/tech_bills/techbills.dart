@@ -8,7 +8,7 @@ import 'package:power_saving/model/tech_bill.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 
 class Techbills extends GetxController {
-  RxBool looading=false.obs;
+  RxBool looading = false.obs;
   // ignore: unused_field
   final Map<int, GlobalKey<FormState>> formKeys = {};
   GlobalKey<FormState> getFormKey(int index) {
@@ -75,9 +75,8 @@ class Techbills extends GetxController {
   // Example method to fetch tech bills data
   void fetchTechBills() async {
     try {
-      final res = await http.get(
-        Uri.parse("http://$ip/tech-bills"),
-      );
+      techBills.clear();
+      final res = await http.get(Uri.parse("http://$ip/tech-bills"));
 
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
@@ -105,7 +104,7 @@ class Techbills extends GetxController {
     required int index, // <-- Add this parameter
   }) async {
     try {
-      looading.value=true;
+      looading.value = true;
       loadingIndex.value = index; // mark current item as loading
 
       final res = await http.post(
@@ -120,16 +119,17 @@ class Techbills extends GetxController {
       );
 
       if (res.statusCode == 200) {
-          looading.value=false;
+        looading.value = false;
+        fetchTechBills();
         showSuccessToast("تمت الإضافة بنجاح");
       } else {
-         looading.value=false;
+        looading.value = false;
         final errorBody = jsonDecode(res.body);
         final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';
         showCustomErrorDialog(errorMessage: errorMessage);
       }
     } catch (e) {
-       looading.value=false;
+      looading.value = false;
       print("Error during bill submission: $e");
     } finally {
       loadingIndex.value = null; // reset after done

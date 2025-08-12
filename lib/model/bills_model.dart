@@ -16,6 +16,8 @@ class GuageBill {
   final num prevPayments;
   final num rounding;
   final num billTotal;
+  final int? delayYear;
+  final int? delayMonth;
   List<double>? percentMoney;
   List<double>? percentPower;
 
@@ -23,6 +25,8 @@ class GuageBill {
     this.guageBillId,
     this.notes,
     this.isPaid,
+    this.delayYear,
+    this.delayMonth,
     required this.accountNumber,
     required this.billMonth,
     required this.billYear,
@@ -43,6 +47,8 @@ class GuageBill {
 
   factory GuageBill.fromJson(Map<String, dynamic> json) {
     return GuageBill(
+      delayMonth: json[""],
+      delayYear: json["delay_year"],
       settlementsratio: json["settlement_qty"],
       guageBillId: json['guage_bill_id'],
       accountNumber: json['account_number'],
@@ -67,6 +73,8 @@ class GuageBill {
 
   Map<String, dynamic> toJson() {
     return {
+      "delay_month": delayMonth,
+      "delay_year": delayYear,
       "notes": notes,
       "settlement_qty": settlementsratio,
       'percent_money': percentMoney,

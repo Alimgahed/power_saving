@@ -148,183 +148,234 @@ class TechBills extends StatelessWidget {
                   const SizedBox(height: 24),
 
                   // Grid Section
-                SingleChildScrollView(
-  child: Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: Wrap(
-      spacing: 10,
-      runSpacing: 20,
-      children: controller.techBills.asMap().entries.map((entry) {
-        final index = entry.key;
-        final techBill = entry.value;
+                  SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Wrap(
+                        spacing: 10,
+                        runSpacing: 20,
+                        children:
+                            controller.techBills.asMap().entries.map((entry) {
+                              final index = entry.key;
+                              final techBill = entry.value;
 
-        return Container(
-          width: 300, // Same as maxCrossAxisExtent in original Grid
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.04),
-                spreadRadius: 0,
-                blurRadius: 20,
-                offset: const Offset(0, 4),
-              ),
-            ],
-            border: Border.all(color: Colors.grey.shade100, width: 1),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Header
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.blue.shade600, Colors.blue.shade700],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+                              return Container(
+                                width:
+                                    300, // Same as maxCrossAxisExtent in original Grid
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.04),
+                                      spreadRadius: 0,
+                                      blurRadius: 20,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                  border: Border.all(
+                                    color: Colors.grey.shade100,
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    // Header
+                                    Container(
+                                      padding: const EdgeInsets.all(16),
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            Colors.blue.shade600,
+                                            Colors.blue.shade700,
+                                          ],
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(20),
+                                          topRight: Radius.circular(20),
+                                        ),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.all(6),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white.withOpacity(
+                                                0.2,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
+                                            ),
+                                            child: const Icon(
+                                              Icons.engineering,
+                                              color: Colors.white,
+                                              size: 16,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 12),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  techBill.stationName,
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 10),
+                                                Text(
+                                                  techBill.technologyName,
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.white70,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
+                                    // Content
+                                    Padding(
+                                      padding: const EdgeInsets.all(16),
+                                      child: Column(
+                                        children: [
+                                          _buildBasicInfoSection(
+                                            techBill.billMonth.toString(),
+                                            techBill.billYear.toString(),
+                                            techBill.technologyBillPercentage
+                                                .toString(),
+                                          ),
+                                          const SizedBox(height: 12),
+
+                                          _buildChemicalRangesSection(
+                                            controller,
+                                            index,
+                                          ),
+
+                                          const SizedBox(height: 16),
+
+                                          Obx(() {
+                                            if (controller.loadingIndex.value ==
+                                                index) {
+                                              return const Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              );
+                                            }
+                                            return SizedBox(
+                                              width: double.infinity,
+                                              child: ElevatedButton.icon(
+                                                onPressed: () {
+                                                  if (controller
+                                                      .getFormKey(index)
+                                                      .currentState!
+                                                      .validate()) {
+                                                    if (controller
+                                                            .getWaterProducedController(
+                                                              index,
+                                                            )
+                                                            .text ==
+                                                        "0") {
+                                                      showCustomErrorDialog(
+                                                        errorMessage:
+                                                            'الرجاء إدخال قيمة لكمية المياه',
+                                                      );
+                                                    } else {
+                                                      controller.addTechBills(
+                                                        index: index,
+                                                        id: techBill.techBillId,
+                                                        chlorine:
+                                                            double.tryParse(
+                                                              controller
+                                                                  .getChlorineController(
+                                                                    index,
+                                                                  )
+                                                                  .text,
+                                                            ) ??
+                                                            0,
+                                                        liquid:
+                                                            double.tryParse(
+                                                              controller
+                                                                  .getLiquidAlumController(
+                                                                    index,
+                                                                  )
+                                                                  .text,
+                                                            ) ??
+                                                            0,
+                                                        solid:
+                                                            double.tryParse(
+                                                              controller
+                                                                  .getSolidAlumController(
+                                                                    index,
+                                                                  )
+                                                                  .text,
+                                                            ) ??
+                                                            0,
+                                                        water:
+                                                            double.tryParse(
+                                                              controller
+                                                                  .getWaterProducedController(
+                                                                    index,
+                                                                  )
+                                                                  .text,
+                                                            ) ??
+                                                            0,
+                                                      );
+                                                    }
+                                                  }
+                                                },
+                                                icon: const Icon(
+                                                  Icons.edit,
+                                                  size: 14,
+                                                ),
+                                                label: const Text(
+                                                  'حفظ',
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      Colors.blue.shade600,
+                                                  foregroundColor: Colors.white,
+                                                  elevation: 0,
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                        horizontal: 12,
+                                                        vertical: 6,
+                                                      ),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          6,
+                                                        ),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          }),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                      ),
+                    ),
                   ),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: const Icon(
-                        Icons.engineering,
-                        color: Colors.white,
-                        size: 16,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            techBill.stationName,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            techBill.technologyName,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.white70,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              // Content
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    _buildBasicInfoSection(
-                      techBill.billMonth.toString(),
-                      techBill.billYear.toString(),
-                      techBill.technologyBillPercentage.toString(),
-                    ),
-                    const SizedBox(height: 12),
-
-                    _buildChemicalRangesSection(controller, index),
-
-                    const SizedBox(height: 16),
-
-                    Obx(() {
-                      if (controller.loadingIndex.value == index) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                      return SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            if (controller
-                                .getFormKey(index)
-                                .currentState!
-                                .validate()) {
-                              if (controller
-                                      .getWaterProducedController(index)
-                                      .text ==
-                                  "0") {
-                                showCustomErrorDialog(
-                                    errorMessage:
-                                        'الرجاء إدخال قيمة لكمية المياه');
-                              } else {
-                                controller.addTechBills(
-                                  index: index,
-                                  id: techBill.techBillId,
-                                  chlorine: double.tryParse(controller
-                                          .getChlorineController(index)
-                                          .text) ??
-                                      0,
-                                  liquid: double.tryParse(controller
-                                          .getLiquidAlumController(index)
-                                          .text) ??
-                                      0,
-                                  solid: double.tryParse(controller
-                                          .getSolidAlumController(index)
-                                          .text) ??
-                                      0,
-                                  water: double.tryParse(controller
-                                          .getWaterProducedController(index)
-                                          .text) ??
-                                      0,
-                                );
-                              }
-                            }
-                          },
-                          icon: const Icon(Icons.edit, size: 14),
-                          label: const Text(
-                            'حفظ',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue.shade600,
-                            foregroundColor: Colors.white,
-                            elevation: 0,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      }).toList(),
-    ),
-  ),
-)
-
                 ],
               ),
             );
@@ -382,12 +433,6 @@ class TechBills extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          _buildInfoItem(
-            'النسبة المئوية',
-            '$percentage%',
-            Icons.percent,
-            Colors.orange,
-          ),
         ],
       ),
     );
@@ -471,7 +516,7 @@ class TechBills extends StatelessWidget {
                   'المدى الفعلي للمواد الكيميائية',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 18,
+                    fontSize: 16,
                     color: Colors.indigo,
                   ),
                 ),

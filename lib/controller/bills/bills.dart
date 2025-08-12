@@ -34,6 +34,8 @@ class Bills extends GetxController {
   late TextEditingController billTotalController;
   late TextEditingController billMonthController;
   late TextEditingController billyearController;
+  late TextEditingController delayYearController;
+  late TextEditingController delayMonthController;
 
   // List of TextEditingControllers for ratio fields
   List<TextEditingController> powerControllers = [];
@@ -58,6 +60,8 @@ class Bills extends GetxController {
     super.onInit();
     settlementsControllerratio = TextEditingController();
     notes = TextEditingController();
+    delayMonthController = TextEditingController();
+    delayYearController = TextEditingController();
     // Initialize controllers
     briefReadingController = TextEditingController();
     currentReadingController = TextEditingController();
@@ -297,6 +301,8 @@ class Bills extends GetxController {
     billMonthController.dispose();
     billyearController.dispose();
     billTotalController.dispose();
+    delayMonthController.dispose();
+    delayYearController.dispose();
     notes.dispose();
 
     super.onClose();
