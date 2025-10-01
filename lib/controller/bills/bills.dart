@@ -8,6 +8,7 @@ import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/bills_model.dart';
 import 'package:power_saving/model/relations.dart';
 import 'package:power_saving/my_widget/sharable.dart';
+import 'package:power_saving/network/network.dart';
 
 class Bills extends GetxController {
   RxBool isLoading = false.obs;
@@ -45,7 +46,7 @@ class Bills extends GetxController {
   // Text controllers
 
   // Observable values for real-time calculations
-  var calculatedConsumption = 0.obs;
+  var calculatedConsumption = 0.0.obs;
   var calculatedEnergyCost = 0.0.obs;
 
   var fixed = 0.0.obs;
@@ -87,6 +88,7 @@ class Bills extends GetxController {
     currentReadingController.addListener(_calculateFields);
     readingFactorController.addListener(_calculateFields);
     fixedInstallmentController.addListener(_calculateFields);
+    stampController.addListener(_calculateFields);
     settlementsController.addListener(_calculateFields);
     settlementsControllerratio.addListener(_calculateFields);
     prevPaymentsController.addListener(_calculateFields);
@@ -116,9 +118,9 @@ class Bills extends GetxController {
   }
 
   void _calculateConsumption() {
-    final prevReading = int.tryParse(briefReadingController.text) ?? 0;
-    final currentReading = int.tryParse(currentReadingController.text) ?? 0;
-    final factor = int.tryParse(readingFactorController.text) ?? 1;
+    final prevReading = double.tryParse(briefReadingController.text) ?? 0;
+    final currentReading = double.tryParse(currentReadingController.text) ?? 0;
+    final factor = double.tryParse(readingFactorController.text) ?? 1;
 
     // Validate input values
     if (prevReading < 0 || currentReading < 0) {
@@ -152,16 +154,13 @@ class Bills extends GetxController {
   }
 
   // Generic method to calculate reading difference with rollover support
-  int _calculateReadingDifference(int prevReading, int currentReading) {
-    int readingDiff = currentReading - prevReading;
+  double _calculateReadingDifference(double prevReading, double currentReading) {
+    double readingDiff = currentReading - prevReading;
 
     if (readingDiff < 0) {
-      // Generic rollover calculation for any number of digits
       final numDigits = prevReading.toString().length;
-      final rolloverValue = pow(10, numDigits).toInt();
-
+      final rolloverValue = pow(10, numDigits).toDouble();
       readingDiff += rolloverValue - 1;
-
       print('Meter rollover detected:');
       print('Previous reading: $prevReading (${numDigits} digits)');
       print('Current reading: $currentReading');
@@ -182,10 +181,10 @@ class Bills extends GetxController {
 
   // Generic validation method for consumption values
   void _validateConsumption(
-    int consumption,
-    int rolloverValue,
-    int prevReading,
-    int currentReading,
+    double consumption,
+    double rolloverValue,
+    double prevReading,
+    double currentReading,
   ) {
     // Check if consumption seems unreasonably high (more than 80% of rollover value)
     if (consumption > rolloverValue * 0.8) {
@@ -311,7 +310,9 @@ class Bills extends GetxController {
   Future<void> newbill(String number) async {
     try {
       gauges = [];
-      final res = await http.get(Uri.parse("http://$ip/new-bill/$number"));
+      final accountNumber = Uri.encodeComponent(number);
+
+      final res = await fetchData("http://$ip/new-bill/$accountNumber");
 
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
@@ -351,10 +352,9 @@ class Bills extends GetxController {
   }) async {
     try {
       isLoading.value = true;
-      final res = await http.post(
-        headers: {"Content-Type": "application/json"},
-        Uri.parse("http://$ip/new-bill/$number"),
-        body: json.encode(bill.toJson()),
+      final res = await postData(
+        "http://$ip/new-bill/$number",
+      (bill.toJson()),
       );
 
       if (res.statusCode == 200) {

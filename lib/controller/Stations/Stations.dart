@@ -6,9 +6,10 @@ import 'package:http/http.dart' as http;
 import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/station_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
+import 'package:power_saving/network/network.dart';
 
 class AddStationController extends GetxController {
-  RxBool looading=false.obs;
+  RxBool looading = false.obs;
   late TextEditingController name;
   late TextEditingController capacity;
 
@@ -35,8 +36,6 @@ class AddStationController extends GetxController {
   void onClose() {
     name.dispose();
     capacity.dispose();
-
-    // No need to dispose integers
     super.onClose();
   }
 
@@ -47,42 +46,30 @@ class AddStationController extends GetxController {
     required String typeId,
     required int capacity,
   }) async {
-    looading.value=true;
+    looading.value = true;
     try {
-      final res = await http.post(
-        Uri.parse("http://$ip/new-station"),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
+      final res = await postData(
+        "http://$ip/new-station",
+        {
           "name": name,
           "branch_id": branchId,
           "water_source_id": sourceId,
           "station_type": typeId,
           "station_water_capacity": capacity,
-        }),
+        },
       );
 
       if (res.statusCode == 200) {
-         looading.value=false;
+        looading.value = false;
         showSuccessToast("تم اضافة المحطة بنجاح");
       } else {
-         looading.value=false;
+        looading.value = false;
         final errorBody = jsonDecode(res.body);
-
-        // Extract Arabic error message
         final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';
-
-        // Show custom dialog or toast with Arabic error
         showCustomErrorDialog(errorMessage: errorMessage);
       }
     } catch (e) {
-     looading.value=false;
-      print("Error adding station: $e");
-      Get.snackbar(
-        "خطأ",
-        "حدث خطأ أثناء الإضافة",
-        backgroundColor: Colors.red.shade100,
-        colorText: Colors.black87,
-      );
+      looading.value = false;
     }
   }
 
@@ -95,42 +82,30 @@ class AddStationController extends GetxController {
     required int capacity,
   }) async {
     try {
-      looading.value=true;
-      final res = await http.post(
-        Uri.parse("http://$ip/edit-station/$Stations_id"),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
+      looading.value = true;
+      final res = await postData(
+        "http://$ip/edit-station/$Stations_id",
+        {
           "name": name,
           "branch_id": branchId,
           "water_source_id": sourceId,
           "station_type": typeId,
           "station_water_capacity": capacity,
-        }),
+        },
       );
 
       if (res.statusCode == 200) {
-         looading.value=false;
+        looading.value = false;
         showSuccessToast("تم تعديل المحطة بنجاح");
         Get.offAllNamed('/Stations');
       } else {
         final errorBody = jsonDecode(res.body);
-         looading.value=false;
-
-        // Extract Arabic error message
+        looading.value = false;
         final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';
-
-        // Show custom dialog or toast with Arabic error
         showCustomErrorDialog(errorMessage: errorMessage);
       }
     } catch (e) {
-       looading.value=false;
-      print("Error adding station: $e");
-      Get.snackbar(
-        "خطأ",
-        "حدث خطأ أثناء الإضافة",
-        backgroundColor: Colors.red.shade100,
-        colorText: Colors.black87,
-      );
+      looading.value = false;
     }
   }
 
@@ -139,22 +114,16 @@ class AddStationController extends GetxController {
 
   Future<void> allBranches() async {
     try {
-      final res = await http.get(
-        Uri.parse("http://$ip/new-station"),
+      final res = await fetchData(
+        "http://$ip/new-station",
       );
 
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
-
-        // Parse with the existing model
         final parsedData = AddStationData.fromJson(jsonData);
-
-        // Assign to local lists
         branchList = parsedData.branches;
         waterSourceList = parsedData.waterSources;
         update();
-
-        // Debug prints
       }
     } catch (e) {
       print("Error fetching branches: $e");
@@ -163,19 +132,57 @@ class AddStationController extends GetxController {
 }
 
 class get_all_stations extends GetxController {
+  RxBool isLoading = false.obs;
+  RxBool isSearching = false.obs;
   List<Station> allstations = [];
+  List<Station> filteredStations = [];
   Station? station;
+  late TextEditingController searchController;
+
   @override
   void onInit() {
+    searchController = TextEditingController();
     get_stations();
     super.onInit();
   }
 
+  @override
+  void onClose() {
+    searchController.dispose();
+    super.onClose();
+  }
+
+  void toggleSearch() {
+    isSearching.value = !isSearching.value;
+    if (!isSearching.value) {
+      searchController.clear();
+      filteredStations.clear();
+    }
+    update();
+  }
+
+  void filterStations(String query) {
+    if (query.isEmpty) {
+      filteredStations.clear();
+    } else {
+      filteredStations = allstations.where((station) {
+        String branchName = station.branchName?.toLowerCase() ?? '';
+        return branchName.contains(query.toLowerCase());
+      }).toList();
+    }
+    update();
+  }
+
   void get_stations() async {
+    isLoading.value = true;
+    allstations.clear();
+    filteredStations.clear();
+    
     try {
-      final res = await http.get(
-        Uri.parse("http://$ip/stations"),
+      final res = await fetchData(
+        "http://$ip/stations",
       );
+      
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
         List<dynamic> responseData = jsonData;
@@ -184,9 +191,16 @@ class get_all_stations extends GetxController {
           station = Station.fromJson(i);
           allstations.add(station!);
         }
+        
+        isLoading.value = false;
+        update();
+      } else {
+        isLoading.value = false;
         update();
       }
     } catch (e) {
+      isLoading.value = false;
+      update();
       print(e.toString());
     }
   }

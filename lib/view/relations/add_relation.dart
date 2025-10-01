@@ -116,58 +116,88 @@ class AddRelation extends StatelessWidget {
                         children: [
                           _buildSectionHeader('تفاصيل الربط', Icons.link, Colors.blue),
 
-                          CustomDropdownFormField<int>(
-                            items: controller.stationlist.map((branch) {
-                              return DropdownMenuItem<int>(
-                                value: branch.branchId,
-                                child: Text(branch.branchName),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              controller.stationid = value;
-                            },
-                            labelText: 'المحطة',
-                            hintText: 'اختر المحطة',
-                            prefixIcon: Icons.map,
-                            validator: (val) =>
-                                val == null ? 'الرجاء اختيار المحطة' : null,
-                          ),
-                          const SizedBox(height: 16),
+// First Dropdown - Station/Branch
+SearchableDropdown(
+  tag: 'station_dropdown', // Unique tag
+  items: [
+    ...controller.stationlist.map((p) {
+      return DropdownMenuItem<String>(
+        value: p.branchId.toString(), // Convert int to String
+        child: Text(p.branchName),
+      );
+    }).toList(),
+  ],
+  onChanged: (value) {
+    // Convert string back to int when assigning
+    controller.stationid = value != null ? int.tryParse(value) : null;
+  },
+  validator: (value) {
+    if (value == null || value.isEmpty) {
+      return "يجب ادخال اسم المحطة".tr;
+    }
+    return null;
+  },
+  labelText: "المحطة".tr,
+  hintText: 'اختر المحطة'.tr,
+  prefixIcon: Icons.map,
+),
 
-                          CustomDropdownFormField<String>(
-                            items: controller.electricMeterList.map((meter) {
-                              return DropdownMenuItem<String>(
-                                value: meter.accountNumber,
-                                child: Text(meter.accountNumber ?? ""),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              controller.counterid = value;
-                            },
-                            labelText: 'العداد',
-                            hintText: 'اختر العداد',
-                            prefixIcon: Icons.bolt,
-                            validator: (val) =>
-                                val == null ? 'الرجاء اختيار العداد' : null,
-                          ),
-                          const SizedBox(height: 16),
+const SizedBox(height: 16),
 
-                          CustomDropdownFormField<int>(
-                            items: controller.technologylist.map((tech) {
-                              return DropdownMenuItem<int>(
-                                value: tech.technologyId,
-                                child: Text(tech.technologyName),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              controller.techid = value;
-                            },
-                            labelText: 'التكنولوجيا',
-                            hintText: 'اختر التكنولوجيا',
-                            prefixIcon: Icons.memory,
-                            validator: (val) =>
-                                val == null ? 'الرجاء اختيار التكنولوجيا' : null,
-                          ),
+// Second Dropdown - Electric Meter
+SearchableDropdown(
+  tag: 'meter_dropdown', // Unique tag
+  items: [
+    ...controller.electricMeterList.map((p) {
+      return DropdownMenuItem<String>(
+        value: p.accountNumber, // Already a String
+        child: Text(p.accountNumber ?? ""),
+      );
+    }).toList(),
+  ],
+  onChanged: (value) {
+    // Direct assignment since it's already a string
+    controller.counterid = value;
+  },
+  validator: (value) {
+    if (value == null || value.isEmpty) {
+      return "يجب ادخال اسم العداد".tr;
+    }
+    return null;
+  },
+  labelText: "العداد".tr,
+  hintText: 'اختر العداد'.tr,
+  prefixIcon: Icons.bolt,
+),
+
+const SizedBox(height: 16),
+
+// Third Dropdown - Technology
+SearchableDropdown(
+  tag: 'technology_dropdown', // Unique tag
+  items: [
+    ...controller.technologylist.map((p) {
+      return DropdownMenuItem<String>( // Changed to String
+        value: p.technologyId.toString(), // Convert int to String
+        child: Text(p.technologyName ),
+      );
+    }).toList(),
+  ],
+  onChanged: (value) {
+    // Convert string back to int when assigning
+    controller.techid = value != null ? int.tryParse(value) : null;
+  },
+  validator: (value) {
+    if (value == null || value.isEmpty) {
+      return "يجب ادخال اسم التكنولوجيا".tr;
+    }
+    return null;
+  },
+  labelText: "التكنولوجيا".tr,
+  hintText: 'التكنولوجيا'.tr,
+  prefixIcon: Icons.memory,
+),
+                         
 
                           const SizedBox(height: 24),
 Obx((){

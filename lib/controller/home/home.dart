@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/home.dart';
+import 'package:power_saving/network/network.dart';
 
 // ignore: camel_case_types
 class homecontroller extends GetxController {
@@ -17,6 +18,9 @@ class homecontroller extends GetxController {
   RxnNum animatedChlorine = RxnNum();
   RxnNum animatedLiquidAlum = RxnNum();
   RxnNum animatedSolidAlum = RxnNum();
+    RxnNum saintion = RxnNum();
+
+
 
   @override
   void onInit() {
@@ -27,7 +31,7 @@ class homecontroller extends GetxController {
   void home() async {
     try {
       looading.value = true;
-      final res = await http.get(Uri.parse("http://$ip/"));
+      final res = await fetchData("http://$ip/");
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
         consumptionModel = ConsumptionModel.fromJson(jsonData);
@@ -37,9 +41,9 @@ class homecontroller extends GetxController {
         update();
       }
     } catch (e) {
+      print(e.toString());
       looading.value = false;
       update();
-      print("Error: $e");
     }
   }
 
@@ -52,6 +56,9 @@ class homecontroller extends GetxController {
     animateValue(animatedChlorine, consumptionModel!.chlorine ?? 0);
     animateValue(animatedLiquidAlum, consumptionModel!.liquidAlum ?? 0);
     animateValue(animatedSolidAlum, consumptionModel!.solidAlum ?? 0);
+        animateValue(saintion, consumptionModel!.sanitaion ?? 0);
+
+
   }
 
   void animateValue(RxnNum rxValue, num targetValue) {

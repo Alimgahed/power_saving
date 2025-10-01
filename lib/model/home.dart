@@ -1,3 +1,32 @@
+
+class OverWaterStation {
+  final int capacityLimit;
+  final int month;
+  final String stationName;
+  final double totalWater;
+  final int waterCapacity;
+  final int year;
+
+  OverWaterStation({
+    required this.capacityLimit,
+    required this.month,
+    required this.stationName,
+    required this.totalWater,
+    required this.waterCapacity,
+    required this.year,
+  });
+
+  factory OverWaterStation.fromJson(Map<String, dynamic> json) {
+    return OverWaterStation(
+      capacityLimit: json['capacity_limit'],
+      month: json['month'],
+      stationName: json['station_name'],
+      totalWater: (json['total_water'] as num).toDouble(),
+      waterCapacity: json['water_capacity'],
+      year: json['year'],
+    );
+  }
+}
 class ConsumptionModel {
   final num? chlorine;
   final num? liquidAlum;
@@ -5,12 +34,16 @@ class ConsumptionModel {
   final num? power;
   final num? solidAlum;
   final num? water;
+  final num?sanitaion;
+
   final List<OverConsump>? overChlorineConsump;
   final List<OverConsump>? overLiquidAlumConsump;
   final List<OverConsump>? overPowerConsump;
   final List<OverConsump>? overSolidAlumConsump;
+  final List<OverWaterStation>? overWaterStations; // 👈 New field
 
   ConsumptionModel({
+    required this.sanitaion,
     required this.chlorine,
     required this.liquidAlum,
     required this.money,
@@ -21,6 +54,7 @@ class ConsumptionModel {
     required this.overLiquidAlumConsump,
     required this.overPowerConsump,
     required this.overSolidAlumConsump,
+    required this.overWaterStations, // 👈 New param
   });
 
   factory ConsumptionModel.fromJson(Map<String, dynamic> json) {
@@ -31,30 +65,32 @@ class ConsumptionModel {
       power: json['power'],
       solidAlum: json['solid_alum'],
       water: json['water'],
-      overChlorineConsump:
-          json['over_chlorine_consump'] == null
-              ? null
-              : (json['over_chlorine_consump'] as List)
-                  .map((e) => OverConsump.fromJson(e))
-                  .toList(),
-      overLiquidAlumConsump:
-          json['over_liquid_alum_consump'] == null
-              ? null
-              : (json['over_liquid_alum_consump'] as List)
-                  .map((e) => OverConsump.fromJson(e))
-                  .toList(),
-      overPowerConsump:
-          json['over_power_consump'] == null
-              ? null
-              : (json['over_power_consump'] as List)
-                  .map((e) => OverConsump.fromJson(e))
-                  .toList(),
-      overSolidAlumConsump:
-          json['over_solid_alum_consump'] == null
-              ? null
-              : (json['over_solid_alum_consump'] as List)
-                  .map((e) => OverConsump.fromJson(e))
-                  .toList(),
+      sanitaion: json['sanitaion'],
+      overChlorineConsump: json['over_chlorine_consump'] == null
+          ? null
+          : (json['over_chlorine_consump'] as List)
+              .map((e) => OverConsump.fromJson(e))
+              .toList(),
+      overLiquidAlumConsump: json['over_liquid_alum_consump'] == null
+          ? null
+          : (json['over_liquid_alum_consump'] as List)
+              .map((e) => OverConsump.fromJson(e))
+              .toList(),
+      overPowerConsump: json['over_power_consump'] == null
+          ? null
+          : (json['over_power_consump'] as List)
+              .map((e) => OverConsump.fromJson(e))
+              .toList(),
+      overSolidAlumConsump: json['over_solid_alum_consump'] == null
+          ? null
+          : (json['over_solid_alum_consump'] as List)
+              .map((e) => OverConsump.fromJson(e))
+              .toList(),
+      overWaterStations: json['over_water_stations'] == null
+          ? null
+          : (json['over_water_stations'] as List)
+              .map((e) => OverWaterStation.fromJson(e))
+              .toList(),
     );
   }
 }

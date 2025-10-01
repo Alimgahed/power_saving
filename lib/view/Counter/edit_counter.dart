@@ -12,6 +12,7 @@ class editCounter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
       if (meter == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Get.offAllNamed('/Countrts');
@@ -146,18 +147,18 @@ class editCounter extends StatelessWidget {
                           _buildSectionHeader('تفاصيل العداد', Icons.electric_meter, Colors.blue),
 
                           CustomTextFormField(
-                            label: 'رقم الحساب',
-                            allowOnlyDigits: true,
-                            hintText: 'أدخل رقم الحساب',
+                            label: 'رقم الاشتراك',
+                            readonly: true,
+                            
                             icon: Icons.numbers,
                             controller: controller.Counter_number,
                           ),
                           const SizedBox(height: 16),
 
                           CustomTextFormField(
-                            label: 'معرّف العداد',
+                            label: 'الرقم التسلسلي للعداد',
                             allowOnlyDigits: true,
-                            hintText: 'أدخل معرف العداد',
+                            hintText:  'الرقم التسلسلي للعداد',
                             icon: Icons.confirmation_number,
                             controller: controller.meterId,
                           ),
@@ -185,6 +186,7 @@ class editCounter extends StatelessWidget {
                             label: 'القراءة النهائية',
                             hintText: 'أدخل القراءة النهائية',
                             icon: Icons.speed,
+                            readonly: true,
                             allowOnlyDigits: true,
                             controller: controller.finalReading,
                             keyboardType: TextInputType.number,
@@ -212,7 +214,8 @@ class editCounter extends StatelessWidget {
                                   await controller.editCounter(
                                     serial: controller.Counter_number.text,
                                     counter: ElectricMeter(
-                                      finalReading: int.tryParse(controller.finalReading.text) ?? 0,
+                                      accountNumber: controller.Counter_number.text,
+                                      finalReading: double.tryParse(controller.finalReading.text) ?? 0,
                                       meterFactor: int.tryParse(controller.meterFactor.text) ?? 1,
                                       meterId: controller.meterId.text,
                                       voltageid: controller.voltage!,

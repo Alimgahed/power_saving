@@ -1,6 +1,6 @@
 class ElectricMeter {
   final String? accountNumber;
-  final int? finalReading;
+  final double? finalReading;
   final int? meterFactor;
   final int? voltageid;
   final num? price;

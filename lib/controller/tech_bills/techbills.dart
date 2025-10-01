@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/tech_bill.dart';
 import 'package:power_saving/my_widget/sharable.dart';
+import 'package:power_saving/network/network.dart';
 
 class Techbills extends GetxController {
   RxBool looading = false.obs;
@@ -76,7 +77,7 @@ class Techbills extends GetxController {
   void fetchTechBills() async {
     try {
       techBills.clear();
-      final res = await http.get(Uri.parse("http://$ip/tech-bills"));
+      final res = await fetchData("http://$ip/tech-bills");
 
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
@@ -107,15 +108,14 @@ class Techbills extends GetxController {
       looading.value = true;
       loadingIndex.value = index; // mark current item as loading
 
-      final res = await http.post(
-        headers: {"Content-Type": "application/json"},
-        Uri.parse("http://$ip/edit-tech-bill/$id"),
-        body: json.encode({
+      final res = await postData(
+        "http://$ip/edit-tech-bill/$id",
+        {
           "technology_chlorine_consump": chlorine,
           "technology_liquid_alum_consump": liquid,
           "technology_solid_alum_consump": solid,
           "technology_water_amount": water,
-        }),
+        },
       );
 
       if (res.statusCode == 200) {

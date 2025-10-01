@@ -191,8 +191,8 @@ class EditStationsScreen extends StatelessWidget {
                               const SizedBox(width: 16),
                               Expanded(
                                 child: CustomTextFormField(
-                                  label: 'الكفاءة التصميمية',
-                                  hintText: 'ادخل كفاءة المحطة',
+                                  label: 'الطاقة التصميمية',
+                                  hintText: 'ادخل الطاقة المحطة',
                                   icon: Icons.water,
                                   allowOnlyDigits: true,
                                   controller: controller.capacity,

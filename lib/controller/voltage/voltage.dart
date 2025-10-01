@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/vlotage.dart';
 import 'package:power_saving/my_widget/sharable.dart';
+import 'package:power_saving/network/network.dart';
 
 class Voltage extends GetxController {
   var isLoading = false.obs;
@@ -39,8 +40,8 @@ class Voltage extends GetxController {
   Future<void> allVoltage() async {
     try {
       vlotages = [];
-      final res = await http.get(
-        Uri.parse("http://$ip/voltage-costs"),
+      final res = await fetchData(
+        "http://$ip/voltage-costs",
       );
 
       if (res.statusCode == 200) {
@@ -74,10 +75,9 @@ class Voltage extends GetxController {
     required int voltid,
   }) async {
     try {
-      final res = await http.post(
-        headers: {"Content-Type": "application/json"},
-        Uri.parse("http://$ip/edit-v-cost/$voltid"),
-        body: json.encode(volt.toJson()),
+      final res = await postData(
+        "http://$ip/edit-v-cost/$voltid",
+         (volt.toJson()),
       );
 
       if (res.statusCode == 200) {

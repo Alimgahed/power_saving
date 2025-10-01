@@ -53,54 +53,7 @@ class AddStationScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Header Card
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Colors.blue.shade50, Colors.blue.shade300],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.blue.shade100),
-                    ),
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.blue.shade100,
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          child: Icon(
-                            Icons.add_location_alt,
-                            size: 32,
-                            color: Colors.blue.shade700,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'إدخال بيانات المحطة',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue.shade900,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'أدخل المعلومات الأساسية للمحطة الجديدة',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.blue.shade600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 16),
+                 
 
                   // Form Card
                   Container(
@@ -168,8 +121,8 @@ class AddStationScreen extends StatelessWidget {
                               const SizedBox(width: 16),
                               Expanded(
                                 child: CustomTextFormField(
-                                  label: 'الكفاءة التصميمية',
-                                  hintText: 'ادخل كفاءة المحطه',
+                                  label: 'الطاقة التصميمية',
+                                  hintText: 'ادخل الطاقة المحطه',
                                   icon: Icons.water,
                                   allowOnlyDigits: true,
                                   controller: controller.capacity,

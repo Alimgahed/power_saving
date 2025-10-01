@@ -55,54 +55,54 @@ class AddChemicalScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Header Card
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Colors.blue.shade50, Colors.blue.shade300],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.blue.shade100),
-                    ),
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.blue.shade100,
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          child: Icon(
-                            Icons.science,
-                            size: 32,
-                            color: Colors.blue.shade700,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'إدخال بيانات المواد الكيميائية',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue.shade900,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'أدخل القيم والنطاقات للمواد الكيميائية',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.blue.shade600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Container(
+                  //   width: double.infinity,
+                  //   padding: const EdgeInsets.all(16),
+                  //   decoration: BoxDecoration(
+                  //     gradient: LinearGradient(
+                  //       colors: [Colors.blue.shade50, Colors.blue.shade300],
+                  //       begin: Alignment.topLeft,
+                  //       end: Alignment.bottomRight,
+                  //     ),
+                  //     borderRadius: BorderRadius.circular(16),
+                  //     border: Border.all(color: Colors.blue.shade100),
+                  //   ),
+                  //   child: Column(
+                  //     children: [
+                  //       Container(
+                  //         padding: const EdgeInsets.all(16),
+                  //         decoration: BoxDecoration(
+                  //           color: Colors.blue.shade100,
+                  //           borderRadius: BorderRadius.circular(50),
+                  //         ),
+                  //         child: Icon(
+                  //           Icons.science,
+                  //           size: 32,
+                  //           color: Colors.blue.shade700,
+                  //         ),
+                  //       ),
+                  //       const SizedBox(height: 16),
+                  //       Text(
+                  //         'إدخال بيانات المواد الكيميائية',
+                  //         style: TextStyle(
+                  //           fontSize: 20,
+                  //           fontWeight: FontWeight.bold,
+                  //           color: Colors.blue.shade900,
+                  //         ),
+                  //       ),
+                  //       const SizedBox(height: 8),
+                  //       Text(
+                  //         'أدخل القيم والنطاقات للمواد الكيميائية',
+                  //         style: TextStyle(
+                  //           fontSize: 14,
+                  //           color: Colors.blue.shade600,
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
 
-                  const SizedBox(height: 16),
+                  // const SizedBox(height: 16),
 
                   // Form Card
                   Container(

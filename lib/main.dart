@@ -1,12 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:power_saving/model/login.dart';
+import 'package:power_saving/shared_pref/cache.dart';
 import 'package:power_saving/view/Counter/Counter.dart';
 import 'package:power_saving/view/Counter/add_Counter.dart';
 import 'package:power_saving/view/Counter/edit_counter.dart';
 import 'package:power_saving/view/analysis/analysis.dart';
+import 'package:power_saving/view/auth/change_password.dart';
 import 'package:power_saving/view/auth/login.dart';
 import 'package:power_saving/view/auth/new_user.dart';
 import 'package:power_saving/view/bill/add_bill.dart';
@@ -17,6 +22,7 @@ import 'package:power_saving/view/home.dart';
 import 'package:power_saving/view/predaction/predaction.dart';
 import 'package:power_saving/view/relations/add_relation.dart';
 import 'package:power_saving/view/relations/relatiuons.dart';
+import 'package:power_saving/view/reports/report.dart';
 import 'package:power_saving/view/stations/add_station.dart';
 import 'package:power_saving/view/stations/edit_staion.dart';
 import 'package:power_saving/view/stations/stations.dart';
@@ -25,8 +31,15 @@ import 'package:power_saving/view/technology/add_tech.dart';
 import 'package:power_saving/view/technology/edittech.dart';
 import 'package:power_saving/view/technology/technology.dart';
 
-void main() {
+import 'gloable/data.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   setUrlStrategy(const HashUrlStrategy());
+
+  // ✅ Initialize SharedPreferences before running the app
+  await Cache.init();
+
   runApp(const MyApp());
 }
 
@@ -39,6 +52,26 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+ var jsuser = Cache.getdata(key: "user") ?? "{}";
+
+if (jsuser.isNotEmpty && jsuser != "{}") {
+  try {
+    dynamic decoded = jsonDecode(jsuser);
+    
+    // Keep decoding until we get a Map
+    while (decoded is String) {
+      decoded = jsonDecode(decoded);
+    }
+    
+    user = User.fromJson(decoded as Map<String, dynamic>);
+  } catch (e) {
+    print("Error decoding user data: $e");
+  }
+}
+
+
+
+
     return GetMaterialApp(
       locale: const Locale('ar'),
       supportedLocales: const [Locale('en', 'US'), Locale('ar', 'AE')],
@@ -51,19 +84,21 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(textTheme: GoogleFonts.almaraiTextTheme()),
       initialRoute: '/home',
       getPages: [
+        
         GetPage(name: '/home', page: () => Home()),
+                GetPage(name: '/change_password', page: () => ChangePassword()),
+
         GetPage(name: '/Stations', page: () => StationsScreen()),
         GetPage(name: '/Login', page: () => const Login()),
         GetPage(name: '/editMeter', page: () => editCounter()),
         GetPage(name: '/editStations', page: () => EditStationsScreen()),
-        GetPage(name: '/NewUser', page: () => const NewUser()),
+        GetPage(name: '/NewUser', page: () => NewUser()),
         GetPage(name: '/addstations', page: () => AddStationScreen()),
         GetPage(name: '/Technology', page: () => Technology()),
         GetPage(name: '/Edittech', page: () => Edittech()),
+        GetPage(name: '/Reports', page: () => Reports()),
         GetPage(name: '/Predictions', page: () => Predaction()),
-
         GetPage(name: '/analysis', page: () => AnalysisView()),
-
         GetPage(name: '/addTech', page: () => AddTech()),
         GetPage(name: '/Countrts', page: () => Counterscreen()),
         GetPage(name: '/addCounter', page: () => AddElectricMeterScreen()),
@@ -75,7 +110,6 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/EditChemcials', page: () => EditChemcials()),
         GetPage(name: '/AddBill', page: () => AddBill()),
       ],
-      // Initialize dimensions after GetX is ready
       onInit: () {
         _initializeDimensions();
       },
@@ -83,7 +117,6 @@ class MyApp extends StatelessWidget {
   }
 
   void _initializeDimensions() {
-    // Use WidgetsBinding to ensure GetX is initialized
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (Get.context != null) {
         height = Get.height;
@@ -95,7 +128,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// Alternative: Create a utility class for screen dimensions
 class ScreenUtils {
   static double get width => Get.width;
   static double get height => Get.height;
@@ -106,7 +138,6 @@ class ScreenUtils {
   }
 }
 
-// Alternative: Create a custom controller for managing screen dimensions
 class ScreenController extends GetxController {
   RxDouble screenWidth = 0.0.obs;
   RxDouble screenHeight = 0.0.obs;

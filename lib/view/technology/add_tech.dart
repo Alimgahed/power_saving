@@ -148,6 +148,44 @@ class AddTech extends StatelessWidget {
                             allowOnlyDigits: true,
                             keyboardType: TextInputType.number,
                           ),
+                                  const SizedBox(height: 16),
+
+                          CustomDropdownFormField<String>(
+  items: const [
+    DropdownMenuItem(
+      value: "ثابت",
+      child: Text("ثابت"),
+    ),
+    DropdownMenuItem(
+      value: "نقالي",
+      child: Text("نقالي"),
+    ),
+    DropdownMenuItem(
+      value: "ارتوازي",
+      child: Text("ارتوازي"),
+    ),
+    DropdownMenuItem(
+      value: "رفع",
+      child: Text("رفع"),
+    ),
+    DropdownMenuItem(
+      value: "معالجة",
+      child: Text("معالجة"),
+    ),
+    DropdownMenuItem(
+      value: "روافع",
+      child: Text("روافع"),
+    ),
+  ],
+  onChanged: (val) {
+    controller.main_type = val!; // تأكد أنك أنشأت هذا المتغير داخل الكنترولر
+  },
+  labelText: 'التصنيف الرئيسي',
+  hintText: 'اختر التصنيف الرئيسي',
+  prefixIcon: Icons.build, // يمكن تغييره حسب السياق
+  validator: (val) =>
+      val == null ? 'الرجاء اختيار نوع التقنية' : null,
+),
 
                           const SizedBox(height: 24),
 Obx((){
@@ -158,6 +196,7 @@ Obx((){
                                 if (_globalKey.currentState!.validate()) {
                                   await controller.addtech(
                                     tech: TechnologyModel(
+                                      main_type:controller.main_type ,
                                       powerPerWater:
                                           double.parse(controller.power.text),
                                       technologyName: controller.name.text,

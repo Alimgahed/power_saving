@@ -7,6 +7,7 @@ import 'package:power_saving/model/chemacial.dart';
 import 'package:power_saving/model/station_model.dart';
 import 'package:power_saving/model/tech_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
+import 'package:power_saving/network/network.dart';
 
 class Chemacialcontroller extends GetxController {
   List<AlumChlorineReference> chemicals = [];
@@ -24,8 +25,8 @@ class Chemacialcontroller extends GetxController {
     try {
       chemicals.clear();
       chemicals = []; // Clear the list before fetching new data
-      final res = await http.get(
-        Uri.parse("http://$ip/chemicals"),
+      final res = await fetchData(
+        "http://$ip/chemicals"
       );
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
@@ -85,10 +86,9 @@ class addchemical extends GetxController {
 
   Future<void> addchemicals({required AlumChlorineReference reference}) async {
     try {
-      final res = await http.post(
-        Uri.parse("http://$ip/new-chemical"),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(reference.toJson()),
+      final res = await postData(
+        "http://$ip/new-chemical",
+        (reference.toJson()),
       );
 
       if (res.statusCode == 200) {
@@ -105,12 +105,7 @@ class addchemical extends GetxController {
       }
     } catch (e) {
       print("Error adding station: $e");
-      Get.snackbar(
-        "خطأ",
-        "حدث خطأ أثناء الإضافة",
-        backgroundColor: Colors.red.shade100,
-        colorText: Colors.black87,
-      );
+     
     }
   }
 
@@ -119,10 +114,9 @@ class addchemical extends GetxController {
     required int id,
   }) async {
     try {
-      final res = await http.post(
-        Uri.parse("http://$ip/edit-chemical/$id"),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(reference.toJson()),
+      final res = await postData(
+        "http://$ip/edit-chemical/$id",
+         (reference.toJson()),
       );
 
       if (res.statusCode == 200) {
@@ -139,19 +133,14 @@ class addchemical extends GetxController {
       }
     } catch (e) {
       print("Error adding station: $e");
-      Get.snackbar(
-        "خطأ",
-        "حدث خطأ أثناء الإضافة",
-        backgroundColor: Colors.red.shade100,
-        colorText: Colors.black87,
-      );
+     
     }
   }
 
   void getchemicals() async {
     try {
-      final res = await http.get(
-        Uri.parse("http://$ip/new-chemical"),
+      final res = await fetchData(
+       "http://$ip/new-chemical"
       );
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);

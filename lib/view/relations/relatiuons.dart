@@ -238,7 +238,8 @@ class RelatiuonsSCREAN extends StatelessWidget {
         final isActive = relation.relationStatus == true;
 
         return Container(
-          width: 280, // Or any desired width
+          width: 280,
+           // Or any desired width
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
@@ -262,6 +263,7 @@ class RelatiuonsSCREAN extends StatelessWidget {
             children: [
               // --- Header ---
               Container(
+                height: 100,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -299,10 +301,11 @@ class RelatiuonsSCREAN extends StatelessWidget {
                           fontSize: 16,
                           color: Colors.white,
                         ),
-                        maxLines: 1,
+                        maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
+                    SizedBox(width: 2,),
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 8,

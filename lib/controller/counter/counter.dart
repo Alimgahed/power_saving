@@ -6,12 +6,13 @@ import 'package:http/http.dart' as http;
 import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/Counter_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
+import 'package:power_saving/network/network.dart';
 
 // ignore: camel_case_types
 class Counter_controller extends GetxController {
   List<ElectricMeter> allcounter = [];
-  // ignore: non_constant_identifier_names
-
+  List<ElectricMeter> filteredCounters = [];
+  RxBool looading=false.obs;
   @override
   void onInit() {
     all_counter();
@@ -20,71 +21,96 @@ class Counter_controller extends GetxController {
 
   @override
   void onClose() {
-    // No need to dispose integers
     super.onClose();
+  }
+
+  // Search/Filter function
+  void filterCounters(String query) {
+    if (query.isEmpty) {
+      filteredCounters.clear();
+    } else {
+      filteredCounters = allcounter.where((meter) {
+        // Search by meter ID (meterId) or account number (accountNumber)
+        final meterIdMatch = meter.meterId?.toLowerCase().contains(query.toLowerCase()) ?? false;
+        final accountNumberMatch = meter.accountNumber?.toLowerCase().contains(query.toLowerCase()) ?? false;
+        
+        return meterIdMatch || accountNumberMatch;
+      }).toList();
+    }
+    update(); // Notify listeners to rebuild UI
+  }
+
+  // Clear search filter
+  void clearFilter() {
+    filteredCounters.clear();
+    update(); // Notify listeners to rebuild UI
   }
 
   Future<void> addCounter({required ElectricMeter counter}) async {
     try {
-      final res = await http.post(
-        Uri.parse("http://$ip/new-station"),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(counter.toJson()),
+      final res = await postData(
+        "http://$ip/new-station",
+    (counter.toJson()),
       );
 
       if (res.statusCode == 200) {
         showSuccessToast("تم اضافة العداد بنجاح");
+        // Refresh the list after adding
+        await all_counter();
       } else {
         final errorBody = jsonDecode(res.body);
-
-        // Extract Arabic error message
         final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';
-
-        // Show custom dialog or toast with Arabic error
         showCustomErrorDialog(errorMessage: errorMessage);
       }
+    // ignore: empty_catches
     } catch (e) {
-      print("Error adding station: $e");
-      Get.snackbar(
-        "خطأ",
-        "حدث خطأ أثناء الإضافة",
-        backgroundColor: Colors.red.shade100,
-        colorText: Colors.black87,
-      );
+   
     }
   }
 
   Future<void> all_counter() async {
     try {
-      final res = await http.get(
-        Uri.parse("http://$ip/gauges"),
+              looading.value=true;
+
+      final res = await fetchData(
+        "http://$ip/gauges"
       );
 
       if (res.statusCode == 200) {
+        looading.value=false;
         final jsonData = json.decode(res.body);
         print(jsonData);
         List<dynamic> responseData = jsonData;
 
+        // Clear existing data
+        allcounter.clear();
+        
         for (var i in responseData) {
           ElectricMeter meter = ElectricMeter.fromJson(i);
           allcounter.add(meter);
-          conters = allcounter; // Update the global list
-          update();
         }
+        
+        conters = allcounter; // Update the global list
+        
+        // Clear filtered results when refreshing data
+        filteredCounters.clear();
+        
+        update();
       }
+    // ignore: empty_catches
     } catch (e) {
-      print("Error fetching branches: $e");
+                    looading.value=false;
+
     }
   }
 }
 
 // ignore: camel_case_types
 class addcounter extends GetxController {
-  RxBool looading=false.obs;
+  RxBool looading = false.obs;
   List<VoltageType> allVoltage = [];
   int? voltage;
 
-  // ignore: non_constant_identifier_names
   late TextEditingController Counter_number;
   late TextEditingController finalReading;
   late TextEditingController meterFactor;
@@ -109,54 +135,42 @@ class addcounter extends GetxController {
     meterFactor.dispose();
     finalReading.dispose();
     voltageType.dispose();
-
-    // No need to dispose integers
     super.onClose();
   }
 
   Future<void> addCounter({required ElectricMeter counter}) async {
     try {
-      looading.value=true;
-      final res = await http.post(
-        Uri.parse("http://$ip/new-gauge"),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(counter.toJson()),
+      looading.value = true;
+      final res = await postData(
+        "http://$ip/new-gauge",
+        (counter.toJson()),
       );
 
       if (res.statusCode == 200) {
-        looading.value=false;
+        looading.value = false;
         showSuccessToast("تم اضافة العداد بنجاح");
+        // Refresh the main counter list
+        Get.find<Counter_controller>().all_counter();
       } else {
-        looading.value=false;
+        looading.value = false;
         final errorBody = jsonDecode(res.body);
-
-        // Extract Arabic error message
         final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';
-
-        // Show custom dialog or toast with Arabic error
         showCustomErrorDialog(errorMessage: errorMessage);
       }
     } catch (e) {
-      looading.value=false;
-      print("Error adding station: $e");
-      Get.snackbar(
-        "خطأ",
-        "حدث خطأ أثناء الإضافة",
-        backgroundColor: Colors.red.shade100,
-        colorText: Colors.black87,
-      );
+      looading.value = false;
+     
     }
   }
 
   Future<void> allVoltige() async {
     try {
-      final res = await http.get(
-        Uri.parse("http://$ip/new-gauge"),
-        headers: {"Content-Type": "application/json"},
+      final res = await fetchData(
+       "http://$ip/new-gauge",
       );
 
       if (res.statusCode == 200) {
-        final jsonData = json.decode(res.body); // returns a String
+        final jsonData = json.decode(res.body);
 
         for (var i in jsonData) {
           VoltageType voltage = VoltageType.fromJson(i);
@@ -172,24 +186,18 @@ class addcounter extends GetxController {
           colorText: Colors.black87,
         );
       }
+    // ignore: empty_catches
     } catch (e) {
-      print("Error adding station: $e");
-      Get.snackbar(
-        "خطأ",
-        "حدث خطأ أثناء الإضافة",
-        backgroundColor: Colors.red.shade100,
-        colorText: Colors.black87,
-      );
+      
     }
   }
 }
 
 class EditCounter extends GetxController {
-  RxBool looadig=false.obs;
+  RxBool looadig = false.obs;
   List<VoltageType> allVoltage = [];
   int? voltage;
 
-  // ignore: non_constant_identifier_names
   late TextEditingController Counter_number;
   late TextEditingController finalReading;
   late TextEditingController meterFactor;
@@ -214,8 +222,6 @@ class EditCounter extends GetxController {
     meterFactor.dispose();
     finalReading.dispose();
     voltageType.dispose();
-
-    // No need to dispose integers
     super.onClose();
   }
 
@@ -224,47 +230,41 @@ class EditCounter extends GetxController {
     required String serial,
   }) async {
     try {
-      looadig.value=true;
-      final res = await http.post(
-        Uri.parse("http://$ip/edit-gauge/$serial"),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(counter.toJson()),
+      looadig.value = true;
+      final res = await postData(
+        "http://$ip/edit-gauge",
+        (counter.toJson()),
       );
 
       if (res.statusCode == 200) {
-        looadig.value=false;
+        looadig.value = false;
         showSuccessToast("تم تعديل العداد بنجاح");
+        // Refresh the main counter list
+        Get.find<Counter_controller>().all_counter();
       } else {
-         looadig.value=false;
-        print("Failed to add station: ${res.body}");
+        looadig.value = false;
+        print("Failed to edit station: ${res.body}");
         Get.snackbar(
           "خطأ",
-          "فشل في إضافة المحطة: ${res.body}",
+          "فشل في تعديل المحطة: ${res.body}",
           backgroundColor: Colors.red.shade100,
           colorText: Colors.black87,
         );
       }
     } catch (e) {
-       looadig.value=false;
-      print("Error adding station: $e");
-      Get.snackbar(
-        "خطأ",
-        "حدث خطأ أثناء الإضافة",
-        backgroundColor: Colors.red.shade100,
-        colorText: Colors.black87,
-      );
+      looadig.value = false;
+      
     }
   }
 
   Future<void> allVoltige() async {
     try {
-      final res = await http.get(
-        Uri.parse("http://$ip/new-gauge"),
-        headers: {"Content-Type": "application/json"},
+      final res = await fetchData(
+        "http://$ip/new-gauge",
       );
 
       if (res.statusCode == 200) {
-        final jsonData = json.decode(res.body); // returns a String
+        final jsonData = json.decode(res.body);
 
         for (var i in jsonData) {
           VoltageType voltage = VoltageType.fromJson(i);
@@ -272,19 +272,19 @@ class EditCounter extends GetxController {
           update();
         }
       } else {
-        print("Failed to add station: ${res.body}");
+        print("Failed to load voltage types: ${res.body}");
         Get.snackbar(
           "خطأ",
-          "فشل في إضافة المحطة: ${res.body}",
+          "فشل في تحميل أنواع الجهد: ${res.body}",
           backgroundColor: Colors.red.shade100,
           colorText: Colors.black87,
         );
       }
     } catch (e) {
-      print("Error adding station: $e");
+      print("Error loading voltage types: $e");
       Get.snackbar(
         "خطأ",
-        "حدث خطأ أثناء الإضافة",
+        "حدث خطأ أثناء تحميل أنواع الجهد",
         backgroundColor: Colors.red.shade100,
         colorText: Colors.black87,
       );

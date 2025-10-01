@@ -8,10 +8,15 @@ import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/tech_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:http/http.dart' as http;
+import 'package:power_saving/network/network.dart';
 
 class TechnlogyController extends GetxController {
-  RxBool looading=false.obs;
+  RxBool looading = false.obs;
+  RxBool isLoading = false.obs;
   List<TechnologyModel> all_technology = [];
+  String main_type = "";
+  String selectedFilter = 'all';
+
   late TextEditingController name;
   late TextEditingController chlorine;
   late TextEditingController liquid;
@@ -35,43 +40,68 @@ class TechnlogyController extends GetxController {
     super.onClose();
   }
 
+  // Filter function
+  void filterByType(String type) {
+    selectedFilter = type;
+    update();
+  }
+
+  // Get filtered technologies
+  List<TechnologyModel> getFilteredTechnologies() {
+    if (selectedFilter == 'all') {
+      return all_technology;
+    }
+    return all_technology
+        .where((tech) => tech.main_type == selectedFilter)
+        .toList();
+  }
+
   Future<void> alltechnology() async {
+    isLoading.value = true;
+    all_technology.clear(); // Clear old data
+    
     try {
-      
-      final res = await http.get(
-        Uri.parse("http://$ip/technologies"),
+      final res = await fetchData(
+        "http://$ip/technologies",
       );
 
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
-
         List<dynamic> responseData = jsonData;
 
         for (var i in responseData) {
           TechnologyModel tech = TechnologyModel.fromJson(i);
           all_technology.add(tech);
           technologies = all_technology; // Update the global list
-          update();
         }
+        
+        isLoading.value = false;
+        update();
       } else {
-        print("Failed to fetch branches: ${res.body}");
+        isLoading.value = false;
+        update();
+        print("Failed to fetch technologies: ${res.body}");
       }
     } catch (e) {
-      print("Error fetching branches: $e");
+      isLoading.value = false;
+      update();
+      print("Error fetching technologies: $e");
     }
   }
 
   Future<void> addtech({required TechnologyModel tech}) async {
-    try {   looading.value=true;
-      final res = await http.post(
-        Uri.parse("http://$ip/new-tech"),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(tech.toJson()), // ✅ Proper JSON encoding
+    try {
+      looading.value = true;
+      final res = await postData(
+        "http://$ip/new-tech",
+        (tech.toJson()), // ✅ Proper JSON encoding
       );
 
-      if (res.statusCode == 200) {   looading.value=false;
+      if (res.statusCode == 200) {
+        looading.value = false;
         showSuccessToast("تم اضافة التقنية بنجاح");
-      } else {   looading.value=false;
+      } else {
+        looading.value = false;
         final errorBody = jsonDecode(res.body);
 
         // Extract Arabic error message
@@ -80,21 +110,16 @@ class TechnlogyController extends GetxController {
         // Show custom dialog or toast with Arabic error
         showCustomErrorDialog(errorMessage: errorMessage);
       }
-    } catch (e) {   looading.value=false;
+    } catch (e) {
+      looading.value = false;
       print("Error adding station: $e");
-      Get.snackbar(
-        "خطأ",
-        "حدث خطأ أثناء الإضافة",
-        backgroundColor: Colors.red.shade100,
-        colorText: Colors.black87,
-      );
     }
   }
 }
 
 class edit_tech extends GetxController {
-    RxBool looading=false.obs;
-
+  RxBool looading = false.obs;
+  String? main_type;
   late TextEditingController name;
   late TextEditingController chlorine;
   late TextEditingController liquid;
@@ -121,18 +146,18 @@ class edit_tech extends GetxController {
     required TechnologyModel tech,
     required int id,
   }) async {
-    try {   looading.value=true;
-      final res = await http.post(
-        Uri.parse("http://$ip/edit-tech/$id"),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(tech.toJson()), // ✅ Proper JSON encoding
+    try {
+      looading.value = true;
+      final res = await postData(
+        "http://$ip/edit-tech/$id",
+        (tech.toJson()), // ✅ Proper JSON encoding
       );
 
       if (res.statusCode == 200) {
-           looading.value=false;
+        looading.value = false;
         showSuccessToast("تم تعديل التقنية بنجاح");
       } else {
-           looading.value=false;
+        looading.value = false;
         final errorBody = jsonDecode(res.body);
 
         // Extract Arabic error message
@@ -142,14 +167,7 @@ class edit_tech extends GetxController {
         showCustomErrorDialog(errorMessage: errorMessage);
       }
     } catch (e) {
-         looading.value=false;
-      print("Error adding station: $e");
-      Get.snackbar(
-        "خطأ",
-        "حدث خطأ أثناء الإضافة",
-        backgroundColor: Colors.red.shade100,
-        colorText: Colors.black87,
-      );
+      looading.value = false;
     }
   }
 }

@@ -134,10 +134,9 @@ class AddElectricMeterScreen extends StatelessWidget {
                           _buildSectionHeader('تفاصيل العداد', Icons.electric_meter, Colors.blue),
 
                           CustomTextFormField(
-                            label: 'رقم الحساب',
-                            hintText: 'أدخل رقم الحساب',
+                            label: 'رقم الاشتراك',
+                            hintText: 'أدخل رقم الاشتراك',
                             icon: Icons.numbers,
-                            allowOnlyDigits: true,
                             controller: controller.Counter_number,
                           
                           ),
@@ -203,8 +202,8 @@ class AddElectricMeterScreen extends StatelessWidget {
                                   await controller.addCounter(
                                     counter: ElectricMeter(
                                       accountNumber: controller.Counter_number.text,
-                                      finalReading: int.tryParse(controller.finalReading.text) ?? 0,
-                                      meterFactor: int.tryParse(controller.meterFactor.text) ?? 1,
+                                      finalReading: double.tryParse(controller.finalReading.text),
+                                      meterFactor: int.tryParse(controller.meterFactor.text),
                                       meterId: controller.meterId.text,
                                       voltageid: controller.voltage!,
                                     ),

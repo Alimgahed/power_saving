@@ -8,6 +8,7 @@ import 'package:power_saving/model/relations.dart';
 import 'package:power_saving/model/station_model.dart';
 import 'package:power_saving/model/tech_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
+import 'package:power_saving/network/network.dart';
 
 class Relation extends GetxController {
   List<StationGaugeTechnologyRelation> allrelations = [];
@@ -31,8 +32,8 @@ class Relation extends GetxController {
   // ignore: non_constant_identifier_names
   Future<void> all_relations() async {
     try {
-      final res = await http.get(
-        Uri.parse("http://$ip/stg-relations"),
+      final res = await fetchData(
+        ("http://$ip/stg-relations"),
       );
 
       if (res.statusCode == 200) {
@@ -58,9 +59,8 @@ class Relation extends GetxController {
   Future<void> editRelation(int id, String text) async {
     try {
       isLoading.value = true; // Start loading
-      final res = await http.get(
-        Uri.parse("http://$ip/edit-relation/$id"),
-        headers: {"Content-Type": "application/json"},
+      final res = await fetchData(
+        "http://$ip/edit-relation/$id",
       );
 
       if (res.statusCode == 200) {
@@ -107,8 +107,8 @@ class addrelationcontroller extends GetxController {
 
   Future<void> new_relations() async {
     try {
-      final res = await http.get(
-        Uri.parse("http://$ip/new-relation"),
+      final res = await fetchData(
+        "http://$ip/new-relation",
       );
 
       if (res.statusCode == 200) {
@@ -150,10 +150,9 @@ class addrelationcontroller extends GetxController {
     try {
             looading.value=true;
 
-      final res = await http.post(
-        Uri.parse("http://$ip/new-relation"),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(relation.toJson()),
+      final res = await postData(
+        "http://$ip/new-relation",
+        (relation.toJson()),
       );
 
       if (res.statusCode == 200) {

@@ -1,12 +1,20 @@
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:power_saving/gloable/data.dart';
+import 'package:power_saving/model/login.dart';
+import 'package:power_saving/my_widget/sharable.dart';
+import 'package:power_saving/network/network.dart';
+
+import '../../shared_pref/cache.dart';
 
 class LoginController extends GetxController {
   late TextEditingController name;
   late TextEditingController password;
+  RxBool isLoading = false.obs;
 
   @override
   void onInit() {
@@ -24,63 +32,51 @@ class LoginController extends GetxController {
 
     super.onClose();
   }
+  
+  
+// ignore: non_constant_identifier_names
+Future<void> Login(String name, String password) async {
+  try {
+    isLoading.value = true;
 
-  // ignore: non_constant_identifier_names
-  Future<void> Login(String name, String password) async {
-    try {
-      final res = await http.post(
-        Uri.parse("http://$ip/login"),
-        body: {
-          "name": name,
-          "password": password,
-        },
-      );
-      if (res.statusCode == 200) {
-        // final Map<String, dynamic> jsonData = json.decode(res.body);
-      //   USERname = name;
-      //   userinfo = user.fromJson(jsonData);
-      //   print(userinfo?.name);
+   final res = await postData(
+  "http://$ip/login",
+  {
+    "username": name,
+    "password": password,
+  },
+);
 
-      //   // ignore: unrelated_type_equality_checks
-      //   if (userinfo?.dep_id == 2) {
-      //     id.value = true;
-      //   } else {
-      //     id.value = false;
-      //   }
-      //   showSuccessToast("تم تسجيل الدخول بنجاح");
-      //   // await get_departments();
-      //   Get.offAll(() => home());
-      // } else if (res.statusCode == 400) {
-      //   showCustomErrorDialog(
-      //       iconColor: Colors.red,
-      //       buttonColor: Colors.red,
-      //       title: "خطأ",
-      //       errorMessage: res.body,
-      //       titleColor: Colors.red);
-      }
-      // ignore: empty_catches
-    } catch (e) {
-      print(e.toString());
+
+    isLoading.value = false;
+
+    if (res.statusCode == 200) {
+      final jsonResponse = jsonDecode(res.body);
+
+      // 👇 Optional: print to see structure
+      print("Login response: $jsonResponse");
+
+      // ✅ Step 1: Extract user info and token
+      final userMap = jsonResponse['current_user']; // or just jsonResponse if no wrapper
+      final token = jsonResponse['token']; // adjust based on actual structure
+
+      // ✅ Step 2: Save to cache
+       Cache.saveData(key: "user", value: jsonEncode(userMap));
+       Cache.saveData(key: "token", value: token);
+
+      // ✅ Step 3: Store in global `user` variable
+      user = User.fromJson(userMap);
+
+      // ✅ Step 4: Navigate to home
+      Get.offNamed('/home');
+    } else {
+      final errorBody = jsonDecode(res.body);
+      final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';
+      showCustomErrorDialog(errorMessage: errorMessage);
     }
+  } catch (e) {
+    isLoading.value = false;
   }
+}
 
-  // Future<void> get_departments() async {
-  //   try {
-  //     final res = await http.get(
-  //       Uri.parse("http://172.16.0.10:3000/home"),
-  //     );
-
-  //     if (res.statusCode == 200) {
-  //       print(res.body);
-  //     } else if (res.statusCode == 400) {
-  //       showCustomErrorDialog(
-  //           iconColor: Colors.red,
-  //           buttonColor: Colors.red,
-  //           title: "خطأ",
-  //           errorMessage: "ليس لديك الصلاحية للدخول لهذه الادارة",
-  //           titleColor: Colors.red);
-  //     }
-  //     // ignore: empty_catches
-  //   } catch (e) {}
-  // }
 }

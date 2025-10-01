@@ -8,6 +8,8 @@ import 'package:power_saving/my_widget/sharable.dart';
 class Counterscreen extends StatelessWidget {
   Counterscreen({super.key});
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+  final TextEditingController _searchController = TextEditingController();
+  final RxBool _isSearching = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -16,13 +18,28 @@ class Counterscreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: const Color(0xFFF8FAFC),
         appBar: AppBar(
-          title: const Text(
-            'قائمة العدادات',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
+          title: Obx(() => _isSearching.value 
+            ? TextField(
+                controller: _searchController,
+                autofocus: true,
+                style: const TextStyle(color: Colors.white),
+                decoration: const InputDecoration(
+                  hintText: 'ابحث برقم العداد أو رقم الاشتراك...',
+                  hintStyle: TextStyle(color: Colors.white70),
+                  border: InputBorder.none,
+                ),
+                onChanged: (value) {
+                  Get.find<Counter_controller>().filterCounters(value);
+                },
+              )
+            : const Text(
+                'قائمة العدادات',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
           ),
           backgroundColor: const Color(0xFF1E40AF),
           elevation: 0,
@@ -31,32 +48,59 @@ class Counterscreen extends StatelessWidget {
               margin: const EdgeInsets.only(left: 16),
               child: Row(
                 children: [
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      Get.offNamed('/addCounter');
-                    },
-                    icon: const Icon(Icons.add, size: 18),
-                    label: const Text(
-                      "إضافة عداد جديد",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
+                  // Search Icon Button
+                  Obx(() => IconButton(
+                    icon: Icon(
+                      _isSearching.value ? Icons.close : Icons.search,
+                      color: Colors.white,
                     ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: const Color(0xFF1E40AF),
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
+                    onPressed: () {
+                      if (_isSearching.value) {
+                        _isSearching.value = false;
+                        _searchController.clear();
+                        Get.find<Counter_controller>().clearFilter();
+                      } else {
+                        _isSearching.value = true;
+                      }
+                    },
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.white.withOpacity(0.1),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 12),
+                  )),
+                  const SizedBox(width: 8),
+                  // Add Counter Button
+                  if (!_isSearching.value) ...[
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        Get.offNamed('/addCounter');
+                      },
+                      icon: const Icon(Icons.add, size: 18),
+                      label: const Text(
+                        "إضافة عداد جديد",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: const Color(0xFF1E40AF),
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                  ],
+                  // Home Button
                   IconButton(
                     icon: const Icon(Icons.arrow_forward, color: Colors.white),
                     onPressed: () {
@@ -78,6 +122,14 @@ class Counterscreen extends StatelessWidget {
         body: GetBuilder<Counter_controller>(
           init: Counter_controller(),
           builder: (controller) {
+            // Use filtered list if search is active, otherwise use all counters
+            List<dynamic> displayCounters = controller.filteredCounters.isNotEmpty || _searchController.text.isNotEmpty 
+                ? controller.filteredCounters 
+                : controller.allcounter;
+if(controller.looading.value==true){
+  return Center(child: CircularProgressIndicator(),);
+}
+
             if (controller.allcounter.isEmpty) {
               return Center(
                 child: Column(
@@ -108,6 +160,45 @@ class Counterscreen extends StatelessWidget {
                     const Text(
                       'ابدأ بإضافة عداد جديد',
                       style: TextStyle(fontSize: 14, color: Colors.black54),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+
+            // Show no results message when searching
+            if (_searchController.text.isNotEmpty && displayCounters.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: Icon(
+                        Icons.search_off,
+                        size: 48,
+                        color: Colors.grey.shade400,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    const Text(
+                      'لا توجد نتائج للبحث',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'لم يتم العثور على عدادات تحتوي على "${_searchController.text}"',
+                      style: const TextStyle(fontSize: 14, color: Colors.black54),
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
@@ -150,9 +241,11 @@ class Counterscreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                'إجمالي العدادات',
-                                style: TextStyle(
+                              Text(
+                                _searchController.text.isNotEmpty 
+                                    ? 'نتائج البحث' 
+                                    : 'إجمالي العدادات',
+                                style: const TextStyle(
                                   fontSize: 14,
                                   color: Colors.black54,
                                   fontWeight: FontWeight.w500,
@@ -160,7 +253,7 @@ class Counterscreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                '${controller.allcounter.length} عداد',
+                                '${displayCounters.length} عداد',
                                 style: const TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
@@ -183,135 +276,123 @@ class Counterscreen extends StatelessWidget {
                       child: Wrap(
                         spacing: 10,
                         runSpacing: 20,
-                        children:
-                            controller.allcounter.map((meter) {
-                              return Container(
-                                width: 290, // same as maxCrossAxisExtent
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(20),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.04),
-                                      spreadRadius: 0,
-                                      blurRadius: 20,
-                                      offset: const Offset(0, 4),
+                        children: displayCounters.map((meter) {
+                          return Container(
+                            width: 290, // same as maxCrossAxisExtent
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.04),
+                                  spreadRadius: 0,
+                                  blurRadius: 20,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                              border: Border.all(
+                                color: Colors.grey.shade100,
+                                width: 1,
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min, // Allow dynamic height
+                              children: [
+                                // Header
+                                Container(
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Colors.blue.shade600,
+                                        Colors.blue.shade700,
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
                                     ),
-                                  ],
-                                  border: Border.all(
-                                    color: Colors.grey.shade100,
-                                    width: 1,
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(20),
+                                      topRight: Radius.circular(20),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(6),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white.withOpacity(0.2),
+                                          borderRadius: BorderRadius.circular(6),
+                                        ),
+                                        child: const Icon(
+                                          Icons.electric_meter,
+                                          color: Colors.white,
+                                          size: 16,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          meter.meterId,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                child: Column(
-                                  mainAxisSize:
-                                      MainAxisSize.min, // Allow dynamic height
-                                  children: [
-                                    // Header
-                                    Container(
-                                      padding: const EdgeInsets.all(16),
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            Colors.blue.shade600,
-                                            Colors.blue.shade700,
-                                          ],
-                                          begin: Alignment.topLeft,
-                                          end: Alignment.bottomRight,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(20),
-                                          topRight: Radius.circular(20),
-                                        ),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            padding: const EdgeInsets.all(6),
-                                            decoration: BoxDecoration(
-                                              color: Colors.white.withOpacity(
-                                                0.2,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(6),
-                                            ),
-                                            child: const Icon(
-                                              Icons.electric_meter,
-                                              color: Colors.white,
-                                              size: 16,
-                                            ),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Expanded(
-                                            child: Text(
-                                              meter.meterId,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
 
-                                    // Content
-                                    Padding(
-                                      padding: const EdgeInsets.all(8),
-                                      child: Column(
-                                        children: [
-                                          _buildMeterInfoSection(meter),
-                                          const SizedBox(height: 8),
-                                          _buildMeterDetailsSection(meter),
-                                        ],
-                                      ),
-                                    ),
+                                // Content
+                                Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Column(
+                                    children: [
+                                      _buildMeterInfoSection(meter),
+                                      const SizedBox(height: 8),
+                                      _buildMeterDetailsSection(meter),
+                                    ],
+                                  ),
+                                ),
 
-                                    // Footer
-                                    Container(
-                                      padding: const EdgeInsets.all(16),
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.shade50,
-                                        borderRadius: const BorderRadius.only(
-                                          bottomLeft: Radius.circular(20),
-                                          bottomRight: Radius.circular(20),
+                                // Footer
+                                Container(
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade50,
+                                    borderRadius: const BorderRadius.only(
+                                      bottomLeft: Radius.circular(20),
+                                      bottomRight: Radius.circular(20),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      ElevatedButton.icon(
+                                        onPressed: () {
+                                          Get.offNamed(
+                                            '/editMeter',
+                                            arguments: {"meter": meter},
+                                          );
+                                        },
+                                        icon: const Icon(Icons.edit, size: 14),
+                                        label: const Text('تعديل'),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.blue.shade600,
+                                          foregroundColor: Colors.white,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                            vertical: 6,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(6),
+                                          ),
                                         ),
                                       ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          ElevatedButton.icon(
-                                            onPressed: () {
-                                              Get.offNamed(
-                                                '/editMeter',
-                                                arguments: {"meter": meter},
-                                              );
-                                            },
-                                            icon: const Icon(
-                                              Icons.edit,
-                                              size: 14,
-                                            ),
-                                            label: const Text('تعديل'),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  Colors.blue.shade600,
-                                              foregroundColor: Colors.white,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                    horizontal: 12,
-                                                    vertical: 6,
-                                                  ),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(6),
-                                              ),
-                                            ),
-                                          ),
-                                          ElevatedButton.icon(
-                                            onPressed: () async {
-                                              Get.put(Bills()).onInit();
+                                      ElevatedButton.icon(
+                                        onPressed: () async {
+                                   Get.put(Bills()).onInit();
                                               final Bill = await Get.put(
                                                 Bills(),
                                               );
@@ -1235,35 +1316,29 @@ class Counterscreen extends StatelessWidget {
                                                   errorMessage:
                                                       "لا يوجد عدادات محطات مرتبطة بهذا الحساب",
                                                 );
-                                              }
-                                            },
-                                            icon: const Icon(
-                                              Icons.receipt,
-                                              size: 14,
-                                            ),
-                                            label: const Text('فاتورة جديدة'),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  Colors.green.shade600,
-                                              foregroundColor: Colors.white,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                    horizontal: 12,
-                                                    vertical: 6,
-                                                  ),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(6),
-                                              ),
-                                            ),
+                                              }           
+                                        },
+                                        icon: const Icon(Icons.receipt, size: 14),
+                                        label: const Text('فاتورة جديدة'),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.green.shade600,
+                                          foregroundColor: Colors.white,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                            vertical: 6,
                                           ),
-                                        ],
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(6),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              );
-                            }).toList(),
+                              ],
+                            ),
+                          );
+                        }).toList(),
                       ),
                     ),
                   ),
@@ -1372,12 +1447,7 @@ class Counterscreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoItem(
-    String label,
-    String value,
-    IconData icon,
-    Color color,
-  ) {
+  Widget _buildInfoItem(String label, String value, IconData icon, Color color) {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
@@ -1417,12 +1487,7 @@ class Counterscreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailItem(
-    String label,
-    String value,
-    IconData icon,
-    Color color,
-  ) {
+  Widget _buildDetailItem(String label, String value, IconData icon, Color color) {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
