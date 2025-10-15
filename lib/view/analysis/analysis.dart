@@ -178,11 +178,7 @@ class AnalysisView extends StatelessWidget {
     );
   }
 
-  // Method to check if this is a reload and navigate to home
-  void _checkForReloadAndNavigate() {
-    // This method is no longer needed since we handle it in build method
-    // But keeping it for reference if needed later
-  }
+ 
 
   // Extract base64 images from the analysis model
   List<String> _extractImages(AnalysisModel analysisModel) {

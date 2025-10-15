@@ -78,7 +78,7 @@ class Home extends StatelessWidget {
                     Icon(Icons.dashboard, color: Colors.white, size: 40),
                     SizedBox(height: 10),
                     Text(
-                      'نظام إدارة الطاقة',
+                      ' نظام إدارة الطاقة والمياه' ,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
@@ -378,6 +378,19 @@ class Home extends StatelessWidget {
                   text: "التوقعات",
                   ontap: () => _navigateWithAuth('./Predictions'),
                 ),
+                  if(user?.groupId == 3 || user?.groupId ==1)
+                list_view(
+                  icon: Icons.receipt_long_rounded,
+                  text: "الفواتير",
+                  ontap: () => _navigateWithAuth('./bills'),
+                ),
+                              if (user?.groupId!=4)
+
+                  list_view(
+                  icon: Icons.receipt_long_rounded,
+                  text: "فواتير التقنيات",
+                  ontap: () => _navigateWithAuth('./techBill'),
+                ),
 
               if (user?.groupId!=4)
               list_view(
@@ -392,6 +405,12 @@ class Home extends StatelessWidget {
                   icon: Icons.person_add_alt_outlined,
                   text: "مستخدم جديد",
                   ontap: () => _navigateWithAuth('/NewUser'),
+                ),
+                                    if(user?.groupId == 1)
+          list_view(
+                  icon: Icons.people_outline_outlined,
+                  text: "المستخدمين",
+                  ontap: () => _navigateWithAuth('/all_users'),
                 ),
                list_view(
                   icon: Icons.password_outlined,
@@ -1508,24 +1527,4 @@ class Home extends StatelessWidget {
     }
   }
 
-  Widget _buildDetailItem(
-    String label,
-    String value,
-    IconData icon,
-    Color color,
-  ) {
-    return Row(
-      children: [
-        Icon(icon, size: 16, color: color),
-        const SizedBox(width: 6),
-        Expanded(
-          child: Text(
-            '$label: $value',
-            style: const TextStyle(fontSize: 14, color: Colors.black87),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-      ],
-    );
-  }
 }

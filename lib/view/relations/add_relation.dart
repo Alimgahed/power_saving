@@ -26,13 +26,20 @@ class AddRelation extends StatelessWidget {
           backgroundColor: const Color(0xFF1E40AF),
           elevation: 0,
           centerTitle: true,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              Get.offNamed('/Relations');
-            },
-          ),
-          automaticallyImplyLeading: false,
+       
+          actions: [  IconButton(
+                    icon: const Icon(Icons.arrow_forward, color: Colors.white),
+                    onPressed: () {
+              Get.offNamed('/Countrts');
+                    },
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.white.withOpacity(0.1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 20,)],
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(20),

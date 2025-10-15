@@ -1,16 +1,18 @@
 class User {
   final String empCode;
   final String empName;
-  final int groupId;
-  final String groupName;
+  final int? groupId;
+  final String? groupName;
   final bool isActive;
   final String username;
+  final bool? reset;
 
   User({
     required this.empCode,
     required this.empName,
+    this.reset,
     required this.groupId,
-    required this.groupName,
+     this.groupName,
     required this.isActive,
     required this.username,
   });
@@ -19,15 +21,16 @@ class User {
     return User(
       empCode: json['emp_code'] as String,
       empName: json['emp_name'] as String,
-      groupId: json['group_id'] as int,
-      groupName: json['group_name'] as String,
+      groupId: json['group_id']??1,
+      reset: json["reset"]??false,
+      groupName: json['group_name']??"",
       isActive: json['is_active'] as bool,
       username: json['username'] as String,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
+    return {'reset':reset,
       'emp_code': empCode,
       'emp_name': empName,
       'group_id': groupId,

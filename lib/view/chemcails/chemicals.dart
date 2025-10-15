@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/controller/chemcaial/chemacial.dart';
-import 'package:power_saving/my_widget/sharable.dart';
 
 class Chemicals extends StatelessWidget {
   const Chemicals({super.key});

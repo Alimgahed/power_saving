@@ -4,6 +4,7 @@ import 'package:power_saving/controller/chemcaial/chemacial.dart';
 import 'package:power_saving/model/chemacial.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 
+// ignore: must_be_immutable
 class EditChemcials extends StatelessWidget {
   EditChemcials({super.key});
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();

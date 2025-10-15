@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/station_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
@@ -73,7 +72,9 @@ class AddStationController extends GetxController {
     }
   }
 
+  // ignore: non_constant_identifier_names
   Future<void> edit_Stations({
+    // ignore: non_constant_identifier_names
     required int Stations_id,
     required String name,
     required int branchId,
@@ -125,12 +126,13 @@ class AddStationController extends GetxController {
         waterSourceList = parsedData.waterSources;
         update();
       }
+    // ignore: empty_catches
     } catch (e) {
-      print("Error fetching branches: $e");
     }
   }
 }
 
+// ignore: camel_case_types
 class get_all_stations extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isSearching = false.obs;
@@ -173,6 +175,7 @@ class get_all_stations extends GetxController {
     update();
   }
 
+  // ignore: non_constant_identifier_names
   void get_stations() async {
     isLoading.value = true;
     allstations.clear();
@@ -201,7 +204,6 @@ class get_all_stations extends GetxController {
     } catch (e) {
       isLoading.value = false;
       update();
-      print(e.toString());
     }
   }
 }

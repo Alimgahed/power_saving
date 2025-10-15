@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:http/http.dart' as http;
 import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/predication.dart';
 import 'package:power_saving/my_widget/sharable.dart';
@@ -30,8 +29,8 @@ class Prediactioncontroller extends GetxController {
         // Show custom dialog or toast with Arabic error
         showCustomErrorDialog(errorMessage: errorMessage);
       }
+    // ignore: empty_catches
     } catch (e) {
-      print("Error fetching branches: $e");
     }
   }
 }

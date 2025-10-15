@@ -90,7 +90,7 @@ class Login extends StatelessWidget {
                               ),
                               const SizedBox(height: 20),
                               const Text(
-                                'نظام إدارة الطاقة',
+                                 ' نظام إدارة الطاقة والمياه',
                                 style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
@@ -297,7 +297,7 @@ class Login extends StatelessWidget {
                                 // Footer Text
                                 Center(
                                   child: Text(
-                                    'مرحباً بك في نظام إدارة الطاقة',
+                                    ' مرحباً بك في نظام إدارة الطاقة والمياه' ,
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: Colors.grey.shade600,

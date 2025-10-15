@@ -99,6 +99,33 @@ class Counterscreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 12),
+                      ElevatedButton.icon(
+                      onPressed: () {
+                        Get.offNamed('/Addrelation');
+                      },
+                      icon: const Icon(Icons.add, size: 18),
+                      label: const Text(
+                        "إضافة ربط جديد",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: const Color(0xFF1E40AF),
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                                        const SizedBox(width: 12),
+
                   ],
                   // Home Button
                   IconButton(
@@ -1122,24 +1149,24 @@ if(controller.looading.value==true){
                                                                                                   ) ??
                                                                                                   0;
 
-                                                                                      final int prevReading =
-                                                                                          int.tryParse(
+                                                                                      final double prevReading =
+                                                                                          double.tryParse(
                                                                                             billsController.briefReadingController.text,
                                                                                           ) ??
                                                                                           0;
-                                                                                      final int currentReading =
-                                                                                          int.tryParse(
+                                                                                      final double currentReading =
+                                                                                          double.tryParse(
                                                                                             billsController.currentReadingController.text,
                                                                                           ) ??
                                                                                           0;
 
-                                                                                      final int readingFactor =
-                                                                                          int.tryParse(
+                                                                                      final double readingFactor =
+                                                                                          double.tryParse(
                                                                                             billsController.readingFactorController.text,
                                                                                           ) ??
                                                                                           0;
-                                                                                      final int powerConsump =
-                                                                                          int.tryParse(
+                                                                                      final double powerConsump =
+                                                                                          double.tryParse(
                                                                                             billsController.powerConsumpController.text,
                                                                                           ) ??
                                                                                           0;

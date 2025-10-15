@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/home.dart';
 import 'package:power_saving/network/network.dart';
@@ -62,7 +61,7 @@ class homecontroller extends GetxController {
   }
 
   void animateValue(RxnNum rxValue, num targetValue) {
-    const duration = Duration(milliseconds: 700);
+    const duration = Duration(milliseconds: 200);
     const interval = Duration(milliseconds: 5);
     int steps = duration.inMilliseconds ~/ interval.inMilliseconds;
     num stepValue = targetValue / steps;

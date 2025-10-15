@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/Counter_model.dart';
 import 'package:power_saving/model/relations.dart';
@@ -38,7 +37,6 @@ class Relation extends GetxController {
 
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
-        print(jsonData);
         List<dynamic> responseData = jsonData;
 
         for (var i in responseData) {
@@ -51,8 +49,8 @@ class Relation extends GetxController {
 
         // Debug prints
       }
+    // ignore: empty_catches
     } catch (e) {
-      print("Error fetching branches: $e");
     }
   }
 
@@ -78,7 +76,6 @@ class Relation extends GetxController {
       }
     } catch (e) {
       isLoading.value = false; // Stop loading
-      print("Error fetching branches: $e");
     }
   }
 }
@@ -135,14 +132,9 @@ class addrelationcontroller extends GetxController {
 
         update(); // Assuming you're using GetX or similar for state management
 
-        print("Electric Meters: $electricMeterList");
-        print("Stations: $stationlist");
-        print("Technologies: $technologylist");
-      } else {
-        print("Server returned status code: ${res.statusCode}");
-      }
+      } 
+    // ignore: empty_catches
     } catch (e) {
-      print("Error fetching data: $e");
     }
   }
 

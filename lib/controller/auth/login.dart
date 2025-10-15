@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/login.dart';
 import 'package:power_saving/my_widget/sharable.dart';
@@ -54,7 +53,6 @@ Future<void> Login(String name, String password) async {
       final jsonResponse = jsonDecode(res.body);
 
       // 👇 Optional: print to see structure
-      print("Login response: $jsonResponse");
 
       // ✅ Step 1: Extract user info and token
       final userMap = jsonResponse['current_user']; // or just jsonResponse if no wrapper

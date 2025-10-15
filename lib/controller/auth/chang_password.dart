@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
-import 'package:power_saving/view/auth/change_password.dart';
 
 class ChangePasswordController extends GetxController {
   final currentPassword = TextEditingController();

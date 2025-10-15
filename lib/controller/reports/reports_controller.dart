@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/gloable/data.dart';
-import 'package:http/http.dart' as http;
 import 'package:power_saving/model/report.dart';
 import 'package:power_saving/network/network.dart';
 
@@ -17,7 +16,6 @@ for(var i in branchs){
     powersum=i.totalPower+powersum;
   moneysum=i.totalBill+moneysum;
   update();
-  print(powersum);
 
 }
   }
@@ -73,6 +71,8 @@ late TextEditingController startdate;
       List<dynamic> responseData;
       if (jsonData is List) {
         responseData = jsonData;
+        
+print(res.body);
       } else if (jsonData is Map && jsonData.containsKey('data')) {
         responseData = jsonData['data'] ?? [];
       } else {
@@ -111,7 +111,6 @@ late TextEditingController startdate;
   } catch (e) {
     // Handle network or other errors
     isLoading.value = false;
-    print("Error in get_reports: $e");
     
     _showErrorDialog('تأكد من الاتصال بالإنترنت وحاول مرة أخرى');
     update();

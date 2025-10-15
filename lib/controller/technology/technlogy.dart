@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/tech_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
-import 'package:http/http.dart' as http;
 import 'package:power_saving/network/network.dart';
 
 class TechnlogyController extends GetxController {

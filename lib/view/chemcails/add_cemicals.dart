@@ -10,7 +10,7 @@ class AddChemicalScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final addchemical controller = Get.put(addchemical());
+    Get.put(addchemical());
 
     return Directionality(
       textDirection: TextDirection.rtl,

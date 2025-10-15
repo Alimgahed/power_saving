@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/controller/relations/relation.dart';
-import 'package:power_saving/my_widget/sharable.dart';
 
 class RelatiuonsSCREAN extends StatelessWidget {
   const RelatiuonsSCREAN({super.key});
@@ -29,31 +28,31 @@ class RelatiuonsSCREAN extends StatelessWidget {
               margin: const EdgeInsets.only(left: 16),
               child: Row(
                 children: [
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      Get.offNamed('/Addrelation');
-                    },
-                    icon: const Icon(Icons.add, size: 18),
-                    label: const Text(
-                      "إضافة ربط جديد",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: const Color(0xFF1E40AF),
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
+                  // ElevatedButton.icon(
+                  //   onPressed: () {
+                  //     Get.offNamed('/Addrelation');
+                  //   },
+                  //   icon: const Icon(Icons.add, size: 18),
+                  //   label: const Text(
+                  //     "إضافة ربط جديد",
+                  //     style: TextStyle(
+                  //       fontSize: 14,
+                  //       fontWeight: FontWeight.w500,
+                  //     ),
+                  //   ),
+                  //   style: ElevatedButton.styleFrom(
+                  //     backgroundColor: Colors.white,
+                  //     foregroundColor: const Color(0xFF1E40AF),
+                  //     elevation: 0,
+                  //     padding: const EdgeInsets.symmetric(
+                  //       horizontal: 16,
+                  //       vertical: 8,
+                  //     ),
+                  //     shape: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(8),
+                  //     ),
+                  //   ),
+                  // ),
                   const SizedBox(width: 12),
                   IconButton(
                     icon: const Icon(Icons.arrow_forward, color: Colors.white),
@@ -343,7 +342,7 @@ class RelatiuonsSCREAN extends StatelessWidget {
                     const SizedBox(height: 12),
                     _buildInfoContainer(
                       'رقم الاشتراك',
-                      "${relation.accountNumber ?? 'غير محدد'}",
+                      relation.accountNumber,
                       Icons.numbers,
                       Colors.orange,
                     ),

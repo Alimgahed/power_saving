@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/tech_bill.dart';
 import 'package:power_saving/my_widget/sharable.dart';
@@ -76,13 +75,14 @@ class Techbills extends GetxController {
   // Example method to fetch tech bills data
   void fetchTechBills() async {
     try {
+      looading.value=true;
       techBills.clear();
       final res = await fetchData("http://$ip/tech-bills");
 
       if (res.statusCode == 200) {
+        looading.value=false;
         final jsonData = json.decode(res.body);
         List<dynamic> responseData = jsonData;
-        print(responseData);
         for (var i in responseData) {
           TechnologyBill technologyBill = TechnologyBill.fromJson(i);
           techBills.add(technologyBill);
@@ -92,47 +92,55 @@ class Techbills extends GetxController {
         // Debug prints
       }
     } catch (e) {
-      print("Error fetching branches: $e");
+              looading.value=false;
+
     }
   }
 
   void addTechBills({
-    required int id,
-    required double chlorine,
-    required double liquid,
-    required double solid,
-    required double water,
-    required int index, // <-- Add this parameter
-  }) async {
-    try {
-      looading.value = true;
-      loadingIndex.value = index; // mark current item as loading
+  required int id,
+  required double chlorine,
+  required double liquid,
+  required double solid,
+  required double water,
+  required int index,
+}) async {
+  try {
+    looading.value = true;
+    loadingIndex.value = index;
 
-      final res = await postData(
-        "http://$ip/edit-tech-bill/$id",
-        {
-          "technology_chlorine_consump": chlorine,
-          "technology_liquid_alum_consump": liquid,
-          "technology_solid_alum_consump": solid,
-          "technology_water_amount": water,
-        },
-      );
+    final res = await postData(
+      "http://$ip/edit-tech-bill/$id",
+      {
+        "technology_chlorine_consump": chlorine,
+        "technology_liquid_alum_consump": liquid,
+        "technology_solid_alum_consump": solid,
+        "technology_water_amount": water,
+      },
+    );
 
-      if (res.statusCode == 200) {
-        looading.value = false;
-        fetchTechBills();
-        showSuccessToast("تمت الإضافة بنجاح");
-      } else {
-        looading.value = false;
-        final errorBody = jsonDecode(res.body);
-        final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';
-        showCustomErrorDialog(errorMessage: errorMessage);
-      }
-    } catch (e) {
+    if (res.statusCode == 200) {
       looading.value = false;
-      print("Error during bill submission: $e");
-    } finally {
-      loadingIndex.value = null; // reset after done
+      fetchTechBills();
+      showSuccessToast("تمت الإضافة بنجاح");
+
+      /// ✅ Clear input fields after successful submission
+      getChlorineController(index).clear();
+      getLiquidAlumController(index).clear();
+      getSolidAlumController(index).clear();
+      getWaterProducedController(index).clear();
+    } else {
+      looading.value = false;
+      final errorBody = jsonDecode(res.body);
+      final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';
+      showCustomErrorDialog(errorMessage: errorMessage);
     }
+  } catch (e) {
+    looading.value = false;
+    print("Error during bill submission: $e");
+  } finally {
+    loadingIndex.value = null;
   }
+}
+
 }

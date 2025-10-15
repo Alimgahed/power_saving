@@ -2,9 +2,14 @@ class ReportBranch {
   final String branchName;
     final String? techname;
         final String? stationname;
+                final String? accountnumber;
+
+                final bool? ispaid;
 
   final int month;
   final int year;
+   final int? delleymonth;
+  final int? delleyyear;
     final String? precent;
 
   final double totalBill;
@@ -16,11 +21,15 @@ class ReportBranch {
 
   ReportBranch({
     this.precent,
+    this.accountnumber,
     required this.branchName,
     required this.month,
     required this.year,
     required this.totalBill,
     required this.totalChlorine,
+    this.ispaid,
+    this.delleymonth,
+    this.delleyyear,
     this.techname,
     this.stationname,
     required this.totalLiquidAlum,
@@ -34,6 +43,10 @@ class ReportBranch {
       branchName: json['branch_name']??"",
       techname: json["technology_name"],
       month: json['month']??0,
+      ispaid: json["is_paid"],
+delleymonth: json["delay_month"],
+delleyyear: json["delay_year"],
+      accountnumber: json["account_number"]??"",
       stationname: json['station_name']??"",
       year: json['year']??0,
       precent: json["percent"]??"",
@@ -47,7 +60,11 @@ class ReportBranch {
   }
 
   Map<String, dynamic> toJson() {
-    return {
+    return {"delay_year":delleyyear
+    ,
+    "delay_month":delleymonth,
+    "is_paid":ispaid,
+      "account_number":accountnumber,
       'branch_name': branchName,
       'month': month,
       'year': year,

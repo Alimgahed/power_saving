@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/Counter_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
@@ -19,11 +18,7 @@ class Counter_controller extends GetxController {
     super.onInit();
   }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
+ 
   // Search/Filter function
   void filterCounters(String query) {
     if (query.isEmpty) {
@@ -31,7 +26,7 @@ class Counter_controller extends GetxController {
     } else {
       filteredCounters = allcounter.where((meter) {
         // Search by meter ID (meterId) or account number (accountNumber)
-        final meterIdMatch = meter.meterId?.toLowerCase().contains(query.toLowerCase()) ?? false;
+        final meterIdMatch = meter.meterId.toLowerCase().contains(query.toLowerCase()) ;
         final accountNumberMatch = meter.accountNumber?.toLowerCase().contains(query.toLowerCase()) ?? false;
         
         return meterIdMatch || accountNumberMatch;
@@ -68,6 +63,7 @@ class Counter_controller extends GetxController {
     }
   }
 
+  // ignore: non_constant_identifier_names
   Future<void> all_counter() async {
     try {
               looading.value=true;
@@ -79,7 +75,6 @@ class Counter_controller extends GetxController {
       if (res.statusCode == 200) {
         looading.value=false;
         final jsonData = json.decode(res.body);
-        print(jsonData);
         List<dynamic> responseData = jsonData;
 
         // Clear existing data
@@ -111,6 +106,7 @@ class addcounter extends GetxController {
   List<VoltageType> allVoltage = [];
   int? voltage;
 
+  // ignore: non_constant_identifier_names
   late TextEditingController Counter_number;
   late TextEditingController finalReading;
   late TextEditingController meterFactor;
@@ -178,7 +174,6 @@ class addcounter extends GetxController {
           update();
         }
       } else {
-        print("Failed to add station: ${res.body}");
         Get.snackbar(
           "خطأ",
           "فشل في إضافة المحطة: ${res.body}",
@@ -198,6 +193,7 @@ class EditCounter extends GetxController {
   List<VoltageType> allVoltage = [];
   int? voltage;
 
+  // ignore: non_constant_identifier_names
   late TextEditingController Counter_number;
   late TextEditingController finalReading;
   late TextEditingController meterFactor;
@@ -243,7 +239,6 @@ class EditCounter extends GetxController {
         Get.find<Counter_controller>().all_counter();
       } else {
         looadig.value = false;
-        print("Failed to edit station: ${res.body}");
         Get.snackbar(
           "خطأ",
           "فشل في تعديل المحطة: ${res.body}",
@@ -272,7 +267,6 @@ class EditCounter extends GetxController {
           update();
         }
       } else {
-        print("Failed to load voltage types: ${res.body}");
         Get.snackbar(
           "خطأ",
           "فشل في تحميل أنواع الجهد: ${res.body}",
@@ -281,7 +275,6 @@ class EditCounter extends GetxController {
         );
       }
     } catch (e) {
-      print("Error loading voltage types: $e");
       Get.snackbar(
         "خطأ",
         "حدث خطأ أثناء تحميل أنواع الجهد",

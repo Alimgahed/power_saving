@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/bills_model.dart';
 import 'package:power_saving/model/relations.dart';
@@ -110,8 +109,6 @@ class Bills extends GetxController {
 
       // Calculate final total
       _calculateTotal();
-    } catch (e) {
-      print('Calculation error: $e');
     } finally {
       isCalculating.value = false;
     }
@@ -124,7 +121,6 @@ class Bills extends GetxController {
 
     // Validate input values
     if (prevReading < 0 || currentReading < 0) {
-      print('Error: Meter readings cannot be negative');
       calculatedConsumption.value = 0;
       powerConsumpController.text = '0';
       return;
@@ -143,13 +139,10 @@ class Bills extends GetxController {
       // Auto-fill the consumption field
       powerConsumpController.text = calculatedConsumption.value.toString();
 
-      print(
-        'Final consumption: ${calculatedConsumption.value} kWh (with factor: $factor)',
-      );
+      
     } else {
       calculatedConsumption.value = 0;
       powerConsumpController.text = '0';
-      print('No consumption calculated - check meter readings');
     }
   }
 
@@ -160,12 +153,7 @@ class Bills extends GetxController {
     if (readingDiff < 0) {
       final numDigits = prevReading.toString().length;
       final rolloverValue = pow(10, numDigits).toDouble();
-      readingDiff += rolloverValue - 1;
-      print('Meter rollover detected:');
-      print('Previous reading: $prevReading (${numDigits} digits)');
-      print('Current reading: $currentReading');
-      print('Rollover value: $rolloverValue');
-      print('Calculated consumption: $readingDiff');
+    
 
       // Optional: Add reasonable consumption validation
       _validateConsumption(
@@ -187,20 +175,7 @@ class Bills extends GetxController {
     double currentReading,
   ) {
     // Check if consumption seems unreasonably high (more than 80% of rollover value)
-    if (consumption > rolloverValue * 0.8) {
-      print('⚠️ Warning: Very high consumption detected ($consumption)');
-      print('This might indicate incorrect meter readings. Please verify:');
-      print('Previous reading: $prevReading');
-      print('Current reading: $currentReading');
-    }
-
-    // Check if consumption is unreasonably low for rollover scenario
-    if (consumption < 10) {
-      print('ℹ️ Info: Very low consumption after rollover ($consumption)');
-      print(
-        'This might be normal for new connections or brief billing periods.',
-      );
-    }
+    
   }
 
   // void _calculateEnergyCost() {
@@ -232,7 +207,6 @@ class Bills extends GetxController {
   void _calculateTotal() {
     final consumption = double.tryParse(powerConsumpController.text) ?? 0;
 
-    final energyCost = calculatedEnergyCost.value;
     final fixedInstallment =
         double.tryParse(fixedInstallmentController.text) ?? 0.0;
     final settlements = double.tryParse(settlementsController.text) ?? 0.0;
@@ -338,11 +312,11 @@ class Bills extends GetxController {
         // Call update() to notify GetBuilder widgets
         update();
 
-        print("Gauges updated: ${gauges.length}");
-        print("Show percent: $showPercent");
+       
       }
+    // ignore: empty_catches
     } catch (e) {
-      print("Error fetching data: $e");
+      
     }
   }
 
@@ -376,7 +350,6 @@ class Bills extends GetxController {
     } catch (e) {
       isLoading.value = false;
 
-      print("Error fetching data: $e");
     }
   }
 }

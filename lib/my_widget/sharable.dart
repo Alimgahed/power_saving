@@ -10,6 +10,7 @@ class CustomTextFormField extends StatelessWidget {
   final TextEditingController? controller;
   final TextInputType keyboardType;
   final bool obscureText;
+  final double? padding;
   bool? readonly=false;
   Function()? onTap;
   final bool allowOnlyDigits;
@@ -23,6 +24,7 @@ class CustomTextFormField extends StatelessWidget {
     this.hintText,
     this.allowOnlyDigits = false,
     this.icon,
+    this.padding,
     this.controller,
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
@@ -33,7 +35,7 @@ class CustomTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      padding:  EdgeInsets.symmetric(vertical: padding ?? 12.0),
       child: TextFormField(
         onTap:onTap,
         controller: controller,

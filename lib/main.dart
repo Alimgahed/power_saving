@@ -11,10 +11,13 @@ import 'package:power_saving/view/Counter/Counter.dart';
 import 'package:power_saving/view/Counter/add_Counter.dart';
 import 'package:power_saving/view/Counter/edit_counter.dart';
 import 'package:power_saving/view/analysis/analysis.dart';
+import 'package:power_saving/view/auth/all_user.dart';
 import 'package:power_saving/view/auth/change_password.dart';
 import 'package:power_saving/view/auth/login.dart';
 import 'package:power_saving/view/auth/new_user.dart';
 import 'package:power_saving/view/bill/add_bill.dart';
+import 'package:power_saving/view/bills/Tech_bills.dart';
+import 'package:power_saving/view/bills/bills.dart';
 import 'package:power_saving/view/chemcails/add_cemicals.dart';
 import 'package:power_saving/view/chemcails/chemicals.dart';
 import 'package:power_saving/view/chemcails/edit_chemcials.dart';
@@ -64,8 +67,8 @@ if (jsuser.isNotEmpty && jsuser != "{}") {
     }
     
     user = User.fromJson(decoded as Map<String, dynamic>);
+  // ignore: empty_catches
   } catch (e) {
-    print("Error decoding user data: $e");
   }
 }
 
@@ -95,11 +98,16 @@ if (jsuser.isNotEmpty && jsuser != "{}") {
         GetPage(name: '/NewUser', page: () => NewUser()),
         GetPage(name: '/addstations', page: () => AddStationScreen()),
         GetPage(name: '/Technology', page: () => Technology()),
+                GetPage(name: '/all_users', page: () => AllUserScreen()),
+
+        
         GetPage(name: '/Edittech', page: () => Edittech()),
         GetPage(name: '/Reports', page: () => Reports()),
         GetPage(name: '/Predictions', page: () => Predaction()),
         GetPage(name: '/analysis', page: () => AnalysisView()),
         GetPage(name: '/addTech', page: () => AddTech()),
+        GetPage(name: '/bills', page: () => Bills()),
+        GetPage(name: '/techBill', page: () => TechBill()),
         GetPage(name: '/Countrts', page: () => Counterscreen()),
         GetPage(name: '/addCounter', page: () => AddElectricMeterScreen()),
         GetPage(name: '/Relations', page: () => RelatiuonsSCREAN()),
@@ -121,8 +129,7 @@ if (jsuser.isNotEmpty && jsuser != "{}") {
       if (Get.context != null) {
         height = Get.height;
         width = Get.width;
-        print('Height: $height');
-        print('Width: $width');
+     
       }
     });
   }
@@ -132,10 +139,7 @@ class ScreenUtils {
   static double get width => Get.width;
   static double get height => Get.height;
 
-  static void printDimensions() {
-    print('Height: ${height}');
-    print('Width: ${width}');
-  }
+  
 }
 
 class ScreenController extends GetxController {
@@ -151,7 +155,6 @@ class ScreenController extends GetxController {
   void updateDimensions() {
     screenWidth.value = Get.width;
     screenHeight.value = Get.height;
-    print('Height: ${screenHeight.value}');
-    print('Width: ${screenWidth.value}');
+    
   }
 }

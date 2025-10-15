@@ -413,7 +413,7 @@ class StationsScreen extends StatelessWidget {
                                   fontSize: 14,
                                   color: Colors.white,
                                 ),
-                                maxLines: 1,
+                                maxLines: 3,
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),

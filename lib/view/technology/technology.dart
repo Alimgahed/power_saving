@@ -1,8 +1,8 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/controller/technology/technlogy.dart';
+import 'package:power_saving/main.dart';
 
 class Technology extends StatelessWidget {
   const Technology({super.key});
@@ -446,13 +446,13 @@ class Technology extends StatelessWidget {
                   // Technologies Grid
                   SingleChildScrollView(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: Wrap(
-                        spacing: 10,
-                        runSpacing: 20,
+                        spacing: 8,
+                        runSpacing: 8,
                         children: filteredTech.map((tech) {
                           return Container(
-                            width: 270,
+                            width: 280,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(20),
@@ -473,6 +473,7 @@ class Technology extends StatelessWidget {
                               children: [
                                 // Header
                                 Container(
+                                  height: 80,
                                   padding: const EdgeInsets.all(16),
                                   decoration: BoxDecoration(
                                     gradient: LinearGradient(

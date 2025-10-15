@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/model/chemacial.dart';
 import 'package:power_saving/model/station_model.dart';
@@ -38,8 +37,8 @@ class Chemacialcontroller extends GetxController {
         }
         update();
       }
+    // ignore: empty_catches
     } catch (e) {
-      print("Error fetching chemicals: $e");
     }
   }
 }
@@ -103,8 +102,8 @@ class addchemical extends GetxController {
         // Show custom dialog or toast with Arabic error
         showCustomErrorDialog(errorMessage: errorMessage);
       }
+    // ignore: empty_catches
     } catch (e) {
-      print("Error adding station: $e");
      
     }
   }
@@ -131,8 +130,9 @@ class addchemical extends GetxController {
         // Show custom dialog or toast with Arabic error
         showCustomErrorDialog(errorMessage: errorMessage);
       }
+    // ignore: empty_catches
     } catch (e) {
-      print("Error adding station: $e");
+    
      
     }
   }
@@ -151,8 +151,7 @@ class addchemical extends GetxController {
         jsonData["techs"].forEach((tech) {
           this.tech.add(TechnologyModel.fromJson(tech));
         });
-        print(tech);
-        print(waterSourceList);
+     
         update(); // Notify listeners
         // for (var i in responseData) {
         //   AlumChlorineReference chemical = AlumChlorineReference.fromJson(i);
@@ -162,8 +161,8 @@ class addchemical extends GetxController {
 
         update(); // Notify listeners
       }
+    // ignore: empty_catches
     } catch (e) {
-      print("Error fetching chemicals: $e");
     }
   }
 }

@@ -6,6 +6,7 @@ import 'package:power_saving/controller/Stations/Stations.dart';
 import 'package:power_saving/controller/prediaction/prediaction.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 
+// ignore: must_be_immutable
 class Predaction extends StatelessWidget {
   Predaction({super.key});
 
