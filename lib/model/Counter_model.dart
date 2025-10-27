@@ -5,7 +5,7 @@ class ElectricMeter {
   final int? voltageid;
   final num? price;
   final num? fixedprice;
-
+final String?branch;
   final String meterId;
   String? voltageType;
 
@@ -16,12 +16,14 @@ class ElectricMeter {
     this.meterFactor,
     this.price,
     this.fixedprice,
+    this.branch,
     required this.meterId,
     this.voltageType,
   });
 
   factory ElectricMeter.fromJson(Map<String, dynamic> json) {
     return ElectricMeter(
+      branch: json['branch_name'],
       voltageid: json['voltage_id'],
       accountNumber: json['account_number'],
       finalReading: json['final_reading'],
@@ -35,6 +37,7 @@ class ElectricMeter {
 
   Map<String, dynamic> toJson() {
     return {
+      'branch_name': branch,
       'account_number': accountNumber,
       'final_reading': finalReading,
       'meter_factor': meterFactor,

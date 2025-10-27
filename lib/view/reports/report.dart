@@ -560,9 +560,9 @@ class Reports extends StatelessWidget {
     if (reportType != "bills" && reportType != "station-bills" && reportType != "sanity-techs-3-month" && reportType != "water-techs-3-month") {
       cells.addAll([
         _buildDataCell('${branch.totalWater.toStringAsFixed(1)} م³'),
-        _buildDataCell('${branch.totalChlorine.toStringAsFixed(1)} كجم'),
-        _buildDataCell('${branch.totalSolidAlum.toStringAsFixed(1)} كجم'),
-        _buildDataCell('${branch.totalLiquidAlum.toStringAsFixed(1)} كجم'),
+        _buildDataCell('${branch.totalChlorine.toStringAsFixed(1)} جرام'),
+        _buildDataCell('${branch.totalSolidAlum.toStringAsFixed(1)} جرام'),
+        _buildDataCell('${branch.totalLiquidAlum.toStringAsFixed(1)} جرام'),
         _buildDataCell('${branch.totalPower.toStringAsFixed(1)} واط'),
       ]);
     }

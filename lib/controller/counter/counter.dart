@@ -21,19 +21,24 @@ class Counter_controller extends GetxController {
  
   // Search/Filter function
   void filterCounters(String query) {
-    if (query.isEmpty) {
-      filteredCounters.clear();
-    } else {
-      filteredCounters = allcounter.where((meter) {
-        // Search by meter ID (meterId) or account number (accountNumber)
-        final meterIdMatch = meter.meterId.toLowerCase().contains(query.toLowerCase()) ;
-        final accountNumberMatch = meter.accountNumber?.toLowerCase().contains(query.toLowerCase()) ?? false;
-        
-        return meterIdMatch || accountNumberMatch;
-      }).toList();
-    }
-    update(); // Notify listeners to rebuild UI
+  if (query.isEmpty) {
+    filteredCounters.clear();
+  } else {
+    filteredCounters = allcounter.where((meter) {
+      // Convert query to lowercase once for efficiency
+      final lowerQuery = query.toLowerCase();
+
+      // Search by meterId, accountNumber, or branch
+      final meterIdMatch = meter.meterId.toLowerCase().contains(lowerQuery);
+      final accountNumberMatch = meter.accountNumber?.toLowerCase().contains(lowerQuery) ?? false;
+      final branchMatch = meter.branch?.toLowerCase().contains(lowerQuery) ?? false;
+
+      return meterIdMatch || accountNumberMatch || branchMatch;
+    }).toList();
   }
+  update(); // Notify listeners to rebuild UI
+}
+
 
   // Clear search filter
   void clearFilter() {

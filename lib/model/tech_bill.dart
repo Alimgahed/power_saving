@@ -10,6 +10,8 @@ class TechnologyBill {
   final num? solidAlumRangeTo;
   final int stationId;
   final String stationName;
+    final String ?branch;
+
   final int techBillId;
   final num technologyBillPercentage;
   final String technologyBillTotal;
@@ -30,6 +32,7 @@ class TechnologyBill {
     this.liquidAlumRangeTo,
     this.powerPerWater,
     this.solidAlumRangeFrom,
+    this.branch,
     this.solidAlumRangeTo,
     required this.stationId,
     required this.stationName,
@@ -49,6 +52,7 @@ class TechnologyBill {
     return TechnologyBill(
       billMonth: json['bill_month'],
       billYear: json['bill_year'],
+      branch: json['branch_name'],
       chlorineRangeFrom: json['chlorine_range_from']??0,
       chlorineRangeTo: json['chlorine_range_to']??0,
       liquidAlumRangeFrom: json['liquid_alum_range_from']??0,
@@ -73,6 +77,7 @@ class TechnologyBill {
 
   Map<String, dynamic> toJson() {
     return {
+      'branch_name':branch,
       'bill_month': billMonth,
       'bill_year': billYear,
       'chlorine_range_from': chlorineRangeFrom,

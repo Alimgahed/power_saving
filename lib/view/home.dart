@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart' show NumberFormat;
 import 'package:power_saving/controller/home/home.dart';
@@ -762,19 +763,43 @@ class Home extends StatelessWidget {
             ),
           ),
 
-          Container(
-            height: 400,
-            padding: const EdgeInsets.all(20),
+          // Fixed: SizedBox with specific height for scrollable area with web support
+          SizedBox(
+            height: 480,
             child: data.isEmpty 
               ? _buildEmptyState(color)
-              : ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: data.length,
-                  separatorBuilder: (context, index) => const SizedBox(width: 16),
-                  itemBuilder: (context, index) {
-                    final item = data[index];
-                    return _buildProfessionalCard(item, label, icons, color);
-                  },
+              : Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  child: Builder(
+                    builder: (context) {
+                      return ScrollConfiguration(
+                        behavior: ScrollConfiguration.of(context).copyWith(
+                          dragDevices: {
+                            PointerDeviceKind.touch,
+                            PointerDeviceKind.mouse,
+                            
+                          },
+                        ),
+                        child: Scrollbar(
+                          thumbVisibility: true,
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            shrinkWrap: false,
+                            itemCount: data.length,
+                            separatorBuilder: (context, index) => const SizedBox(width: 16),
+                            itemBuilder: (context, index) {
+                              final item = data[index];
+                              return SizedBox(
+                                width: 300,
+                                child: _buildProfessionalCard(item, label, icons, color),
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    }
+                  ),
                 ),
           ),
         ],
@@ -798,9 +823,7 @@ class Home extends StatelessWidget {
           },
         );
       },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: 280,
+      child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
@@ -819,8 +842,10 @@ class Home extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
+              height: 100,
               width: double.infinity,
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -837,117 +862,105 @@ class Home extends StatelessWidget {
                   topRight: Radius.circular(20),
                 ),
               ),
-              child: Row(
+              child: Column(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: color.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Icon(
-                      Icons.electric_meter_outlined,
-                      color: color,
-                      size: 18,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'محطة ${item.stationName}',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: color,
-                          ),
+                
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'محطة ${item.stationName}',
+                        maxLines: 3,
+                        
+                        style: TextStyle(
                           overflow: TextOverflow.ellipsis,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: color,
                         ),
-                        const SizedBox(height: 4),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'رقم المحطة: ${item.stationId}',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildProfessionalDetailItem(
+                    'التاريخ',
+                    '${item.billMonth} / ${item.billYear}',
+                    Icons.calendar_today_outlined,
+                    Colors.blue.shade600,
+                    isHighlight: true,
+                  ),
+                  const SizedBox(height: 8),
+                  _buildProfessionalDetailItem(
+                    'التقنية',
+                    item.technologyName,
+                    Icons.memory_outlined,
+                    Colors.teal.shade600,
+                    isHighlight: true,
+                  ),
+                  const SizedBox(height: 8),
+                  _buildProfessionalDetailItem(
+                    label,
+                    _getItemValue(item, label),
+                    icons,
+                    Colors.indigo.shade600,
+                    isHighlight: true,
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          color.withOpacity(0.1),
+                          color.withOpacity(0.05),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: color.withOpacity(0.2),
+                        width: 1,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.analytics_outlined,
+                          size: 16,
+                          color: color,
+                        ),
+                        const SizedBox(width: 8),
                         Text(
-                          'رقم المحطة: ${item.stationId}',
+                          'عرض التحليل',
                           style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey.shade600,
+                            color: color,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
                           ),
                         ),
                       ],
                     ),
                   ),
                 ],
-              ),
-            ),
-
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildProfessionalDetailItem(
-                      'التاريخ',
-                      '${item.billMonth} / ${item.billYear}',
-                      Icons.calendar_today_outlined,
-                      Colors.blue.shade600,
-                      isHighlight: true,
-                    ),
-                    const SizedBox(height: 5),
-                    _buildProfessionalDetailItem(
-                      'التقنية',
-                      item.technologyName,
-                      Icons.memory_outlined,
-                      Colors.teal.shade600,
-                      isHighlight: true,
-                    ),
-                    const SizedBox(height: 5),
-                    _buildProfessionalDetailItem(
-                      label,
-                      _getItemValue(item, label),
-                      icons,
-                      Colors.indigo.shade600,
-                      isHighlight: true,
-                    ),
-                    const SizedBox(height: 8),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            color.withOpacity(0.1),
-                            color.withOpacity(0.05),
-                          ],
-                        ),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: color.withOpacity(0.2),
-                          width: 1,
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.analytics_outlined,
-                            size: 16,
-                            color: color,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            'عرض التحليل',
-                            style: TextStyle(
-                              color: color,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
               ),
             ),
           ],
@@ -1151,19 +1164,41 @@ class Home extends StatelessWidget {
             ),
           ),
 
-          Container(
-            height: 500,
-            padding: const EdgeInsets.all(20),
+          SizedBox(
+            height: 480,
             child: data.isEmpty 
               ? _buildWaterEmptyState(color)
-              : ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: data.length,
-                  separatorBuilder: (context, index) => const SizedBox(width: 16),
-                  itemBuilder: (context, index) {
-                    final item = data[index];
-                    return _buildProfessionalWaterCard(item, color);
-                  },
+              : Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  child: Builder(
+                    builder: (context) {
+                      return ScrollConfiguration(
+                        behavior: ScrollConfiguration.of(context).copyWith(
+                          dragDevices: {
+                            PointerDeviceKind.touch,
+                            PointerDeviceKind.mouse,
+                          },
+                        ),
+                        child: Scrollbar(
+                          thumbVisibility: true,
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            shrinkWrap: false,
+                            itemCount: data.length,
+                            separatorBuilder: (context, index) => const SizedBox(width: 16),
+                            itemBuilder: (context, index) {
+                              final item = data[index];
+                              return SizedBox(
+                                width: 320,
+                                child: _buildProfessionalWaterCard(item, color),
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    }
+                  ),
                 ),
           ),
         ],
@@ -1175,10 +1210,7 @@ class Home extends StatelessWidget {
     OverWaterStation item,
     Color color,
   ) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      width: 320,
-      height: 340,
+    return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -1197,6 +1229,7 @@ class Home extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             width: double.infinity,
@@ -1263,55 +1296,54 @@ class Home extends StatelessWidget {
             ),
           ),
 
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildWaterDetailItem(
-                    'التاريخ',
-                    '${item.month} / ${item.year}',
-                    Icons.calendar_today_outlined,
-                    Colors.blue.shade600,
-                  ),
-                  const SizedBox(height: 12),
-                  _buildWaterDetailItem(
-                    'الطاقة التصميمية الشهرية',
-                    '${item.capacityLimit} م³ / شهر',
-                    Icons.speed_outlined,
-                    Colors.orange.shade600,
-                    isPercentage: true,
-                  ),
-                  const SizedBox(height: 12),
-                  _buildWaterDetailItem(
-                    'الطاقة التصميمية',
-                    '${item.waterCapacity} م³/ يوم',
-                    Icons.engineering_outlined,
-                    Colors.teal.shade600,
-                  ),
-                  const SizedBox(height: 12),
-                  _buildWaterDetailItem(
-                    'إجمالي المياه',
-                    _formatWaterAmount(item.totalWater),
-                    Icons.opacity_outlined,
-                    Colors.indigo.shade600,
-                    isHighlight: true,
-                  ),
-                  
-                  const Spacer(),
-                  
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildStatusIndicator(item, color),
-                      ),
-                      const SizedBox(width: 12),
-                      _buildActionButton(color),
-                    ],
-                  ),
-                ],
-              ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildWaterDetailItem(
+                  'التاريخ',
+                  '${item.month} / ${item.year}',
+                  Icons.calendar_today_outlined,
+                  Colors.blue.shade600,
+                ),
+                const SizedBox(height: 12),
+                _buildWaterDetailItem(
+                  'الطاقة التصميمية الشهرية',
+                  '${item.capacityLimit} م³ / شهر',
+                  Icons.speed_outlined,
+                  Colors.orange.shade600,
+                  isPercentage: true,
+                ),
+                const SizedBox(height: 12),
+                _buildWaterDetailItem(
+                  'الطاقة التصميمية',
+                  '${item.waterCapacity} م³/ يوم',
+                  Icons.engineering_outlined,
+                  Colors.teal.shade600,
+                ),
+                const SizedBox(height: 12),
+                _buildWaterDetailItem(
+                  'إجمالي المياه',
+                  _formatWaterAmount(item.totalWater),
+                  Icons.opacity_outlined,
+                  Colors.indigo.shade600,
+                  isHighlight: true,
+                ),
+                
+                const SizedBox(height: 12),
+                
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildStatusIndicator(item, color),
+                    ),
+                    const SizedBox(width: 12),
+                    _buildActionButton(color),
+                  ],
+                ),
+              ],
             ),
           ),
         ],
@@ -1526,5 +1558,4 @@ class Home extends StatelessWidget {
         return "";
     }
   }
-
 }

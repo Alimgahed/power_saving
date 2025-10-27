@@ -752,11 +752,11 @@ class TechBill extends StatelessWidget {
                       Icons.bolt,
                       Colors.orange,
                       [
-                        _buildDialogDetailRow('كمية المياه', '${bill.technologyWaterAmount ?? 0} م³', Icons.water),
-                        _buildDialogDetailRow('استهلاك الكلور', '${bill.technologyChlorineConsump ?? 0} كجم', Icons.science),
-                        _buildDialogDetailRow('استهلاك الشب السائل', '${bill.technologyLiquidAlumConsump ?? 0} كجم', Icons.opacity),
-                        _buildDialogDetailRow('استهلاك الشب الصلب', '${bill.technologySolidAlumConsump ?? 0} كجم', Icons.ac_unit),
-                        _buildDialogDetailRow('استهلاك الكهرباء', '${bill.technologyPowerConsump} ك.و.س', Icons.electrical_services),
+                        _buildDialogDetailRow('كمية المياه', '${NumberFormat('#,###').format(bill.technologyWaterAmount ?? 0)} م³', Icons.water),
+                        _buildDialogDetailRow('استهلاك الكلور', '${NumberFormat('#,###').format(bill.technologyChlorineConsump ?? 0)} جرام', Icons.science),
+                        _buildDialogDetailRow('استهلاك الشب السائل', '${NumberFormat('#,###').format(bill.technologyLiquidAlumConsump ?? 0)} جرام', Icons.opacity),
+                        _buildDialogDetailRow('استهلاك الشب الصلب', '${NumberFormat('#,###').format(bill.technologySolidAlumConsump ?? 0)} جرام', Icons.ac_unit),
+                        _buildDialogDetailRow('استهلاك الكهرباء', '${NumberFormat('#,###').format(bill.technologyPowerConsump)} ك.و.س', Icons.electrical_services),
                       ],
                     ),
 

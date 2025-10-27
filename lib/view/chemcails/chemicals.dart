@@ -181,7 +181,7 @@ class Chemicals extends StatelessWidget {
       runSpacing: 20,
       children: controller.chemicals.map((chemical) {
         return Container(
-          width: 400, // Match maxCrossAxisExtent
+          width: 350, // Match maxCrossAxisExtent
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),

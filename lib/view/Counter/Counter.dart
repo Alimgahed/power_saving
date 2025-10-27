@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/controller/bills/bills.dart';
 import 'package:power_saving/controller/counter/counter.dart';
+import 'package:power_saving/model/Counter_model.dart';
 import 'package:power_saving/model/bills_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 
@@ -24,7 +25,7 @@ class Counterscreen extends StatelessWidget {
                 autofocus: true,
                 style: const TextStyle(color: Colors.white),
                 decoration: const InputDecoration(
-                  hintText: 'ابحث برقم العداد أو رقم الاشتراك...',
+                  hintText: 'ابحث برقم العداداو الفرع أو رقم الاشتراك...',
                   hintStyle: TextStyle(color: Colors.white70),
                   border: InputBorder.none,
                 ),
@@ -377,8 +378,6 @@ if(controller.looading.value==true){
                                   child: Column(
                                     children: [
                                       _buildMeterInfoSection(meter),
-                                      const SizedBox(height: 8),
-                                      _buildMeterDetailsSection(meter),
                                     ],
                                   ),
                                 ),
@@ -1378,7 +1377,7 @@ if(controller.looading.value==true){
     );
   }
 
-  Widget _buildMeterInfoSection(dynamic meter) {
+  Widget _buildMeterInfoSection(ElectricMeter meter) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -1405,6 +1404,13 @@ if(controller.looading.value==true){
           ),
           const SizedBox(height: 12),
           _buildInfoItem(
+            'اسم الفرع',
+            meter.branch ?? 'لا يوجد',
+            Icons.location_on_outlined,
+            Colors.green,
+          ),
+          const SizedBox(height: 8),
+          _buildInfoItem(
             'رقم الحساب',
             meter.accountNumber ?? 'غير محدد',
             Icons.account_balance,
@@ -1417,63 +1423,27 @@ if(controller.looading.value==true){
             Icons.electric_bolt_rounded,
             Colors.green,
           ),
+                    const SizedBox(height: 8),
+
+           _buildDetailItem(
+             'القراءة النهائية',
+             meter.finalReading.toString(),
+             Icons.speed,
+             Colors.cyan,
+           ),
+          const SizedBox(height: 8),
+              _buildDetailItem(
+                'معامل العداد',
+                meter.meterFactor.toString(),
+                Icons.calculate,
+                Colors.purple,
+              ),
         ],
       ),
     );
   }
 
-  Widget _buildMeterDetailsSection(dynamic meter) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.orange.withOpacity(0.05),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.orange.withOpacity(0.1)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.settings, size: 16, color: Colors.orange),
-              const SizedBox(width: 6),
-              const Text(
-                'تفاصيل العداد',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                  color: Colors.orange,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: _buildDetailItem(
-                  'القراءة النهائية',
-                  meter.finalReading.toString(),
-                  Icons.speed,
-                  Colors.cyan,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: _buildDetailItem(
-                  'معامل العداد',
-                  meter.meterFactor.toString(),
-                  Icons.calculate,
-                  Colors.purple,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
+  
   Widget _buildInfoItem(String label, String value, IconData icon, Color color) {
     return Container(
       padding: const EdgeInsets.all(8),

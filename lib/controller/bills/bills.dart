@@ -52,6 +52,9 @@ class Bills extends GetxController {
   var calculatedSubtotal = 0.0.obs;
   var calculatedTotal = 0.0.obs;
   var isCalculating = false.obs;
+  
+  // Add observable for negative consumption warning
+  var hasNegativeConsumption = false.obs;
 
   // Pricing tiers (you can modify these based on your pricing structure)
 
@@ -119,41 +122,33 @@ class Bills extends GetxController {
     final currentReading = double.tryParse(currentReadingController.text) ?? 0;
     final factor = double.tryParse(readingFactorController.text) ?? 1;
 
-    // Validate input values
-    if (prevReading < 0 || currentReading < 0) {
-      calculatedConsumption.value = 0;
-      powerConsumpController.text = '0';
-      return;
-    }
-
     // Use generic reading difference calculation with rollover support
     final readingDiff = _calculateReadingDifference(
       prevReading,
       currentReading,
     );
 
-    if (readingDiff > 0) {
-      final rawConsumption = readingDiff;
-      calculatedConsumption.value = rawConsumption * factor;
+    final rawConsumption = readingDiff;
+    calculatedConsumption.value = rawConsumption * factor;
 
-      // Auto-fill the consumption field
-      powerConsumpController.text = calculatedConsumption.value.toString();
+    // Check if consumption is negative
+    hasNegativeConsumption.value = calculatedConsumption.value < 0;
 
-      
-    } else {
-      calculatedConsumption.value = 0;
-      powerConsumpController.text = '0';
-    }
+    // Auto-fill the consumption field
+    powerConsumpController.text = calculatedConsumption.value.toString();
   }
 
   // Generic method to calculate reading difference with rollover support
   double _calculateReadingDifference(double prevReading, double currentReading) {
     double readingDiff = currentReading - prevReading;
 
+    // If consumption is negative, handle rollover
     if (readingDiff < 0) {
-      final numDigits = prevReading.toString().length;
+      final numDigits = prevReading.toString().split('.')[0].length;
       final rolloverValue = pow(10, numDigits).toDouble();
-    
+      
+      // Calculate rolled-over reading
+      readingDiff = (rolloverValue-1 - prevReading) + currentReading;
 
       // Optional: Add reasonable consumption validation
       _validateConsumption(
@@ -175,34 +170,11 @@ class Bills extends GetxController {
     double currentReading,
   ) {
     // Check if consumption seems unreasonably high (more than 80% of rollover value)
-    
+    if (consumption > (rolloverValue * 0.8)) {
+      // You can add a warning here or log it
+      // For example: showWarningToast("الاستهلاك يبدو مرتفعاً بشكل غير معتاد");
+    }
   }
-
-  // void _calculateEnergyCost() {
-  //   final consumption = calculatedConsumption.value;
-  //   if (consumption <= 0) {
-  //     calculatedEnergyCost.value = 0.0;
-  //     return;
-  //   }
-
-  //   double totalCost = 0.0;
-  //   int remainingConsumption = consumption;
-
-  //   for (final tier in pricingTiers) {
-  //     if (remainingConsumption <= 0) break;
-
-  //     final tierConsumption = remainingConsumption > (tier.maxKwh - tier.minKwh + 1)
-  //         ? (tier.maxKwh - tier.minKwh + 1).toInt()
-  //         : remainingConsumption;
-
-  //     totalCost += tierConsumption * tier.pricePerKwh;
-  //     remainingConsumption -= tierConsumption;
-
-  //     if (tier.maxKwh == double.infinity) break;
-  //   }
-
-  //   calculatedEnergyCost.value = totalCost;
-  // }
 
   void _calculateTotal() {
     final consumption = double.tryParse(powerConsumpController.text) ?? 0;
