@@ -5,34 +5,38 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
-import 'package:power_saving/model/login.dart';
+import 'package:power_saving/features/auth/model/login.dart';
+import 'package:power_saving/features/planning/view/screens/add_places.dart';
+import 'package:power_saving/features/planning/view/screens/edit_places.dart';
+import 'package:power_saving/features/planning/view/screens/places.dart';
 import 'package:power_saving/shared_pref/cache.dart';
-import 'package:power_saving/view/Counter/Counter.dart';
-import 'package:power_saving/view/Counter/add_Counter.dart';
-import 'package:power_saving/view/Counter/edit_counter.dart';
-import 'package:power_saving/view/analysis/analysis.dart';
-import 'package:power_saving/view/auth/all_user.dart';
-import 'package:power_saving/view/auth/change_password.dart';
-import 'package:power_saving/view/auth/login.dart';
-import 'package:power_saving/view/auth/new_user.dart';
-import 'package:power_saving/view/bill/add_bill.dart';
-import 'package:power_saving/view/bills/Tech_bills.dart';
-import 'package:power_saving/view/bills/bills.dart';
-import 'package:power_saving/view/chemcails/add_cemicals.dart';
-import 'package:power_saving/view/chemcails/chemicals.dart';
-import 'package:power_saving/view/chemcails/edit_chemcials.dart';
-import 'package:power_saving/view/home.dart';
-import 'package:power_saving/view/predaction/predaction.dart';
-import 'package:power_saving/view/relations/add_relation.dart';
-import 'package:power_saving/view/relations/relatiuons.dart';
-import 'package:power_saving/view/reports/report.dart';
-import 'package:power_saving/view/stations/add_station.dart';
-import 'package:power_saving/view/stations/edit_staion.dart';
-import 'package:power_saving/view/stations/stations.dart';
-import 'package:power_saving/view/tech_bills/tech_bills.dart';
-import 'package:power_saving/view/technology/add_tech.dart';
-import 'package:power_saving/view/technology/edittech.dart';
-import 'package:power_saving/view/technology/technology.dart';
+import 'package:power_saving/features/Counter/view/screens/Counter.dart';
+import 'package:power_saving/features/Counter/view/screens/add_Counter.dart';
+import 'package:power_saving/features/Counter/view/screens/edit_counter.dart';
+import 'package:power_saving/features/Ploitly.dart';
+import 'package:power_saving/features/analysis/view/screen/analysis.dart';
+import 'package:power_saving/features/auth/view/screens/all_user.dart';
+import 'package:power_saving/features/auth/view/screens/change_password.dart';
+import 'package:power_saving/features/auth/view/screens/login.dart';
+import 'package:power_saving/features/auth/view/screens/new_user.dart';
+import 'package:power_saving/features/bill/view/screens/Tech_bills.dart';
+import 'package:power_saving/features/bill/view/screens/bills.dart';
+import 'package:power_saving/features/chemcails/view/screens/add_cemicals.dart';
+import 'package:power_saving/features/chemcails/view/screens/chemicals.dart';
+import 'package:power_saving/features/chemcails/view/screens/edit_chemcials.dart';
+import 'package:power_saving/features/home/view/screens/home.dart';
+import 'package:power_saving/features/predaction/view/screens/predaction.dart';
+import 'package:power_saving/features/relations/view/screens/add_relation.dart';
+import 'package:power_saving/features/relations/view/screens/relatiuons.dart';
+import 'package:power_saving/features/reports/view/screens/report.dart';
+import 'package:power_saving/features/stations/view/screens/add_station.dart';
+import 'package:power_saving/features/stations/view/screens/edit_staion.dart';
+import 'package:power_saving/features/stations/view/screens/stations.dart';
+import 'package:power_saving/features/tech_bills/view/screens/edit_tech_bills.dart';
+import 'package:power_saving/features/tech_bills/view/screens/tech_bills.dart';
+import 'package:power_saving/features/technology/view/screens/add_tech.dart';
+import 'package:power_saving/features/technology/view/screens/edittech.dart';
+import 'package:power_saving/features/technology/view/screens/technology.dart';
 
 import 'gloable/data.dart';
 
@@ -85,38 +89,44 @@ if (jsuser.isNotEmpty && jsuser != "{}") {
       ],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(textTheme: GoogleFonts.almaraiTextTheme()),
-      initialRoute: '/home',
+      initialRoute: '/home', 
       getPages: [
-        
-        GetPage(name: '/home', page: () => Home()),
+                GetPage(name: '/Charts', page: () =>         SunburstPage
+()),
+
+        GetPage(name: '/home', page: () => HomeScreen()),
                 GetPage(name: '/change_password', page: () => ChangePassword()),
+                GetPage(name: '/editPlaces', page: () => EditPlacesScreen()),
 
         GetPage(name: '/Stations', page: () => StationsScreen()),
         GetPage(name: '/Login', page: () => const Login()),
-        GetPage(name: '/editMeter', page: () => editCounter()),
+        GetPage(name: '/editMeter', page: () => EditCounterScreen()),
         GetPage(name: '/editStations', page: () => EditStationsScreen()),
         GetPage(name: '/NewUser', page: () => NewUser()),
         GetPage(name: '/addstations', page: () => AddStationScreen()),
         GetPage(name: '/Technology', page: () => Technology()),
                 GetPage(name: '/all_users', page: () => AllUserScreen()),
+                GetPage(name: '/EditTechBills', page: () => EditTechBills()),
+        GetPage(name: '/Places', page: () => PlacesScreen()),
+                GetPage(name: '/AddPlaces', page: () => AddPlacesScreen()),
 
         
-        GetPage(name: '/Edittech', page: () => Edittech()),
+        
+        GetPage(name: '/Edittech', page: () => EditTechScreen()),
         GetPage(name: '/Reports', page: () => Reports()),
         GetPage(name: '/Predictions', page: () => Predaction()),
         GetPage(name: '/analysis', page: () => AnalysisView()),
-        GetPage(name: '/addTech', page: () => AddTech()),
+        GetPage(name: '/addTech', page: () => AddTechScreen()),
         GetPage(name: '/bills', page: () => Bills()),
         GetPage(name: '/techBill', page: () => TechBill()),
         GetPage(name: '/Countrts', page: () => Counterscreen()),
         GetPage(name: '/addCounter', page: () => AddElectricMeterScreen()),
         GetPage(name: '/Relations', page: () => RelatiuonsSCREAN()),
-        GetPage(name: '/Addrelation', page: () => AddRelation()),
+        GetPage(name: '/Addrelation', page: () => AddRelationScreen()),
         GetPage(name: '/Chemicals', page: () => Chemicals()),
         GetPage(name: '/AddChemicalScreen', page: () => AddChemicalScreen()),
         GetPage(name: '/techbills', page: () => TechBills()),
         GetPage(name: '/EditChemcials', page: () => EditChemcials()),
-        GetPage(name: '/AddBill', page: () => AddBill()),
       ],
       onInit: () {
         _initializeDimensions();

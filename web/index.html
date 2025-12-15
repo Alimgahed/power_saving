@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<script>
+  window.renderPlotlyChart = function(containerId, plotJson) {
+    Plotly.newPlot(containerId, plotJson.data, plotJson.layout, plotJson.config);
+  };
+</script>
+
   <!--
     If you are serving your web app in a path other than the root, change the
     href value below to reflect the base path you are serving from.
