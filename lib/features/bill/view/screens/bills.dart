@@ -9,477 +9,449 @@ class Bills extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(AllBills());
+    final controller = Get.put(AllBills());
+    
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
-      appBar: AppBar(
-        title: const Text(
-          'قائمة الفواتير',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
+      appBar: _buildAppBar(controller),
+      body: Obx(() => _buildBody(controller)),
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar(AllBills controller) {
+    return AppBar(
+      title: Obx(() => controller.isSearching.value
+          ? TextField(
+              controller: controller.searchController,
+              autofocus: true,
+              style: const TextStyle(color: Colors.white),
+              decoration: const InputDecoration(
+                hintText: 'ابحث برقم الحساب، الشهر، أو السنة...',
+                hintStyle: TextStyle(color: Colors.white70),
+                border: InputBorder.none,
+              ),
+              onChanged: (value) {
+                controller.onSearchChanged(value);
+              },
+            )
+          : const Text(
+              'قائمة الفواتير',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
+            )),
+            
+      backgroundColor: const Color(0xFF1E40AF),
+      elevation: 0,
+      actions: [
+        Container(
+          margin: const EdgeInsets.only(left: 16),
+          child: Obx(() => Row(
+                children: [
+                  if (!controller.isSearching.value) ...[
+                    // Search Button
+                    IconButton(
+                      icon: const Icon(Icons.search, color: Colors.white),
+                      onPressed: controller.toggleSearch,
+                      style: IconButton.styleFrom(
+                        backgroundColor: Colors.white.withOpacity(0.1),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                 
+                    // Add Button
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        Get.offNamed('/addBill');
+            
+                      },
+                      icon: const Icon(Icons.add, size: 18),
+                      label: const Text(
+                        "إضافة فاتورة",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: const Color(0xFF1E40AF),
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                  ] else ...[
+                    IconButton(
+                      icon: const Icon(Icons.close, color: Colors.white),
+                      onPressed: controller.toggleSearch,
+                      style: IconButton.styleFrom(
+                        backgroundColor: Colors.white.withOpacity(0.1),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                  ],
+                  const SizedBox(width: 12),
+                  // Back Button
+                  IconButton(
+                    icon: const Icon(Icons.arrow_forward, color: Colors.white),
+                    onPressed: () {
+                      Get.offNamed('/home');
+                    },
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.white.withOpacity(0.1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                ],
+              )),
+        ),
+      ],
+      automaticallyImplyLeading: false,
+    );
+  }
+
+  Widget _buildBody(AllBills controller) {
+    if (controller.isLoading.value) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    if (controller.bills.isEmpty) {
+      return _buildEmptyState(controller);
+    }
+
+    return CustomScrollView(
+      slivers: [
+        // Search Error Message (if any)
+        if (controller.searchError.value.isNotEmpty)
+          SliverToBoxAdapter(
+            child: _buildSearchError(controller),
+          ),
+        
+        // Statistics Header
+        SliverPadding(
+          padding: const EdgeInsets.all(20),
+          sliver: SliverToBoxAdapter(
+            child: _buildStatisticsHeader(controller),
           ),
         ),
-        backgroundColor: const Color(0xFF1E40AF),
-        elevation: 0,
-        actions: [
+
+        // Active Filters Badge
+        if (controller.selectedYear != 'all' ||
+            controller.selectedMonth != 'all' ||
+            controller.selectedAccountNumber != 'all')
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            sliver: SliverToBoxAdapter(
+              child: _buildActiveFilters(controller),
+            ),
+          ),
+        
+        // Bills Grid
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          sliver: SliverGrid(
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 350,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+              childAspectRatio: 0.75,
+            ),
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return _BillCard(
+                  bill: controller.bills[index],
+                  controller: controller,
+                );
+              },
+              childCount: controller.bills.length,
+            ),
+          ),
+        ),
+        
+        // Bottom padding
+        const SliverToBoxAdapter(
+          child: SizedBox(height: 20),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSearchError(AllBills controller) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.orange.shade50,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.orange.shade200),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              Icons.info_outline,
+              color: Colors.orange.shade700,
+              size: 20,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                controller.searchError.value,
+                style: TextStyle(
+                  color: Colors.orange.shade900,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(AllBills controller) {
+    if (controller.searchController.text.isNotEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.search_off, size: 64, color: Colors.grey.shade400),
+            const SizedBox(height: 16),
+            const Text(
+              'لا توجد نتائج',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'لم يتم العثور على "${controller.searchController.text}"',
+              style: const TextStyle(fontSize: 14, color: Colors.black54),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
           Container(
-            margin: const EdgeInsets.only(left: 16),
-            child: Row(
-              children: [
-                // Filter Buttons
-                GetBuilder<AllBills>(
-                  builder: (controller) {
-                    return Row(
-                      children: [
-                        // Year Filter
-                        PopupMenuButton<String>(
-                          icon: Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.calendar_today,
-                                  color: Colors.white,
-                                  size: 16,
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  controller.selectedYear == 'all'
-                                      ? 'السنة'
-                                      : controller.selectedYear,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          onSelected: (String value) {
-                            controller.filterByYear(value);
-                          },
-                          itemBuilder: (BuildContext context) {
-                            return [
-                              const PopupMenuItem<String>(
-                                value: 'all',
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.all_inclusive, size: 18),
-                                    SizedBox(width: 8),
-                                    Text('كل السنوات'),
-                                  ],
-                                ),
-                              ),
-                              ...controller.getUniqueYears().map((year) {
-                                return PopupMenuItem<String>(
-                                  value: year,
-                                  child: Row(
-                                    children: [
-                                      const Icon(Icons.calendar_today, size: 18),
-                                      const SizedBox(width: 8),
-                                      Text(year),
-                                    ],
-                                  ),
-                                );
-                              }).toList(),
-                            ];
-                          },
-                        ),
-                        const SizedBox(width: 8),
-                        // Month Filter
-                        PopupMenuButton<String>(
-                          icon: Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.date_range,
-                                  color: Colors.white,
-                                  size: 16,
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  controller.selectedMonth == 'all'
-                                      ? 'الشهر'
-                                      : controller.getMonthName(int.parse(controller.selectedMonth)),
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          onSelected: (String value) {
-                            controller.filterByMonth(value);
-                          },
-                          itemBuilder: (BuildContext context) {
-                            return [
-                              const PopupMenuItem<String>(
-                                value: 'all',
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.all_inclusive, size: 18),
-                                    SizedBox(width: 8),
-                                    Text('كل الأشهر'),
-                                  ],
-                                ),
-                              ),
-                              ...controller.getUniqueMonths().map((month) {
-                                return PopupMenuItem<String>(
-                                  value: month,
-                                  child: Row(
-                                    children: [
-                                      const Icon(Icons.date_range, size: 18),
-                                      const SizedBox(width: 8),
-                                      Text(controller.getMonthName(int.parse(month))),
-                                    ],
-                                  ),
-                                );
-                              }).toList(),
-                            ];
-                          },
-                        ),
-                        const SizedBox(width: 8),
-                        // Account Number Filter
-                        PopupMenuButton<String>(
-                          icon: Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.account_circle,
-                                  color: Colors.white,
-                                  size: 16,
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  controller.selectedAccountNumber == 'all'
-                                      ? 'الحساب'
-                                      : controller.selectedAccountNumber,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                              ],
-                            ),
-                          ),
-                          onSelected: (String value) {
-                            controller.filterByAccountNumber(value);
-                          },
-                          itemBuilder: (BuildContext context) {
-                            return [
-                              const PopupMenuItem<String>(
-                                value: 'all',
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.all_inclusive, size: 18),
-                                    SizedBox(width: 8),
-                                    Text('كل الحسابات'),
-                                  ],
-                                ),
-                              ),
-                              ...controller.getUniqueAccountNumbers().map((account) {
-                                return PopupMenuItem<String>(
-                                  value: account,
-                                  child: Row(
-                                    children: [
-                                      const Icon(Icons.account_circle, size: 18),
-                                      const SizedBox(width: 8),
-                                      Text(account),
-                                    ],
-                                  ),
-                                );
-                              }).toList(),
-                            ];
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                ),
-                const SizedBox(width: 12),
-                // Add Button
-                ElevatedButton.icon(
-                  onPressed: () {
-                    Get.offNamed('/addBill');
-                  },
-                  icon: const Icon(Icons.add, size: 18),
-                  label: const Text(
-                    "إضافة فاتورة",
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: const Color(0xFF1E40AF),
-                    elevation: 0,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                // Back Button
-                IconButton(
-                  icon: const Icon(Icons.arrow_forward, color: Colors.white),
-                  onPressed: () {
-                    Get.offNamed('/home');
-                  },
-                  style: IconButton.styleFrom(
-                    backgroundColor: Colors.white.withOpacity(0.1),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
-              ],
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Colors.blue.shade50,
+              borderRadius: BorderRadius.circular(50),
+            ),
+            child: Icon(
+              Icons.receipt_long,
+              size: 48,
+              color: Colors.blue.shade300,
+            ),
+          ),
+          const SizedBox(height: 24),
+          const Text(
+            'لا توجد فواتير',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'ابدأ بإضافة فاتورة جديدة',
+            style: TextStyle(fontSize: 14, color: Colors.black54),
+          ),
+          const SizedBox(height: 24),
+          ElevatedButton.icon(
+            onPressed: () => Get.offNamed('/addBill'),
+            icon: const Icon(Icons.add, size: 20),
+            label: const Text('إضافة فاتورة'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF1E40AF),
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24,
+                vertical: 12,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
           ),
         ],
-        automaticallyImplyLeading: false,
       ),
-      body: GetBuilder<AllBills>(
-        builder: (controller) {
-          // Loading State
-          if (controller.isLoading.value) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(
-                    color: const Color(0xFF1E40AF),
-                    strokeWidth: 3,
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'جاري تحميل الفواتير...',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black54,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
-    
-          // Empty State
-          if (controller.bills.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color: Colors.blue.shade50,
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: Icon(
-                      Icons.receipt_long,
-                      size: 48,
-                      color: Colors.blue.shade300,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  const Text(
-                    'لا توجد فواتير',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'ابدأ بإضافة فاتورة جديدة',
-                    style: TextStyle(fontSize: 14, color: Colors.black54),
-                  ),
-                ],
-              ),
-            );
-          }
-    
-          // Get filtered bills
-          List<GuageBill> filteredBills = controller.getFilteredBills();
-    
-          // Empty Filter Result
-          if (filteredBills.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color: Colors.orange.shade50,
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: Icon(
-                      Icons.search_off,
-                      size: 48,
-                      color: Colors.orange.shade300,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  const Text(
-                    'لا توجد نتائج',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'لا توجد فواتير مطابقة للفلاتر المحددة',
-                    style: TextStyle(fontSize: 14, color: Colors.black54),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton.icon(
-                    onPressed: () => controller.resetFilters(),
-                    icon: const Icon(Icons.refresh, size: 18),
-                    label: const Text('إعادة تعيين الفلاتر'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1E40AF),
-                      foregroundColor: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
-    
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Statistics Cards
-                Row(
-                  children: [
-                    Expanded(
-                      child: _buildStatCard(
-                        'إجمالي الفواتير',
-                        '${filteredBills.length}',
-                        Icons.receipt_long,
-                        Colors.blue,
-                      ),
-                    ),
-                       const SizedBox(width: 12),
-                    Expanded(child: _buildStatCard  ('إجمالي المبلغ','${NumberFormat('#,###').format(controller.getTotalBillAmount())} ج.م' ,Icons.monetization_on_outlined,Colors.green.shade700,))
-                                                    ,const SizedBox(width: 12),
+    );
+  }
 
-                                        Expanded(child: _buildStatCard  ('اجمالي الاستهلاك','${NumberFormat('#,###').format(controller.getTotalPowerConsumption())} كيلو واط' ,Icons.monetization_on_outlined, Colors.purple.shade700,))
-                    ,const SizedBox(width: 12),
-                    Expanded(
-                      child: _buildStatCard(
-                        'المدفوعة',
-                        '${controller.getPaidBillsCount()}',
-                        Icons.check_circle,
-                        Colors.green,
-                      ),
+  Widget _buildStatisticsHeader(AllBills controller) {
+    return Column(
+      children: [
+        // Main header with count
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue.shade50, Colors.blue.shade100],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.blue.shade200),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.blue.withOpacity(0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _buildStatCard(
-                        'غير المدفوعة',
-                        '${controller.getUnpaidBillsCount()}',
-                        Icons.pending,
-                        Colors.orange,
-                      ),
-                    ),
-                     
-                 
-
-                    
-                  
                   ],
                 ),
-    
-    
-                // Total Statistics
-              
-                const SizedBox(height: 24),
-    
-                // Active Filters Badge
-                if (controller.selectedYear != 'all' ||
-                    controller.selectedMonth != 'all' ||
-                    controller.selectedAccountNumber != 'all')
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 16),
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.blue.shade50,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.blue.shade200),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.filter_list, size: 16, color: Colors.blue.shade700),
-                        const SizedBox(width: 6),
-                        Text(
-                          'تصفية نشطة (${filteredBills.length})',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.blue.shade700,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        GestureDetector(
-                          onTap: () => controller.resetFilters(),
-                          child: Icon(
-                            Icons.close,
-                            size: 16,
-                            color: Colors.blue.shade700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-    
-                // Bills Grid
-                Wrap(
-                  spacing: 12,
-                  runSpacing: 12,
-                  children: filteredBills.map((bill) {
-                    return _buildBillCard(bill, controller);
-                  }).toList(),
+                child: Icon(
+                  Icons.receipt_long,
+                  color: Colors.blue.shade700,
+                  size: 24,
                 ),
-              ],
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      controller.searchController.text.isEmpty &&
+                              controller.selectedYear == 'all' &&
+                              controller.selectedMonth == 'all' &&
+                              controller.selectedAccountNumber == 'all'
+                          ? 'إجمالي الفواتير'
+                          : 'نتائج البحث',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.blue.shade900,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${controller.bills.length} فاتورة',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue.shade900,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        // Statistics Cards
+        Row(
+          children: [
+            Expanded(
+              child: _buildStatCard(
+                'المدفوعة',
+                '${controller.getPaidBillsCount()}',
+                Icons.check_circle,
+                Colors.green,
+              ),
             ),
-          );
-        },
+            const SizedBox(width: 12),
+            Expanded(
+              child: _buildStatCard(
+                'غير المدفوعة',
+                '${controller.getUnpaidBillsCount()}',
+                Icons.pending,
+                Colors.orange,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _buildStatCard(
+                'إجمالي المبلغ',
+                '${NumberFormat('#,###').format(controller.getTotalBillAmount())} ج.م',
+                Icons.monetization_on_outlined,
+                Colors.green.shade700,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _buildStatCard(
+                'إجمالي الاستهلاك',
+                '${NumberFormat('#,###').format(controller.getTotalPowerConsumption())} كيلو واط',
+                Icons.electric_bolt,
+                Colors.purple.shade700,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActiveFilters(AllBills controller) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.blue.shade50,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.blue.shade200),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.filter_list, size: 16, color: Colors.blue.shade700),
+          const SizedBox(width: 6),
+          Text(
+            'تصفية نشطة',
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.blue.shade700,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(width: 8),
+          GestureDetector(
+            onTap: () => controller.refresh(),
+            child: Icon(
+              Icons.close,
+              size: 16,
+              color: Colors.blue.shade700,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -503,12 +475,12 @@ class Bills extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: color, size: 24),
-          const SizedBox(height: 12),
+          Icon(icon, color: color, size: 20),
+          const SizedBox(height: 8),
           Text(
             title,
             style: const TextStyle(
-              fontSize: 13,
+              fontSize: 11,
               color: Colors.black54,
               fontWeight: FontWeight.w500,
             ),
@@ -517,187 +489,129 @@ class Bills extends StatelessWidget {
           Text(
             value,
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
               color: color,
             ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
     );
   }
+}
 
-  Widget _buildBillCard(GuageBill bill, AllBills controller) {
+// Separate widget to prevent rebuilding all cards
+class _BillCard extends StatelessWidget {
+  final GuageBill bill;
+  final AllBills controller;
+
+  const _BillCard({
+    required this.bill,
+    required this.controller,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     Color statusColor = bill.isPaid == true ? Colors.green : Colors.orange;
     IconData statusIcon = bill.isPaid == true ? Icons.check_circle : Icons.pending;
 
     return Container(
-      width: 300,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.04),
             spreadRadius: 0,
-            blurRadius: 15,
+            blurRadius: 20,
             offset: const Offset(0, 4),
           ),
         ],
-        border: Border.all(color: Colors.grey.shade100),
+        border: Border.all(
+          color: Colors.grey.shade100,
+          width: 1,
+        ),
       ),
       child: Column(
         children: [
-          // Header
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.blue.shade600, Colors.blue.shade700],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          _buildHeader(statusColor, statusIcon),
+          _buildContent(),
+          _buildFooter(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeader(Color statusColor, IconData statusIcon) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.blue.shade600, Colors.blue.shade700],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.account_circle, color: Colors.white, size: 16),
-                        const SizedBox(width: 6),
-                        Text(
-                          bill.accountNumber,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                    const Icon(Icons.account_circle, color: Colors.white, size: 16),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        bill.accountNumber,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '${controller.getMonthName(bill.billMonth)} ${bill.billYear}',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.white70,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: statusColor.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.white.withOpacity(0.3)),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(statusIcon, color: Colors.white, size: 14),
-                      const SizedBox(width: 4),
-                      Text(
-                        bill.isPaid == true ? 'مدفوعة' : 'معلقة',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
+                const SizedBox(height: 4),
+                Text(
+                  '${controller.getMonthName(bill.billMonth)} ${bill.billYear}',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: Colors.white70,
                   ),
                 ),
               ],
             ),
           ),
-
-          // Content
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                _buildInfoRow(
-                  'القراءة السابقة',
-                  '${bill.prevReading}',
-                  Icons.speed,
-                  Colors.grey,
-                ),
-                const Divider(height: 16),
-                _buildInfoRow(
-                  'القراءة الحالية',
-                  '${bill.currentReading}',
-                  Icons.speed,
-                  Colors.grey,
-                ),
-                const Divider(height: 16),
-                _buildInfoRow(
-                  'الاستهلاك',
-                  '${NumberFormat('#,###').format(bill.powerConsump)} كيلووات',
-                  Icons.electric_bolt,
-                  Colors.purple,
-                ),
-                const Divider(height: 16),
-                _buildInfoRow(
-                  'إجمالي الفاتورة',
-                  ' ${NumberFormat('#,###').format(bill.billTotal)} ج.م',
-                  Icons.attach_money,
-                  Colors.green,
-                ),
-              ],
-            ),
-          ),
-
-          // Footer
+          const SizedBox(width: 8),
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             decoration: BoxDecoration(
-              color: Colors.grey.shade50,
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(16),
-                bottomRight: Radius.circular(16),
-              ),
+              color: statusColor.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.white.withOpacity(0.3)),
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'تفاصيل الفاتورة',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black54,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    _showBillDetailsDialog(bill, controller);
-                  },
-                  icon: const Icon(Icons.visibility, size: 14),
-                  label: const Text(
-                    'عرض',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue.shade600,
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
-                    ),
+                Icon(statusIcon, color: Colors.white, size: 12),
+                const SizedBox(width: 4),
+                Text(
+                  bill.isPaid == true ? 'مدفوعة' : 'معلقة',
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
@@ -708,433 +622,137 @@ class Bills extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow(String label, String value, IconData icon, Color color) {
-    return Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(8),
+  Widget _buildContent() {
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        children: [
+          _InfoCard(
+            label: 'الاستهلاك',
+            value: '${NumberFormat('#,###').format(bill.powerConsump)} كيلووات',
+            icon: Icons.electric_bolt,
+            color: Colors.purple,
           ),
-          child: Icon(icon, color: color, size: 16),
+          const SizedBox(height: 8),
+          _InfoCard(
+            label: 'إجمالي الفاتورة',
+            value: '${NumberFormat('#,###').format(bill.billTotal)} ج.م',
+            icon: Icons.attach_money,
+            color: Colors.green,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFooter(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(20),
+          bottomRight: Radius.circular(20),
         ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Text(
-            label,
-            style: const TextStyle(
-              fontSize: 13,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            'تفاصيل الفاتورة',
+            style: TextStyle(
+              fontSize: 14,
               color: Colors.black54,
               fontWeight: FontWeight.w500,
             ),
           ),
-        ),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            color: color,
-          ),
-        ),
-      ],
-    );
-  }
-
-  // Show Bill Details Dialog
-  void _showBillDetailsDialog(GuageBill bill, AllBills controller) {
-    Get.dialog(
-      Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 600, maxHeight: 700),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Header
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.blue.shade600, Colors.blue.shade700],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Icon(
-                        Icons.receipt_long,
-                        color: Colors.white,
-                        size: 28,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'تفاصيل الفاتورة',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '${controller.getMonthName(bill.billMonth)} ${bill.billYear}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.white70,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.close, color: Colors.white),
-                      onPressed: () => Get.back(),
-                    ),
-                  ],
-                ),
-              ),
-      
-              // Content
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Account Info Section
-                      _buildDialogSection(
-                        'معلومات الحساب',
-                        Icons.account_circle,
-                        Colors.blue,
-                        [
-                          _buildDialogDetailRow(
-                            'رقم الحساب',
-                            bill.accountNumber,
-                            Icons.badge,
-                          ),
-                          _buildDialogDetailRow(
-                            'شهر الفاتورة',
-                            controller.getMonthName(bill.billMonth),
-                            Icons.calendar_month,
-                          ),
-                          _buildDialogDetailRow(
-                            'سنة الفاتورة',
-                            '${bill.billYear}',
-                            Icons.calendar_today,
-                          ),
-                          _buildDialogDetailRow(
-                            'حالة الدفع',
-                            bill.isPaid == true ? 'مدفوعة' : 'معلقة',
-                            bill.isPaid == true ? Icons.check_circle : Icons.pending,
-                            valueColor: bill.isPaid == true ? Colors.green : Colors.orange,
-                          ),
-                        ],
-                      ),
-      
-                      const SizedBox(height: 20),
-      
-                      // Readings Section
-                      _buildDialogSection(
-                        'القراءات والاستهلاك',
-                        Icons.speed,
-                        Colors.purple,
-                        [
-                          _buildDialogDetailRow(
-                            'القراءة السابقة',
-                            '${bill.prevReading}',
-                            Icons.history,
-                          ),
-                          _buildDialogDetailRow(
-                            'القراءة الحالية',
-                            '${bill.currentReading}',
-                            Icons.speed,
-                          ),
-                          _buildDialogDetailRow(
-                            'معامل القراءة',
-                            '${bill.readingFactor}',
-                            Icons.calculate,
-                          ),
-                          _buildDialogDetailRow(
-                            'استهلاك الكهرباء',
-                            '${bill.powerConsump} كيلووات',
-                            Icons.electric_bolt,
-                            valueColor: Colors.purple,
-                          ),
-                        ],
-                      ),
-      
-                      const SizedBox(height: 20),
-      
-                      // Financial Details Section
-                      _buildDialogSection(
-                        'التفاصيل المالية',
-                        Icons.attach_money,
-                        Colors.green,
-                        [
-                          _buildDialogDetailRow(
-                            'القسط الثابت',
-                            '${bill.fixedInstallment.toStringAsFixed(2)} ج.م',
-                            Icons.payment,
-                          ),
-                          _buildDialogDetailRow(
-                            'التسويات',
-                            '${bill.settlements.toStringAsFixed(2)} ج.م',
-                            Icons.account_balance,
-                          ),
-                          _buildDialogDetailRow(
-                            'نسبة التسوية',
-                            '${bill.settlementsratio}',
-                            Icons.percent,
-                          ),
-                          _buildDialogDetailRow(
-                            'الطوابع',
-                            '${bill.stamp.toStringAsFixed(2)} ج.م',
-                            Icons.local_post_office,
-                          ),
-                          _buildDialogDetailRow(
-                            'المدفوعات السابقة',
-                            '${bill.prevPayments.toStringAsFixed(2)} ج.م',
-                            Icons.history,
-                          ),
-                          _buildDialogDetailRow(
-                            'التقريب',
-                            '${bill.rounding.toStringAsFixed(2)} ج.م',
-                            Icons.rounded_corner,
-                          ),
-                        ],
-                      ),
-      
-                      const SizedBox(height: 20),
-      
-                      // Delay Info (if exists)
-                      if (bill.delayMonth != null || bill.delayYear != null)
-                        _buildDialogSection(
-                          'معلومات التأخير',
-                          Icons.schedule,
-                          Colors.orange,
-                          [
-                            if (bill.delayMonth != null)
-                              _buildDialogDetailRow(
-                                'شهر التأخير',
-                                '${bill.delayMonth}',
-                                Icons.calendar_month,
-                              ),
-                            if (bill.delayYear != null)
-                              _buildDialogDetailRow(
-                                'سنة التأخير',
-                                '${bill.delayYear}',
-                                Icons.calendar_today,
-                              ),
-                          ],
-                        ),
-      
-                      if (bill.delayMonth != null || bill.delayYear != null)
-                        const SizedBox(height: 20),
-      
-                      // Notes Section (if exists)
-                      if (bill.notes != null && bill.notes!.isNotEmpty)
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.amber.shade50,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.amber.shade200),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(Icons.note, color: Colors.amber.shade700, size: 20),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    'ملاحظات',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.amber.shade700,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 12),
-                              Text(
-                                bill.notes!,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black87,
-                                  height: 1.5,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-      
-                      if (bill.notes != null && bill.notes!.isNotEmpty)
-                        const SizedBox(height: 20),
-      
-                      // Total Section
-                      Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [Colors.green.shade50, Colors.green.shade100],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: Colors.green.shade200),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: BoxDecoration(
-                                    color: Colors.green.shade200,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Icon(
-                                    Icons.account_balance_wallet,
-                                    color: Colors.green.shade700,
-                                    size: 24,
-                                  ),
-                                ),
-                                const SizedBox(width: 16),
-                                const Text(
-                                  'إجمالي الفاتورة',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Text(
-                              ' ${NumberFormat('#,###').format(bill.billTotal)}ج.م',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.green.shade700,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-      
-              // Footer Actions
-             
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Build dialog section
-  Widget _buildDialogSection(String title, IconData icon, Color color, List<Widget> children) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.2)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            spreadRadius: 0,
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(icon, color: color, size: 20),
-              ),
-              const SizedBox(width: 12),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: color,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          ...children,
-        ],
-      ),
-    );
-  }
-
-  // Build dialog detail row
-  Widget _buildDialogDetailRow(
-    String label,
-    String value,
-    IconData icon, {
-    Color? valueColor,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        children: [
-          Icon(icon, size: 18, color: Colors.grey.shade600),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              label,
+          ElevatedButton.icon(
+            onPressed: () {
+              // Show bill details - you can implement the dialog here
+              // _showBillDetailsDialog(bill, controller);
+            },
+            icon: const Icon(Icons.visibility, size: 14),
+            label: const Text(
+              'عرض',
               style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey.shade700,
+                fontSize: 12,
                 fontWeight: FontWeight.w500,
               ),
             ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue.shade600,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
           ),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: valueColor ?? Colors.black87,
+        ],
+      ),
+    );
+  }
+}
+
+class _InfoCard extends StatelessWidget {
+  final String label;
+  final String value;
+  final IconData icon;
+  final Color color;
+
+  const _InfoCard({
+    required this.label,
+    required this.value,
+    required this.icon,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: color.withOpacity(0.2)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, color: color, size: 16),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: color,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  value,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
           ),
         ],

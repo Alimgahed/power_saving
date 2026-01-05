@@ -7,7 +7,7 @@ import 'package:power_saving/core/widgets/custom_app_bar.dart';
 import 'package:power_saving/core/widgets/form_card.dart';
 import 'package:power_saving/core/widgets/rtl_scafold.dart';
 import 'package:power_saving/core/widgets/section_header.dart';
-import 'package:power_saving/features/planning/controller/edit_places_controller.dart';
+import 'package:power_saving/features/planning/controller/place/edit_places_controller.dart';
 import 'package:power_saving/features/planning/model/all_places_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 
@@ -161,6 +161,7 @@ class EditPlacesScreen extends StatelessWidget {
                           ],
                         ),
 
+SizedBox(height: AppDimensions.paddingL,),
                         CustomDropdownFormField<int>(
                           items: controller.placeTypeList.map((placeType) {
                             return DropdownMenuItem<int>(

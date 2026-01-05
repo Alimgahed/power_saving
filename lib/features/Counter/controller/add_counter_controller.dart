@@ -54,7 +54,7 @@ class addcounter extends GetxController {
         looading.value = false;
         showSuccessToast("تم اضافة العداد بنجاح");
         // Refresh the main counter list
-        Get.find<Counter_controller>().all_counter();
+        Get.find<CounterController>().fetchAllCounters();
       } else {
         looading.value = false;
         final errorBody = jsonDecode(res.body);

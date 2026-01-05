@@ -13,6 +13,7 @@ class CustomTextFormField extends StatelessWidget {
   final double? padding;
   bool? readonly=false;
   Function()? onTap;
+  Function()? validator;
   final bool allowOnlyDigits;
   final bool useValidator; // <-- NEW
 
@@ -28,6 +29,7 @@ class CustomTextFormField extends StatelessWidget {
     this.controller,
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
+    this.validator,
       
     this.useValidator = true, // <-- DEFAULT true
   });

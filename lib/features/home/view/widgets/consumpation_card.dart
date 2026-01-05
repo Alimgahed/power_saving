@@ -192,6 +192,7 @@ class ConsumptionCard extends StatelessWidget {
     Get.toNamed(
       '/analysis',
       arguments: {
+        "data": item,
         'station': item.stationId,
         'tech': item.technologyId,
       },

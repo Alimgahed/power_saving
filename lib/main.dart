@@ -6,9 +6,11 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:power_saving/features/auth/model/login.dart';
-import 'package:power_saving/features/planning/view/screens/add_places.dart';
-import 'package:power_saving/features/planning/view/screens/edit_places.dart';
-import 'package:power_saving/features/planning/view/screens/places.dart';
+import 'package:power_saving/features/planning/view/screens/blance_chart/blance.dart';
+import 'package:power_saving/features/planning/view/screens/blance_chart/blance_chart_print_screen.dart';
+import 'package:power_saving/features/planning/view/screens/places/add_places.dart';
+import 'package:power_saving/features/planning/view/screens/places/edit_places.dart';
+import 'package:power_saving/features/planning/view/screens/places/places.dart';
 import 'package:power_saving/shared_pref/cache.dart';
 import 'package:power_saving/features/Counter/view/screens/Counter.dart';
 import 'package:power_saving/features/Counter/view/screens/add_Counter.dart';
@@ -27,7 +29,7 @@ import 'package:power_saving/features/chemcails/view/screens/edit_chemcials.dart
 import 'package:power_saving/features/home/view/screens/home.dart';
 import 'package:power_saving/features/predaction/view/screens/predaction.dart';
 import 'package:power_saving/features/relations/view/screens/add_relation.dart';
-import 'package:power_saving/features/relations/view/screens/relatiuons.dart';
+import 'package:power_saving/features/relations/view/screens/relations.dart';
 import 'package:power_saving/features/reports/view/screens/report.dart';
 import 'package:power_saving/features/stations/view/screens/add_station.dart';
 import 'package:power_saving/features/stations/view/screens/edit_staion.dart';
@@ -37,6 +39,7 @@ import 'package:power_saving/features/tech_bills/view/screens/tech_bills.dart';
 import 'package:power_saving/features/technology/view/screens/add_tech.dart';
 import 'package:power_saving/features/technology/view/screens/edittech.dart';
 import 'package:power_saving/features/technology/view/screens/technology.dart';
+import 'package:power_saving/test.dart';
 
 import 'gloable/data.dart';
 
@@ -91,10 +94,13 @@ if (jsuser.isNotEmpty && jsuser != "{}") {
       theme: ThemeData(textTheme: GoogleFonts.almaraiTextTheme()),
       initialRoute: '/home', 
       getPages: [
-                GetPage(name: '/Charts', page: () =>         SunburstPage
-()),
+                GetPage(name: '/Charts', page: () =>         SunburstPage()),
+
 
         GetPage(name: '/home', page: () => HomeScreen()),
+
+                // GetPage(name: '/Populations', page: () => PopulationsScreen()),
+
                 GetPage(name: '/change_password', page: () => ChangePassword()),
                 GetPage(name: '/editPlaces', page: () => EditPlacesScreen()),
 
@@ -109,9 +115,12 @@ if (jsuser.isNotEmpty && jsuser != "{}") {
                 GetPage(name: '/EditTechBills', page: () => EditTechBills()),
         GetPage(name: '/Places', page: () => PlacesScreen()),
                 GetPage(name: '/AddPlaces', page: () => AddPlacesScreen()),
+        GetPage(name: '/BlanceCart', page: () => BlanceCart()), //
+                
 
-        
-        
+        // GetPage(name: '/BalanceChart', page: () => BalanceChart()),
+                GetPage(name: '/BalanceChartPrintScreen', page: () => BalanceChartPrintScreen()),
+
         GetPage(name: '/Edittech', page: () => EditTechScreen()),
         GetPage(name: '/Reports', page: () => Reports()),
         GetPage(name: '/Predictions', page: () => Predaction()),
@@ -121,12 +130,13 @@ if (jsuser.isNotEmpty && jsuser != "{}") {
         GetPage(name: '/techBill', page: () => TechBill()),
         GetPage(name: '/Countrts', page: () => Counterscreen()),
         GetPage(name: '/addCounter', page: () => AddElectricMeterScreen()),
-        GetPage(name: '/Relations', page: () => RelatiuonsSCREAN()),
+        GetPage(name: '/Relations', page: () => RelationsScreen()),
         GetPage(name: '/Addrelation', page: () => AddRelationScreen()),
         GetPage(name: '/Chemicals', page: () => Chemicals()),
         GetPage(name: '/AddChemicalScreen', page: () => AddChemicalScreen()),
         GetPage(name: '/techbills', page: () => TechBills()),
         GetPage(name: '/EditChemcials', page: () => EditChemcials()),
+        GetPage(name: '/AnimatedGauge', page: () => AnimatedGauge()),
       ],
       onInit: () {
         _initializeDimensions();

@@ -71,14 +71,14 @@ class EditStationsScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'المحطة الحالية: ${station!.stationName}',
+                              'المحطة الحالية: ${station?.stationName}',
                               style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 14,
                               ),
                             ),
                             Text(
-                              'معرف المحطة: ${station!.stationId}',
+                              'معرف المحطة: ${station?.stationId}',
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey.shade600,
@@ -125,7 +125,7 @@ class EditStationsScreen extends StatelessWidget {
                                   DropdownMenuItem(
                                       value: "صرف", child: Text("صرف")),
                                 ],
-                                initialValue: station!.stationType,
+                                initialValue: station?.stationType,
                                 onChanged: (val) {
                                   controller.stationTypeId = val!;
                                 },

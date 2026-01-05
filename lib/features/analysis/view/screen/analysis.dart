@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/analysis/controller/analysis.dart';
+import 'package:power_saving/features/home/model/home.dart';
 import 'package:power_saving/main.dart';
 import 'dart:convert';
 
@@ -10,11 +11,13 @@ class AnalysisView extends StatelessWidget {
   // Safe way to get arguments that handles null case
   final int? station = Get.arguments != null ? Get.arguments['station'] : null;
   final int? tech = Get.arguments != null ? Get.arguments['tech'] : null;
+  final OverConsump? data = Get.arguments != null ? Get.arguments['data'] : null;
 
   final Analysis controller = Get.put(Analysis());
 
   @override
   Widget build(BuildContext context) {
+
     // Check if arguments are null (page reload) and navigate to home
     if (station == null || tech == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -166,6 +169,8 @@ class AnalysisView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text("${data?.technologyPowerConsump != null && data?.powerPerWater != null ? (data!.technologyPowerConsump! / data!.powerPerWater!) : 'N/A'}"),
+                      Text("${data?.technologyChlorineConsump != null && data?.chlorineRangeFrom != null && data?.chlorineRangeTo != null ? (data!.technologyChlorineConsump! / ((data!.chlorineRangeFrom! + data!.chlorineRangeTo!) / 2)) : 'N/A'}"),
                     // Analysis Charts Grid
                     _buildChartsGrid(images),
                   ],

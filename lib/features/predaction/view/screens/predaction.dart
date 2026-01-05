@@ -10,7 +10,7 @@ import 'package:power_saving/my_widget/sharable.dart';
 class Predaction extends StatelessWidget {
   Predaction({super.key});
 
-  final get_all_stations getAllStation = Get.put(get_all_stations());
+  final StationsController stationsController = Get.put(StationsController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   int? stationId;
 
@@ -95,62 +95,53 @@ class Predaction extends StatelessWidget {
       ),
     );
   }
+Widget _buildStationSelector(Prediactioncontroller controller) {
+  return Row(
+    crossAxisAlignment: CrossAxisAlignment.end,
+    children: [
+      Expanded(
+        child: Obx((){
+          return  CustomDropdownFormField<int>(
+            items: stationsController.stations.map((station) {
+              return DropdownMenuItem<int>(
+                value: station.stationId,
+                child: Text(station.stationName),
+              );
+            }).toList(),
+            onChanged: (value) => stationId = value,
+            labelText: 'المحطة',
+            hintText: 'اختر المحطة',
+            prefixIcon: Icons.map,
+            validator: (val) => val == null ? 'الرجاء اختيار المحطة' : null,
+          );
+        }
+          
+        ),
+      ),
+      const SizedBox(width: 10),
+      Expanded(
+        child: ElevatedButton(
+          onPressed: () {
+            if (_formKey.currentState?.validate() ?? false) {
+              controller.prediactions(stationId!);
+            } else {
+              Get.snackbar(
+                "خطأ",
+                "الرجاء اختيار محطة",
+                backgroundColor: Colors.red.shade100,
+                colorText: Colors.black87,
+              );
+            }
+          },
+          child: const Text("تنبؤ"),
+        ),
+      ),
+    ],
+  );
+}
 
-  Widget _buildStationSelector(Prediactioncontroller controller) {
-    return GetBuilder<get_all_stations>(
-      builder: (stationController) {
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Expanded(
-              child: CustomDropdownFormField<int>(
-                items:
-                    stationController.allstations.map((station) {
-                      return DropdownMenuItem<int>(
-                        value: station.stationId,
-                        child: Text(station.stationName),
-                      );
-                    }).toList(),
-                onChanged: (value) => stationId = value,
-                labelText: 'المحطة',
-                hintText: 'اختر المحطة',
-                prefixIcon: Icons.map,
-                validator: (val) => val == null ? 'الرجاء اختيار المحطة' : null,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState?.validate() ?? false) {
-                    controller.prediactions(stationId!);
-                  } else {
-                    Get.snackbar(
-                      "خطأ",
-                      "الرجاء اختيار محطة",
-                      backgroundColor: Colors.red.shade100,
-                      colorText: Colors.black87,
-                    );
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 14,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: const Text("تنبؤ"),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
+  
   Widget _buildChartCard(String base64Image) {
     return Container(
       width: double.infinity,

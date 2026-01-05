@@ -1,83 +1,75 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:power_saving/core/widgets/empty_widget.dart';
+import 'package:power_saving/core/widgets/main_screen/main_card_widgets.dart';
+import 'package:power_saving/core/widgets/main_screen/totl_header.dart';
 import 'package:power_saving/features/bill/controller/bills.dart';
 import 'package:power_saving/features/Counter/controller/counter.dart';
 import 'package:power_saving/features/Counter/model/Counter_model.dart';
 import 'package:power_saving/features/bill/model/bills_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
-
 class Counterscreen extends StatelessWidget {
   Counterscreen({super.key});
-  final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
-  final TextEditingController _searchController = TextEditingController();
-  final RxBool _isSearching = false.obs;
+    final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(CounterController());
+    
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: const Color(0xFFF8FAFC),
-        appBar: AppBar(
-          title: Obx(() => _isSearching.value 
-            ? TextField(
-                controller: _searchController,
-                autofocus: true,
-                style: const TextStyle(color: Colors.white),
-                decoration: const InputDecoration(
-                  hintText: 'ابحث برقم العداداو الفرع أو رقم الاشتراك...',
-                  hintStyle: TextStyle(color: Colors.white70),
-                  border: InputBorder.none,
-                ),
-                onChanged: (value) {
-                  Get.find<Counter_controller>().filterCounters(value);
-                },
-              )
-            : const Text(
-                'قائمة العدادات',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
+        appBar: _buildAppBar(controller),
+        body: Obx(() => _buildBody(controller)),
+      ),
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar( CounterController controller) {
+    return AppBar(
+      title: Obx(() => controller.isSearching.value
+          ? TextField(
+              controller: controller.searchController,
+              autofocus: true,
+              style: const TextStyle(color: Colors.white),
+              decoration: const InputDecoration(
+                hintText: 'ابحث برقم العداد أو الفرع أو رقم الاشتراك...',
+                hintStyle: TextStyle(color: Colors.white70),
+                border: InputBorder.none,
               ),
-          ),
-          backgroundColor: const Color(0xFF1E40AF),
-          elevation: 0,
-          actions: [
-            Container(
-              margin: const EdgeInsets.only(left: 16),
-              child: Row(
+              onChanged: controller.onSearchChanged,
+            )
+          : const Text(
+              'قائمة العدادات',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
+            )),
+      backgroundColor: const Color(0xFF1E40AF),
+      elevation: 0,
+      actions: [
+        Container(
+          margin: const EdgeInsets.only(left: 16),
+          child: Obx(() => Row(
                 children: [
-                  // Search Icon Button
-                  Obx(() => IconButton(
-                    icon: Icon(
-                      _isSearching.value ? Icons.close : Icons.search,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      if (_isSearching.value) {
-                        _isSearching.value = false;
-                        _searchController.clear();
-                        Get.find<Counter_controller>().clearFilter();
-                      } else {
-                        _isSearching.value = true;
-                      }
-                    },
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.white.withOpacity(0.1),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                  if (!controller.isSearching.value) ...[
+                    IconButton(
+                      icon: const Icon(Icons.search, color: Colors.white),
+                      onPressed: controller.toggleSearch,
+                      style: IconButton.styleFrom(
+                        backgroundColor: Colors.white.withOpacity(0.1),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
                     ),
-                  )),
-                  const SizedBox(width: 8),
-                  // Add Counter Button
-                  if (!_isSearching.value) ...[
+                    const SizedBox(width: 8),
                     ElevatedButton.icon(
-                      onPressed: () {
-                        Get.offNamed('/addCounter');
-                      },
+                      onPressed: () => Get.offNamed('/addCounter'),
                       icon: const Icon(Icons.add, size: 18),
                       label: const Text(
                         "إضافة عداد جديد",
@@ -99,11 +91,9 @@ class Counterscreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
-                      ElevatedButton.icon(
-                      onPressed: () {
-                        Get.offNamed('/Addrelation');
-                      },
+                    const SizedBox(width: 8),
+                    ElevatedButton.icon(
+                      onPressed: () => Get.offNamed('/Addrelation'),
                       icon: const Icon(Icons.add, size: 18),
                       label: const Text(
                         "إضافة ربط جديد",
@@ -125,15 +115,22 @@ class Counterscreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                                        const SizedBox(width: 12),
-
+                  ] else ...[
+                    IconButton(
+                      icon: const Icon(Icons.close, color: Colors.white),
+                      onPressed: controller.toggleSearch,
+                      style: IconButton.styleFrom(
+                        backgroundColor: Colors.white.withOpacity(0.1),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
                   ],
-                  // Home Button
+                  const SizedBox(width: 12),
                   IconButton(
                     icon: const Icon(Icons.arrow_forward, color: Colors.white),
-                    onPressed: () {
-                      Get.offNamed('/home');
-                    },
+                    onPressed: () => Get.offNamed('/home'),
                     style: IconButton.styleFrom(
                       backgroundColor: Colors.white.withOpacity(0.1),
                       shape: RoundedRectangleBorder(
@@ -142,291 +139,319 @@ class Counterscreen extends StatelessWidget {
                     ),
                   ),
                 ],
+              )),
+        ),
+      ],
+      automaticallyImplyLeading: false,
+    );
+  }
+
+  Widget _buildBody(CounterController controller) {
+    // Loading State
+    if (controller.looading.value) {
+      return const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 16),
+            Text(
+              'جاري تحميل العدادات...',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black54,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],
-          automaticallyImplyLeading: false,
         ),
-        body: GetBuilder<Counter_controller>(
-          init: Counter_controller(),
-          builder: (controller) {
-            // Use filtered list if search is active, otherwise use all counters
-            List<dynamic> displayCounters = controller.filteredCounters.isNotEmpty || _searchController.text.isNotEmpty 
-                ? controller.filteredCounters 
-                : controller.allcounter;
-if(controller.looading.value==true){
-  return Center(child:Text ("جاري تحميل العدادات ........"),);
+      );
+    }
+
+    // Empty State
+    if (controller.allcounter.isEmpty) {
+      return ReusableEmptyView( message: 'لا توجد عدادات متاحة حالياً');
+    }
+
+    // Get display counters
+    final displayCounters = controller.filteredCounters.isNotEmpty ||
+            controller.searchController.text.isNotEmpty
+        ? controller.filteredCounters
+        : controller.allcounter;
+
+    // No Search Results
+    if (controller.searchController.text.isNotEmpty &&
+        displayCounters.isEmpty) {
+      return _buildNoResultsState(controller);
+    }
+
+    return RefreshIndicator(
+      onRefresh: controller.refresh,
+      child: CustomScrollView(
+        slivers: [
+          // Search Error Message
+          if (controller.searchError.value.isNotEmpty)
+            SliverToBoxAdapter(
+              child: ReusableEmptyView( message: 'لا توجد عدادات مطابقة'),
+            ),
+
+          // Header
+          SliverPadding(
+            padding: const EdgeInsets.all(20),
+            sliver: SliverToBoxAdapter(
+              child:                   TotalHeader(count: controller.displayCounters.length.toString(), title: 'إجمالي العدادات'),
+
+            ),
+          ),
+
+          // Counters Grid
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            sliver: SliverGrid(
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 300,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                childAspectRatio: 0.50,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return _CounterCard(
+                    meter: displayCounters[index],
+                    globalKey: _globalKey,
+                  );
+                },
+                childCount: displayCounters.length,
+              ),
+            ),
+          ),
+
+          const SliverToBoxAdapter(
+            child: SizedBox(height: 20),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+ 
+  Widget _buildNoResultsState( CounterController controller) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(50),
+            ),
+            child: Icon(
+              Icons.search_off,
+              size: 48,
+              color: Colors.grey.shade400,
+            ),
+          ),
+          const SizedBox(height: 24),
+          const Text(
+            'لا توجد نتائج للبحث',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'لم يتم العثور على "${controller.searchController.text}"',
+            style: const TextStyle(fontSize: 14, color: Colors.black54),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
 }
 
-            if (controller.allcounter.isEmpty) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                        color: Colors.blue.shade50,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Icon(
-                        Icons.electric_meter,
-                        size: 48,
-                        color: Colors.blue.shade300,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    const Text(
-                      'لا توجد عدادات',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'ابدأ بإضافة عداد جديد',
-                      style: TextStyle(fontSize: 14, color: Colors.black54),
-                    ),
-                  ],
+// Separate widget to prevent rebuilding all cards
+class _CounterCard extends StatelessWidget {
+  final ElectricMeter meter;
+  final GlobalKey<FormState> globalKey;
+
+  const _CounterCard({
+    required this.meter,
+    required this.globalKey,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            spreadRadius: 0,
+            blurRadius: 20,
+            offset: const Offset(0, 4),
+          ),
+        ],
+        border: Border.all(
+          color: Colors.grey.shade100,
+          width: 1,
+        ),
+      ),
+      child: Column(
+        children: [
+          CardHeader(name: meter.meterId ,height: 50,),
+          _buildContent(),
+          SizedBox(height: 12),
+          _buildFooter(context),
+        ],
+      ),
+    );
+  }
+
+ 
+
+  Widget _buildContent() {
+    return Column(
+      children: [
+        InfoCard(
+          label: 'اسم المحطة',
+          value: meter.station ?? 'لا يوجد',
+          icon: Icons.location_on_outlined,
+          color: Colors.blueAccent,
+        ),
+        const SizedBox(height: 8),
+        InfoCard(
+          label: 'اسم الفرع',
+          value: meter.branch ?? 'لا يوجد',
+          icon: Icons.business,
+          color: Colors.green,
+        ),
+        const SizedBox(height: 8),
+        InfoCard(
+          label: 'رقم الحساب',
+          value: meter.accountNumber ?? 'غير محدد',
+          icon: Icons.account_balance,
+          color: Colors.blue,
+        ),
+        const SizedBox(height: 8),
+        InfoCard(
+        
+          label: 'جهد العداد', value: meter.voltageType ?? 'غير محدد', icon: Icons.electric_bolt_rounded, color: Colors.orange,
+        ),
+        const SizedBox(height: 8),
+        InfoCard(
+
+           label: 'القراءة النهائية',
+          value: meter.finalReading?.toString() ?? '0',
+          icon: Icons.speed,
+          color: Colors.cyan,
+        ),
+        const SizedBox(height: 8),
+        InfoCard(
+          label: 'معامل العداد',
+          value: meter.meterFactor?.toString() ?? '0',
+          icon: Icons.calculate,
+          color: Colors.purple,
+        ),
+      ],
+    );
+  }
+
+ 
+
+  Widget _buildFooter(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(20),
+          bottomRight: Radius.circular(20),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: ElevatedButton.icon(
+              onPressed: () {
+                Get.offNamed(
+                  '/editMeter',
+                  arguments: {"meter": meter},
+                );
+              },
+              icon: const Icon(Icons.edit, size: 12),
+              label: const Text(
+                'تعديل',
+                style: TextStyle(fontSize: 11),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue.shade600,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 6,
                 ),
-              );
-            }
-
-
-            // Show no results message when searching
-            if (_searchController.text.isNotEmpty && displayCounters.isEmpty) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Icon(
-                        Icons.search_off,
-                        size: 48,
-                        color: Colors.grey.shade400,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    const Text(
-                      'لا توجد نتائج للبحث',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'لم يتم العثور على عدادات تحتوي على "${_searchController.text}"',
-                      style: const TextStyle(fontSize: 14, color: Colors.black54),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6),
                 ),
-              );
-            }
-
-            return SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Header Section
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Colors.blue.shade50, Colors.blue.shade100],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.blue.shade100),
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Colors.blue.shade100,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Icon(
-                            Icons.electric_meter,
-                            color: Colors.blue.shade700,
-                            size: 24,
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _searchController.text.isNotEmpty 
-                                    ? 'نتائج البحث' 
-                                    : 'إجمالي العدادات',
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black54,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                '${displayCounters.length} عداد',
-                                style: const TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  // Grid Section
-                  SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Wrap(
-                        spacing: 10,
-                        runSpacing: 20,
-                        children: displayCounters.map((meter) {
-                          return Container(
-                            width: 290, // same as maxCrossAxisExtent
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.04),
-                                  spreadRadius: 0,
-                                  blurRadius: 20,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
-                              border: Border.all(
-                                color: Colors.grey.shade100,
-                                width: 1,
-                              ),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min, // Allow dynamic height
-                              children: [
-                                // Header
-                                Container(
-                                  padding: const EdgeInsets.all(16),
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Colors.blue.shade600,
-                                        Colors.blue.shade700,
-                                      ],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                    ),
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(20),
-                                      topRight: Radius.circular(20),
-                                    ),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.all(6),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white.withOpacity(0.2),
-                                          borderRadius: BorderRadius.circular(6),
-                                        ),
-                                        child: const Icon(
-                                          Icons.electric_meter,
-                                          color: Colors.white,
-                                          size: 16,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Expanded(
-                                        child: Text(
-                                          meter.meterId,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-
-                                // Content
-                                Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: Column(
-                                    children: [
-                                      _buildMeterInfoSection(meter),
-                                    ],
-                                  ),
-                                ),
-
-                                // Footer
-                                Container(
-                                  padding: const EdgeInsets.all(16),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade50,
-                                    borderRadius: const BorderRadius.only(
-                                      bottomLeft: Radius.circular(20),
-                                      bottomRight: Radius.circular(20),
-                                    ),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      ElevatedButton.icon(
-                                        onPressed: () {
-                                          Get.offNamed(
-                                            '/editMeter',
-                                            arguments: {"meter": meter},
-                                          );
-                                        },
-                                        icon: const Icon(Icons.edit, size: 14),
-                                        label: const Text('تعديل'),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.blue.shade600,
-                                          foregroundColor: Colors.white,
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 12,
-                                            vertical: 6,
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(6),
-                                          ),
-                                        ),
-                                      ),
-                                      ElevatedButton.icon(
-                                        onPressed: () async {
-                                   Get.put(Bills()).onInit();
-                                              final Bill = await Get.put(
+              ),
+            ),
+          ),
+          const SizedBox(width: 6),
+          Expanded(
+            child: ElevatedButton.icon(
+              onPressed: () async{
+                  Get.put(Bills()).onInit();
+                                              final bill =  Get.put(
                                                 Bills(),
                                               );
-                                              await Bill.newbill(
+                                              await bill.newbill(
                                                 meter.accountNumber!,
                                               );
 
-                                              if (Bill.gauges.isNotEmpty) {
+                // Your bill logic here
+                // ignore: use_build_context_synchronously
+                _handleNewBill(context, bill, globalKey);
+              },
+              icon: const Icon(Icons.receipt, size: 12),
+              label: const Text(
+                'فاتورة جديدة',
+                style: TextStyle(fontSize: 11),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green.shade600,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 6,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _handleNewBill(BuildContext context,Bills bill,GlobalKey<FormState> globalKey) {
+    
+    
+    // Keep your existing bill dialog logic here
+    // For now, just show a placeholder
+  
+        
+                                              if (bill.gauges.isNotEmpty) {
                                                 showDialog(
                                                   // ignore: use_build_context_synchronously
                                                   context: context,
@@ -474,7 +499,7 @@ if(controller.looading.value==true){
 
                                                           return SingleChildScrollView(
                                                             child: Form(
-                                                              key: _globalKey,
+                                                              key: globalKey,
                                                               child: Column(
                                                                 crossAxisAlignment:
                                                                     CrossAxisAlignment
@@ -1117,7 +1142,7 @@ if(controller.looading.value==true){
                                                                               : Center(
                                                                                 child: ElevatedButton(
                                                                                   onPressed: () {
-                                                                                    if (_globalKey.currentState!.validate()) {
+                                                                                    if (globalKey.currentState!.validate()) {
                                                                                       // Collect and parse ratio values
                                                                                       List<
                                                                                         double
@@ -1343,191 +1368,5 @@ if(controller.looading.value==true){
                                                       "لا يوجد عدادات محطات مرتبطة بهذا الحساب",
                                                 );
                                               }           
-                                        },
-                                        icon: const Icon(Icons.receipt, size: 14),
-                                        label: const Text('فاتورة جديدة'),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.green.shade600,
-                                          foregroundColor: Colors.white,
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 12,
-                                            vertical: 6,
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(6),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMeterInfoSection(ElectricMeter meter) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.purple.withOpacity(0.05),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.purple.withOpacity(0.1)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.info_outline, size: 16, color: Colors.purple),
-              const SizedBox(width: 6),
-              const Text(
-                'معلومات العداد',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                  color: Colors.purple,
-                ),
-              ),
-            ],
-          ),
-                    const SizedBox(height: 12),
-          _buildInfoItem(
-            'اسم المحطة',
-            meter.station ?? 'لا يوجد',
-            Icons.location_on_outlined,
-            Colors.blueAccent,
-          ),
-          const SizedBox(height: 12),
-          _buildInfoItem(
-            'اسم الفرع',
-            meter.branch ?? 'لا يوجد',
-            Icons.location_on_outlined,
-            Colors.green,
-          ),
-          const SizedBox(height: 8),
-          _buildInfoItem(
-            'رقم الحساب',
-            meter.accountNumber ?? 'غير محدد',
-            Icons.account_balance,
-            Colors.blue,
-          ),
-          const SizedBox(height: 8),
-          _buildInfoItem(
-            'جهد العداد',
-            meter.voltageType ?? 'غير محدد',
-            Icons.electric_bolt_rounded,
-            Colors.green,
-          ),
-                    const SizedBox(height: 8),
-
-           _buildDetailItem(
-             'القراءة النهائية',
-             meter.finalReading.toString(),
-             Icons.speed,
-             Colors.cyan,
-           ),
-          const SizedBox(height: 8),
-              _buildDetailItem(
-                'معامل العداد',
-                meter.meterFactor.toString(),
-                Icons.calculate,
-                Colors.purple,
-              ),
-        ],
-      ),
-    );
-  }
-
-  
-  Widget _buildInfoItem(String label, String value, IconData icon, Color color) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, size: 16, color: color),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: color,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  value,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDetailItem(String label, String value, IconData icon, Color color) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(icon, size: 16, color: color),
-              const SizedBox(width: 4),
-              Expanded(
-                child: Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: color,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

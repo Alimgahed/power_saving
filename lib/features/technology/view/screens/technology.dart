@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:power_saving/core/widgets/main_screen/totl_header.dart';
+import 'package:power_saving/features/home/view/widgets/empaty.dart';
 import 'package:power_saving/features/technology/controller/technlogy.dart';
 
 class Technology extends StatelessWidget {
@@ -179,39 +181,7 @@ class Technology extends StatelessWidget {
 
             // Empty State
             if (controller.all_technology.isEmpty) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                        color: Colors.blue.shade50,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Icon(
-                        Icons.settings,
-                        size: 48,
-                        color: Colors.blue.shade300,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    const Text(
-                      'لا توجد تقنيات ترشيح',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'ابدأ بإضافة تقنية جديدة',
-                      style: TextStyle(fontSize: 14, color: Colors.black54),
-                    ),
-                  ],
-                ),
-              );
+              return EmptyStateWidget(color:  const Color(0xFF1E40AF), message: 'لا توجد تقنيات متاحة حالياً. الرجاء إضافة تقنية جديدة.');
             }
 
             // Get filtered technologies
@@ -266,58 +236,11 @@ class Technology extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Total Header
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Colors.blue.shade50, Colors.blue.shade100],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.blue.shade100),
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Colors.blue.shade100,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Icon(
-                            Icons.settings,
-                            color: Colors.blue.shade700,
-                            size: 24,
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'إجمالي تقنيات الترشيح',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black54,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                '${controller.all_technology.length} تقنية',
-                                style: const TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                  TotalHeader(
+                    count: filteredTech.length.toString(),
+                    title: controller.selectedFilter == 'all'
+                        ? 'إجمالي التقنيات'
+                        : 'إجمالي تقنيات ${controller.selectedFilter}',
                   ),
 
                   const SizedBox(height: 16),

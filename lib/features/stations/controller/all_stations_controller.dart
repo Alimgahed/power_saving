@@ -1,84 +1,135 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/features/stations/model/station_model.dart';
+import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/network/network.dart';
 
-class get_all_stations extends GetxController {
-  RxBool isLoading = false.obs;
-  RxBool isSearching = false.obs;
-  List<Station> allstations = [];
-  List<Station> filteredStations = [];
-  Station? station;
-  late TextEditingController searchController;
+class StationsController extends GetxController {
+  // Observable states
+  final loading = false.obs;
+  final isSearching = false.obs;
+  final searchError = ''.obs;
+
+  // Master & display data
+  final List<Station> allStations = [];      // non-observable
+  final stations = <Station>[].obs;           // observable for UI
+
+  // Search
+  final searchController = TextEditingController();
+  final RxString _searchQuery = ''.obs;
+  Worker? _searchWorker;
 
   @override
   void onInit() {
-    searchController = TextEditingController();
-    get_stations();
     super.onInit();
+    getStations();
+    _setupSearchWorker();
   }
 
   @override
   void onClose() {
+    _searchWorker?.dispose();
     searchController.dispose();
     super.onClose();
   }
 
-  void toggleSearch() {
-    isSearching.value = !isSearching.value;
-    if (!isSearching.value) {
-      searchController.clear();
-      filteredStations.clear();
-    }
-    update();
+  // -------------------------------
+  // Search Worker (Debounce)
+  // -------------------------------
+  void _setupSearchWorker() {
+    _searchWorker = debounce(
+      _searchQuery,
+      (query) => _performSearch(query),
+      time: const Duration(milliseconds: 300),
+    );
   }
 
-  void filterStations(String query) {
-    if (query.isEmpty) {
-      filteredStations.clear();
-    } else {
-      filteredStations = allstations.where((station) {
-        String branchName = station.branchName?.toLowerCase() ?? '';
-        String stationName = station.stationName.toLowerCase();
-        return branchName.contains(query.toLowerCase()) || 
-               stationName.contains(query.toLowerCase());
-      }).toList();
-    }
-    update();
+  // Called from UI on text change
+  void onSearchChanged(String query) {
+    _searchQuery.value = query;
   }
 
-  // ignore: non_constant_identifier_names
-  void get_stations() async {
-    isLoading.value = true;
-    allstations.clear();
-    filteredStations.clear();
-    
+  // -------------------------------
+  // API Call
+  // -------------------------------
+  Future<void> getStations() async {
     try {
-      final res = await fetchData(
-        "http://$ip/stations",
-      );
-      
-      if (res.statusCode == 200) {
-        final jsonData = json.decode(res.body);
-        List<dynamic> responseData = jsonData;
+      loading.value = true;
 
-        for (var i in responseData) {
-          station = Station.fromJson(i);
-          allstations.add(station!);
-        }
-        
-        isLoading.value = false;
-        update();
+      final response = await fetchData("http://$ip/stations");
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = jsonDecode(response.body);
+
+        allStations
+          ..clear()
+          ..addAll(
+            jsonData.map((e) => Station.fromJson(e)),
+          );
+
+        stations.value = List.from(allStations);
       } else {
-        isLoading.value = false;
-        update();
+        Get.snackbar(
+          'خطأ',
+          'فشل تحميل المحطات',
+          snackPosition: SnackPosition.BOTTOM,
+        );
       }
     } catch (e) {
-      isLoading.value = false;
-      update();
+      debugPrint('Stations error: $e');
+      Get.snackbar(
+        'خطأ',
+        'حدث خطأ أثناء تحميل البيانات',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      loading.value = false;
     }
   }
+
+  // -------------------------------
+  // Search Logic
+  // -------------------------------
+  void _performSearch(String query) {
+    if (query.isEmpty) {
+      stations.value = List.from(allStations);
+      searchError.value = '';
+      return;
+    }
+
+    final lowerQuery = query.toLowerCase();
+
+    final filtered = allStations.where((station) {
+      final stationName = station.stationName.toLowerCase();
+      final branchName = station.branchName?.toLowerCase() ?? '';
+
+      return stationName.contains(lowerQuery) ||
+             branchName.contains(lowerQuery);
+    }).toList();
+
+    if (filtered.isEmpty) {
+      searchError.value = 'لا توجد نتائج تطابق "$query"';
+      stations.value = [];
+    } else {
+      searchError.value = '';
+      stations.value = filtered;
+    }
+  }
+
+  // -------------------------------
+  // UI Helpers
+  // -------------------------------
+  void toggleSearch() {
+    isSearching.value = !isSearching.value;
+
+    if (!isSearching.value) {
+      searchController.clear();
+      _searchQuery.value = '';
+      searchError.value = '';
+      stations.value = List.from(allStations);
+    }
+  }
+
+ 
 }

@@ -4,7 +4,7 @@ import 'package:power_saving/core/constant/AppDimensions.dart';
 import 'package:power_saving/core/constant/colors.dart';
 import 'package:power_saving/core/widgets/buttons.dart';
 import 'package:power_saving/core/widgets/rtl_scafold.dart';
-import 'package:power_saving/features/planning/controller/add_places_controller.dart';
+import 'package:power_saving/features/planning/controller/place/add_places_controller.dart';
 import 'package:power_saving/core/widgets/custom_app_bar.dart';
 import 'package:power_saving/core/widgets/form_card.dart';
 import 'package:power_saving/core/widgets/section_header.dart';

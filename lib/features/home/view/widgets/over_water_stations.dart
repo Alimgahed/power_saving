@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:power_saving/features/home/model/home.dart';
 import 'package:power_saving/features/home/view/widgets/empaty.dart';
 import 'package:power_saving/features/home/view/widgets/water_stations_card.dart';
+
 /// Over Water Stations Section
 /// 
 /// Displays water stations that exceeded design capacity
@@ -119,30 +120,25 @@ class OverWaterStationsSection extends StatelessWidget {
   }
 
   Widget _buildScrollableList() {
+    // Create a dedicated ScrollController
+    final scrollController = ScrollController();
+    
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      child: Builder(
-        builder: (context) => ScrollConfiguration(
-          behavior: ScrollConfiguration.of(context).copyWith(
-            dragDevices: {
-              PointerDeviceKind.touch,
-              PointerDeviceKind.mouse,
-            },
-          ),
-          child: Scrollbar(
-            thumbVisibility: true,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: data.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 16),
-              itemBuilder: (context, index) => SizedBox(
-                width: 320,
-                child: WaterStationCard(
-                  item: data[index],
-                  color: color,
-                ),
-              ),
+      child: Scrollbar(
+        controller: scrollController,
+        thumbVisibility: true,
+        child: ListView.separated(
+          controller: scrollController, // Attach the same controller
+          scrollDirection: Axis.horizontal,
+          physics: const AlwaysScrollableScrollPhysics(),
+          itemCount: data.length,
+          separatorBuilder: (_, __) => const SizedBox(width: 16),
+          itemBuilder: (context, index) => SizedBox(
+            width: 320,
+            child: WaterStationCard(
+              item: data[index],
+              color: color,
             ),
           ),
         ),

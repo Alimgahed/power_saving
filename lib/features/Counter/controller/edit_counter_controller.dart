@@ -58,7 +58,7 @@ class EditCounter extends GetxController {
         looadig.value = false;
         showSuccessToast("تم تعديل العداد بنجاح");
         // Refresh the main counter list
-        Get.find<Counter_controller>().all_counter();
+        Get.find<CounterController>().fetchAllCounters();
       } else {
         looadig.value = false;
         Get.snackbar(

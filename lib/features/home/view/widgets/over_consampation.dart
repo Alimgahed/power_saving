@@ -119,32 +119,27 @@ class OverConsumptionSection extends StatelessWidget {
   }
 
   Widget _buildScrollableList() {
+    // Create a dedicated ScrollController
+    final scrollController = ScrollController();
+    
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      child: Builder(
-        builder: (context) => ScrollConfiguration(
-          behavior: ScrollConfiguration.of(context).copyWith(
-            dragDevices: {
-              PointerDeviceKind.touch,
-              PointerDeviceKind.mouse,
-            },
-          ),
-          child: Scrollbar(
-            thumbVisibility: true,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: data.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 16),
-              itemBuilder: (context, index) => SizedBox(
-                width: 300,
-                child: ConsumptionCard(
-                  item: data[index],
-                  label: label,
-                  icon: icon,
-                  color: color,
-                ),
-              ),
+      child: Scrollbar(
+        controller: scrollController,
+        thumbVisibility: true,
+        child: ListView.separated(
+          controller: scrollController, // Attach the same controller
+          scrollDirection: Axis.horizontal,
+          physics: const AlwaysScrollableScrollPhysics(),
+          itemCount: data.length,
+          separatorBuilder: (_, __) => const SizedBox(width: 16),
+          itemBuilder: (context, index) => SizedBox(
+            width: 300,
+            child: ConsumptionCard(
+              item: data[index],
+              label: label,
+              icon: icon,
+              color: color,
             ),
           ),
         ),

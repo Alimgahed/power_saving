@@ -37,9 +37,7 @@ class HomeScreen extends StatelessWidget {
       builder: (controller) {
         if (controller.loading.value) {
           return const Center(
-            child: CircularProgressIndicator(
-              color: Color(0xFF1E40AF),
-            ),
+            child:Text('جاري التحميل...'),
           );
         }
 

@@ -141,6 +141,13 @@ class HomeDrawer extends StatelessWidget {
         text: "المدن والقري",
         onTap: () => _navigationHelper.navigateWithAuth('./Places'),
       ),
+       if (_hasAccess([1,5]))
+      
+      _buildMenuItem(
+        icon: Icons.show_chart,
+        text: "منحني الأتزان",
+        onTap: () => _navigationHelper.navigateWithAuth('./BlanceCart'),
+      ),
       
       if (_hasAccess([1, 2, 3]))
         _buildMenuItem(

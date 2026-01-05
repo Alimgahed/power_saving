@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/planning/model/all_places_model.dart';
+import 'package:power_saving/features/planning/model/area_model.dart';
 import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/features/stations/model/station_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
