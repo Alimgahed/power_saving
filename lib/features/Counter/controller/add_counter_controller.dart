@@ -4,8 +4,8 @@ import 'dart:convert';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/Counter/controller/counter.dart';
-import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/features/Counter/model/Counter_model.dart';
+import 'package:power_saving/gloable/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
@@ -46,7 +46,7 @@ class addcounter extends GetxController {
     try {
       looading.value = true;
       final res = await postData(
-        "http://$ip/new-gauge",
+        "${ApiConfig.baseUrl}/new-gauge",
         (counter.toJson()),
       );
 
@@ -70,7 +70,7 @@ class addcounter extends GetxController {
   Future<void> allVoltige() async {
     try {
       final res = await fetchData(
-       "http://$ip/new-gauge",
+       "${ApiConfig.baseUrl}/new-gauge",
       );
 
       if (res.statusCode == 200) {

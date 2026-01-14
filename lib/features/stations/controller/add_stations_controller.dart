@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/features/stations/model/station_model.dart';
+import 'package:power_saving/gloable/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
@@ -48,7 +48,7 @@ class AddStationController extends GetxController {
     looading.value = true;
     try {
       final res = await postData(
-        "http://$ip/new-station",
+        "${ApiConfig.baseUrl}/new-station",
         {
           "name": name,
           "branch_id": branchId,
@@ -77,7 +77,7 @@ class AddStationController extends GetxController {
   Future<void> allBranches() async {
     try {
       final res = await fetchData(
-        "http://$ip/new-station",
+        "${ApiConfig.baseUrl}/new-station",
       );
 
       if (res.statusCode == 200) {

@@ -529,6 +529,14 @@ class AllUserScreen extends StatelessWidget {
                                       value: 4,
                                       child: Text("المعامل"),
                                     ),
+                                      const DropdownMenuItem(
+                                      value: 5,
+                                      child: Text("المخطط العام"),
+                                    ),
+                                     const DropdownMenuItem(
+                                      value: 6,
+                                      child: Text("التشغيل والصيانة"),
+                                    ),
                                   ],
                                   onChanged: (val) {
                                   groupIdController=val!;

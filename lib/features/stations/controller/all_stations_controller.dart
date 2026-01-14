@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/stations/model/station_model.dart';
-import 'package:power_saving/gloable/data.dart';
+import 'package:power_saving/gloable/ip_config.dart';
 import 'package:power_saving/network/network.dart';
 
 class StationsController extends GetxController {
@@ -57,7 +57,7 @@ class StationsController extends GetxController {
     try {
       loading.value = true;
 
-      final response = await fetchData("http://$ip/stations");
+      final response = await fetchData("${ApiConfig.baseUrl}/stations");
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = jsonDecode(response.body);

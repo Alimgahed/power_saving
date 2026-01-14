@@ -59,7 +59,7 @@ class HomeDrawer extends StatelessWidget {
 
   List<Widget> _buildMenuItems(BuildContext context) {
     return [
-      if (_hasAccess([1, 2]))
+      if (_hasAccess([1, 2,6]))
         _buildMenuItem(
           icon: Icons.ev_station,
           text: "المحطات",
@@ -94,7 +94,7 @@ class HomeDrawer extends StatelessWidget {
           onTap: () => _navigationHelper.navigateWithAuth("/Relations"),
         ),
       
-      if (_hasAccess([1, 4]))
+      if (_hasAccess([1, 4,6]))
         _buildMenuItem(
           icon: Icons.science,
           text: "الكماويات",
@@ -108,7 +108,7 @@ class HomeDrawer extends StatelessWidget {
           onTap: () => _navigationHelper.navigateWithAuth("/techbills"),
         ),
       
-      if (_hasAccess([1, 2]))
+      if (_hasAccess([1, 2,6]))
         _buildMenuItem(
           icon: Icons.water_drop_outlined,
           text: "التوقعات",
@@ -149,7 +149,7 @@ class HomeDrawer extends StatelessWidget {
         onTap: () => _navigationHelper.navigateWithAuth('./BlanceCart'),
       ),
       
-      if (_hasAccess([1, 2, 3]))
+      if (_hasAccess([1, 2, 3,6]))
         _buildMenuItem(
           icon: Icons.report,
           text: "التقارير",

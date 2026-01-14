@@ -4,10 +4,10 @@ import 'dart:convert';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:power_saving/features/Counter/model/Counter_model.dart';
-import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/features/relations/model/relations.dart';
 import 'package:power_saving/features/stations/model/station_model.dart';
 import 'package:power_saving/features/technology/model/tech_model.dart';
+import 'package:power_saving/gloable/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
@@ -35,7 +35,7 @@ class addrelationcontroller extends GetxController {
   Future<void> new_relations() async {
     try {
       final res = await fetchData(
-        "http://$ip/new-relation",
+        "${ApiConfig.baseUrl}/new-relation",
       );
 
       if (res.statusCode == 200) {
@@ -73,7 +73,7 @@ class addrelationcontroller extends GetxController {
             looading.value=true;
 
       final res = await postData(
-        "http://$ip/new-relation",
+        "${ApiConfig.baseUrl}/new-relation",
         (relation.toJson()),
       );
 

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/planning/model/all_places_model.dart';
-import 'package:power_saving/gloable/data.dart';
+import 'package:power_saving/gloable/ip_config.dart';
 import 'package:power_saving/network/network.dart';
 
 class PlacesController extends GetxController {
@@ -59,7 +59,7 @@ class PlacesController extends GetxController {
     try {
       loading.value = true;
 
-      final response = await fetchData("http://$ip/places");
+      final response = await fetchData("${ApiConfig.baseUrl}/places");
 
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body) as List<dynamic>;

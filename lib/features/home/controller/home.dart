@@ -4,7 +4,8 @@ import 'dart:html';
 import 'package:flutter/foundation.dart'; // kIsWeb
 import 'dart:ui_web' as ui_web; // platformViewRegistry
 import 'package:get/get.dart';
-import 'package:power_saving/gloable/data.dart';
+
+import 'package:power_saving/gloable/ip_config.dart';
 import 'package:power_saving/main.dart';
 import 'package:power_saving/features/home/model/home.dart';
 import 'package:power_saving/network/network.dart';
@@ -32,38 +33,41 @@ class HomeController extends GetxController {
     home();
   }
 
-  void home() async {
+  Future<void> home() async {
     try {
       loading.value = true;
 
-      final res = await fetchData("http://$ip/");
+      // ✅ Use new ApiConfig
+      final res = await fetchData(ApiConfig.baseUrl);
+
       if (res.statusCode == 200) {
         final jsonData = jsonDecode(res.body);
+
         consumptionModel = ConsumptionModel.fromJson(jsonData);
         waterChartHtml = jsonData["water_chart"] as String?;
 
         // Delay iframe creation to avoid lifecycle warning
         if (waterChartHtml != null && kIsWeb) {
-          Future.delayed(Duration(milliseconds: 100), () {
+          Future.delayed(const Duration(milliseconds: 100), () {
             _createIframe(waterChartHtml!);
             update();
           });
         }
 
         animateAll();
-        loading.value = false;
-        update();
       }
     } catch (e) {
+      print("❌ Error fetching home: $e");
+    } finally {
       loading.value = false;
-      print("Error fetching home: $e");
+      update();
     }
   }
 
   void _createIframe(String htmlContent) {
     iframeElement = IFrameElement()
-      ..style.width = '${width}px' // increased width
-      ..style.height = '${height}px' // increased height
+      ..style.width = '${width}px'
+      ..style.height = '${height}px'
       ..style.border = 'none'
       ..srcdoc = htmlContent;
 
@@ -91,9 +95,10 @@ class HomeController extends GetxController {
   void animateValue(RxnNum rxValue, num targetValue) {
     const duration = Duration(milliseconds: 200);
     const interval = Duration(milliseconds: 5);
-    int steps = duration.inMilliseconds ~/ interval.inMilliseconds;
-    num stepValue = targetValue / steps;
-    num current = 0.0;
+
+    final steps = duration.inMilliseconds ~/ interval.inMilliseconds;
+    final stepValue = targetValue / steps;
+    num current = 0;
 
     Timer.periodic(interval, (timer) {
       current += stepValue;

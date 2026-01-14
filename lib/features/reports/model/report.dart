@@ -19,9 +19,11 @@ class ReportBranch {
   final double totalPower;
   final double totalSolidAlum;
   final double totalWater;
+  final String? stationnames;
 
   ReportBranch({
     this.precent,
+    this.stationnames,
     this.station,
     this.accountnumber,
     required this.branchName,
@@ -51,7 +53,7 @@ delleyyear: json["delay_year"],
       accountnumber: json["account_number"]??"",
       stationname: json['station_name']??"",
       year: json['year']??0,
-      station: json['station_names']??"",
+      stationnames: json['station_names']??"",
       precent: json["percent"]??"",
       totalBill: (json['total_bill']??0 as num).toDouble(),
       totalChlorine: (json['total_chlorine']??0 as num).toDouble(),

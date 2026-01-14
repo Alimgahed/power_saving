@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/planning/model/all_places_model.dart';
 import 'package:power_saving/features/planning/model/area_model.dart';
-import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/features/stations/model/station_model.dart';
+import 'package:power_saving/gloable/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
@@ -45,7 +45,7 @@ required   Place  place,
     looading.value = true;
     try {
       final res = await postData(
-        "http://$ip/new-place",
+        "${ApiConfig.baseUrl}/new-place",
           (place.toJson()),
        
       );
@@ -68,7 +68,7 @@ required   Place  place,
   Future<void> allNewData() async {
     try {
       final res = await fetchData(
-        "http://$ip/new-place",
+        "${ApiConfig.baseUrl}/new-place",
       );
 
       if (res.statusCode == 200) {

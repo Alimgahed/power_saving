@@ -4,8 +4,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/features/stations/model/station_model.dart';
+import 'package:power_saving/gloable/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
   RxBool looading = false.obs;
@@ -44,7 +44,7 @@ class EditStationsController extends GetxController {
     Future<void> allBranches() async {
     try {
       final res = await fetchData(
-        "http://$ip/new-station",
+        "${ApiConfig.baseUrl}/new-station",
       );
 
       if (res.statusCode == 200) {
@@ -70,7 +70,7 @@ class EditStationsController extends GetxController {
     try {
       looading.value = true;
       final res = await postData(
-        "http://$ip/edit-station/$Stations_id",
+        "${ApiConfig.baseUrl}/edit-station/$Stations_id",
         {
           "name": name,
           "branch_id": branchId,

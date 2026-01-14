@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/features/chemcails/model/chemacial.dart';
 import 'package:power_saving/features/stations/model/station_model.dart';
 import 'package:power_saving/features/technology/model/tech_model.dart';
+import 'package:power_saving/gloable/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart' show fetchData, postData;
 
@@ -53,7 +53,7 @@ class addchemical extends GetxController {
     try {
       loading.value = true;
       final res = await postData(
-        "http://$ip/new-chemical",
+        "${ApiConfig.baseUrl}/new-chemical",
         (reference.toJson()),
       );
 
@@ -85,7 +85,7 @@ class addchemical extends GetxController {
   }) async {
     try {
       final res = await postData(
-        "http://$ip/edit-chemical/$id",
+        "${ApiConfig.baseUrl}/edit-chemical/$id",
          (reference.toJson()),
       );
 
@@ -111,7 +111,7 @@ class addchemical extends GetxController {
   void getchemicals() async {
     try {
       final res = await fetchData(
-       "http://$ip/new-chemical"
+       "${ApiConfig.baseUrl}/new-chemical"
       );
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
@@ -123,12 +123,7 @@ class addchemical extends GetxController {
           this.tech.add(TechnologyModel.fromJson(tech));
         });
      
-        update(); // Notify listeners
-        // for (var i in responseData) {
-        //   AlumChlorineReference chemical = AlumChlorineReference.fromJson(i);
-        //   chemicals.add(chemical);
-        //   update();
-        // }
+     
 
         update(); // Notify listeners
       }

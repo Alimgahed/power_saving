@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:get/get.dart';
-import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/features/chemcails/model/chemacial.dart';
+import 'package:power_saving/gloable/ip_config.dart';
 import 'package:power_saving/network/network.dart';
 
 class Chemacialcontroller extends GetxController {
@@ -21,7 +21,7 @@ class Chemacialcontroller extends GetxController {
       chemicals.clear();
       chemicals = []; // Clear the list before fetching new data
       final res = await fetchData(
-        "http://$ip/chemicals"
+        "${ApiConfig.baseUrl}/chemicals"
       );
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);

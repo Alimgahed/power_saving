@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/relations/model/relations.dart';
-import 'package:power_saving/gloable/data.dart';
+import 'package:power_saving/gloable/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
@@ -59,7 +59,7 @@ class RelationsController extends GetxController {
     try {
       loading.value = true;
 
-      final response = await fetchData("http://$ip/stg-relations");
+      final response = await fetchData("${ApiConfig.baseUrl}/stg-relations");
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = jsonDecode(response.body);
@@ -97,7 +97,7 @@ class RelationsController extends GetxController {
     try {
       isProcessing.value = true;
 
-      final response = await fetchData("http://$ip/edit-relation/$id");
+      final response = await fetchData("${ApiConfig.baseUrl}/edit-relation/$id");
 
       if (response.statusCode == 200) {
         // Refresh data from server to get updated status

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/Counter/model/Counter_model.dart';
 import 'package:power_saving/gloable/data.dart';
+import 'package:power_saving/gloable/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
@@ -112,7 +113,7 @@ class CounterController extends GetxController {
     try {
       looading.value = true;
 
-      final response = await fetchData("http://$ip/gauges");
+      final response = await fetchData("${ApiConfig.baseUrl}/gauges");
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = jsonDecode(response.body);
@@ -150,7 +151,7 @@ class CounterController extends GetxController {
   Future<void> addCounter(ElectricMeter counter) async {
     try {
       final response = await postData(
-        "http://$ip/new-station",
+        "${ApiConfig.baseUrl}/new-station",
         counter.toJson(),
       );
 

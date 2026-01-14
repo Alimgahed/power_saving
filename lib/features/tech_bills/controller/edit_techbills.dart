@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:power_saving/gloable/data.dart';
+import 'package:power_saving/gloable/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
@@ -42,7 +42,7 @@ class EditTechbillsController extends GetxController {
       looading.value = true;
 
       final res = await postData(
-        "http://$ip/edit-tech-bill/$id",
+        "${ApiConfig.baseUrl}/edit-tech-bill/$id",
         {
           "technology_chlorine_consump": chlorine,
           "technology_liquid_alum_consump": liquid,

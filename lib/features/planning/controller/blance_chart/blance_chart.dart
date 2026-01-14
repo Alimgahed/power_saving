@@ -5,13 +5,14 @@ import 'package:power_saving/features/planning/model/all_places_model.dart';
 import 'package:power_saving/features/planning/model/area_model.dart';
 import 'package:power_saving/features/planning/model/blance_model.dart';
 import 'package:power_saving/features/planning/view/screens/blance_chart/blance_chart_print_screen.dart';
-import 'package:power_saving/gloable/data.dart';
+import 'package:power_saving/gloable/ip_config.dart';
 import 'package:power_saving/network/network.dart';
 
 class BalanceChartController extends GetxController {
   var isloading = false.obs;
   int areaid=0;
   bool edited = true;
+  TextEditingController incresableController = TextEditingController();
   var balanceData = Rxn<WaterDataResponse>();
   final areas = <AreaOfService>[].obs; 
   /// 🔽 Calculation method
@@ -40,7 +41,7 @@ class BalanceChartController extends GetxController {
    Future<void> allareas() async {
     try {
 
-      final response = await fetchData("http://$ip/all-areas");
+      final response = await fetchData("${ApiConfig.baseUrl}/all-areas");
       
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body) as List<dynamic>;
@@ -73,7 +74,7 @@ class BalanceChartController extends GetxController {
 
   Future<void> allvalues() async {
     try {
-      final response = await fetchData("http://$ip/place-types");
+      final response = await fetchData("${ApiConfig.baseUrl}/place-types");
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = jsonDecode(response.body);
@@ -108,6 +109,7 @@ class BalanceChartController extends GetxController {
     final Map<String, dynamic> body = {
       "calc_type": selectedMethod.value,
       "is_modified": edited,
+      "increasable": int.tryParse(incresableController.text) ?? 0,
       "goal_year": int.tryParse(yearController.text) ?? 0,
     };
 
@@ -126,7 +128,7 @@ Future<void> submitData(int id) async {
 
   try {
     final response = await postData(
-      "http://$ip/balance-plot-calc/$id",
+      "${ApiConfig.baseUrl}/balance-plot-calc/$id",
       body,
     );
 

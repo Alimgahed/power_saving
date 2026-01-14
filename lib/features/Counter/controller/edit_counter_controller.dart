@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'dart:convert';
 
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/Counter/controller/counter.dart';
-import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/features/Counter/model/Counter_model.dart';
+import 'package:power_saving/gloable/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
@@ -50,7 +48,7 @@ class EditCounter extends GetxController {
     try {
       looadig.value = true;
       final res = await postData(
-        "http://$ip/edit-gauge",
+        "${ApiConfig.baseUrl}/edit-gauge",
         (counter.toJson()),
       );
 
@@ -77,7 +75,7 @@ class EditCounter extends GetxController {
   Future<void> allVoltige() async {
     try {
       final res = await fetchData(
-        "http://$ip/new-gauge",
+        "${ApiConfig.baseUrl}/new-gauge",
       );
 
       if (res.statusCode == 200) {

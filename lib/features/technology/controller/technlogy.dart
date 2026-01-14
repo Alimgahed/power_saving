@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/features/technology/model/tech_model.dart';
+import 'package:power_saving/gloable/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
@@ -59,7 +60,7 @@ class TechnlogyController extends GetxController {
     
     try {
       final res = await fetchData(
-        "http://$ip/technologies",
+        "${ApiConfig.baseUrl}/technologies",
       );
 
       if (res.statusCode == 200) {
@@ -90,7 +91,7 @@ class TechnlogyController extends GetxController {
     try {
       looading.value = true;
       final res = await postData(
-        "http://$ip/new-tech",
+        "${ApiConfig.baseUrl}/new-tech",
         (tech.toJson()), // ✅ Proper JSON encoding
       );
 

@@ -7,6 +7,7 @@ import 'package:power_saving/core/widgets/rtl_scafold.dart';
 
 import 'package:power_saving/features/stations/controller/all_stations_controller.dart';
 import 'package:power_saving/features/stations/view/widgets/Stations_body.dart';
+import 'package:power_saving/gloable/data.dart';
 
 
 class StationsScreen extends StatelessWidget {
@@ -31,20 +32,16 @@ class StationsScreen extends StatelessWidget {
           },
           onNavigateHome: () => Get.offNamed('/home'),
           customActions: [
-            if (controller.isSearching.value)
+            // if (controller.isSearching.value)
+            
+            if(user?.groupId==1||user?.groupId==2)
               ReusableActionButton(
                 label: 'إضافة محطة',
                 icon: Icons.add,
                 route: '/addStations',
               
               ),
-            if (!controller.isSearching.value)
-                ReusableActionButton(
-                label: 'إضافة محطة',
-                icon: Icons.add,
-                route: '/addstations',
-              
-              ),
+         
           ],
         ),
       body: StationsBody(controller: controller)

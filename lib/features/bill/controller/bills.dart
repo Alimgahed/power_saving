@@ -3,9 +3,9 @@ import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/features/bill/model/bills_model.dart';
 import 'package:power_saving/features/relations/model/relations.dart';
+import 'package:power_saving/gloable/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
@@ -258,7 +258,7 @@ class Bills extends GetxController {
       gauges = [];
       final accountNumber = Uri.encodeComponent(number);
 
-      final res = await fetchData("http://$ip/new-bill/$accountNumber");
+      final res = await fetchData("${ApiConfig.baseUrl}/new-bill/$accountNumber");
 
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
@@ -299,7 +299,7 @@ class Bills extends GetxController {
     try {
       isLoading.value = true;
       final res = await postData(
-        "http://$ip/new-bill/$number",
+        "${ApiConfig.baseUrl}/new-bill/$number",
       (bill.toJson()),
       );
 

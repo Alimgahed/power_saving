@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:get/get.dart';
-import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/features/auth/model/login.dart';
+import 'package:power_saving/gloable/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +26,7 @@ class AllUserController extends GetxController {
       errorMessage.value = '';
       users.value = [];
 
-      final res = await fetchData("http://$ip/all-users");
+      final res = await fetchData("${ApiConfig.baseUrl}/all-users");
 
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
@@ -108,7 +108,7 @@ class AllUserController extends GetxController {
     isLoading.value = true;
 
    final res = await postData(
-  "http://$ip/edit-user/${editedUser.empCode}",
+  "${ApiConfig.baseUrl}/edit-user/${editedUser.empCode}",
   
     editedUser.toJson()
    

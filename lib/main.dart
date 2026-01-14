@@ -11,6 +11,8 @@ import 'package:power_saving/features/planning/view/screens/blance_chart/blance_
 import 'package:power_saving/features/planning/view/screens/places/add_places.dart';
 import 'package:power_saving/features/planning/view/screens/places/edit_places.dart';
 import 'package:power_saving/features/planning/view/screens/places/places.dart';
+import 'package:power_saving/features/relations/view/screens/relatiuons.dart';
+import 'package:power_saving/features/reports/view/screens/report.dart';
 import 'package:power_saving/shared_pref/cache.dart';
 import 'package:power_saving/features/Counter/view/screens/Counter.dart';
 import 'package:power_saving/features/Counter/view/screens/add_Counter.dart';
@@ -29,8 +31,6 @@ import 'package:power_saving/features/chemcails/view/screens/edit_chemcials.dart
 import 'package:power_saving/features/home/view/screens/home.dart';
 import 'package:power_saving/features/predaction/view/screens/predaction.dart';
 import 'package:power_saving/features/relations/view/screens/add_relation.dart';
-import 'package:power_saving/features/relations/view/screens/relations.dart';
-import 'package:power_saving/features/reports/view/screens/report.dart';
 import 'package:power_saving/features/stations/view/screens/add_station.dart';
 import 'package:power_saving/features/stations/view/screens/edit_staion.dart';
 import 'package:power_saving/features/stations/view/screens/stations.dart';

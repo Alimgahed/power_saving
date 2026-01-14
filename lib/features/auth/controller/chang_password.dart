@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:power_saving/gloable/data.dart';
+import 'package:power_saving/gloable/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
@@ -25,7 +25,7 @@ class ChangePasswordController extends GetxController {
     isLoading.value = true;
 
    final res = await postData(
-  "http://$ip/change-password",
+  "${ApiConfig.baseUrl}/change-password",
   {
     "old_password": old,
     "new_password": newpassword,

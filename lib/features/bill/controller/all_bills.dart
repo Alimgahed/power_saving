@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/features/bill/model/bills_model.dart';
+import 'package:power_saving/gloable/ip_config.dart';
 import 'package:power_saving/network/network.dart';
 
 class AllBills extends GetxController {
@@ -61,7 +61,7 @@ class AllBills extends GetxController {
       isLoading.value = true;
       errorMessage.value = '';
 
-      final res = await fetchData("http://$ip/view-bills");
+      final res = await fetchData("${ApiConfig.baseUrl}/view-bills");
 
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);

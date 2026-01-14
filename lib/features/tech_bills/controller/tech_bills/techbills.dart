@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/features/tech_bills/model/tech_bill.dart';
+import 'package:power_saving/gloable/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
@@ -130,7 +130,7 @@ class Techbills extends GetxController {
     try {
       looading.value = true;
       techBills.clear();
-      final res = await fetchData("http://$ip/tech-bills");
+      final res = await fetchData("${ApiConfig.baseUrl}/tech-bills");
 
       if (res.statusCode == 200) {
         looading.value = false;
@@ -162,7 +162,7 @@ class Techbills extends GetxController {
       loadingIndex.value = index;
 
       final res = await postData(
-        "http://$ip/edit-tech-bill/$id",
+        "${ApiConfig.baseUrl}/edit-tech-bill/$id",
         {
           "technology_chlorine_consump": chlorine,
           "technology_liquid_alum_consump": liquid,
