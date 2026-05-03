@@ -91,26 +91,45 @@ class AddRelationScreen extends StatelessWidget {
       val == null ? 'يجب ادخال اسم التكنولوجيا' : null,
 ),
                     const SizedBox(height: AppDimensions.paddingL),
-                                     CustomSearchableDropdown<bool>(
+                      CustomSearchableDropdown<String>(
+  items: controller.electricMeterList.map((p) {
+    return DropdownMenuItem<String>(
+      value: p.accountNumber!,
+      child: Text(p.accountNumber!),
+    );
+  }).toList(),
+
+  onChanged: (value) => controller.counterid = value!,
+  labelText: 'العداد',
+  hintText: 'اختر العداد',
+  prefixIcon: Icons.bolt,
+  validator: (val) =>
+      val == null ? 'يجب ادخال اسم العداد' : null,
+),
+                    const SizedBox(height: AppDimensions.paddingL),
+
+                 CustomSearchableDropdown<bool>(
+                  initialValue: controller.issource,
   items: [
     DropdownMenuItem<bool>(
       value: true,
-      child: Text('نعم'),
+      child: Text('عدد مأخذ'),
     ),
     DropdownMenuItem<bool>(
       value: false,
-      child: Text('لا'),
+      child: Text('ليس عدد مأخذ'),
     ),
   ],
 
-  onChanged: (value) => controller.isSource = value!,
-  labelText: 'عدد مأخذ',
-  hintText: ' هل هذا العداد هو  عدد مأخذ؟',
-  prefixIcon: Icons.bolt,
+  onChanged: (value) => controller.issource = value!,
+  labelText: 'هل هو عدد مأخذ؟',
+  hintText: 'اختر الخيار',
+  prefixIcon: Icons.source,
   validator: (val) =>
-      val == null ? 'يجب اقيمةدخال ' : null,
+      val == null ? 'يجب ادخال اسم النوع' : null,
 ),
                     const SizedBox(height: AppDimensions.paddingL),
+
 
                     // Submit Button
                     Obx(() {
@@ -122,7 +141,7 @@ class AddRelationScreen extends StatelessWidget {
                           if (_globalKey.currentState!.validate()) {
                             await controller.addRelations(
                               StationGaugeTechnologyRelation(
-                                isSource: controller.isSource,
+                                issource: controller.issource,
                                 accountNumber: controller.counterid!,
                                 relationStatus: true,
                                 stationId: controller.stationid!,

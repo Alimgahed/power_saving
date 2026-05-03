@@ -549,6 +549,8 @@ class CustomSearchableDropdown<T> extends StatelessWidget {
         return _itemToString(match);
       },
 
+      compareFn: (item, selectedItem) => item == selectedItem,
+
       popupProps: const PopupProps.menu(
         showSearchBox: true,
         searchDelay: Duration(milliseconds: 300),

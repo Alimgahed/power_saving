@@ -19,6 +19,7 @@ class addrelationcontroller extends GetxController {
   bool isSource=false;
   int? techid;
   String? counterid;
+  bool issource=false;
   int? stationid;
 
   @override

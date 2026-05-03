@@ -42,10 +42,13 @@ class Station {
 }
 
 class FollowingStationsController extends GetxController {
-  List<Station> stations = [];
+  RxList<Station> stations = <Station>[].obs;
 
   Station? selectedStation;
   TechnologyModel? selectedTech;
+
+  // Filter for new tech bills
+  RxnString selectedBranch = RxnString();
 
   @override
   void onInit() {
@@ -58,23 +61,44 @@ class FollowingStationsController extends GetxController {
 
     if (res.statusCode == 200) {
       final List data = json.decode(res.body);
-      stations = data.map((e) => Station.fromJson(e)).toList();
+      stations.value = data.map((e) => Station.fromJson(e)).toList();
       update();
     }
   }
 
- void onStationChanged(Station? station) {
-  selectedStation = station;
-  selectedTech = null;
+  void onStationChanged(Station? station) {
+    selectedStation = station;
+    selectedTech = null;
 
-  print("Station: ${station?.stationName}");
-  print("Techs count: ${station?.techs.length}");
+    print("Station: ${station?.stationName}");
+    print("Techs count: ${station?.techs.length}");
 
-  update();
-}
+    update();
+  }
 
   void onTechChanged(TechnologyModel? tech) {
     selectedTech = tech;
+    update();
+  }
+
+  /// Get list of all unique branches
+  List<String> getBranches() {
+    return stations
+        .map((station) => station.branchName)
+        .toSet()
+        .toList()
+      ..sort();
+  }
+
+  /// Filter by branch
+  void filterByBranch(String? branch) {
+    selectedBranch.value = branch;
+    update();
+  }
+
+  /// Clear all filters
+  void clearFilters() {
+    selectedBranch.value = null;
     update();
   }
 }

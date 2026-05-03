@@ -59,7 +59,7 @@ class HomeDrawer extends StatelessWidget {
 
   List<Widget> _buildMenuItems(BuildContext context) {
     return [
-      if (_hasAccess([1, 2,6]))
+      if (_hasAccess([1, 2,6,7]))
         _buildMenuItem(
           icon: Icons.ev_station,
           text: "المحطات",
@@ -80,21 +80,21 @@ class HomeDrawer extends StatelessWidget {
           onTap: () => VoltageDialogHelper.showVoltageDialog(context),
         ),
       
-      if (_hasAccess([1, 2, 3]))
+      if (_hasAccess([1, 2, 3,7]))
         _buildMenuItem(
           icon: Icons.memory,
           text: "التكنولوجيا",
           onTap: () => _navigationHelper.navigateWithAuth("/Technology"),
         ),
       
-      if (_hasAccess([1, 3]))
+      if (_hasAccess([1, 3,7]))
         _buildMenuItem(
           icon: Icons.ac_unit_sharp,
           text: "الربط",
           onTap: () => _navigationHelper.navigateWithAuth("/Relations"),
         ),
       
-      if (_hasAccess([1, 4,6]))
+      if (_hasAccess([1, 4,6,7]))
         _buildMenuItem(
           icon: Icons.science,
           text: "الكماويات",
@@ -107,8 +107,14 @@ class HomeDrawer extends StatelessWidget {
           text: "المكتب الفني",
           onTap: () => _navigationHelper.navigateWithAuth("/techbills"),
         ),
+         if (_hasAccess([1, 2]))
+        _buildMenuItem(
+          icon: Icons.engineering,
+          text: "ادخال كميات مياة جديدة",
+          onTap: () => _navigationHelper.navigateWithAuth("/NewTechBills"),
+        ),
       
-      if (_hasAccess([1, 2,6]))
+      if (_hasAccess([1, 2,6,7]))
         _buildMenuItem(
           icon: Icons.water_drop_outlined,
           text: "التوقعات",
@@ -122,7 +128,7 @@ class HomeDrawer extends StatelessWidget {
           onTap: () => _navigationHelper.navigateWithAuth('./bills'),
         ),
       
-      if (_hasAccess([1, 2, 3]))
+      if (_hasAccess([1, 2, 3,7]))
         _buildMenuItem(
           icon: Icons.receipt_long_rounded,
           text: "فواتير التقنيات",
@@ -154,7 +160,7 @@ class HomeDrawer extends StatelessWidget {
         onTap: () => _navigationHelper.navigateWithAuth('./BlanceCart'),
       ),
       
-      if (_hasAccess([1, 2, 3,6]))
+      if (_hasAccess([1, 2, 3,6,7]))
         _buildMenuItem(
           icon: Icons.report,
           text: "التقارير",

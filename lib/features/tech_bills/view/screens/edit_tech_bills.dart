@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:power_saving/features/tech_bills/controller/edit_techbills.dart';
+import 'package:power_saving/features/tech_bills/controller/tech_bills/edit_techbills.dart';
 import 'package:power_saving/features/tech_bills/model/tech_bill.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 

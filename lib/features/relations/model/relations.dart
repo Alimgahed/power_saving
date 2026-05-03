@@ -3,9 +3,9 @@ class StationGaugeTechnologyRelation {
   final bool relationStatus;
   final int? stationGaugeTechnologyId;
   final int stationId;
-  final bool? isSource;
   final String? stationName;
   final int technologyId;
+  final bool? issource;
   final String? branchName;
   final String? technologyName;
 
@@ -18,6 +18,7 @@ class StationGaugeTechnologyRelation {
     this.branchName,
     required this.technologyId,
     this.technologyName,
+     this.issource,
   });
 
   factory StationGaugeTechnologyRelation.fromJson(Map<String, dynamic> json) {
@@ -30,6 +31,7 @@ class StationGaugeTechnologyRelation {
       stationName: json['station_name'],
       technologyId: json['technology_id'],
       technologyName: json['technology_name'],
+      issource: json['issource'],
     );
   }
 
@@ -40,6 +42,7 @@ class StationGaugeTechnologyRelation {
       'station_guage_technology_id': stationGaugeTechnologyId,
       'station_id': stationId,
       'branch_name': branchName,
+      'issource': issource,
       'station_name': stationName,
       'technology_id': technologyId,
       'technology_name': technologyName,

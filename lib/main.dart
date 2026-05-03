@@ -14,6 +14,7 @@ import 'package:power_saving/features/planning/view/screens/places/places.dart';
 import 'package:power_saving/features/relations/view/screens/relatiuons.dart';
 import 'package:power_saving/features/reports/view/screens/report.dart';
 import 'package:power_saving/features/stations/view/screens/following_stations.dart';
+import 'package:power_saving/features/tech_bills/view/screens/new_tech_bills.dart';
 import 'package:power_saving/shared_pref/cache.dart';
 import 'package:power_saving/features/Counter/view/screens/Counter.dart';
 import 'package:power_saving/features/Counter/view/screens/add_Counter.dart';
@@ -131,6 +132,7 @@ if (jsuser.isNotEmpty && jsuser != "{}") {
         GetPage(name: '/techBill', page: () => TechBill()),
         GetPage(name: '/Countrts', page: () => Counterscreen()),
         GetPage(name: '/addCounter', page: () => AddElectricMeterScreen()),
+        GetPage(name: '/NewTechBills', page: () => NewTechBillsScreen()),
         GetPage(name: '/FollowingStations', page: () => FollowingStationsScreen()),
         GetPage(name: '/Relations', page: () => RelationsScreen()),
         GetPage(name: '/Addrelation', page: () => AddRelationScreen()),
