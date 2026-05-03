@@ -19,6 +19,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(HomeController());
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -33,7 +34,6 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildBody() {
     return GetBuilder<HomeController>(
-      init: HomeController(),
       builder: (controller) {
         if (controller.loading.value) {
           return const Center(

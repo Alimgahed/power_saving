@@ -25,7 +25,6 @@ class StationsScreen extends StatelessWidget {
           searchController: controller.searchController,
           onSearchChanged: controller.onSearchChanged,
           onSearchToggle: () {
-            // Validate before toggling the search
           
               controller.toggleSearch();
             
@@ -38,7 +37,7 @@ class StationsScreen extends StatelessWidget {
               ReusableActionButton(
                 label: 'إضافة محطة',
                 icon: Icons.add,
-                route: '/addStations',
+                route: '/addstations',
               
               ),
          

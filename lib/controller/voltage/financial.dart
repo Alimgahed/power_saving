@@ -4,7 +4,6 @@ import 'dart:html';
 import 'package:flutter/foundation.dart'; // kIsWeb
 import 'dart:ui_web' as ui_web; // platformViewRegistry
 import 'package:get/get.dart';
-import 'package:power_saving/gloable/data.dart';
 import 'package:power_saving/gloable/ip_config.dart';
 import 'package:power_saving/main.dart';
 import 'package:power_saving/network/network.dart';
@@ -27,7 +26,7 @@ class FinancialController extends GetxController {
     try {
       loading.value = true;
 
-      final res = await fetchData(ApiConfig.baseUrl);
+      final res = await fetchData("${ApiConfig.baseUrl}/financial-analysis");
       if (res.statusCode == 200) {
         final jsonData = jsonDecode(res.body);
         waterChartHtml = jsonData["water_chart"] as String?;

@@ -3,6 +3,7 @@ class StationGaugeTechnologyRelation {
   final bool relationStatus;
   final int? stationGaugeTechnologyId;
   final int stationId;
+  final bool? isSource;
   final String? stationName;
   final int technologyId;
   final String? branchName;

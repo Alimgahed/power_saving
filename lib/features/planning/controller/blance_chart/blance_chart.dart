@@ -54,6 +54,7 @@ class BalanceChartController extends GetxController {
         
         // Update display list
        areas.value = List.from(areas);
+       update();
         
       } else {
         Get.snackbar(

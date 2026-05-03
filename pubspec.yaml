@@ -23,6 +23,7 @@ dependencies:
   google_fonts: ^6.3.3
   html: ^0.15.6
   shared_preferences: ^2.5.2
+  dropdown_search: ^6.0.2
   flutter_web_plugins:
     sdk: flutter
 

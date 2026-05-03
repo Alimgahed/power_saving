@@ -25,174 +25,179 @@ class AddChemicalScreen extends StatelessWidget {
         title: "إضافة مرجع كيميائي",
         backRoute: '/Chemicals',
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppDimensions.paddingXL),
-        child: FormCard(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                /// ===============================
-                /// Chemicals Ranges
-                /// ===============================
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _chemicalRange(
-                      title: 'الكلور',
-                      icon: Icons.water_drop,
-                      color: Colors.cyan,
-                      from: controller.chlorineFromController,
-                      to: controller.chlorineToController,
-                    ),
-                    const SizedBox(width: 24),
-                    _chemicalRange(
-                      title: 'الشبة الصلبة',
-                      icon: Icons.grain,
-                      color: Colors.brown,
-                      from: controller.solidAlumFromController,
-                      to: controller.solidAlumToController,
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: AppDimensions.paddingM),
-
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _chemicalRange(
-                      title: 'الشبة السائلة',
-                      icon: Icons.opacity,
-                      color: Colors.orange,
-                      from: controller.liquidAlumFromController,
-                      to: controller.liquidAlumToController,
-                    ),
-                    const SizedBox(width: 24),
-
-                    /// ===============================
-                    /// Basic Info
-                    /// ===============================
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SectionHeader(
-                            title: 'المعلومات الأساسية',
-                            icon: Icons.settings,
-                            color: AppColors.primary,
-                          ),
-
-                          CustomDropdownFormField<int>(
-                            items: controller.waterSourceList.map((source) {
-                              return DropdownMenuItem<int>(
-                                value: source.waterSourceId,
-                                child: Text(source.waterSourceName!),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              controller.waterSourceId = value;
-                            },
-                            labelText: 'مصدر المياه',
-                            hintText: 'اختر مصدر المياه',
-                            prefixIcon: Icons.water_drop,
-                            validator: (val) =>
-                                val == null ? 'الرجاء اختيار مصدر المياه' : null,
-                          ),
-
-                          SizedBox(height: AppDimensions.paddingM),
-
-                          CustomDropdownFormField<String>(
-                            items: const [
-                              DropdownMenuItem(
-                                value: "winter",
-                                child: Text("شتاء"),
-                              ),
-                              DropdownMenuItem(
-                                value: "summer",
-                                child: Text("صيف"),
-                              ),
-                            ],
-                            onChanged: (val) {
-                              controller.season = val!;
-                            },
-                            labelText: 'الموسم',
-                            hintText: 'اختر الموسم',
-                            prefixIcon: Icons.calendar_month,
-                            validator: (val) =>
-                                val == null ? 'هذا الحقل مطلوب' : null,
-                          ),
-                         SizedBox(height: AppDimensions.paddingM),
-                          CustomDropdownFormField<int>(
-                            items: controller.tech.map((tech) {
-                              return DropdownMenuItem<int>(
-                                value: tech.technologyId,
-                                child: Text(tech.technologyName),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              controller.technologyId = value;
-                            },
-                            labelText: 'تقنية المعالجة',
-                            hintText: 'اختر تقنية المعالجة',
-                            prefixIcon: Icons.precision_manufacturing,
-                            validator: (val) =>
-                                val == null ? 'الرجاء اختيار تقنية' : null,
-                          ),
-                        ],
+      body: GetBuilder<addchemical>(
+        builder: (controller) {
+        return  SingleChildScrollView(
+          padding: const EdgeInsets.all(AppDimensions.paddingXL),
+          child: FormCard(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  /// ===============================
+                  /// Chemicals Ranges
+                  /// ===============================
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _chemicalRange(
+                        title: 'الكلور',
+                        icon: Icons.water_drop,
+                        color: Colors.cyan,
+                        from: controller.chlorineFromController,
+                        to: controller.chlorineToController,
                       ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: AppDimensions.paddingL),
-
-                /// ===============================
-                /// Save Button
-                /// ===============================
-                Obx(() {
-                  return PrimaryButton(
-                    label: 'حفظ المرجع',
-                    icon: Icons.save,
-                    isLoading: controller.loading.value,
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        if (!_validateRanges(controller)) return;
-
-                        await controller.addchemicals(
-                          reference: AlumChlorineReference(
-                            chlorineRangeFrom: double.parse(
-                              controller.chlorineFromController.text,
+                      const SizedBox(width: 24),
+                      _chemicalRange(
+                        title: 'الشبة الصلبة',
+                        icon: Icons.grain,
+                        color: Colors.brown,
+                        from: controller.solidAlumFromController,
+                        to: controller.solidAlumToController,
+                      ),
+                    ],
+                  ),
+        
+                  const SizedBox(height: AppDimensions.paddingM),
+        
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _chemicalRange(
+                        title: 'الشبة السائلة',
+                        icon: Icons.opacity,
+                        color: Colors.orange,
+                        from: controller.liquidAlumFromController,
+                        to: controller.liquidAlumToController,
+                      ),
+                      const SizedBox(width: 24),
+        
+                      /// ===============================
+                      /// Basic Info
+                      /// ===============================
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SectionHeader(
+                              title: 'المعلومات الأساسية',
+                              icon: Icons.settings,
+                              color: AppColors.primary,
                             ),
-                            chlorineRangeTo: double.parse(
-                              controller.chlorineToController.text,
+        
+                            CustomDropdownFormField<int>(
+                              items: controller.waterSourceList.map((source) {
+                                return DropdownMenuItem<int>(
+                                  value: source.waterSourceId,
+                                  child: Text(source.waterSourceName!),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                controller.waterSourceId = value;
+                              },
+                              labelText: 'مصدر المياه',
+                              hintText: 'اختر مصدر المياه',
+                              prefixIcon: Icons.water_drop,
+                              validator: (val) =>
+                                  val == null ? 'الرجاء اختيار مصدر المياه' : null,
                             ),
-                            liquidAlumRangeFrom: double.parse(
-                              controller.liquidAlumFromController.text,
+        
+                            SizedBox(height: AppDimensions.paddingM),
+        
+                            CustomDropdownFormField<String>(
+                              items: const [
+                                DropdownMenuItem(
+                                  value: "winter",
+                                  child: Text("شتاء"),
+                                ),
+                                DropdownMenuItem(
+                                  value: "summer",
+                                  child: Text("صيف"),
+                                ),
+                              ],
+                              onChanged: (val) {
+                                controller.season = val!;
+                              },
+                              labelText: 'الموسم',
+                              hintText: 'اختر الموسم',
+                              prefixIcon: Icons.calendar_month,
+                              validator: (val) =>
+                                  val == null ? 'هذا الحقل مطلوب' : null,
                             ),
-                            liquidAlumRangeTo: double.parse(
-                              controller.liquidAlumToController.text,
+                           SizedBox(height: AppDimensions.paddingM),
+                            CustomDropdownFormField<int>(
+                              items: controller.tech.map((tech) {
+                                return DropdownMenuItem<int>(
+                                  value: tech.technologyId,
+                                  child: Text(tech.technologyName),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                controller.technologyId = value;
+                              },
+                              labelText: 'تقنية المعالجة',
+                              hintText: 'اختر تقنية المعالجة',
+                              prefixIcon: Icons.precision_manufacturing,
+                              validator: (val) =>
+                                  val == null ? 'الرجاء اختيار تقنية' : null,
                             ),
-                            solidAlumRangeFrom: double.parse(
-                              controller.solidAlumFromController.text,
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+        
+                  const SizedBox(height: AppDimensions.paddingL),
+        
+                  /// ===============================
+                  /// Save Button
+                  /// ===============================
+                  Obx(() {
+                    return PrimaryButton(
+                      label: 'حفظ المرجع',
+                      icon: Icons.save,
+                      isLoading: controller.loading.value,
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          if (!_validateRanges(controller)) return;
+        
+                          await controller.addchemicals(
+                            reference: AlumChlorineReference(
+                              chlorineRangeFrom: double.parse(
+                                controller.chlorineFromController.text,
+                              ),
+                              chlorineRangeTo: double.parse(
+                                controller.chlorineToController.text,
+                              ),
+                              liquidAlumRangeFrom: double.parse(
+                                controller.liquidAlumFromController.text,
+                              ),
+                              liquidAlumRangeTo: double.parse(
+                                controller.liquidAlumToController.text,
+                              ),
+                              solidAlumRangeFrom: double.parse(
+                                controller.solidAlumFromController.text,
+                              ),
+                              solidAlumRangeTo: double.parse(
+                                controller.solidAlumToController.text,
+                              ),
+                              season: controller.season!,
+                              technologyId: controller.technologyId!,
+                              waterSourceId: controller.waterSourceId!,
                             ),
-                            solidAlumRangeTo: double.parse(
-                              controller.solidAlumToController.text,
-                            ),
-                            season: controller.season!,
-                            technologyId: controller.technologyId!,
-                            waterSourceId: controller.waterSourceId!,
-                          ),
-                        );
-                      }
-                    },
-                  );
-                }),
-              ],
+                          );
+                        }
+                      },
+                    );
+                  }),
+                ],
+              ),
             ),
           ),
-        ),
+        );  
+        },
+        
       ),
     );
   }

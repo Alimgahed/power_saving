@@ -669,7 +669,7 @@ class _BillCard extends StatelessWidget {
           ElevatedButton.icon(
             onPressed: () {
               // Show bill details - you can implement the dialog here
-              // _showBillDetailsDialog(bill, controller);
+              showBillDetailsDialog(bill, controller);
             },
             icon: const Icon(Icons.visibility, size: 14),
             label: const Text(
@@ -760,3 +760,359 @@ class _InfoCard extends StatelessWidget {
     );
   }
 }
+void showBillDetailsDialog(GuageBill bill, AllBills controller) {
+  final nf = NumberFormat('#,###.##');
+
+  Get.dialog(
+    Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 700, maxHeight: 750),
+        child: Column(
+          children: [
+
+            /// ================= HEADER =================
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.blue.shade600, Colors.blue.shade800],
+                ),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.receipt_long,
+                      color: Colors.white, size: 28),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'تفاصيل فاتورة العداد',
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                        Text(
+                          '${controller.getMonthName(bill.billMonth)} ${bill.billYear}',
+                          style:
+                              const TextStyle(color: Colors.white70),
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    icon:
+                        const Icon(Icons.close, color: Colors.white),
+                    onPressed: () => Get.back(),
+                  )
+                ],
+              ),
+            ),
+
+            /// ================= BODY =================
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+
+                    /// -------- المعلومات العامة --------
+                    _buildDialogSection(
+                      'المعلومات العامة',
+                      Icons.info,
+                      Colors.teal,
+                      [
+                        _buildDialogDetailRow(
+                            'رقم الحساب',
+                            bill.accountNumber,
+                            Icons.confirmation_number),
+
+                        _buildDialogDetailRow(
+                            'الشهر',
+                            controller.getMonthName(bill.billMonth),
+                            Icons.calendar_month),
+
+                        _buildDialogDetailRow(
+                            'السنة',
+                            bill.billYear.toString(),
+                            Icons.calendar_today),
+
+                        _buildDialogDetailRow(
+                            'حالة الدفع',
+                            bill.isPaid == true
+                                ? 'مدفوعة'
+                                : 'غير مدفوعة',
+                            bill.isPaid == true
+                                ? Icons.check_circle
+                                : Icons.pending,
+                            valueColor: bill.isPaid == true
+                                ? Colors.green
+                                : Colors.red),
+                      ],
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    /// -------- قراءات العداد --------
+                    _buildDialogSection(
+                      'قراءات العداد',
+                      Icons.speed,
+                      Colors.orange,
+                      [
+                        _buildDialogDetailRow(
+                            'القراءة السابقة',
+                            nf.format(bill.prevReading),
+                            Icons.history),
+
+                        _buildDialogDetailRow(
+                            'القراءة الحالية',
+                            nf.format(bill.currentReading),
+                            Icons.timeline),
+
+                        _buildDialogDetailRow(
+                            'معامل القراءة',
+                            nf.format(bill.readingFactor),
+                            Icons.calculate),
+                      ],
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    /// -------- الاستهلاك --------
+                    _buildDialogSection(
+                      'الاستهلاك',
+                      Icons.bolt,
+                      Colors.deepOrange,
+                      [
+                        _buildDialogDetailRow(
+                          'استهلاك الكهرباء',
+                          '${nf.format(bill.powerConsump)} ك.و.س',
+                          Icons.electric_meter,
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    /// -------- الحسابات المالية --------
+                    _buildDialogSection(
+                      'الحسابات المالية',
+                      Icons.payments,
+                      Colors.indigo,
+                      [
+                        _buildDialogDetailRow(
+                            'القسط الثابت',
+                            nf.format(bill.fixedInstallment),
+                            Icons.account_balance),
+
+                        _buildDialogDetailRow(
+                            'التسويات',
+                            nf.format(bill.settlements),
+                            Icons.swap_horiz),
+
+                        _buildDialogDetailRow(
+                            'نسبة التسوية',
+                            nf.format(bill.settlementsratio),
+                            Icons.percent),
+
+                        _buildDialogDetailRow(
+                            'الدمغة',
+                            nf.format(bill.stamp),
+                            Icons.receipt),
+
+                        _buildDialogDetailRow(
+                            'مدفوعات سابقة',
+                            nf.format(bill.prevPayments),
+                            Icons.payments),
+
+                        _buildDialogDetailRow(
+                            'التقريب',
+                            nf.format(bill.rounding),
+                            Icons.rounded_corner),
+                      ],
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    /// -------- التأخيرات --------
+                    if (bill.delayMonth != null ||
+                        bill.delayYear != null)
+                      _buildDialogSection(
+                        'التأخيرات',
+                        Icons.schedule,
+                        Colors.redAccent,
+                        [
+                          _buildDialogDetailRow(
+                              'شهر التأخير',
+                              '${bill.delayMonth ?? 0}',
+                              Icons.calendar_month),
+
+                          _buildDialogDetailRow(
+                              'سنة التأخير',
+                              '${bill.delayYear ?? 0}',
+                              Icons.calendar_today),
+                        ],
+                      ),
+
+                    const SizedBox(height: 20),
+
+                    /// -------- الإجمالي النهائي --------
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.green.shade50,
+                            Colors.green.shade100
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                        border:
+                            Border.all(color: Colors.green.shade200),
+                      ),
+                      child: Row(
+                        mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'الإجمالي النهائي',
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          Text(
+                            '${nf.format(bill.billTotal)} ج.م',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green.shade700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    if (bill.notes != null &&
+                        bill.notes!.isNotEmpty) ...[
+                      const SizedBox(height: 16),
+                      _buildDialogSection(
+                        'ملاحظات',
+                        Icons.note,
+                        Colors.blueGrey,
+                        [
+                          Text(bill.notes!),
+                        ],
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+
+ 
+
+  Widget _buildDialogSection(String title, IconData icon, Color color, List<Widget> children) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withOpacity(0.2)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            spreadRadius: 0,
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(icon, color: color, size: 20),
+              ),
+              SizedBox(width: 10,),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10,),
+          ...children,
+         
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDialogDetailRow(
+    String label,
+    String value,
+    IconData icon, {
+    Color? valueColor,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        children: [
+          Icon(icon, size: 18, color: Colors.grey.shade600),
+          SizedBox(width: 10,),
+          Expanded(
+            child: Text(
+              label,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey.shade700,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          Flexible(
+            child: Text(
+              value,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: valueColor ?? Colors.black87,
+              ),
+              textAlign: TextAlign.end,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+ 

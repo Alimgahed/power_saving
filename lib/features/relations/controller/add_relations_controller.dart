@@ -16,6 +16,7 @@ class addrelationcontroller extends GetxController {
   List<TechnologyModel> technologylist = [];
   List<ElectricMeter> electricMeterList = [];
   List<allstations> stationlist = [];
+  bool isSource=false;
   int? techid;
   String? counterid;
   int? stationid;

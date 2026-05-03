@@ -16,6 +16,7 @@ class AddStationController extends GetxController {
   int? sourceId;
   bool? stationStatusId;
   String? stationTypeId;
+  int? areaId;
 
   @override
   void onInit() {
@@ -44,6 +45,7 @@ class AddStationController extends GetxController {
     required int sourceId,
     required String typeId,
     required int capacity,
+     int? areaId,
   }) async {
     looading.value = true;
     try {
@@ -55,6 +57,7 @@ class AddStationController extends GetxController {
           "water_source_id": sourceId,
           "station_type": typeId,
           "station_water_capacity": capacity,
+          "area_id": areaId
         },
       );
 

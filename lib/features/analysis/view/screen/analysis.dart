@@ -116,7 +116,7 @@ class AnalysisView extends StatelessWidget {
               }
 
               // Check if we have images
-              List<String> images = _extractImages(controller.anl!);
+              List<String> images = extractImages(controller.anl!);
 
               if (images.isEmpty) {
                 return Center(
@@ -169,10 +169,9 @@ class AnalysisView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("${data?.technologyPowerConsump != null && data?.powerPerWater != null ? (data!.technologyPowerConsump! / data!.powerPerWater!) : 'N/A'}"),
-                      Text("${data?.technologyChlorineConsump != null && data?.chlorineRangeFrom != null && data?.chlorineRangeTo != null ? (data!.technologyChlorineConsump! / ((data!.chlorineRangeFrom! + data!.chlorineRangeTo!) / 2)) : 'N/A'}"),
+                 
                     // Analysis Charts Grid
-                    _buildChartsGrid(images),
+                    buildChartsGrid(images),
                   ],
                 ),
               );
@@ -186,7 +185,12 @@ class AnalysisView extends StatelessWidget {
  
 
   // Extract base64 images from the analysis model
-  List<String> _extractImages(AnalysisModel analysisModel) {
+ 
+
+  
+
+  }
+   List<String> extractImages(AnalysisModel analysisModel) {
     List<String> images = [];
 
     // Extract images based on your actual model structure
@@ -206,27 +210,6 @@ class AnalysisView extends StatelessWidget {
 
     return images;
   }
-
-  Widget _buildChartsGrid(List<String> images) {
-    return Wrap(
-      spacing: 8, // horizontal spacing between items
-      runSpacing: 8, // vertical spacing between lines
-      alignment: WrapAlignment.center,
-      children: List.generate(images.length, (index) {
-        return Container(
-          width: (width - 30) / 2, // Responsive width for 2 columns
-          height: 450, // Fixed height for consistent cards
-          child: _buildChartCard(
-            images[index],
-            index + 1,
-            _getChartTitle(index),
-          ),
-        );
-      }),
-    );
-  }
-
-  // Helper method to get proper chart titles
   String _getChartTitle(int index) {
     switch (index) {
       case 0:
@@ -445,4 +428,24 @@ class AnalysisView extends StatelessWidget {
       ),
     );
   }
-}
+  // Helper method to get proper chart titles
+  
+
+Widget buildChartsGrid(List<String> images) {
+    return Wrap(
+      spacing: 8, // horizontal spacing between items
+      runSpacing: 8, // vertical spacing between lines
+      alignment: WrapAlignment.center,
+      children: List.generate(images.length, (index) {
+        return Container(
+          width: (width - 30) / 2, // Responsive width for 2 columns
+          height: 450, // Fixed height for consistent cards
+          child: _buildChartCard(
+            images[index],
+            index + 1,
+            _getChartTitle(index),
+          ),
+        );
+      }),
+    );
+  }

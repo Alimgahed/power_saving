@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -499,4 +500,80 @@ Widget infoRowWidget(String label, String value) {
       ],
     ),
   );
+}
+
+
+
+class CustomSearchableDropdown<T> extends StatelessWidget {
+  final List<DropdownMenuItem<T>> items;
+  final T? initialValue;
+  final void Function(T?)? onChanged;
+  final String labelText;
+  final String hintText;
+  final IconData prefixIcon;
+  final String? Function(T?)? validator;
+
+  const CustomSearchableDropdown({
+    super.key,
+    required this.items,
+    required this.onChanged,
+    required this.labelText,
+    required this.hintText,
+    required this.prefixIcon,
+    this.initialValue,
+    this.validator,
+  });
+
+  /// extract text from DropdownMenuItem child
+  String _itemToString(DropdownMenuItem<T> item) {
+    final child = item.child;
+    if (child is Text) {
+      return child.data ?? '';
+    }
+    return item.value.toString();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownSearch<T>(
+      selectedItem: initialValue,
+
+      /// convert DropdownMenuItem -> value list
+      items: (filter, infiniteScrollProps) async =>
+          items.map((e) => e.value as T).toList(),
+
+      /// how text appears in search + dropdown
+      itemAsString: (value) {
+        final match =
+            items.firstWhere((element) => element.value == value);
+        return _itemToString(match);
+      },
+
+      popupProps: const PopupProps.menu(
+        showSearchBox: true,
+        searchDelay: Duration(milliseconds: 300),
+      ),
+
+      decoratorProps: DropDownDecoratorProps(
+        decoration: InputDecoration(
+          labelText: labelText,
+          hintText: hintText,
+          prefixIcon: Icon(prefixIcon, color: Colors.blue),
+          filled: true,
+          fillColor: const Color(0xFFF5F8FB),
+          enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.blueAccent),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.blue, width: 2),
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      ),
+
+      onChanged: onChanged,
+      validator: validator,
+    );
+  }
 }

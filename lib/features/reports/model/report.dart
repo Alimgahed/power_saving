@@ -4,8 +4,21 @@ class ReportBranch {
         final String? stationname;
         final String? station;
                 final String? accountnumber;
+                final double?wateramount;
+                final double?powerconsump;
+                final double?chlorineconsump;
+                final double?soildalum;
+                final double?liquidalum;
 
                 final bool? ispaid;
+                final double? actualratio;
+
+                final double? expected;
+                final double? excesspercentage;
+                final double? minratio;
+                final double? maxratio;
+                final double? actialratio;
+                final String? statues;
 
   final int month;
   final int year;
@@ -23,19 +36,32 @@ class ReportBranch {
 
   ReportBranch({
     this.precent,
+    
+    this.actualratio,
     this.stationnames,
+    this.expected,
+    this.excesspercentage,
     this.station,
+    this.minratio,
+    this.maxratio,
+    this.actialratio,
     this.accountnumber,
     required this.branchName,
     required this.month,
     required this.year,
     required this.totalBill,
+    this.statues,
     required this.totalChlorine,
     this.ispaid,
     this.delleymonth,
     this.delleyyear,
+    this.wateramount,
+    this.powerconsump,
     this.techname,
     this.stationname,
+    this.chlorineconsump,
+    this.liquidalum,
+    this.soildalum,
     required this.totalLiquidAlum,
     required this.totalPower,
     required this.totalSolidAlum,
@@ -48,13 +74,26 @@ class ReportBranch {
       techname: json["technology_name"],
       month: json['month']??0,
       ispaid: json["is_paid"],
+      statues: json["status"]??"",
+      minratio: (json["min_ratio"]??0 as num).toDouble(),
+      maxratio: (json["max_ratio"]??0 as num).toDouble(),
+      actialratio: (json["actual_ratio"]??0 as num).toDouble(),
+      wateramount: json["water_amount"],
+      powerconsump: json["power_consumption"],
+      chlorineconsump: json["chlorine_consumption"],
+      liquidalum: json["liquid_alum_consumption"],
+      soildalum: json["solid_alum_consumption"],
 delleymonth: json["delay_month"],
+excesspercentage: 
+    (json["excess_percentage"]??0 as num).toDouble(),
+    expected: (json["expected_ratio"]??0 as num).toDouble(),
 delleyyear: json["delay_year"],
       accountnumber: json["account_number"]??"",
       stationname: json['station_name']??"",
       year: json['year']??0,
       stationnames: json['station_names']??"",
       precent: json["percent"]??"",
+      actualratio: (json["actual_ratio"]??0 as num).toDouble(),
       totalBill: (json['total_bill']??0 as num).toDouble(),
       totalChlorine: (json['total_chlorine']??0 as num).toDouble(),
       totalLiquidAlum: (json['total_liquid_alum']??0 as num).toDouble(),

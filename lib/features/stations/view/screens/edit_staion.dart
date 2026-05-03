@@ -7,6 +7,7 @@ import 'package:power_saving/core/widgets/custom_app_bar.dart';
 import 'package:power_saving/core/widgets/form_card.dart';
 import 'package:power_saving/core/widgets/rtl_scafold.dart';
 import 'package:power_saving/core/widgets/section_header.dart';
+import 'package:power_saving/features/planning/controller/blance_chart/blance_chart.dart';
 import 'package:power_saving/features/stations/controller/edit_stations_controller.dart';
 import 'package:power_saving/features/stations/model/station_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
@@ -196,6 +197,28 @@ class EditStationsScreen extends StatelessWidget {
                             ),
                           ],
                         ),
+                          SizedBox(height: 20,),
+                     GetBuilder<BalanceChartController>(
+                      init: BalanceChartController(),
+
+                       builder:(area)=>
+                        CustomDropdownFormField<int>(
+                                           items: area.areas.map((area) {
+                        return DropdownMenuItem<int>(
+                          value: area.areaId,
+                          child: Text(area.areaName),
+                        );
+                                           }).toList(),
+                                           onChanged: (value) {
+                        controller.areaId = value!;
+                                           },
+                                           labelText: 'منطقة الخدمة',
+                                           hintText: 'اختر منطقة الخدمة',
+                                           prefixIcon: Icons.location_on,
+                                           
+                                      
+                                         ),
+                     ),
 
                         const SizedBox(height: AppDimensions.paddingL),
 
@@ -212,6 +235,7 @@ class EditStationsScreen extends StatelessWidget {
                                 await controller.edit_Stations(
                                   Stations_id: station!.stationId!,
                                   name: controller.name.text,
+                                  areaId: controller.areaId,
                                   typeId: controller.stationTypeId!,
                                   capacity:
                                       int.parse(controller.capacity.text),

@@ -128,6 +128,11 @@ class HomeDrawer extends StatelessWidget {
           text: "فواتير التقنيات",
           onTap: () => _navigationHelper.navigateWithAuth('./techBill'),
         ),
+        _buildMenuItem(
+        icon: Icons.ev_station,
+        text: "متابعة المحطات",
+        onTap: () => _navigationHelper.navigateWithAuth('./FollowingStations'),
+      ),
       
       _buildMenuItem(
         icon: Icons.bar_chart,

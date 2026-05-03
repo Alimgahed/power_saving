@@ -40,54 +40,76 @@ class AddRelationScreen extends StatelessWidget {
                     ),
 
                     // Station Dropdown
-                    CustomDropdownFormField<int>(
-                      items: controller.stationlist.map((p) {
-                        return DropdownMenuItem<int>(
-                          value: p.branchId,
-                          child: Text(p.branchName),
-                        );
-                      }).toList(),
-                      onChanged: (value) => controller.stationid = value,
-                      labelText: 'المحطة',
-                      hintText: 'اختر المحطة',
-                      prefixIcon: Icons.map,
-                      validator: (val) =>
-                          val == null ? 'يجب ادخال اسم المحطة' : null,
-                    ),
+               CustomSearchableDropdown<int>(
+  items: controller.stationlist.map((p) {
+    return DropdownMenuItem<int>(
+      value: p.branchId,
+      child: Text(p.branchName),
+    );
+  }).toList(),
+
+  onChanged: (value) => controller.stationid = value!,
+  labelText: 'المحطة',
+  hintText: 'اختر المحطة',
+  prefixIcon: Icons.map,
+  validator: (val) =>
+      val == null ? 'يجب ادخال اسم المحطة' : null,
+),
                     const SizedBox(height: AppDimensions.paddingL),
 
                     // Electric Meter Dropdown
-                    CustomDropdownFormField<String>(
-                      items: controller.electricMeterList.map((p) {
-                        return DropdownMenuItem<String>(
-                          value: p.accountNumber,
-                          child: Text(p.accountNumber ?? ""),
-                        );
-                      }).toList(),
-                      onChanged: (value) => controller.counterid = value,
-                      labelText: 'العداد',
-                      hintText: 'اختر العداد',
-                      prefixIcon: Icons.bolt,
-                      validator: (val) =>
-                          val == null ? 'يجب ادخال اسم العداد' : null,
-                    ),
+                 CustomSearchableDropdown<String>(
+  items: controller.electricMeterList.map((p) {
+    return DropdownMenuItem<String>(
+      value: p.accountNumber!,
+      child: Text(p.accountNumber!),
+    );
+  }).toList(),
+
+  onChanged: (value) => controller.counterid = value!,
+  labelText: 'العداد',
+  hintText: 'اختر العداد',
+  prefixIcon: Icons.bolt,
+  validator: (val) =>
+      val == null ? 'يجب ادخال اسم العداد' : null,
+),
                     const SizedBox(height: AppDimensions.paddingL),
 
-                    // Technology Dropdown
-                    CustomDropdownFormField<int>(
-                      items: controller.technologylist.map((p) {
-                        return DropdownMenuItem<int>(
-                          value: p.technologyId,
-                          child: Text(p.technologyName),
-                        );
-                      }).toList(),
-                      onChanged: (value) => controller.techid = value,
-                      labelText: 'التكنولوجيا',
-                      hintText: 'اختر التكنولوجيا',
-                      prefixIcon: Icons.memory,
-                      validator: (val) =>
-                          val == null ? 'يجب ادخال اسم التكنولوجيا' : null,
-                    ),
+                 CustomSearchableDropdown<int>(
+  items: controller.technologylist.map((p) {
+    return DropdownMenuItem<int>(
+      value: p.technologyId, // 👈 ID الحقيقي
+      child: Text(p.technologyName),
+    );
+  }).toList(),
+
+  onChanged: (value) => controller.techid = value!,
+  labelText: 'التكنولوجيا',
+  hintText: 'اختر التكنولوجيا',
+  prefixIcon: Icons.memory,
+  validator: (val) =>
+      val == null ? 'يجب ادخال اسم التكنولوجيا' : null,
+),
+                    const SizedBox(height: AppDimensions.paddingL),
+                                     CustomSearchableDropdown<bool>(
+  items: [
+    DropdownMenuItem<bool>(
+      value: true,
+      child: Text('نعم'),
+    ),
+    DropdownMenuItem<bool>(
+      value: false,
+      child: Text('لا'),
+    ),
+  ],
+
+  onChanged: (value) => controller.isSource = value!,
+  labelText: 'عدد مأخذ',
+  hintText: ' هل هذا العداد هو  عدد مأخذ؟',
+  prefixIcon: Icons.bolt,
+  validator: (val) =>
+      val == null ? 'يجب اقيمةدخال ' : null,
+),
                     const SizedBox(height: AppDimensions.paddingL),
 
                     // Submit Button
@@ -100,6 +122,7 @@ class AddRelationScreen extends StatelessWidget {
                           if (_globalKey.currentState!.validate()) {
                             await controller.addRelations(
                               StationGaugeTechnologyRelation(
+                                isSource: controller.isSource,
                                 accountNumber: controller.counterid!,
                                 relationStatus: true,
                                 stationId: controller.stationid!,

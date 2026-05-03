@@ -20,6 +20,7 @@ class EditStationsController extends GetxController {
   int? sourceId;
   bool? stationStatusId;
   String? stationTypeId;
+  int? areaId;
 
   @override
   void onInit() {
@@ -65,6 +66,7 @@ class EditStationsController extends GetxController {
     required int branchId,
     required int sourceId,
     required String typeId,
+    int? areaId,
     required int capacity,
   }) async {
     try {
@@ -77,6 +79,7 @@ class EditStationsController extends GetxController {
           "water_source_id": sourceId,
           "station_type": typeId,
           "station_water_capacity": capacity,
+          "area_id": areaId,
         },
       );
 

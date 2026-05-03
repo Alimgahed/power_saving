@@ -598,7 +598,7 @@ class TechBill extends StatelessWidget {
                 ),
                 ElevatedButton.icon(
                   onPressed: () {
-                    _showBillDetailsDialog(bill, controller);
+                    showBillDetailsDialog(bill, controller);
                   },
                   icon: const Icon(Icons.visibility, size: 14),
                   label: const Text(
@@ -694,7 +694,8 @@ class TechBill extends StatelessWidget {
     );
   }
 
- void _showBillDetailsDialog(TechnologyBill bill, TechBillscontroller controller) {
+
+void showBillDetailsDialog(TechnologyBill bill, TechBillscontroller controller) {
   Get.dialog(
     Dialog(
       shape: RoundedRectangleBorder(
@@ -874,6 +875,8 @@ class TechBill extends StatelessWidget {
   );
 }
 
+
+ 
 
   Widget _buildDialogSection(String title, IconData icon, Color color, List<Widget> children) {
     return Container(

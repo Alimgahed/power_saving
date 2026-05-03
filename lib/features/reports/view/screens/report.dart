@@ -4,6 +4,11 @@ import 'package:intl/intl.dart';
 import 'package:power_saving/features/reports/controller/reports_controller.dart';
 import 'package:power_saving/features/reports/view/widgets/bills_report.dart';
 import 'package:power_saving/features/reports/view/widgets/branch_report.dart';
+import 'package:power_saving/features/reports/view/widgets/over_chlorine_report.dart';
+import 'package:power_saving/features/reports/view/widgets/over_liquid_report.dart';
+import 'package:power_saving/features/reports/view/widgets/over_powe_report.dart';
+import 'package:power_saving/features/reports/view/widgets/over_soild_alum.dart';
+import 'package:power_saving/features/reports/view/widgets/power_zero_water.dart';
 import 'package:power_saving/features/reports/view/widgets/station-total.dart';
 import 'package:power_saving/features/reports/view/widgets/stations_bills_report.dart';
 import 'package:power_saving/features/reports/view/widgets/tech3_mont_report.dart';
@@ -196,6 +201,22 @@ class Reports extends StatelessWidget {
       if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6) {"value": "technology_per_month", "label": "تقرير التكنولوجيا شهرياً"},
       if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6) {"value": "technology_total", "label": "إجمالي تقرير التكنولوجيا"},
       {"value": "station_total", "label": "إجمالي المحطات"},
+        if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6)
+      {"value": "over_solid_alum_consumption", "label": " الأستهلاك الزائد (الشبة الصلب)"},
+        if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6)
+      {"value": "over_liquid_alum_consumption", "label": " الأستهلاك الزائد (الشبة السائل)"},
+        if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6)
+      {"value": "power_for_zero_water", "label": "أستهلاك خارج الحد المسموح للأنارة"},
+          if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6)
+      {"value": "over_chlorine_consumption", "label": " الأستهلاك الزائد (كلور)"},
+      
+                if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6)
+
+
+
+           {"value": "over_power_consumption", "label": " الأستهلاك الزائد (كهرياء)"},
+          if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6)
+
       {"value": "station_per_month", "label": "تقرير المحطات شهرياً"},
       if (user?.groupId == 3 || user?.groupId == 1) {"value": "station-bills", "label": "فواتير المحطات"},
       if (user?.groupId == 3 || user?.groupId == 1) {"value": "water-techs-3-month", "label": "تقرير المياه (3 أشهر)"},
@@ -397,7 +418,14 @@ class Reports extends StatelessWidget {
       "station-bills": "فواتير المحطات",
       "water-techs-3-month": "تقرير المياه",
       "sanity-techs-3-month": "تقرير الصرف",
+      "over_power_consumption":"الأسنهلاك الزائد(كهرباء)",
       "bills": "تقرير الفواتير (المالي) ",
+      "station_total": "إجمالي المحطات",
+      "station_per_month": " إجمالي المحطات شهرياً",
+      "over_chlorine_consumption": "الاستهلاك الزائد (كلور)",
+      "over_solid_alum_consumption": "الاستهلاك الزائد (الشبة الصلبة)",
+      "over_liquid_alum_consumption": "الاستهلاك الزائد (الشبة السائلة)",
+      "power_for_zero_water": "استهلاك كهرباء مع عدم وجود مياه",
     };
     return titles[reportName] ?? "بيانات التقارير";
   }
@@ -482,11 +510,22 @@ class ReportTableFactory {
         return StationBillsReportTable(controller: controller);
       case 'station_per_month':
         return StationTotalReportTable(controller: controller, showMonthYear: true);
-      case 'bills':
-        return BillsReportTable(controller: controller);
+        case 'bills':
+          return BillsReportTable(controller: controller);
+      case 'over_power_consumption':
+        return OverPoweReport(controller: controller);
       case 'water-techs-3-month':
       case 'sanity-techs-3-month':
         return Techs3MonthReportTable(controller: controller);
+         case 'over_chlorine_consumption':
+        return OverChlorineReport(controller: controller);
+          case 'over_solid_alum_consumption':
+        return OverSolidAlumReport(controller: controller);
+          case 'over_liquid_alum_consumption':
+        return OverLiquidAlumReport(controller: controller);
+           case 'power_for_zero_water':
+        return PowerZeroWaterReport(controller: controller);
+        
       default:
         return BranchReportTable(controller: controller, showMonthYear: true);
     }
@@ -503,10 +542,16 @@ abstract class BaseReportPrinter {
           "technology_total": "إجمالي بيانات التكنولوجيا",
           "station-bills": "فواتير المحطات",
           "water-techs-3-month": "تقرير المياه",
+          'over_power_consumption':"الأسنهلاك الزائد(كهرباء)",
           "sanity-techs-3-month": "تقرير الصرف",
           "bills": "تقرير الفواتير (المالي) ",
           "station_total": "إجمالي المحطات",
           "station_per_month": " إجمالي المحطات شهرياً",
+          "over_chlorine_consumption": "الاستهلاك الزائد (كلور)",
+          "over_solid_alum_consumption": "الاستهلاك الزائد (الشبة الصلبة)",
+          "over_liquid_alum_consumption": "الاستهلاك الزائد (الشبة السائلة)",
+          "power_for_zero_water": "استهلاك كهرباء مع عدم وجود مياه",
+          "all_anomalies_report": "مجمع اخطاء الكهرباء   ",
         }[type] ??
         "بيانات التقارير";
   }
@@ -634,6 +679,18 @@ class ReportPrinterFactory {
         return StationTotalReportPrinter(showMonthYear: false);
       case 'station_per_month':
         return StationTotalReportPrinter(showMonthYear: true);
+      case 'over_power_consumption':
+
+        return OverPowerReportPrinter();
+          case 'over_solid_alum_consumption':
+
+        return OverSolidAlumReportPrinter();
+          case 'over_chlorine_consumption':
+        return OverChlorineReportPrinter();
+          case 'power_for_zero_water':
+        return PowerZeroWaterReportPrinter();
+        case 'over_liquid_alum_consumption':
+        return OverLiquidAlumReportPrinter();
       default:
         return BranchReportPrinter(showMonthYear: true);
     }
