@@ -5,8 +5,8 @@ import 'package:power_saving/features/home/model/home.dart';
 
 /// Consumption Card
 /// 
-/// Displays individual consumption data in a professional card format
-class ConsumptionCard extends StatelessWidget {
+/// Displays individual consumption data in a professional, interactive card format
+class ConsumptionCard extends StatefulWidget {
   final OverConsump item;
   final String label;
   final IconData icon;
@@ -21,33 +21,47 @@ class ConsumptionCard extends StatelessWidget {
   });
 
   @override
+  State<ConsumptionCard> createState() => _ConsumptionCardState();
+}
+
+class _ConsumptionCardState extends State<ConsumptionCard> {
+  bool _isHovered = false;
+
+  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => _navigateToAnalysis(),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: Colors.grey.shade200,
-            width: 1,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.06),
-              spreadRadius: 0,
-              blurRadius: 20,
-              offset: const Offset(0, 4),
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: () => _navigateToAnalysis(),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOutCubic,
+          transform: _isHovered ? (Matrix4.identity()..scale(1.025)) : Matrix4.identity(),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: _isHovered ? widget.color.withOpacity(0.4) : const Color(0xFFE2E8F0), // Slate-200
+              width: 1,
             ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildCardHeader(),
-            _buildCardBody(),
-          ],
+            boxShadow: [
+              BoxShadow(
+                color: widget.color.withOpacity(_isHovered ? 0.12 : 0.04),
+                spreadRadius: 0,
+                blurRadius: _isHovered ? 24 : 16,
+                offset: Offset(0, _isHovered ? 8 : 4),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildCardHeader(),
+              _buildCardBody(),
+            ],
+          ),
         ),
       ),
     );
@@ -55,14 +69,14 @@ class ConsumptionCard extends StatelessWidget {
 
   Widget _buildCardHeader() {
     return Container(
-      height: 100,
+      height: 70,
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            color.withOpacity(0.1),
-            color.withOpacity(0.05),
+            widget.color.withOpacity(0.08),
+            widget.color.withOpacity(0.02),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -74,23 +88,25 @@ class ConsumptionCard extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            item.stationName,
-            maxLines: 3,
+            widget.item.stationName,
+            maxLines: 1,
             style: TextStyle(
               overflow: TextOverflow.ellipsis,
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: color,
+              color: widget.color,
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 3),
           Text(
-            'رقم المحطة: ${item.stationId}',
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey.shade600,
+            'رقم المحطة: ${widget.item.stationId}',
+            style: const TextStyle(
+              fontSize: 11.5,
+              color: Color(0xFF475569), // Slate-600
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],
@@ -100,35 +116,35 @@ class ConsumptionCard extends StatelessWidget {
 
   Widget _buildCardBody() {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           _DetailItem(
             title: 'التاريخ',
-            value: '${item.billMonth} / ${item.billYear}',
+            value: '${widget.item.billMonth} / ${widget.item.billYear}',
             icon: Icons.calendar_today_outlined,
-            color: Colors.blue.shade600,
+            color: const Color(0xFF1E40AF), // Brand Royal Blue
             isHighlight: true,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
           _DetailItem(
             title: 'التقنية',
-            value: item.technologyName,
+            value: widget.item.technologyName,
             icon: Icons.memory_outlined,
-            color: Colors.teal.shade600,
+            color: const Color(0xFF0D9488), // Brand Teal
             isHighlight: true,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
           _DetailItem(
-            title: label,
+            title: widget.label,
             value: _getItemValue(),
-            icon: icon,
-            color: Colors.indigo.shade600,
+            icon: widget.icon,
+            color: widget.color,
             isHighlight: true,
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           _buildActionButton(),
         ],
       ),
@@ -136,33 +152,29 @@ class ConsumptionCard extends StatelessWidget {
   }
 
   Widget _buildActionButton() {
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            color.withOpacity(0.1),
-            color.withOpacity(0.05),
-          ],
-        ),
+        color: widget.color.withOpacity(_isHovered ? 0.08 : 0.04),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: color.withOpacity(0.2),
+          color: widget.color.withOpacity(_isHovered ? 0.35 : 0.15),
           width: 1,
         ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.analytics_outlined, size: 16, color: color),
+          Icon(Icons.analytics_outlined, size: 16, color: widget.color),
           const SizedBox(width: 8),
           Text(
             'عرض التحليل',
             style: TextStyle(
-              color: color,
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
+              color: widget.color,
+              fontWeight: FontWeight.bold,
+              fontSize: 13,
             ),
           ),
         ],
@@ -172,17 +184,17 @@ class ConsumptionCard extends StatelessWidget {
 
   String _getItemValue() {
     final formatter = NumberFormat('#,###');
-    switch (label) {
+    switch (widget.label) {
       case "الكهرباء":
-        return "${formatter.format(item.technologyPowerConsump)} واط";
+        return "${formatter.format(widget.item.technologyPowerConsump)} واط";
       case "الكلور":
-        return "${formatter.format(item.technologyChlorineConsump)} جرام";
+        return "${formatter.format(widget.item.technologyChlorineConsump)} جرام";
       case "الشبة السائلة":
-        return "${formatter.format(item.technologyLiquidAlumConsump)} جرام";
+        return "${formatter.format(widget.item.technologyLiquidAlumConsump)} جرام";
       case "الشبة الصلبة":
-        return "${formatter.format(item.technologySolidAlumConsump)} جرام";
+        return "${formatter.format(widget.item.technologySolidAlumConsump)} جرام";
       case "الإنارة":
-        return "${formatter.format(item.technologyPowerConsump)} واط";
+        return "${formatter.format(widget.item.technologyPowerConsump)} واط";
       default:
         return "";
     }
@@ -192,9 +204,9 @@ class ConsumptionCard extends StatelessWidget {
     Get.toNamed(
       '/analysis',
       arguments: {
-        "data": item,
-        'station': item.stationId,
-        'tech': item.technologyId,
+        "data": widget.item,
+        'station': widget.item.stationId,
+        'tech': widget.item.technologyId,
       },
     );
   }
@@ -219,12 +231,12 @@ class _DetailItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: isHighlight ? color.withOpacity(0.08) : Colors.grey.shade50,
+        color: isHighlight ? color.withOpacity(0.05) : const Color(0xFFF8FAFC), // Slate-50 background
         borderRadius: BorderRadius.circular(12),
         border: isHighlight
-            ? Border.all(color: color.withOpacity(0.2), width: 1)
+            ? Border.all(color: color.withOpacity(0.12), width: 1)
             : null,
       ),
       child: Row(
@@ -232,7 +244,7 @@ class _DetailItem extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withOpacity(0.08),
               borderRadius: BorderRadius.circular(6),
             ),
             child: Icon(icon, size: 14, color: color),
@@ -244,19 +256,19 @@ class _DetailItem extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 11,
-                    color: Colors.grey.shade600,
+                    color: Color(0xFF475569), // Slate-600 secondary text
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   value,
-                  style: TextStyle(
-                    fontSize: 14,
+                  style: const TextStyle(
+                    fontSize: 13,
                     fontWeight: FontWeight.bold,
-                    color: isHighlight ? color : Colors.grey.shade800,
+                    color: Color(0xFF0F172A), // Slate-900 high legibility primary text
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
