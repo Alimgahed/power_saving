@@ -22,6 +22,13 @@ class SessionService extends GetxService {
 
   User? get user => _user.value;
   set user(User? val) => _user.value = val;
+
+  /// Completely wipe all in-memory session data
+  void clear() {
+    _technologies.clear();
+    _counters.clear();
+    _user.value = null;
+  }
 }
 
 // Backwards compatibility layer to keep all other workspace files fully functional

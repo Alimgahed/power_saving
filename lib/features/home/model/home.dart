@@ -18,12 +18,12 @@ class OverWaterStation {
 
   factory OverWaterStation.fromJson(Map<String, dynamic> json) {
     return OverWaterStation(
-      capacityLimit: json['capacity_limit'],
-      month: json['month'],
-      stationName: json['station_name'],
-      totalWater: (json['total_water'] as num).toDouble(),
-      waterCapacity: json['water_capacity'],
-      year: json['year'],
+      capacityLimit: json['capacity_limit'] ?? 0,
+      month: json['month'] ?? 0,
+      stationName: json['station_name'] ?? '',
+      totalWater: (json['total_water'] as num?)?.toDouble() ?? 0.0,
+      waterCapacity: json['water_capacity'] ?? 0,
+      year: json['year'] ?? 0,
     );
   }
 }
@@ -66,7 +66,7 @@ class ConsumptionModel {
     return ConsumptionModel(
       chlorine: json['chlorine'],
       liquidAlum: json['liquid_alum'],
-      money: json['money'],
+      money: (json['money'] as num?)?.toDouble(),
       power: json['power'],
         Waterformissingpower: json['water_with_missing_power'] == null
             ? null
@@ -160,8 +160,8 @@ class OverConsump {
 
   factory OverConsump.fromJson(Map<String, dynamic> json) {
     return OverConsump(
-      billMonth: json['bill_month'],
-      billYear: json['bill_year'],
+      billMonth: json['bill_month'] ?? 0,
+      billYear: json['bill_year'] ?? 0,
       chlorineRangeFrom: json['chlorine_range_from'],
       chlorineRangeTo: json['chlorine_range_to'],
       liquidAlumRangeFrom: json['liquid_alum_range_from'],
@@ -169,15 +169,15 @@ class OverConsump {
       powerPerWater: json['power_per_water'],
       solidAlumRangeFrom: json['solid_alum_range_from'],
       solidAlumRangeTo: json['solid_alum_range_to'],
-      stationId: json['station_id'],
-      stationName: json['station_name'],
-      techBillId: json['tech_bill_id'],
+      stationId: json['station_id'] ?? 0,
+      stationName: json['station_name'] ?? '',
+      techBillId: json['tech_bill_id'] ?? 0,
       technologyBillPercentage: json['technology_bill_percentage'],
-      technologyBillTotal: json['technology_bill_total'],
+      technologyBillTotal: (json['technology_bill_total'] ?? '').toString(),
       technologyChlorineConsump: json['technology_chlorine_consump'],
-      technologyId: json['technology_id'],
+      technologyId: json['technology_id'] ?? 0,
       technologyLiquidAlumConsump: json['technology_liquid_alum_consump'],
-      technologyName: json['technology_name'],
+      technologyName: json['technology_name'] ?? '',
       technologyPowerConsump: json['technology_power_consump'],
       technologySolidAlumConsump: json['technology_solid_alum_consump'],
       technologyWaterAmount: json['technology_water_amount'],

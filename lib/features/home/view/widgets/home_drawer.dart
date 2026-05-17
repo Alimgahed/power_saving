@@ -222,6 +222,7 @@ class HomeDrawer extends StatelessWidget {
 
   Future<void> _handleLogout() async {
     await Cache.sharedPreferences.clear();
-    Get.offNamed("/Login");
+    SessionService.to.clear();
+    Get.offAllNamed("/Login");
   }
 }

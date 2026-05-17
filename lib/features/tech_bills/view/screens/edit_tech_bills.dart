@@ -55,19 +55,23 @@ class EditTechBills extends StatelessWidget {
             final args = Get.arguments;
             TechnologyBill bill = args?['bill'];
 
-            controller.chlorineController.text = bill.technologyChlorineConsump.toString();
-            controller.liquidAlumController.text = bill.technologyLiquidAlumConsump.toString();
-            controller.solidAlumController.text = bill.technologySolidAlumConsump.toString();
-            controller.waterProducedController.text = bill.technologyWaterAmount.toString();
-            controller.calculatedWaterController.text = bill.calculatedWater.toString();
-            controller.measuredWaterController.text = bill.measuredWater.toString();
+            controller.chlorineController.text =
+                bill.technologyChlorineConsump.toString();
+            controller.liquidAlumController.text =
+                bill.technologyLiquidAlumConsump.toString();
+            controller.solidAlumController.text =
+                bill.technologySolidAlumConsump.toString();
+            controller.waterProducedController.text =
+                bill.technologyWaterAmount.toString();
+            controller.calculatedWaterController.text =
+                bill.calculatedWater.toString();
+            controller.measuredWaterController.text =
+                bill.measuredWater.toString();
 
             return Obx(() {
               if (controller.looading.value) {
                 return const Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.blue,
-                  ),
+                  child: CircularProgressIndicator(color: Colors.blue),
                 );
               }
 
@@ -75,7 +79,7 @@ class EditTechBills extends StatelessWidget {
                 padding: const EdgeInsets.all(20),
                 child: Center(
                   child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 600),
+                    constraints: const BoxConstraints(maxWidth: 800),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -124,8 +128,12 @@ class EditTechBills extends StatelessWidget {
                                         Container(
                                           padding: const EdgeInsets.all(10),
                                           decoration: BoxDecoration(
-                                            color: Colors.white.withOpacity(0.2),
-                                            borderRadius: BorderRadius.circular(12),
+                                            color: Colors.white.withOpacity(
+                                              0.2,
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
                                           ),
                                           child: const Icon(
                                             Icons.engineering,
@@ -136,7 +144,8 @@ class EditTechBills extends StatelessWidget {
                                         const SizedBox(width: 12),
                                         Expanded(
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               const Text(
                                                 'معلومات الفاتورة',
@@ -167,24 +176,41 @@ class EditTechBills extends StatelessWidget {
                                         color: Colors.white.withOpacity(0.1),
                                         borderRadius: BorderRadius.circular(12),
                                       ),
-                                      child: Column(
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                                         children: [
-                                          _buildInfoRow(
-                                            'التقنية',
-                                            bill.technologyName,
-                                            Icons.settings,
+                                          Expanded(
+                                            child: _buildInfoRow(
+                                              'التقنية',
+                                              bill.technologyName,
+                                              Icons.settings,
+                                            ),
                                           ),
-                                          const Divider(color: Colors.white24, height: 16),
-                                          _buildInfoRow(
-                                            'الفرع',
-                                            bill.branch ?? 'غير محدد',
-                                            Icons.business,
+                                          Container(
+                                            height: 24,
+                                            width: 1,
+                                            color: Colors.white24,
+                                            margin: const EdgeInsets.symmetric(horizontal: 8),
                                           ),
-                                          const Divider(color: Colors.white24, height: 16),
-                                          _buildInfoRow(
-                                            'الفترة',
-                                            'السنة: ${bill.billYear} - الشهر: ${bill.billMonth}',
-                                            Icons.calendar_today,
+                                          Expanded(
+                                            child: _buildInfoRow(
+                                              'الفرع',
+                                              bill.branch ?? 'غير محدد',
+                                              Icons.business,
+                                            ),
+                                          ),
+                                          Container(
+                                            height: 24,
+                                            width: 1,
+                                            color: Colors.white24,
+                                            margin: const EdgeInsets.symmetric(horizontal: 8),
+                                          ),
+                                          Expanded(
+                                            child: _buildInfoRow(
+                                              'الفترة',
+                                              'السنة: ${bill.billYear} - الشهر: ${bill.billMonth}',
+                                              Icons.calendar_today,
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -216,34 +242,75 @@ class EditTechBills extends StatelessWidget {
                                           ),
                                         ),
                                       ],
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: CustomTextFormField(
+                                            controller: controller.chlorineController,
+                                            label: 'استهلاك الكلور',
+                                            icon: Icons.water,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 16),
+                                        Expanded(
+                                          child: CustomTextFormField(
+                                            controller:
+                                                controller.liquidAlumController,
+                                            label: 'استهلاك الشبة السائلة',
+                                            icon: Icons.opacity,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 12),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: CustomTextFormField(
+                                            controller:
+                                                controller.solidAlumController,
+                                            label: 'استهلاك الشبة الصلبة',
+                                            icon: Icons.ac_unit,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 16),
+                                        Expanded(
+                                          child: CustomTextFormField(
+                                            controller:
+                                                controller.waterProducedController,
+                                            label: 'كمية المياه المنتجة',
+                                            icon: Icons.water_drop,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 12),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: CustomTextFormField(
+                                            controller:
+                                                controller.calculatedWaterController,
+                                            label: 'كمية المياه المحسوبة',
+                                            icon: Icons.water_drop,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 16),
+                                        Expanded(
+                                          child: CustomTextFormField(
+                                            controller:
+                                                controller.measuredWaterController,
+                                            label: 'كمية المياه المقاسة',
+                                            icon: Icons.water_drop,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
 
-                                    ),
-                                    CustomTextFormField(
-                                      controller: controller.chlorineController,
-                                      label: 'استهلاك الكلور',
-                                      icon: Icons.water,
-                                    ),
-                                    const SizedBox(height: 8),
-                                    CustomTextFormField(
-                                      controller: controller.liquidAlumController,
-                                      label: 'استهلاك الشبة السائلة',
-                                      icon: Icons.opacity,
-                                    ),
-                                    const SizedBox(height: 8),
-                                    CustomTextFormField(
-                                      controller: controller.solidAlumController,
-                                      label: 'استهلاك الشبة الصلبة',
-                                      icon: Icons.ac_unit,
-                                    ),
-                                    const SizedBox(height: 8),
-                                    CustomTextFormField(
-                                      controller: controller.waterProducedController,
-                                      label: 'كمية المياه المنتجة',
-                                      icon: Icons.water_drop,
-                                    ),
+                                    const SizedBox(height: 24),
 
-                                    const SizedBox(height: 20),
-                                    
                                     // Action Buttons
                                     Obx(() {
                                       if (controller.looading.value) {
@@ -258,36 +325,56 @@ class EditTechBills extends StatelessWidget {
                                               onPressed: () {
                                                 {
                                                   controller.editTechBills(
-                                                    
-                                                    measuredWater: double.tryParse(
-                                                          controller.measuredWaterController.text) ??
-                                                      0,
-                                                      calculatedWater: double.tryParse(
-                                                          controller.calculatedWaterController.text) ??                                  0,
+                                                    measuredWater:
+                                                        double.tryParse(
+                                                          controller
+                                                              .measuredWaterController
+                                                              .text,
+                                                        ) ??
+                                                        0,
+                                                    calculatedWater:
+                                                        double.tryParse(
+                                                          controller
+                                                              .calculatedWaterController
+                                                              .text,
+                                                        ) ??
+                                                        0,
                                                     id: bill.techBillId,
-                                                    chlorine: double.tryParse(
+                                                    chlorine:
+                                                        double.tryParse(
                                                           controller
-                                                              .chlorineController.text,
-                                                        ) ?? 0,
-                                                    liquid: double.tryParse(
+                                                              .chlorineController
+                                                              .text,
+                                                        ) ??
+                                                        0,
+                                                    liquid:
+                                                        double.tryParse(
                                                           controller
-                                                              .liquidAlumController.text,
-                                                        
-                                                              
-                                                        ) ?? 0,
-                                                    solid: double.tryParse(
+                                                              .liquidAlumController
+                                                              .text,
+                                                        ) ??
+                                                        0,
+                                                    solid:
+                                                        double.tryParse(
                                                           controller
-                                                              .solidAlumController.text,
-                                                              
-                                                        ) ?? 0,
-                                                    water: double.tryParse(
+                                                              .solidAlumController
+                                                              .text,
+                                                        ) ??
+                                                        0,
+                                                    water:
+                                                        double.tryParse(
                                                           controller
-                                                              .wateramount.text,
-                                                        ) ?? 0,
+                                                              .waterProducedController
+                                                              .text,
+                                                        ) ??
+                                                        0,
                                                   );
                                                 }
                                               },
-                                              icon: const Icon(Icons.save, size: 20),
+                                              icon: const Icon(
+                                                Icons.save,
+                                                size: 20,
+                                              ),
                                               label: const Text(
                                                 'حفظ التعديلات',
                                                 style: TextStyle(
@@ -296,14 +383,17 @@ class EditTechBills extends StatelessWidget {
                                                 ),
                                               ),
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor: Colors.green.shade600,
+                                                backgroundColor:
+                                                    Colors.green.shade600,
                                                 foregroundColor: Colors.white,
                                                 elevation: 2,
-                                                padding: const EdgeInsets.symmetric(
-                                                  vertical: 16,
-                                                ),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      vertical: 16,
+                                                    ),
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(12),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
                                                 ),
                                               ),
                                             ),
@@ -312,7 +402,10 @@ class EditTechBills extends StatelessWidget {
                                           Expanded(
                                             child: OutlinedButton.icon(
                                               onPressed: () => Get.back(),
-                                              icon: const Icon(Icons.cancel, size: 20),
+                                              icon: const Icon(
+                                                Icons.cancel,
+                                                size: 20,
+                                              ),
                                               label: const Text(
                                                 'إلغاء',
                                                 style: TextStyle(
@@ -321,16 +414,19 @@ class EditTechBills extends StatelessWidget {
                                                 ),
                                               ),
                                               style: OutlinedButton.styleFrom(
-                                                foregroundColor: Colors.grey.shade700,
+                                                foregroundColor:
+                                                    Colors.grey.shade700,
                                                 side: BorderSide(
                                                   color: Colors.grey.shade300,
                                                   width: 2,
                                                 ),
-                                                padding: const EdgeInsets.symmetric(
-                                                  vertical: 16,
-                                                ),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      vertical: 16,
+                                                    ),
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(12),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
                                                 ),
                                               ),
                                             ),
@@ -382,6 +478,4 @@ class EditTechBills extends StatelessWidget {
       ],
     );
   }
-
-
 }

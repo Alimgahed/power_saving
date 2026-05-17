@@ -567,7 +567,7 @@ class TechBill extends StatelessWidget {
                 const Divider(height: 16),
                 _buildInfoRow(
                   'إجمالي الفاتورة',
-                  '${NumberFormat('#,###').format(num.parse(bill.technologyBillTotal))} ج.م',
+                  '${NumberFormat('#,###').format(num.tryParse(bill.technologyBillTotal) ?? 0)} ج.م',
                   Icons.attach_money,
                   Colors.green,
                 ),
@@ -817,7 +817,7 @@ void showBillDetailsDialog(TechnologyBill bill, TechBillscontroller controller) 
 
                         _buildDialogDetailRow(
                           'إجمالي الفاتورة',
-                          '${NumberFormat('#,###.##').format(num.parse(bill.technologyBillTotal))} ج.م',
+                          '${NumberFormat('#,###.##').format(num.tryParse(bill.technologyBillTotal) ?? 0)} ج.م',
                           Icons.account_balance_wallet,
                           valueColor: Colors.green.shade700,
                         ),
@@ -858,7 +858,7 @@ void showBillDetailsDialog(TechnologyBill bill, TechBillscontroller controller) 
                             ],
                           ),
                           Text(
-                            '${NumberFormat('#,###').format(num.parse(bill.technologyBillTotal))} ج.م',
+                            '${NumberFormat('#,###').format(num.tryParse(bill.technologyBillTotal) ?? 0)} ج.م',
                             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.green.shade700),
                           ),
                         ],

@@ -91,7 +91,7 @@ class MyApp extends StatelessWidget {
       ],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(textTheme: GoogleFonts.almaraiTextTheme()),
-      initialRoute: '/home', 
+      initialRoute: user != null ? '/home' : '/Login', 
       getPages: [
                 GetPage(name: '/Charts', page: () =>         SunburstPage()),
 

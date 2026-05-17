@@ -211,7 +211,6 @@ class Techbills extends GetxController {
       final res = await fetchData("${ApiConfig.baseUrl}/tech-bills");
 
       if (res.statusCode == 200) {
-        loading.value = false;
         final jsonData = json.decode(res.body);
         List<dynamic> responseData = jsonData;
         for (var i in responseData) {
@@ -219,11 +218,12 @@ class Techbills extends GetxController {
           techBills.add(technologyBill);
         }
         applyFilters();
-        update();
       }
     } catch (e) {
-      loading.value = false;
       print("Error fetching tech bills: $e");
+    } finally {
+      loading.value = false;
+      update();
     }
   }
 

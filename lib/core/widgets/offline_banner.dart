@@ -49,7 +49,7 @@ class OfflineBanner extends StatelessWidget {
                     ),
                     Text(
                       'يرجى التحقق من اتصال الشبكة الخاص بك.',
-                      style: TextStyle(color: Colors.white80, fontSize: 12),
+                      style: TextStyle(color: Colors.white, fontSize: 12),
                     ),
                   ],
                 ),

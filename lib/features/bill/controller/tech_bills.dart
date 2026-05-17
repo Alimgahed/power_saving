@@ -162,7 +162,7 @@ class TechBillscontroller extends GetxController {
   // Calculate total bill amount for filtered bills
   num getTotalBillAmount() {
     List<TechnologyBill> filtered = getFilteredBills();
-    return filtered.fold(0, (sum, bill) => sum + num.parse(bill.technologyBillTotal));
+    return filtered.fold(0, (sum, bill) => sum + (num.tryParse(bill.technologyBillTotal) ?? 0));
   }
 
   // Calculate total water amount
