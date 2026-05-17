@@ -609,6 +609,12 @@ class _TechBillCard extends StatelessWidget {
               if (controller.getFormKey(originalIndex).currentState!
                   .validate()) {
                 controller.addTechBills(
+                  calculatedWater: double.tryParse(
+                        controller.getcalculatedWaterControllers(originalIndex).text) ??
+                      0,
+                      measuredWater: double.tryParse(
+                        controller.getmeasuredWaterControllers(originalIndex).text) ??
+                      0,
                   index: originalIndex,
                   id: techBill.techBillId,
                   chlorine: double.tryParse(
@@ -687,6 +693,17 @@ class _TechBillCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
+            _buildRangeItem(
+              'كمية المياه المقاسة',
+              Icons.water,
+              controller.getmeasuredWaterControllers(originalIndex),
+            ),
+            const SizedBox(height: 8),
+            _buildRangeItem(
+              'كمية المياه المحسوبة',
+              Icons.water,
+              controller.getcalculatedWaterControllers(originalIndex),
+            ),
             _buildRangeItem(
               'كمية المياه المنتجة',
               Icons.water,

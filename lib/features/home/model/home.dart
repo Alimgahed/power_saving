@@ -40,6 +40,7 @@ class ConsumptionModel {
   final List<OverConsump>? overLiquidAlumConsump;
   final List<OverConsump>? overPowerConsump;
   final List<OverConsump>? overSolidAlumConsump;
+  final List<OverConsump>? Waterformissingpower;
     final List<OverConsump>? overpowerfor0water;
   final List<OverWaterStation>? overWaterStations; // 👈 New field
 
@@ -48,6 +49,8 @@ class ConsumptionModel {
     required this.chlorine,
     required this.liquidAlum,
     required this.money,
+      required this.Waterformissingpower,
+      
     this.overpowerfor0water,
     required this.power,
     required this.solidAlum,
@@ -65,6 +68,11 @@ class ConsumptionModel {
       liquidAlum: json['liquid_alum'],
       money: json['money'],
       power: json['power'],
+        Waterformissingpower: json['water_with_missing_power'] == null
+            ? null
+            : (json['water_with_missing_power'] as List)
+                .map((e) => OverConsump.fromJson(e))
+                .toList(),
       solidAlum: json['solid_alum'],
       water: json['water'],
       overpowerfor0water: json['over_power_for_0_water'] == null

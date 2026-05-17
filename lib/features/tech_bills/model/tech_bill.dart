@@ -22,11 +22,15 @@ class TechnologyBill {
   final num technologyPowerConsump;
   final num? technologySolidAlumConsump;
   final num? technologyWaterAmount;
+  final num? calculatedWater;
+  final num? measuredWater;
 
   TechnologyBill({
     required this.billMonth,
     required this.billYear,
     this.chlorineRangeFrom,
+    this.calculatedWater,
+     this.measuredWater,
     this.chlorineRangeTo,
     this.liquidAlumRangeFrom,
     this.liquidAlumRangeTo,
@@ -61,6 +65,8 @@ class TechnologyBill {
       solidAlumRangeFrom: json['solid_alum_range_from']??0,
       solidAlumRangeTo: json['solid_alum_range_to']??0,
       stationId: json['station_id'],
+      calculatedWater: json['calculated_water']??0,
+      measuredWater: json['measured_water']??0,
       stationName: json['station_name'],
       techBillId: json['tech_bill_id'],
       technologyBillPercentage: json['technology_bill_percentage']??0,

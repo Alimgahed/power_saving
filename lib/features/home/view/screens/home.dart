@@ -76,6 +76,15 @@ class HomeScreen extends StatelessWidget {
             color: Colors.blue,
           ),
         
+         if (data.Waterformissingpower?.isNotEmpty ?? false)
+          OverConsumptionSection(
+            title: 'مياة بدون طاقة',
+            data: data.Waterformissingpower ?? [],
+            label: "مياة بدون طاقة",
+            unit: "م3",
+            icon: Icons.electrical_services,
+            color: Colors.blue,
+          ),
         if (data.overpowerfor0water?.isNotEmpty ?? false)
           OverConsumptionSection(
             title: 'الاستهلاك خارج الحد المسموح للإنارة (اعلي من 1200 واط)',
@@ -83,7 +92,7 @@ class HomeScreen extends StatelessWidget {
             label: "الإنارة",
             unit: "واط",
             icon: Icons.lightbulb_outline,
-            color: const Color.fromARGB(255, 255, 239, 192),
+            color: Colors.blue,
           ),
         
         if (data.overChlorineConsump?.isNotEmpty ?? false)
@@ -103,7 +112,7 @@ class HomeScreen extends StatelessWidget {
             label: "الشبة السائلة",
             unit: "مجم/لتر",
             icon: Icons.opacity,
-            color: const Color.fromARGB(255, 255, 202, 122),
+            color:  Colors.blue,  
           ),
         
         if (data.overSolidAlumConsump?.isNotEmpty ?? false)
@@ -113,7 +122,7 @@ class HomeScreen extends StatelessWidget {
             label: "الشبة الصلبة",
             unit: "مجم/لتر",
             icon: Icons.grain,
-            color: Colors.brown,
+            color: Colors.blue,
           ),
         
         if (data.overWaterStations?.isNotEmpty ?? false)

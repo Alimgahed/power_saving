@@ -47,16 +47,27 @@ class NewTechBillsController extends GetxController {
   Station? selectedStation;
   TechnologyModel? selectedTech;
   var loading = false.obs;
-  
+
   late TextEditingController chlorineController;
   late TextEditingController liquidAlumController;
   late TextEditingController solidAlumController;
   late TextEditingController waterProducedController;
   late TextEditingController yearController;
   late TextEditingController monthController;
+  late TextEditingController calculatedWaterController;
+  late TextEditingController measuredWaterController;
 
   // Filter for new tech bills
   RxnString selectedBranch = RxnString();
+
+  List<Station> get filteredStations {
+    if (selectedBranch.value == null) {
+      return stations.toList();
+    }
+    return stations
+        .where((station) => station.branchName == selectedBranch.value)
+        .toList();
+  }
 
   @override
   void onInit() {
@@ -67,6 +78,8 @@ class NewTechBillsController extends GetxController {
     waterProducedController = TextEditingController();
     yearController = TextEditingController();
     monthController = TextEditingController();
+    calculatedWaterController = TextEditingController();
+    measuredWaterController = TextEditingController();
     stationsTechs();
   }
 
@@ -82,16 +95,52 @@ class NewTechBillsController extends GetxController {
   }
 
   Future<void> stationsTechs() async {
-    final res = await fetchData("${ApiConfig.baseUrl}/station-techs");
+    loading.value = true;
+    try {
+      final res = await fetchData("${ApiConfig.baseUrl}/station-techs");
+      if (res.statusCode == 200) {
+        final decoded = json.decode(res.body);
+        List<dynamic> data = [];
 
-    if (res.statusCode == 200) {
-      final List data = json.decode(res.body);
-      stations.value = data.map((e) => Station.fromJson(e)).toList();
+        if (decoded is List) {
+          data = decoded;
+        } else if (decoded is Map<String, dynamic>) {
+          if (decoded.containsKey('stations') && decoded['stations'] is List) {
+            data = decoded['stations'] as List<dynamic>;
+          } else if (decoded.containsKey('data') && decoded['data'] is List) {
+            data = decoded['data'] as List<dynamic>;
+          }
+        }
+
+        stations.value =
+            data
+                .whereType<Map<String, dynamic>>()
+                .map((e) => Station.fromJson(e))
+                .toList();
+
+        if (selectedBranch.value != null &&
+            !getBranches().contains(selectedBranch.value)) {
+          selectedBranch.value = null;
+          selectedStation = null;
+          selectedTech = null;
+        }
+      } else {
+        showCustomErrorDialog(
+          errorMessage: 'فشل في جلب بيانات المحطات. حاول مرة أخرى.',
+        );
+      }
+    } catch (e) {
+      print('Error fetching station techs: $e');
+      showCustomErrorDialog(
+        errorMessage: 'حدث خطأ أثناء تحميل بيانات الفروع والمحطات.',
+      );
+    } finally {
+      loading.value = false;
       update();
     }
   }
 
- void addTechBills({
+  void addTechBills({
     required int staionid,
     required int techid,
     required double chlorine,
@@ -99,30 +148,32 @@ class NewTechBillsController extends GetxController {
     required double solid,
     required double water,
     required int index,
+    required double measuredWater,
+    required double calculatedWater,
   }) async {
     try {
       loading.value = true;
 
-      final res = await postData(
-        "${ApiConfig.baseUrl}/insert-or-edit-tech-bill",
-        {
-          "technology_chlorine_consump": chlorine,
-          "technology_liquid_alum_consump": liquid,
-          "technology_solid_alum_consump": solid,
-          "technology_water_amount": water,
-          "station_id": selectedStation?.stationId,
-          "technology_id": selectedTech?.technologyId,
-          "bill_month": int.parse(monthController.text),
-          "bill_year": int.parse(yearController.text),
-        },
-      );
+      final res =
+          await postData("${ApiConfig.baseUrl}/insert-or-edit-tech-bill", {
+            "technology_chlorine_consump": chlorine,
+            "technology_liquid_alum_consump": liquid,
+            "technology_solid_alum_consump": solid,
+            "technology_water_amount": water,
+            "measured_water": double.parse(measuredWaterController.text),
+            "calculated_water": double.parse(calculatedWaterController.text),
+            
+            "station_id": selectedStation?.stationId,
+            "technology_id": selectedTech?.technologyId,
+            "bill_month": int.parse(monthController.text),
+            "bill_year": int.parse(yearController.text),
+          });
 
       if (res.statusCode == 200) {
         loading.value = false;
         showSuccessToast("تمت الإضافة بنجاح");
 
         // Clear input fields after successful submission
-    
       } else {
         loading.value = false;
         final errorBody = jsonDecode(res.body);
@@ -132,8 +183,7 @@ class NewTechBillsController extends GetxController {
     } catch (e) {
       loading.value = false;
       print("Error during bill submission: $e");
-    } finally {
-    }
+    } finally {}
   }
 
   void onStationChanged(Station? station) {
@@ -148,20 +198,25 @@ class NewTechBillsController extends GetxController {
   }
 
   List<String> getBranches() {
-    return stations
-        .map((station) => station.branchName)
-        .toSet()
-        .toList()
+    return stations.map((station) => station.branchName).toSet().toList()
       ..sort();
   }
 
   void filterByBranch(String? branch) {
     selectedBranch.value = branch;
+    if (branch == null) return;
+
+    if (selectedStation != null && selectedStation!.branchName != branch) {
+      selectedStation = null;
+      selectedTech = null;
+    }
     update();
   }
 
   void clearFilters() {
     selectedBranch.value = null;
+    selectedStation = null;
+    selectedTech = null;
     update();
   }
 }

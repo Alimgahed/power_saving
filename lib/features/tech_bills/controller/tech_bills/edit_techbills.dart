@@ -12,12 +12,18 @@ class EditTechbillsController extends GetxController {
   late TextEditingController chlorineController;
   late TextEditingController liquidAlumController;
   late TextEditingController solidAlumController;
+  late TextEditingController wateramount;
   late TextEditingController waterProducedController;
+  late TextEditingController calculatedWaterController;
+  late TextEditingController measuredWaterController;
 
   @override
   void onInit() {
     chlorineController = TextEditingController();
+    wateramount = TextEditingController();
     liquidAlumController = TextEditingController();
+    calculatedWaterController = TextEditingController();
+      measuredWaterController = TextEditingController();
     solidAlumController = TextEditingController();
     waterProducedController = TextEditingController();
     super.onInit();
@@ -27,6 +33,9 @@ class EditTechbillsController extends GetxController {
   void onClose() {
     chlorineController.dispose();
     liquidAlumController.dispose();
+    wateramount.dispose();
+    calculatedWaterController.dispose();
+    measuredWaterController.dispose();
     solidAlumController.dispose();
     waterProducedController.dispose();
     super.onClose();
@@ -37,13 +46,17 @@ class EditTechbillsController extends GetxController {
     required double liquid,
     required double solid,
     required double water,
+    required double calculatedWater,
+    required double measuredWater,
   }) async {
     try {
       looading.value = true;
 
       final res = await postData(
-        "${ApiConfig.baseUrl}/edit-tech-bill/$id",
+        "${ApiConfig.baseUrl}/edit-old-tech-bills/$id",
         {
+          "calculated_water": calculatedWater,
+          "measured_water": measuredWater,
           "technology_chlorine_consump": chlorine,
           "technology_liquid_alum_consump": liquid,
           "technology_solid_alum_consump": solid,

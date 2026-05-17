@@ -55,7 +55,21 @@ class Techbills extends GetxController {
   final liquidAlumControllers = <int, TextEditingController>{};
   final solidAlumControllers = <int, TextEditingController>{};
   final waterProducedControllers = <int, TextEditingController>{};
+  final calculatedWaterControllers = <int, TextEditingController>{};
+  final measuredWaterControllers = <int, TextEditingController>{};
 
+    TextEditingController getcalculatedWaterControllers(int index) {
+      return calculatedWaterControllers.putIfAbsent(
+        index,
+        () => TextEditingController(),
+      );
+    } 
+     TextEditingController getmeasuredWaterControllers(int index) {
+      return measuredWaterControllers.putIfAbsent(
+        index,
+        () => TextEditingController(),
+      );
+    } 
   TextEditingController getChlorineController(int index) {
     return chlorineControllers.putIfAbsent(
       index,
@@ -91,12 +105,15 @@ class Techbills extends GetxController {
     _debounceTimer?.cancel();
     searchController.dispose();
     stationFilterController.dispose();
+
     
     for (var controller in [
       ...chlorineControllers.values,
       ...liquidAlumControllers.values,
       ...solidAlumControllers.values,
       ...waterProducedControllers.values,
+      ...calculatedWaterControllers.values,
+      ...measuredWaterControllers.values,
     ]) {
       controller.dispose();
     }
@@ -216,6 +233,8 @@ class Techbills extends GetxController {
     required double liquid,
     required double solid,
     required double water,
+    required double calculatedWater,
+    required double measuredWater,
     required int index,
   }) async {
     try {
@@ -229,6 +248,8 @@ class Techbills extends GetxController {
           "technology_liquid_alum_consump": liquid,
           "technology_solid_alum_consump": solid,
           "technology_water_amount": water,
+          "measured_water": measuredWater,
+          "calculated_water": calculatedWater,
         },
       );
 
@@ -242,6 +263,8 @@ class Techbills extends GetxController {
         getLiquidAlumController(index).clear();
         getSolidAlumController(index).clear();
         getWaterProducedController(index).clear();
+        getcalculatedWaterControllers(index).clear();
+        getmeasuredWaterControllers(index).clear();
       } else {
         loading.value = false;
         final errorBody = jsonDecode(res.body);

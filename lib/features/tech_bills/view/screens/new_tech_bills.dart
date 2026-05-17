@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:power_saving/core/constant/colors.dart';
-import 'package:power_saving/core/widgets/rtl_scafold.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:power_saving/features/tech_bills/controller/new_tech_bills.dart';
-import 'package:power_saving/features/technology/model/tech_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 
 class NewTechBillsScreen extends StatelessWidget {
@@ -11,125 +9,213 @@ class NewTechBillsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RTLScaffold(
-      backgroundColor: AppColors.background,
-      body: GetBuilder<NewTechBillsController>(
-        init: NewTechBillsController(),
-        builder: (controller) {
-          return Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: SingleChildScrollView(
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF8FAFC),
+        appBar: AppBar(
+          title: const Text(
+            "إضافة فاتورة تقنية",
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+          backgroundColor: const Color(0xFF1E40AF),
+          elevation: 0,
+        ),
+        body: GetBuilder<NewTechBillsController>(
+          init: NewTechBillsController(),
+          builder: (controller) {
+            return Stack(
+              children: [
+                SingleChildScrollView(
+                  padding: const EdgeInsets.all(20),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      /// 🔽 Stations Dropdown
-                      DropdownButtonFormField<Station>(
-                        hint: const Text("اختر المحطة"),
-                        value: controller.selectedStation,
-                        items: controller.stations
-                            .map(
-                              (station) => DropdownMenuItem(
-                                value: station,
-                                child: Text(station.stationName),
-                              ),
-                            )
-                            .toList(),
-                        onChanged: controller.onStationChanged,
-                      ),
+                      /// 🔷 FILTER CARD
+                      _buildCard(
+                        child: Column(
+                          children: [
+                            _buildSectionTitle("اختيار البيانات"),
 
-                      const SizedBox(height: 16),
+                            const SizedBox(height: 12),
 
-                      /// 🔽 Tech Dropdown
-                      if (controller.selectedStation != null &&
-                          controller.selectedStation!.techs.isNotEmpty)
-                        DropdownButtonFormField<TechnologyModel>(
-                          hint: const Text("اختر نوع التكنولوجيا"),
-                          value: controller.selectedTech,
-                          items: controller.selectedStation!.techs
-                              .map(
-                                (tech) => DropdownMenuItem(
-                                  value: tech,
-                                  child: Text(tech.technologyName),
+                            _buildDropdown(
+                              label: "الفرع",
+                              icon: Icons.business,
+                              value: controller.selectedBranch.value,
+                              items: controller
+                                  .getBranches()
+                                  .map((e) =>
+                                      DropdownMenuItem(value: e, child: Text(e)))
+                                  .toList(),
+                              onChanged: (value) => controller.filterByBranch(value),
+                            ),
+
+                            const SizedBox(height: 12),
+
+                            _buildDropdown(
+                              label: "المحطة",
+                              icon: Icons.map,
+                              value: controller.selectedStation,
+                              items: controller.filteredStations
+                                  .map((e) => DropdownMenuItem(
+                                        value: e,
+                                        child: Text(e.stationName),
+                                      ))
+                                  .toList(),
+                              onChanged: (value) => controller.onStationChanged(value),
+                            ),
+
+                            if (controller.selectedBranch.value != null &&
+                                controller.filteredStations.isEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: Text(
+                                  'لا توجد محطات في هذا الفرع',
+                                  style: TextStyle(
+                                      color: Colors.red.shade700),
                                 ),
-                              )
-                              .toList(),
-                          onChanged: controller.onTechChanged,
+                              ),
+
+                            const SizedBox(height: 12),
+
+                            if (controller.selectedStation != null)
+                              _buildDropdown(
+                                label: "التكنولوجيا",
+                                icon: Icons.engineering,
+                                value: controller.selectedTech,
+                                items: controller.selectedStation!.techs
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e.technologyName),
+                                        ))
+                                    .toList(),
+                                onChanged: (value) => controller.onTechChanged(value),
+                              ),
+                          ],
                         ),
-
-                      const SizedBox(height: 16),
-
-                      /// 📅 Month & Year
-                      CustomTextFormField(
-                        label: 'الشهر',
-                        hintText: 'ادخل الشهر',
-                        controller: controller.monthController,
-                        allowOnlyDigits: true,
-                      ),
-                      CustomTextFormField(
-                        label: 'السنة',
-                        hintText: 'ادخل السنة',
-                        controller: controller.yearController,
-                        allowOnlyDigits: true,
                       ),
 
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 20),
 
-                      /// 💧 Values
-                      CustomTextFormField(
-                        label: 'كمية المياه المستهلكة',
-                        hintText: 'ادخل كمية المياه المستهلكة',
-                        controller: controller.waterProducedController,
-                        allowOnlyDigits: true,
+                      /// 🔷 DATE CARD
+                      _buildCard(
+                        child: Column(
+                          children: [
+                            _buildSectionTitle("التاريخ"),
+                            const SizedBox(height: 12),
+
+                            _buildInput(
+                              controller.monthController,
+                              "الشهر",
+                              Icons.calendar_month,
+                            ),
+                            const SizedBox(height: 10),
+                            _buildInput(
+                              controller.yearController,
+                              "السنة",
+                              Icons.date_range,
+                            ),
+                          ],
+                        ),
                       ),
-                      CustomTextFormField(
-                        label: 'كمية الكلور المستخدمة',
-                        hintText: 'ادخل كمية الكلور المستخدمة',
-                        controller: controller.chlorineController,
-                        allowOnlyDigits: true,
-                      ),
-                      CustomTextFormField(
-                        label: 'كمية الشبة السائلة',
-                        hintText: 'ادخل كمية الشبة السائلة',
-                        controller: controller.liquidAlumController,
-                        allowOnlyDigits: true,
-                      ),
-                      CustomTextFormField(
-                        label: 'كمية الشبة الصلبة',
-                        hintText: 'ادخل كمية الشبة الصلبة',
-                        controller: controller.solidAlumController,
-                        allowOnlyDigits: true,
+
+                      const SizedBox(height: 20),
+
+                      /// 🔷 VALUES CARD
+                      _buildCard(
+                        child: Column(
+                          children: [
+                            _buildSectionTitle("القيم"),
+
+                            const SizedBox(height: 12),
+  _buildInput(
+                              controller.measuredWaterController,
+                             "كمية المياه المقاسة",
+                              Icons.water,
+                            ),
+                            _buildInput(
+                              controller.calculatedWaterController,
+                              "كمية المياه المحسوبة",
+                              Icons.water,
+                            ),
+                            const SizedBox(height: 10),
+ _buildInput(
+                              controller.waterProducedController,
+                              "كمية المياه ",
+                              Icons.water,
+                            ),
+                                                        const SizedBox(height: 10),
+
+                            _buildInput(
+                              controller.chlorineController,
+                              "الكلور",
+                              Icons.science,
+                            ),
+                            const SizedBox(height: 10),
+
+                            _buildInput(
+                              controller.liquidAlumController,
+                              "الشبة السائلة",
+                              Icons.opacity,
+                            ),
+                            const SizedBox(height: 10),
+
+                            _buildInput(
+                              controller.solidAlumController,
+                              "الشبة الصلبة",
+                              Icons.ac_unit,
+                            ),
+                          ],
+                        ),
                       ),
 
                       const SizedBox(height: 24),
 
-                      /// ✅ Submit Button
+                      /// 🔷 BUTTON
                       SizedBox(
                         width: double.infinity,
-                        child: ElevatedButton(
+                        child: ElevatedButton.icon(
+                          icon: const Icon(Icons.save),
+                          label: const Text("حفظ البيانات"),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue.shade600,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
                           onPressed: () {
-                            /// 🔒 Basic validation
                             if (controller.selectedStation == null ||
                                 controller.selectedTech == null) {
                               showCustomErrorDialog(
-                                  errorMessage: "من فضلك اختر المحطة والتكنولوجيا");
+                                errorMessage:
+                                    "من فضلك اختر المحطة والتكنولوجيا",
+                              );
                               return;
                             }
 
                             if (controller.monthController.text.isEmpty ||
                                 controller.yearController.text.isEmpty) {
                               showCustomErrorDialog(
-                                  errorMessage: "من فضلك ادخل الشهر والسنة");
+                                errorMessage:
+                                    "من فضلك ادخل الشهر والسنة",
+                              );
                               return;
                             }
 
                             controller.addTechBills(
-                              staionid: controller.selectedStation!.stationId,
-                              techid: controller.selectedTech!.technologyId!,
+                              staionid:
+                                  controller.selectedStation!.stationId,
+                              techid:
+                                  controller.selectedTech!.technologyId!,
                               chlorine: double.tryParse(
                                       controller.chlorineController.text) ??
                                   0,
+                                  calculatedWater: double.tryParse(
+                                      controller.calculatedWaterController.text) ??                                  0,
+                                      measuredWater: double.tryParse(
+                                      controller.measuredWaterController.text) ??                                  0,
+                                  
                               liquid: double.tryParse(
                                       controller.liquidAlumController.text) ??
                                   0,
@@ -137,34 +223,99 @@ class NewTechBillsScreen extends StatelessWidget {
                                       controller.solidAlumController.text) ??
                                   0,
                               water: double.tryParse(
-                                      controller.waterProducedController.text) ??
+                                      controller
+                                          .waterProducedController.text) ??
                                   0,
                               index: 0,
                             );
                           },
-                          child: const Text("حفظ البيانات"),
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
 
-              /// 🔄 Loading Overlay
-              Obx(() {
-                if (controller.loading.value) {
-                  return Container(
-                    color: Colors.black.withOpacity(0.3),
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
-                }
-                return const SizedBox();
-              }),
-            ],
-          );
-        },
+                /// 🔄 LOADING
+                Obx(() => controller.loading.value
+                    ? Container(
+                        color: Colors.black.withOpacity(0.2),
+                        child: const Center(
+                            child: CircularProgressIndicator()),
+                      )
+                    : const SizedBox()),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  /// 🔹 Reusable Card
+  Widget _buildCard({required Widget child}) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 12,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: child,
+    );
+  }
+
+  /// 🔹 Section Title
+  Widget _buildSectionTitle(String title) {
+    return Row(
+      children: [
+        Icon(Icons.tune, color: Colors.blue.shade700, size: 18),
+        const SizedBox(width: 8),
+        Text(
+          title,
+          style: const TextStyle(
+              fontWeight: FontWeight.w600, fontSize: 16),
+        ),
+      ],
+    );
+  }
+
+  /// 🔹 Styled Input
+  Widget _buildInput(
+      TextEditingController controller, String label, IconData icon) {
+    return CustomTextFormField(
+      controller: controller,
+      label: label,
+      icon: icon,
+      allowOnlyDigits: true,
+    );
+  }
+
+  /// 🔹 Styled Dropdown
+  Widget _buildDropdown({
+    required String label,
+    required IconData icon,
+    required value,
+    required List<DropdownMenuItem> items,
+    required Function(dynamic) onChanged,
+  }) {
+    return DropdownButtonFormField(
+      value: value,
+      items: items,
+      onChanged: onChanged,
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon, color: Colors.blue.shade600),
+        filled: true,
+        fillColor: Colors.grey.shade50,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
       ),
     );
   }

@@ -59,6 +59,8 @@ class EditTechBills extends StatelessWidget {
             controller.liquidAlumController.text = bill.technologyLiquidAlumConsump.toString();
             controller.solidAlumController.text = bill.technologySolidAlumConsump.toString();
             controller.waterProducedController.text = bill.technologyWaterAmount.toString();
+            controller.calculatedWaterController.text = bill.calculatedWater.toString();
+            controller.measuredWaterController.text = bill.measuredWater.toString();
 
             return Obx(() {
               if (controller.looading.value) {
@@ -256,6 +258,12 @@ class EditTechBills extends StatelessWidget {
                                               onPressed: () {
                                                 {
                                                   controller.editTechBills(
+                                                    
+                                                    measuredWater: double.tryParse(
+                                                          controller.measuredWaterController.text) ??
+                                                      0,
+                                                      calculatedWater: double.tryParse(
+                                                          controller.calculatedWaterController.text) ??                                  0,
                                                     id: bill.techBillId,
                                                     chlorine: double.tryParse(
                                                           controller
@@ -274,7 +282,7 @@ class EditTechBills extends StatelessWidget {
                                                         ) ?? 0,
                                                     water: double.tryParse(
                                                           controller
-                                                              .waterProducedController.text,
+                                                              .wateramount.text,
                                                         ) ?? 0,
                                                   );
                                                 }
