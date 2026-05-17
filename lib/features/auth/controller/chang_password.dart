@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:power_saving/gloable/ip_config.dart';
+import 'package:power_saving/features/auth/domain/repositories/auth_repository.dart';
+import 'package:power_saving/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:power_saving/my_widget/sharable.dart';
-import 'package:power_saving/network/network.dart';
 
 class ChangePasswordController extends GetxController {
   final currentPassword = TextEditingController();
   final newPassword = TextEditingController();
   final confirmPassword = TextEditingController();
 
-  var isLoading = false.obs;
+  final RxBool isLoading = false.obs;
 
-
+  // Injection of AuthRepository interface
+  final AuthRepository _authRepository = Get.put<AuthRepository>(AuthRepositoryImpl());
 
   @override
   void onClose() {
@@ -20,31 +21,32 @@ class ChangePasswordController extends GetxController {
     confirmPassword.dispose();
     super.onClose();
   }
-  Future<void> changePassword(String old, String newpassword ) async {
-  try {
-    isLoading.value = true;
 
-   final res = await postData(
-  "${ApiConfig.baseUrl}/change-password",
-  {
-    "old_password": old,
-    "new_password": newpassword,
-  },
-);
+  /// Triggers safe password updates via the repository
+  Future<void> changePassword(String old, String newpassword) async {
+    try {
+      isLoading.value = true;
 
+      final result = await _authRepository.changePassword(old, newpassword);
 
-    isLoading.value = false;
+      isLoading.value = false;
 
-    if (res.statusCode == 200) {
-    
-
-      showSuccessToast("تم تغيير كلمة المرور بنجاح");
-      Get.offNamed('/home');
-    } else {
-      showCustomErrorDialog(errorMessage: "خطأ");
+      result.fold(
+        (success) {
+          if (success) {
+            showSuccessToast("تم تغيير كلمة المرور بنجاح");
+            Get.offNamed('/home');
+          } else {
+            showCustomErrorDialog(errorMessage: "فشل تغيير كلمة المرور.");
+          }
+        },
+        (failure) {
+          showCustomErrorDialog(errorMessage: failure.message);
+        },
+      );
+    } catch (e) {
+      isLoading.value = false;
+      showCustomErrorDialog(errorMessage: 'حدث خطأ غير متوقع: ${e.toString()}');
     }
-  } catch (e) {
-    isLoading.value = false;
   }
-}
 }

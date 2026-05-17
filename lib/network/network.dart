@@ -1,9 +1,19 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/shared_pref/cache.dart';
+
+class ApiException implements Exception {
+  final int statusCode;
+  final String message;
+
+  ApiException({required this.statusCode, required this.message});
+
+  @override
+  String toString() => message;
+}
+
 Future<http.Response> fetchData(String url) async {
-  String? token = Cache.getdata(key: "token")??"";
+  String? token = Cache.getdata(key: "token") ?? "";
   final headers = {
     "Content-Type": "application/json",
     'Authorization': 'Bearer $token',
@@ -13,14 +23,20 @@ Future<http.Response> fetchData(String url) async {
     headers: headers,
   );
 
-  if (res.statusCode == 200) {
+  if (res.statusCode >= 200 && res.statusCode < 300) {
     return res;
   } else {
-    throw Exception('Failed to load data. Status code: ${res.statusCode}');
+    String errorMessage = 'حدث خطأ غير متوقع أثناء تحميل البيانات';
+    try {
+      final errorBody = jsonDecode(res.body);
+      errorMessage = errorBody['error'] ?? errorMessage;
+    } catch (_) {}
+    throw ApiException(statusCode: res.statusCode, message: errorMessage);
   }
 }
+
 Future<http.Response> postData(String url, Map<String, dynamic> body) async {
-  String token = Cache.getdata(key: "token")??"";
+  String token = Cache.getdata(key: "token") ?? "";
   final headers = {
     "Content-Type": "application/json",
     "Authorization": "Bearer $token",
@@ -33,9 +49,12 @@ Future<http.Response> postData(String url, Map<String, dynamic> body) async {
   if (res.statusCode >= 200 && res.statusCode < 300) {
     return res;
   } else {
-       final errorBody = jsonDecode(res.body);
-      final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';
-      showCustomErrorDialog(errorMessage: errorMessage);
-    throw Exception('POST failed with status code: ${res.statusCode}\nBody: ${res.body}');
+    String errorMessage = 'حدث خطأ غير متوقع';
+    try {
+      final errorBody = jsonDecode(res.body);
+      errorMessage = errorBody['error'] ?? errorMessage;
+    } catch (_) {}
+    throw ApiException(statusCode: res.statusCode, message: errorMessage);
   }
 }
+

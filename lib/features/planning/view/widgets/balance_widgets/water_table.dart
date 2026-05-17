@@ -3,7 +3,7 @@ import 'package:power_saving/core/constant/colors.dart';
 import 'package:power_saving/core/constant/styles.dart';
 import 'package:power_saving/core/helpers/extensions.dart';
 import 'package:power_saving/features/planning/controller/blance_chart/blance_chart.dart';
-import 'package:power_saving/features/planning/view/widgets/blance_widget.dart/header_cell.dart';
+import 'package:power_saving/features/planning/view/widgets/balance_widgets/header_cell.dart';
 
 class WaterDataTable extends StatelessWidget {
   final BalanceChartController controller;

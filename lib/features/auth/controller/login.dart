@@ -1,20 +1,17 @@
-
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:power_saving/gloable/data.dart';
-import 'package:power_saving/features/auth/model/login.dart';
-import 'package:power_saving/gloable/ip_config.dart';
+import 'package:power_saving/global/data.dart';
+import 'package:power_saving/features/auth/domain/repositories/auth_repository.dart';
+import 'package:power_saving/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:power_saving/my_widget/sharable.dart';
-import 'package:power_saving/network/network.dart';
-
-import '../../../shared_pref/cache.dart';
 
 class LoginController extends GetxController {
   late TextEditingController name;
   late TextEditingController password;
-  RxBool isLoading = false.obs;
+  final RxBool isLoading = false.obs;
+  
+  // Dependency injection via GetX
+  final AuthRepository _authRepository = Get.put<AuthRepository>(AuthRepositoryImpl());
 
   @override
   void onInit() {
@@ -23,59 +20,36 @@ class LoginController extends GetxController {
     name = TextEditingController();
   }
 
-  // Override onClose to dispose of the controllers
   @override
   void onClose() {
-    // Dispose of the controllers when the controller is closed
     password.dispose();
     name.dispose();
-
     super.onClose();
   }
-  
-  
-// ignore: non_constant_identifier_names
-Future<void> Login(String name, String password) async {
-  try {
-    isLoading.value = true;
 
-   final res = await postData(
-  "${ApiConfig.baseUrl}/login",
-  {
-    "username": name,
-    "password": password,
-  },
-);
+  /// Performs user authentication using robust Repository Pattern
+  Future<void> login(String name, String password) async {
+    try {
+      isLoading.value = true;
 
+      final result = await _authRepository.login(name, password);
 
-    isLoading.value = false;
+      isLoading.value = false;
 
-    if (res.statusCode == 200) {
-      final jsonResponse = jsonDecode(res.body);
-
-      // 👇 Optional: print to see structure
-
-      // ✅ Step 1: Extract user info and token
-      final userMap = jsonResponse['current_user']; // or just jsonResponse if no wrapper
-      final token = jsonResponse['token']; // adjust based on actual structure
-
-      // ✅ Step 2: Save to cache
-       Cache.saveData(key: "user", value: jsonEncode(userMap));
-       Cache.saveData(key: "token", value: token);
-
-      // ✅ Step 3: Store in global `user` variable
-      user = User.fromJson(userMap);
-
-      // ✅ Step 4: Navigate to home
-      Get.offNamed('/home');
-    } else {
-      final errorBody = jsonDecode(res.body);
-      final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';
-      showCustomErrorDialog(errorMessage: errorMessage);
+      result.fold(
+        (userData) {
+          // Success pathway: store User instance dynamically in session
+          user = userData;
+          Get.offNamed('/home');
+        },
+        (failure) {
+          // Failure pathway: map failure message securely to custom user dialogs
+          showCustomErrorDialog(errorMessage: failure.message);
+        },
+      );
+    } catch (e) {
+      isLoading.value = false;
+      showCustomErrorDialog(errorMessage: 'حدث خطأ غير متوقع: ${e.toString()}');
     }
-  } catch (e) {
-    isLoading.value = false;
   }
-}
-
 }

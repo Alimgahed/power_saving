@@ -6,8 +6,7 @@ import 'package:power_saving/core/widgets/main_screen/reuseable_appbar.dart';
 import 'package:power_saving/core/widgets/main_screen/totl_header.dart';
 import 'package:power_saving/features/home/view/widgets/empaty.dart';
 import 'package:power_saving/features/planning/controller/place/places_controller.dart';
-import 'package:power_saving/features/planning/view/widgets/place_widget/placeCard.dart';
-import 'package:power_saving/main.dart';
+import 'package:power_saving/features/planning/view/widgets/place_widget/place_card.dart';
 
 class PlacesScreen extends StatelessWidget {
   const PlacesScreen({super.key});
@@ -85,16 +84,16 @@ class PlacesScreen extends StatelessWidget {
     ];
   }
 
-  /// ✅ Dynamic SliverGrid with LayoutBuilder (No Width Condition)
+  /// ✅ Dynamic SliverGrid with LayoutBuilder (No Global Width Condition)
   Widget _responsivePlacesGrid(PlacesController controller) {
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       sliver: SliverLayoutBuilder(
         builder: (context, constraints) {
-
-          final double aspectRatio = width > 600 ? 0.7 : 0.8;
-
-          final int crossAxisCount = (width / 280).floor(); 
+          final double availableWidth = constraints.crossAxisExtent;
+          final double aspectRatio = availableWidth > 600 ? 0.7 : 0.8;
+          int crossAxisCount = (availableWidth / 280).floor();
+          if (crossAxisCount < 1) crossAxisCount = 1;
 
           return SliverGrid(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

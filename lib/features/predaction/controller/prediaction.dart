@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:power_saving/features/predaction/model/predication.dart';
-import 'package:power_saving/gloable/ip_config.dart';
+import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 

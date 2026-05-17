@@ -5,7 +5,7 @@ class RTLScaffold extends StatelessWidget {
   final Widget body;
   final PreferredSizeWidget? appBar;
   final Color? backgroundColor;
-  
+
   const RTLScaffold({
     super.key,
     required this.body,

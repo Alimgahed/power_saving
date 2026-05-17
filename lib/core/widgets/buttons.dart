@@ -10,7 +10,7 @@ class PrimaryButton extends StatelessWidget {
   final IconData? icon;
   final bool isLoading;
   final Color? backgroundColor;
-  
+
   const PrimaryButton({
     super.key,
     required this.label,
@@ -26,16 +26,19 @@ class PrimaryButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton.icon(
         onPressed: isLoading ? null : onPressed,
-        icon: isLoading
-            ? const SizedBox(
-                width: AppDimensions.iconM,
-                height: AppDimensions.iconM,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.textWhite),
-                ),
-              )
-            : Icon(icon ?? Icons.save, size: AppDimensions.iconM),
+        icon:
+            isLoading
+                ? const SizedBox(
+                  width: AppDimensions.iconM,
+                  height: AppDimensions.iconM,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      AppColors.textWhite,
+                    ),
+                  ),
+                )
+                : Icon(icon ?? Icons.save, size: AppDimensions.iconM),
         label: Text(label, style: AppTextStyles.button),
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: AppDimensions.paddingL),
@@ -50,6 +53,7 @@ class PrimaryButton extends StatelessWidget {
     );
   }
 }
+
 class ReusableActionButton extends StatelessWidget {
   final String label;
   final IconData icon;
@@ -57,7 +61,8 @@ class ReusableActionButton extends StatelessWidget {
   final Color? backgroundColor;
   final Color? foregroundColor;
 
-  const ReusableActionButton({super.key, 
+  const ReusableActionButton({
+    super.key,
     required this.label,
     required this.icon,
     required this.route,
@@ -99,7 +104,8 @@ class ReusableFooter extends StatelessWidget {
   final TextStyle? textStyle; // Text style for the button label and text label
   final dynamic arguments; // Custom arguments to pass during navigation
 
-  const ReusableFooter({super.key, 
+  const ReusableFooter({
+    super.key,
     required this.station,
     required this.buttonLabel,
     required this.textLabel,
@@ -122,8 +128,9 @@ class ReusableFooter extends StatelessWidget {
           Expanded(
             child: Container(
               padding: const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.paddingL,
-                  vertical: AppDimensions.paddingS),
+                horizontal: AppDimensions.paddingL,
+                vertical: AppDimensions.paddingS,
+              ),
               decoration: BoxDecoration(
                 color: AppColors.cardBackground,
                 borderRadius: BorderRadius.circular(AppDimensions.radiusM),

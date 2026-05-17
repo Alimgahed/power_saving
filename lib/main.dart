@@ -43,7 +43,7 @@ import 'package:power_saving/features/technology/view/screens/edittech.dart';
 import 'package:power_saving/features/technology/view/screens/technology.dart';
 import 'package:power_saving/test.dart';
 
-import 'gloable/data.dart';
+import 'global/data.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,34 +52,31 @@ void main() async {
   // ✅ Initialize SharedPreferences before running the app
   await Cache.init();
 
+  // ✅ Initialize reactive Session state container
+  Get.put(SessionService(), permanent: true);
+
+  // ✅ Asynchronously parse and initialize cached user on startup
+  final jsuser = Cache.getdata(key: "user") ?? "{}";
+  if (jsuser.isNotEmpty && jsuser != "{}") {
+    try {
+      dynamic decoded = jsonDecode(jsuser);
+      while (decoded is String) {
+        decoded = jsonDecode(decoded);
+      }
+      user = User.fromJson(decoded as Map<String, dynamic>);
+    } catch (e) {
+      debugPrint("Error parsing cached user: $e");
+    }
+  }
+
   runApp(const MyApp());
 }
-
-// Initialize with default values
-double width = 0.0;
-double height = 0.0;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
- var jsuser = Cache.getdata(key: "user") ?? "{}";
-
-if (jsuser.isNotEmpty && jsuser != "{}") {
-  try {
-    dynamic decoded = jsonDecode(jsuser);
-    
-    // Keep decoding until we get a Map
-    while (decoded is String) {
-      decoded = jsonDecode(decoded);
-    }
-    
-    user = User.fromJson(decoded as Map<String, dynamic>);
-  // ignore: empty_catches
-  } catch (e) {
-  }
-}
 
 
 
@@ -142,20 +139,7 @@ if (jsuser.isNotEmpty && jsuser != "{}") {
         GetPage(name: '/EditChemcials', page: () => EditChemcials()),
         GetPage(name: '/AnimatedGauge', page: () => AnimatedGauge()),
       ],
-      onInit: () {
-        _initializeDimensions();
-      },
     );
-  }
-
-  void _initializeDimensions() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (Get.context != null) {
-        height = Get.height;
-        width = Get.width;
-     
-      }
-    });
   }
 }
 

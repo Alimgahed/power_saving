@@ -6,8 +6,8 @@ import 'package:power_saving/core/widgets/main_screen/reuseable_appbar.dart';
 import 'package:power_saving/core/widgets/rtl_scafold.dart';
 
 import 'package:power_saving/features/stations/controller/all_stations_controller.dart';
-import 'package:power_saving/features/stations/view/widgets/Stations_body.dart';
-import 'package:power_saving/gloable/data.dart';
+import 'package:power_saving/features/stations/view/widgets/stations_body.dart';
+import 'package:power_saving/global/data.dart';
 
 
 class StationsScreen extends StatelessWidget {

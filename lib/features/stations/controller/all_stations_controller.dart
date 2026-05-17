@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/stations/model/station_model.dart';
-import 'package:power_saving/gloable/ip_config.dart';
+import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/network/network.dart';
 
 class StationsController extends GetxController {

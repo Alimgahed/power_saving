@@ -5,12 +5,8 @@ import 'package:power_saving/core/constant/colors.dart';
 class FormCard extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry? padding;
-  
-  const FormCard({
-    super.key,
-    required this.child,
-    this.padding,
-  });
+
+  const FormCard({super.key, required this.child, this.padding});
 
   @override
   Widget build(BuildContext context) {

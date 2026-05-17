@@ -21,10 +21,7 @@ class Login extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [
-                const Color(0xFFF8FAFC),
-                Colors.blue.shade50,
-              ],
+              colors: [const Color(0xFFF8FAFC), Colors.blue.shade50],
             ),
           ),
           child: Center(
@@ -58,10 +55,16 @@ class Login extends StatelessWidget {
                         // Header Section with Gradient
                         Container(
                           width: double.infinity,
-                          padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 40,
+                            horizontal: 24,
+                          ),
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
-                              colors: [Colors.blue.shade600, Colors.blue.shade800],
+                              colors: [
+                                Colors.blue.shade600,
+                                Colors.blue.shade800,
+                              ],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
@@ -90,7 +93,7 @@ class Login extends StatelessWidget {
                               ),
                               const SizedBox(height: 20),
                               const Text(
-                                 ' نظام إدارة الطاقة والمياه',
+                                ' نظام إدارة الطاقة والمياه',
                                 style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
@@ -111,7 +114,7 @@ class Login extends StatelessWidget {
                             ],
                           ),
                         ),
-                    
+
                         // Form Section
                         Padding(
                           padding: const EdgeInsets.all(32.0),
@@ -127,9 +130,9 @@ class Login extends StatelessWidget {
                                   icon: Icons.person_outline,
                                   controller: controller.name,
                                 ),
-                                                  
+
                                 const SizedBox(height: 24),
-                                                  
+
                                 // Password Field using CustomTextFormField
                                 CustomTextFormField(
                                   label: 'كلمة المرور',
@@ -138,15 +141,18 @@ class Login extends StatelessWidget {
                                   controller: controller.password,
                                   obscureText: true,
                                 ),
-                                                  
+
                                 const SizedBox(height: 32),
-                                                  
+
                                 // Login Button - Optimized version
                                 Container(
                                   width: double.infinity,
                                   decoration: BoxDecoration(
                                     gradient: LinearGradient(
-                                      colors: [Colors.blue.shade600, Colors.blue.shade800],
+                                      colors: [
+                                        Colors.blue.shade600,
+                                        Colors.blue.shade800,
+                                      ],
                                       begin: Alignment.topLeft,
                                       end: Alignment.bottomRight,
                                     ),
@@ -164,52 +170,65 @@ class Login extends StatelessWidget {
                                     child: InkWell(
                                       borderRadius: BorderRadius.circular(12),
                                       onTap: () {
-                                        if (_globalKey.currentState!.validate()) {
-                                          controller.Login(controller.name.text, controller.password.text);
+                                        if (_globalKey.currentState!
+                                            .validate()) {
+                                          controller.login(
+                                            controller.name.text,
+                                            controller.password.text,
+                                          );
                                         }
                                       },
                                       child: Container(
-                                        padding: const EdgeInsets.symmetric(vertical: 18),
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 18,
+                                        ),
                                         child: Obx(() {
                                           return AnimatedSwitcher(
-                                            duration: const Duration(milliseconds: 300),
-                                            child: controller.isLoading.value
-                                                ? const SizedBox(
-                                                    height: 24,
-                                                    width: 24,
-                                                    child: CircularProgressIndicator(
-                                                      color: Colors.white,
-                                                      strokeWidth: 2,
-                                                    ),
-                                                  )
-                                                : const Row(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    children: [
-                                                      Icon(
-                                                        Icons.login,
-                                                        color: Colors.white,
-                                                        size: 20,
-                                                      ),
-                                                      SizedBox(width: 8),
-                                                      Text(
-                                                        'تسجيل الدخول',
-                                                        style: TextStyle(
-                                                          fontSize: 16,
+                                            duration: const Duration(
+                                              milliseconds: 300,
+                                            ),
+                                            child:
+                                                controller.isLoading.value
+                                                    ? const SizedBox(
+                                                      height: 24,
+                                                      width: 24,
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                            color: Colors.white,
+                                                            strokeWidth: 2,
+                                                          ),
+                                                    )
+                                                    : const Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Icon(
+                                                          Icons.login,
                                                           color: Colors.white,
-                                                          fontWeight: FontWeight.w600,
+                                                          size: 20,
                                                         ),
-                                                      ),
-                                                    ],
-                                                  ),
+                                                        SizedBox(width: 8),
+                                                        Text(
+                                                          'تسجيل الدخول',
+                                                          style: TextStyle(
+                                                            fontSize: 16,
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
                                           );
                                         }),
                                       ),
                                     ),
                                   ),
                                 ),
-                                                  
+
                                 const SizedBox(height: 20),
-                                                  
+
                                 // Divider with text
                                 Row(
                                   children: [
@@ -220,7 +239,9 @@ class Login extends StatelessWidget {
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                      ),
                                       child: Text(
                                         'أو',
                                         style: TextStyle(
@@ -238,9 +259,9 @@ class Login extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                                  
+
                                 const SizedBox(height: 20),
-                                                  
+
                                 // Create Account Button
                                 Container(
                                   width: double.infinity,
@@ -267,9 +288,12 @@ class Login extends StatelessWidget {
                                         Get.toNamed('/NewUser');
                                       },
                                       child: Container(
-                                        padding: const EdgeInsets.symmetric(vertical: 16),
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 16,
+                                        ),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             Icon(
                                               Icons.person_add_alt_outlined,
@@ -291,13 +315,13 @@ class Login extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                                  
+
                                 const SizedBox(height: 24),
-                                                  
+
                                 // Footer Text
                                 Center(
                                   child: Text(
-                                    ' مرحباً بك في نظام إدارة الطاقة والمياه' ,
+                                    ' مرحباً بك في نظام إدارة الطاقة والمياه',
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: Colors.grey.shade600,

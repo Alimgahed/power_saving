@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/reports/model/report.dart';
-import 'package:power_saving/gloable/ip_config.dart';
+import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/network/network.dart';
 
 class ReportsController extends GetxController {
@@ -174,7 +174,7 @@ class ReportsController extends GetxController {
     _index = branchs.map((b) {
       return _BranchIndex(
         branch: b,
-        branchLower: (b.branchName ?? '').toLowerCase(),
+        branchLower: b.branchName.toLowerCase(),
         stationLower: (b.stationname ?? '').toLowerCase(),
       );
     }).toList();

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/home/view/widgets/navigation_helper.dart';
 import 'package:power_saving/features/home/view/widgets/voltaige.dart';
-import 'package:power_saving/gloable/data.dart';
+import 'package:power_saving/global/data.dart';
 import 'package:power_saving/my_widget/home.dart';
 import 'package:power_saving/shared_pref/cache.dart';
 

@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/Counter/model/Counter_model.dart';
-import 'package:power_saving/gloable/data.dart';
-import 'package:power_saving/gloable/ip_config.dart';
+import 'package:power_saving/global/data.dart';
+import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 

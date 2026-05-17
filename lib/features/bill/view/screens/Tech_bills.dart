@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:power_saving/features/bill/controller/tech_bills.dart';
-import 'package:power_saving/gloable/data.dart';
+import 'package:power_saving/global/data.dart';
 import 'package:power_saving/features/tech_bills/model/tech_bill.dart';
 
 

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/analysis/controller/analysis.dart';
 import 'package:power_saving/features/home/model/home.dart';
-import 'package:power_saving/main.dart';
 import 'dart:convert';
 
 import 'package:power_saving/features/analysis/model/analysis.dart';
@@ -164,14 +163,16 @@ class AnalysisView extends StatelessWidget {
                 );
               }
 
+              final double localWidth = MediaQuery.of(context).size.width;
+              final double localHeight = MediaQuery.of(context).size.height;
+
               return SingleChildScrollView(
                 padding: const EdgeInsets.all(10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                 
                     // Analysis Charts Grid
-                    buildChartsGrid(images),
+                    buildChartsGrid(context, images, localWidth, localHeight),
                   ],
                 ),
               );
@@ -182,15 +183,7 @@ class AnalysisView extends StatelessWidget {
     );
   }
 
- 
-
-  // Extract base64 images from the analysis model
- 
-
-  
-
-  }
-   List<String> extractImages(AnalysisModel analysisModel) {
+  List<String> extractImages(AnalysisModel analysisModel) {
     List<String> images = [];
 
     // Extract images based on your actual model structure
@@ -210,6 +203,7 @@ class AnalysisView extends StatelessWidget {
 
     return images;
   }
+
   String _getChartTitle(int index) {
     switch (index) {
       case 0:
@@ -226,12 +220,15 @@ class AnalysisView extends StatelessWidget {
   }
 
   Widget _buildChartCard(
+    BuildContext context,
     String base64Image,
     int chartNumber,
     String chartTitle,
+    double localWidth,
+    double localHeight,
   ) {
     return GestureDetector(
-      onTap: () => _showFullScreenImage(base64Image, chartTitle),
+      onTap: () => _showFullScreenImage(context, base64Image, chartTitle, localWidth, localHeight),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -339,7 +336,13 @@ class AnalysisView extends StatelessWidget {
     );
   }
 
-  void _showFullScreenImage(String base64Image, String chartTitle) {
+  void _showFullScreenImage(
+    BuildContext context,
+    String base64Image,
+    String chartTitle,
+    double localWidth,
+    double localHeight,
+  ) {
     Get.dialog(
       Dialog(
         backgroundColor: Colors.transparent,
@@ -359,8 +362,8 @@ class AnalysisView extends StatelessWidget {
             Center(
               child: Container(
                 constraints: BoxConstraints(
-                  maxWidth: width * 0.95,
-                  maxHeight: height * 0.85,
+                  maxWidth: localWidth * 0.95,
+                  maxHeight: localHeight * 0.85,
                 ),
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -428,24 +431,31 @@ class AnalysisView extends StatelessWidget {
       ),
     );
   }
-  // Helper method to get proper chart titles
-  
 
-Widget buildChartsGrid(List<String> images) {
+  Widget buildChartsGrid(
+    BuildContext context,
+    List<String> images,
+    double localWidth,
+    double localHeight,
+  ) {
     return Wrap(
       spacing: 8, // horizontal spacing between items
       runSpacing: 8, // vertical spacing between lines
       alignment: WrapAlignment.center,
       children: List.generate(images.length, (index) {
-        return Container(
-          width: (width - 30) / 2, // Responsive width for 2 columns
+        return SizedBox(
+          width: localWidth > 800 ? (localWidth - 60) / 2 : (localWidth - 30),
           height: 450, // Fixed height for consistent cards
           child: _buildChartCard(
+            context,
             images[index],
             index + 1,
             _getChartTitle(index),
+            localWidth,
+            localHeight,
           ),
         );
       }),
     );
   }
+}

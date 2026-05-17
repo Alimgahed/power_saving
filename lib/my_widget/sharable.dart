@@ -190,7 +190,7 @@ class SearchableDropdown extends StatelessWidget {
   final String tag;
 
   const SearchableDropdown({
-    Key? key,
+    super.key,
     required this.items,
     this.initialValue,
     required this.onChanged,
@@ -199,7 +199,7 @@ class SearchableDropdown extends StatelessWidget {
     required this.hintText,
     this.prefixIcon,
     this.tag = 'searchable_dropdown',
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

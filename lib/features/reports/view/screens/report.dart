@@ -9,14 +9,13 @@ import 'package:power_saving/features/reports/view/widgets/over_liquid_report.da
 import 'package:power_saving/features/reports/view/widgets/over_powe_report.dart';
 import 'package:power_saving/features/reports/view/widgets/over_soild_alum.dart';
 import 'package:power_saving/features/reports/view/widgets/power_zero_water.dart';
-import 'package:power_saving/features/reports/view/widgets/station-total.dart';
+import 'package:power_saving/features/reports/view/widgets/station_total.dart';
 import 'package:power_saving/features/reports/view/widgets/stations_bills_report.dart';
 import 'package:power_saving/features/reports/view/widgets/tech3_mont_report.dart';
 import 'package:power_saving/features/reports/view/widgets/technology_report.dart';
-import 'package:power_saving/gloable/data.dart';
+import 'package:power_saving/global/data.dart';
 import 'package:power_saving/features/reports/model/report.dart';
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
+import 'package:power_saving/global/html_platform.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 
 class Reports extends StatelessWidget {
@@ -649,10 +648,7 @@ abstract class BaseReportPrinter {
 </html>
 ''';
 
-    final blob = html.Blob([htmlStr], 'text/html');
-    final url = html.Url.createObjectUrlFromBlob(blob);
-    html.window.open(url, '_blank');
-    html.Url.revokeObjectUrl(url);
+    openHtmlReport(htmlStr);
   }
 }
 

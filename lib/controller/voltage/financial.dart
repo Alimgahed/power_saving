@@ -1,21 +1,15 @@
-import 'dart:async';
 import 'dart:convert';
-import 'dart:html';
 import 'package:flutter/foundation.dart'; // kIsWeb
-import 'dart:ui_web' as ui_web; // platformViewRegistry
 import 'package:get/get.dart';
-import 'package:power_saving/gloable/ip_config.dart';
-import 'package:power_saving/main.dart';
+import 'package:power_saving/global/ip_config.dart';
+import 'package:power_saving/global/iframe_platform.dart';
 import 'package:power_saving/network/network.dart';
 
 class FinancialController extends GetxController {
   RxBool loading = false.obs;
 
   String? waterChartHtml;
-  IFrameElement? iframeElement;
-  bool iframeRegistered = false;
 
- 
   @override
   void onInit() {
     super.onInit();
@@ -31,12 +25,9 @@ class FinancialController extends GetxController {
         final jsonData = jsonDecode(res.body);
         waterChartHtml = jsonData["water_chart"] as String?;
 
-        // Delay iframe creation to avoid lifecycle warning
+        // Register iframe view for web compilation dynamically
         if (waterChartHtml != null && kIsWeb) {
-          Future.delayed(Duration(milliseconds: 100), () {
-            _createIframe(waterChartHtml!);
-            update();
-          });
+          registerIframe('sunburst-chart', waterChartHtml!);
         }
 
         loading.value = false;
@@ -44,25 +35,7 @@ class FinancialController extends GetxController {
       }
     } catch (e) {
       loading.value = false;
-      print("Error fetching home: $e");
+      debugPrint("Error fetching financial analysis: $e");
     }
   }
-
-  void _createIframe(String htmlContent) {
-    iframeElement = IFrameElement()
-      ..style.width = '${width}px' // increased width
-      ..style.height = '${height}px' // increased height
-      ..style.border = 'none'
-      ..srcdoc = htmlContent;
-
-    if (!iframeRegistered) {
-      ui_web.platformViewRegistry.registerViewFactory(
-        'sunburst-chart',
-        (int viewId) => iframeElement!,
-      );
-      iframeRegistered = true;
-    }
-  }
-
- 
 }

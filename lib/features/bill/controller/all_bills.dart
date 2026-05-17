@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/bill/model/bills_model.dart';
-import 'package:power_saving/gloable/ip_config.dart';
+import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/network/network.dart';
 
 class AllBills extends GetxController {

@@ -1,5 +1,6 @@
 // lib/config/api_config.dart
-import 'dart:html' as html;
+import 'package:flutter/foundation.dart';
+import 'package:power_saving/global/html_platform.dart';
 
 class ApiConfig {
   // Private constructor
@@ -16,13 +17,18 @@ class ApiConfig {
   
   /// Automatically detect and return the appropriate API URL
   static String get baseUrl {
-    final currentHost = html.window.location.hostname;
+    final currentHost = getHostname();
+    
+    if (currentHost.isEmpty) {
+      // Accessed from non-web platform or headless environment
+      return "http://$publicIP";
+    }
     
     // Check where the app is being accessed from
     if (currentHost == 'localhost' || currentHost == '127.0.0.1') {
       // Accessed from localhost
       return "http://$localhostIP";
-    } else if (currentHost!.startsWith('172.16.') || currentHost.startsWith('192.168.')) {
+    } else if (currentHost.startsWith('172.16.') || currentHost.startsWith('192.168.')) {
       // Accessed from local network (LAN)
       return "http://$localIP";
     } else {
@@ -33,11 +39,15 @@ class ApiConfig {
   
   /// Alternative: Return just the IP:PORT for your existing code
   static String get ip {
-    final currentHost = html.window.location.hostname;
+    final currentHost = getHostname();
+    
+    if (currentHost.isEmpty) {
+      return publicIP;
+    }
     
     if (currentHost == 'localhost' || currentHost == '127.0.0.1') {
       return localhostIP;
-    } else if (currentHost!.startsWith('172.16.') || currentHost.startsWith('192.168.')) {
+    } else if (currentHost.startsWith('172.16.') || currentHost.startsWith('192.168.')) {
       return localIP;
     } else {
       return publicIP;
@@ -60,8 +70,8 @@ class ApiConfig {
   
   /// Debug: Print current configuration
   static void printConfig() {
-    print('🌐 Current hostname: ${html.window.location.hostname}');
-    print('🔗 API URL: $baseUrl');
-    print('📍 Using IP: $ip');
+    debugPrint('🌐 Current hostname: ${getHostname()}');
+    debugPrint('🔗 API URL: $baseUrl');
+    debugPrint('📍 Using IP: $ip');
   }
 }

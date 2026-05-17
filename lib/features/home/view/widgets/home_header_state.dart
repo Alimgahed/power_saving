@@ -5,7 +5,8 @@ import 'package:power_saving/features/home/controller/home.dart';
 
 /// Header Statistics Display
 /// 
-/// Shows animated cards with key metrics like cost, water, power, and chemicals
+/// Shows animated cards with key metrics like cost, water, power, and chemicals.
+/// Fully responsive grid wrapping smoothly across Mobile, Tablet, and Desktop.
 class HomeHeaderStats extends StatelessWidget {
   final HomeController controller;
 
@@ -16,161 +17,146 @@ class HomeHeaderStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.blue.shade600, Colors.blue.shade800],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.blue.withOpacity(0.3),
-            blurRadius: 20,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Obx(
-              () => _StatCard(
-                title: 'إجمالي التكلفة',
-                value: '${_formatNumber(controller.animatedMoney.value ?? 0)} جنيه',
-                icon: Icons.attach_money,
-                color: Colors.green,
-              ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double width = constraints.maxWidth;
+        
+        // Calculate dynamic columns based on available viewport width
+        int crossAxisCount = 7;
+        if (width < 1200) crossAxisCount = 4;
+        if (width < 750) crossAxisCount = 2;
+        if (width < 450) crossAxisCount = 1;
+
+        // Calculate dynamic height to fit grid children perfectly without overflow
+        final double cardHeight = crossAxisCount == 1 ? 95 : 120;
+        final int rows = (7 / crossAxisCount).ceil();
+        final double totalGridHeight = (rows * cardHeight) + ((rows - 1) * 12);
+
+        return Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [const Color(0xFF1E40AF), const Color(0xFF0F172A)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Obx(
-              () => _StatCard(
-                title: 'كمية المياة المنتجة',
-                value: '${_formatNumber(controller.animatedWater.value ?? 0)} م³',
-                icon: Icons.opacity,
-                color: Colors.blue,
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF1E40AF).withOpacity(0.25),
+                blurRadius: 24,
+                offset: const Offset(0, 8),
               ),
-            ),
+            ],
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Obx(
-              () => _StatCard(
-                title: 'كمية المياة المرفوعه',
-                value: '${_formatNumber(controller.saintion.value ?? 0)} م³',
-                icon: Icons.opacity,
-                color: Colors.blue,
+          child: Obx(() {
+            // Re-trigger building when controller animated values update
+            final moneyVal = controller.animatedMoney.value ?? 0;
+            final waterVal = controller.animatedWater.value ?? 0;
+            final saintionVal = controller.saintion.value ?? 0;
+            final powerVal = controller.animatedPower.value ?? 0;
+            final chlorineVal = controller.animatedChlorine.value ?? 0;
+            final liquidAlumVal = controller.animatedLiquidAlum.value ?? 0;
+            final solidAlumVal = controller.animatedSolidAlum.value ?? 0;
+
+            return SizedBox(
+              height: totalGridHeight,
+              child: GridView.count(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: crossAxisCount,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                childAspectRatio: crossAxisCount == 1 
+                    ? (width / cardHeight) 
+                    : (width / crossAxisCount) / cardHeight,
+                children: [
+                  _buildResponsiveCard('إجمالي التكلفة', moneyVal, ' جنيه', Icons.attach_money, const Color(0xFF10B981)),
+                  _buildResponsiveCard('كمية المياة المنتجة', waterVal, ' م³', Icons.opacity, const Color(0xFF3B82F6)),
+                  _buildResponsiveCard('كمية المياة المرفوعه', saintionVal, ' م³', Icons.opacity, const Color(0xFF60A5FA)),
+                  _buildResponsiveCard('الكهرباء المستهلكة', powerVal, ' واط', Icons.electrical_services, const Color(0xFFF59E0B)),
+                  _buildResponsiveCard('كمية الكلور', chlorineVal, ' كجم', Icons.science, const Color(0xFF06B6D4)),
+                  _buildResponsiveCard('كمية الشبة السائلة', liquidAlumVal, ' كجم', Icons.water_drop_outlined, const Color(0xFFF97316)),
+                  _buildResponsiveCard('كمية الشبة الصلبة', solidAlumVal, ' كجم', Icons.ac_unit, const Color(0xFF8B5CF6)),
+                ],
               ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Obx(
-              () => _StatCard(
-                title: 'الكهرباء المستهلكة',
-                value: '${_formatNumber(controller.animatedPower.value ?? 0)} واط',
-                icon: Icons.electrical_services,
-                color: Colors.amber,
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Obx(
-              () => _StatCard(
-                title: 'كمية الكلور',
-                value: '${_formatNumber(controller.animatedChlorine.value ?? 0)} كجم',
-                icon: Icons.science,
-                color: Colors.cyan,
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Obx(
-              () => _StatCard(
-                title: 'كمية الشبة السائلة',
-                value: '${_formatNumber(controller.animatedLiquidAlum.value ?? 0)} كجم',
-                icon: Icons.water_drop_outlined,
-                color: Colors.orange,
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Obx(
-              () => _StatCard(
-                title: 'كمية الشبة الصلبة',
-                value: '${_formatNumber(controller.animatedSolidAlum.value ?? 0)} كجم',
-                icon: Icons.ac_unit,
-                color: Colors.brown,
-              ),
-            ),
-          ),
-        ],
-      ),
+            );
+          }),
+        );
+      },
     );
   }
 
   String _formatNumber(num value) {
     return NumberFormat('#,###').format(value);
   }
-}
 
-/// Individual Stat Card
-class _StatCard extends StatelessWidget {
-  final String title;
-  final String value;
-  final IconData icon;
-  final Color color;
-
-  const _StatCard({
-    required this.title,
-    required this.value,
-    required this.icon,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.15),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.2),
-          width: 1,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, color: Colors.white, size: 24),
-          const SizedBox(height: 8),
-          Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white70,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
+  Widget _buildResponsiveCard(
+    String title,
+    num targetValue,
+    String suffix,
+    IconData icon,
+    Color accentColor,
+  ) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: 0, end: targetValue.toDouble()),
+      duration: const Duration(milliseconds: 1200),
+      curve: Curves.easeOutExpo,
+      builder: (context, val, child) {
+        final formatted = _formatNumber(val);
+        
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.06),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.12),
+              width: 1,
             ),
           ),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: accentColor.withOpacity(0.15),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(icon, color: accentColor, size: 16),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                '$formatted$suffix',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:power_saving/core/constant/colors.dart';
 import 'package:power_saving/core/widgets/buttons.dart';
 import 'package:power_saving/core/widgets/rtl_scafold.dart';
-import 'package:power_saving/features/stations/controller/following_stations._controller.dart';
+import 'package:power_saving/features/stations/controller/following_stations_controller.dart';
 import 'package:power_saving/features/technology/model/tech_model.dart';
 
 class FollowingStationsScreen extends StatelessWidget {

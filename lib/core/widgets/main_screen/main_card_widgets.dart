@@ -6,13 +6,13 @@ import 'package:power_saving/core/constant/styles.dart';
 class CardHeader extends StatelessWidget {
   final String name;
   final double? height;
-  const CardHeader({super.key, required this.name, this.height });
+  const CardHeader({super.key, required this.name, this.height});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height:height?? 90,
+      height: height ?? 90,
       padding: const EdgeInsets.all(AppDimensions.paddingL),
       decoration: const BoxDecoration(
         color: AppColors.primary,
@@ -26,7 +26,8 @@ class CardHeader extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
         style: AppTextStyles.bodyLarge.copyWith(
           fontWeight: FontWeight.bold,
-          color: AppColors.textWhite),
+          color: AppColors.textWhite,
+        ),
       ),
     );
   }
@@ -38,7 +39,8 @@ class InfoCard extends StatelessWidget {
   final IconData icon;
   final Color color;
 
-  const InfoCard({super.key, 
+  const InfoCard({
+    super.key,
     required this.label,
     required this.value,
     required this.icon,
@@ -61,17 +63,20 @@ class InfoCard extends StatelessWidget {
               Icon(icon, size: AppDimensions.iconS, color: color),
               const SizedBox(width: AppDimensions.paddingXS),
               Expanded(
-                child: Text(label,
-                    style:
-                        AppTextStyles.bodySmall.copyWith(color: color)),
+                child: Text(
+                  label,
+                  style: AppTextStyles.bodySmall.copyWith(color: color),
+                ),
               ),
             ],
           ),
           const SizedBox(height: AppDimensions.paddingXS),
-          Text(value,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.bodyMedium),
+          Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.bodyMedium,
+          ),
         ],
       ),
     );

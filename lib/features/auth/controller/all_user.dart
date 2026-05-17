@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:power_saving/features/auth/model/login.dart';
-import 'package:power_saving/gloable/ip_config.dart';
+import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 import 'package:flutter/material.dart';

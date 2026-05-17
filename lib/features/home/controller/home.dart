@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:html';
 import 'package:flutter/foundation.dart'; // kIsWeb
-import 'dart:ui_web' as ui_web; // platformViewRegistry
 import 'package:get/get.dart';
 
-import 'package:power_saving/gloable/ip_config.dart';
-import 'package:power_saving/main.dart';
+import 'package:power_saving/global/ip_config.dart';
+import 'package:power_saving/global/iframe_platform.dart';
 import 'package:power_saving/features/home/model/home.dart';
 import 'package:power_saving/network/network.dart';
 
@@ -15,8 +13,6 @@ class HomeController extends GetxController {
   ConsumptionModel? consumptionModel;
 
   String? waterChartHtml;
-  IFrameElement? iframeElement;
-  bool iframeRegistered = false;
 
   // Animated values
   RxnNum animatedMoney = RxnNum();
@@ -46,10 +42,10 @@ class HomeController extends GetxController {
         consumptionModel = ConsumptionModel.fromJson(jsonData);
         waterChartHtml = jsonData["water_chart"] as String?;
 
-        // Delay iframe creation to avoid lifecycle warning
+        // Register dynamic iframe view for web compilation
         if (waterChartHtml != null && kIsWeb) {
           Future.delayed(const Duration(milliseconds: 100), () {
-            _createIframe(waterChartHtml!);
+            registerIframe('sunburst-chart', waterChartHtml!);
             update();
           });
         }
@@ -57,26 +53,10 @@ class HomeController extends GetxController {
         animateAll();
       }
     } catch (e) {
-      print("❌ Error fetching home: $e");
+      debugPrint("❌ Error fetching home: $e");
     } finally {
       loading.value = false;
       update();
-    }
-  }
-
-  void _createIframe(String htmlContent) {
-    iframeElement = IFrameElement()
-      ..style.width = '${width}px'
-      ..style.height = '${height}px'
-      ..style.border = 'none'
-      ..srcdoc = htmlContent;
-
-    if (!iframeRegistered) {
-      ui_web.platformViewRegistry.registerViewFactory(
-        'sunburst-chart',
-        (int viewId) => iframeElement!,
-      );
-      iframeRegistered = true;
     }
   }
 
@@ -93,21 +73,6 @@ class HomeController extends GetxController {
   }
 
   void animateValue(RxnNum rxValue, num targetValue) {
-    const duration = Duration(milliseconds: 200);
-    const interval = Duration(milliseconds: 5);
-
-    final steps = duration.inMilliseconds ~/ interval.inMilliseconds;
-    final stepValue = targetValue / steps;
-    num current = 0;
-
-    Timer.periodic(interval, (timer) {
-      current += stepValue;
-      if (current >= targetValue) {
-        rxValue.value = targetValue;
-        timer.cancel();
-      } else {
-        rxValue.value = current;
-      }
-    });
+    rxValue.value = targetValue;
   }
 }

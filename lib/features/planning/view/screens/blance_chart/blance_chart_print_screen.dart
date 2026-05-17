@@ -1,17 +1,17 @@
-import 'dart:html' as html;
+import 'package:power_saving/global/html_platform.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/core/constant/AppDimensions.dart';
 import 'package:power_saving/core/constant/colors.dart';
 import 'package:power_saving/core/helpers/extensions.dart';
 import 'package:power_saving/features/planning/controller/blance_chart/blance_chart.dart';
-import 'package:power_saving/features/planning/view/widgets/blance_widget.dart/area_station.dart';
-import 'package:power_saving/features/planning/view/widgets/blance_widget.dart/chart_sctions.dart';
-import 'package:power_saving/features/planning/view/widgets/blance_widget.dart/places_table.dart';
-import 'package:power_saving/features/planning/view/widgets/blance_widget.dart/report_header.dart';
-import 'package:power_saving/features/planning/view/widgets/blance_widget.dart/station_table.dart';
-import 'package:power_saving/features/planning/view/widgets/blance_widget.dart/summery.dart';
-import 'package:power_saving/features/planning/view/widgets/blance_widget.dart/water_table.dart';
+import 'package:power_saving/features/planning/view/widgets/balance_widgets/area_station.dart';
+import 'package:power_saving/features/planning/view/widgets/balance_widgets/chart_sctions.dart';
+import 'package:power_saving/features/planning/view/widgets/balance_widgets/places_table.dart';
+import 'package:power_saving/features/planning/view/widgets/balance_widgets/report_header.dart';
+import 'package:power_saving/features/planning/view/widgets/balance_widgets/station_table.dart';
+import 'package:power_saving/features/planning/view/widgets/balance_widgets/summery.dart';
+import 'package:power_saving/features/planning/view/widgets/balance_widgets/water_table.dart';
 
 /// Professional Print Screen - Renders complete content for printing
 class BalanceChartPrintScreen extends StatefulWidget {
@@ -49,9 +49,18 @@ class _BalanceChartPrintScreenState extends State<BalanceChartPrintScreen> {
         Row(
           children: [
               ElevatedButton.icon(
-        onPressed: () => _handlePrint(controller),
-        icon: Icon(Icons.print_outlined, size: AppDimensions.iconS),
-        label: Text('طباعة'),
+        onPressed: _isPrinting ? null : () => _handlePrint(controller),
+        icon: _isPrinting 
+            ? const SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                ),
+              )
+            : Icon(Icons.print_outlined, size: AppDimensions.iconS),
+        label: Text(_isPrinting ? 'جاري التحضير...' : 'طباعة'),
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.textWhite,
           foregroundColor: AppColors.primary,
@@ -149,10 +158,7 @@ class _BalanceChartPrintScreenState extends State<BalanceChartPrintScreen> {
 
     // Generate the printable HTML content for the screen
     final printContent = generateEnhancedPrintHtml(controller);
-    final blob = html.Blob([printContent], 'text/html');
-    final url = html.Url.createObjectUrlFromBlob(blob);
-    html.window.open(url, '_blank');
-    html.Url.revokeObjectUrl(url);
+    openHtmlReport(printContent);
 
     setState(() => _isPrinting = false);
   }

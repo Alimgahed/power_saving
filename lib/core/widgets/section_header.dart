@@ -7,7 +7,7 @@ class SectionHeader extends StatelessWidget {
   final String title;
   final IconData icon;
   final Color? color;
-  
+
   const SectionHeader({
     super.key,
     required this.title,
@@ -18,7 +18,7 @@ class SectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final headerColor = color ?? AppColors.primary;
-    
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: AppDimensions.paddingS),
       child: Row(
@@ -40,10 +40,7 @@ class SectionHeader extends StatelessWidget {
           ),
           const SizedBox(width: AppDimensions.paddingM),
           Expanded(
-            child: Container(
-              height: 1,
-              color: headerColor.withOpacity(0.2),
-            ),
+            child: Container(height: 1, color: headerColor.withOpacity(0.2)),
           ),
         ],
       ),

@@ -5,7 +5,7 @@ import 'package:power_saving/features/planning/model/all_places_model.dart';
 import 'package:power_saving/features/planning/model/area_model.dart';
 import 'package:power_saving/features/planning/model/blance_model.dart';
 import 'package:power_saving/features/planning/view/screens/blance_chart/blance_chart_print_screen.dart';
-import 'package:power_saving/gloable/ip_config.dart';
+import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/network/network.dart';
 
 class BalanceChartController extends GetxController {

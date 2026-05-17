@@ -9,7 +9,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? backRoute;
   final List<Widget>? actions;
   final bool showBackButton;
-  
+
   const CustomAppBar({
     super.key,
     required this.title,

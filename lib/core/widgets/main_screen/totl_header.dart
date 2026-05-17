@@ -16,8 +16,8 @@ class TotalHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color =  Colors.blue;
-    
+    final color = Colors.blue;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -44,11 +44,7 @@ class TotalHeader extends StatelessWidget {
                 ),
               ],
             ),
-            child: Icon(
-              icon,
-              color: color.shade700,
-              size: 24,
-            ),
+            child: Icon(icon, color: color.shade700, size: 24),
           ),
           const SizedBox(width: 16),
           Expanded(

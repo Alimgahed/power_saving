@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/controller/voltage/voltage.dart';
-import 'package:power_saving/gloable/data.dart';
+import 'package:power_saving/global/data.dart';
 import 'package:power_saving/model/vlotage.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 

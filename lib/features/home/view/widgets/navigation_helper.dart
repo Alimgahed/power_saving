@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:power_saving/gloable/data.dart';
+import 'package:power_saving/global/data.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 
 /// Navigation Helper

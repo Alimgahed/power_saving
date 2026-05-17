@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:power_saving/features/chemcails/model/chemacial.dart';
 import 'package:power_saving/features/stations/model/station_model.dart';
 import 'package:power_saving/features/technology/model/tech_model.dart';
-import 'package:power_saving/gloable/ip_config.dart';
+import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart' show fetchData, postData;
 
