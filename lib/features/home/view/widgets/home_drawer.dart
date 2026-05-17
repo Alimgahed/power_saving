@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:power_saving/core/constant/colors.dart';
+import 'package:power_saving/features/home/home_constant/constant.dart';
 import 'package:power_saving/features/home/view/widgets/navigation_helper.dart';
 import 'package:power_saving/features/home/view/widgets/voltaige.dart';
 import 'package:power_saving/global/data.dart';
@@ -36,19 +38,17 @@ class HomeDrawer extends StatelessWidget {
   Widget _buildDrawerHeader() {
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: const BoxDecoration(
-        color: Color(0xFF1E40AF),
-      ),
+      decoration: const BoxDecoration(gradient: AppGradients.header),
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.dashboard, color: Colors.white, size: 40),
+          Icon(Icons.dashboard, color: AppColors.textWhite, size: 44),
           SizedBox(height: 10),
           Text(
             'نظام إدارة الطاقة والمياه',
             style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
+              color: AppColors.textWhite,
+              fontSize: HomeTypography.body,
               fontWeight: FontWeight.bold,
             ),
           ),

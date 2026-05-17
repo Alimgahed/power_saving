@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:power_saving/core/constant/colors.dart';
+import 'package:power_saving/features/home/home_constant/constant.dart';
 import 'package:power_saving/features/home/model/home.dart';
 
 /// Consumption Card
@@ -39,10 +41,12 @@ class _ConsumptionCardState extends State<ConsumptionCard> {
           curve: Curves.easeOutCubic,
           transform: _isHovered ? (Matrix4.identity()..scale(1.025)) : Matrix4.identity(),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.cardBackground,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: _isHovered ? widget.color.withOpacity(0.4) : const Color(0xFFE2E8F0), // Slate-200
+              color: _isHovered
+                  ? widget.color.withOpacity(0.4)
+                  : AppColors.border,
               width: 1,
             ),
             boxShadow: [
@@ -95,7 +99,7 @@ class _ConsumptionCardState extends State<ConsumptionCard> {
             maxLines: 1,
             style: TextStyle(
               overflow: TextOverflow.ellipsis,
-              fontSize: 16,
+              fontSize: HomeTypography.consumptionTitle,
               fontWeight: FontWeight.bold,
               color: widget.color,
             ),
@@ -104,8 +108,8 @@ class _ConsumptionCardState extends State<ConsumptionCard> {
           Text(
             'رقم المحطة: ${widget.item.stationId}',
             style: const TextStyle(
-              fontSize: 11.5,
-              color: Color(0xFF475569), // Slate-600
+              fontSize: HomeTypography.consumptionSub,
+              color: AppColors.textSecondary,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -125,7 +129,7 @@ class _ConsumptionCardState extends State<ConsumptionCard> {
             title: 'التاريخ',
             value: '${widget.item.billMonth} / ${widget.item.billYear}',
             icon: Icons.calendar_today_outlined,
-            color: const Color(0xFF1E40AF), // Brand Royal Blue
+            color: AppColors.primary,
             isHighlight: true,
           ),
           const SizedBox(height: 6),
@@ -133,7 +137,7 @@ class _ConsumptionCardState extends State<ConsumptionCard> {
             title: 'التقنية',
             value: widget.item.technologyName,
             icon: Icons.memory_outlined,
-            color: const Color(0xFF0D9488), // Brand Teal
+            color: AppColors.teal,
             isHighlight: true,
           ),
           const SizedBox(height: 6),
@@ -167,14 +171,14 @@ class _ConsumptionCardState extends State<ConsumptionCard> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.analytics_outlined, size: 16, color: widget.color),
+          Icon(Icons.analytics_outlined, size: 18, color: widget.color),
           const SizedBox(width: 8),
           Text(
             'عرض التحليل',
             style: TextStyle(
               color: widget.color,
               fontWeight: FontWeight.bold,
-              fontSize: 13,
+              fontSize: HomeTypography.consumptionAction,
             ),
           ),
         ],
@@ -233,7 +237,9 @@ class _DetailItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: isHighlight ? color.withOpacity(0.05) : const Color(0xFFF8FAFC), // Slate-50 background
+        color: isHighlight
+            ? color.withOpacity(0.06)
+            : AppColors.cardBackgroundMuted,
         borderRadius: BorderRadius.circular(12),
         border: isHighlight
             ? Border.all(color: color.withOpacity(0.12), width: 1)
@@ -247,7 +253,7 @@ class _DetailItem extends StatelessWidget {
               color: color.withOpacity(0.08),
               borderRadius: BorderRadius.circular(6),
             ),
-            child: Icon(icon, size: 14, color: color),
+            child: Icon(icon, size: 16, color: color),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -257,8 +263,8 @@ class _DetailItem extends StatelessWidget {
                 Text(
                   title,
                   style: const TextStyle(
-                    fontSize: 11,
-                    color: Color(0xFF475569), // Slate-600 secondary text
+                    fontSize: HomeTypography.consumptionLabel,
+                    color: AppColors.textSecondary,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -266,9 +272,9 @@ class _DetailItem extends StatelessWidget {
                 Text(
                   value,
                   style: const TextStyle(
-                    fontSize: 13,
+                    fontSize: HomeTypography.consumptionValue,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF0F172A), // Slate-900 high legibility primary text
+                    color: AppColors.textPrimary,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:power_saving/core/constant/colors.dart';
+import 'package:power_saving/features/home/home_constant/constant.dart';
 
 /// Custom AppBar for Home Screen
-/// 
+///
 /// Displays the main title and drawer toggle button
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -14,21 +16,24 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: const Color(0xFF1E40AF),
-      foregroundColor: Colors.white,
+      flexibleSpace: Container(
+        decoration: const BoxDecoration(gradient: AppGradients.header),
+      ),
+      backgroundColor: Colors.transparent,
+      foregroundColor: AppColors.textWhite,
       shadowColor: Colors.transparent,
       elevation: 0,
       title: const Text(
         'لوحة التحكم الرئيسية',
         style: TextStyle(
-          fontSize: 20,
+          fontSize: HomeTypography.appBarTitle,
           fontWeight: FontWeight.w600,
-          color: Colors.white,
+          color: AppColors.textWhite,
         ),
       ),
       automaticallyImplyLeading: false,
       leading: IconButton(
-        icon: const Icon(Icons.menu, color: Colors.white),
+        icon: const Icon(Icons.menu, color: AppColors.textWhite, size: 28),
         onPressed: () => scaffoldKey.currentState?.openDrawer(),
         tooltip: 'القائمة',
       ),

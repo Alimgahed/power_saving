@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -10,98 +9,21 @@ import 'package:power_saving/features/home/model/home.dart';
 import 'package:power_saving/features/home/view/widgets/home_app_bar.dart';
 import 'package:power_saving/features/home/view/widgets/home_drawer.dart';
 import 'package:power_saving/features/home/view/widgets/consumpation_card.dart';
-import 'package:power_saving/features/home/view/widgets/water_stations_card.dart';
 import 'package:power_saving/features/home/view/widgets/empaty.dart';
+import 'package:power_saving/features/home/home_constant/constant.dart';
 import 'package:power_saving/global/data.dart';
-import 'package:power_saving/global/iframe_platform.dart';
 
-// ─── Theme Tokens ────────────────────────────────────────────────────────────
+// ─── Layout tokens (colors via AppColors / AppGradients) ─────────────────────
 
 class _T {
-  // Gradient palettes
-  static const LinearGradient primaryGrad = LinearGradient(
-    colors: [Color(0xFF1E40AF), Color(0xFF3B82F6)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-  static const LinearGradient successGrad = LinearGradient(
-    colors: [Color(0xFF059669), Color(0xFF10B981)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-  static const LinearGradient warningGrad = LinearGradient(
-    colors: [Color(0xFFD97706), Color(0xFFF59E0B)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-  static const LinearGradient dangerGrad = LinearGradient(
-    colors: [Color(0xFFDC2626), Color(0xFFEF4444)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-  static const LinearGradient purpleGrad = LinearGradient(
-    colors: [Color(0xFF7C3AED), Color(0xFF8B5CF6)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-  static const LinearGradient cyanGrad = LinearGradient(
-    colors: [Color(0xFF0891B2), Color(0xFF06B6D4)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-  static const LinearGradient orangeGrad = LinearGradient(
-    colors: [Color(0xFFEA580C), Color(0xFFF97316)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-  static const LinearGradient tealGrad = LinearGradient(
-    colors: [Color(0xFF0F766E), Color(0xFF0D9488)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-
-  // Header diagonal gradient
-  static const LinearGradient headerGrad = LinearGradient(
-    colors: [Color(0xFF1E3A8A), Color(0xFF1E40AF), Color(0xFF2563EB)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-
   static const double radius = 20;
   static const double cardRadius = 16;
   static const double spacing = 24;
-  static const double spacingSm = 16;
 
-  // ─── Professional SaaS Color Extensions ───────────────────────────────────
-  static const Color primary = Color(0xFF1E40AF);
-  static const Color primaryLight = Color(0xFF3B82F6);
-  static const Color primaryHover = Color(0xFF1D4ED8);
-  static const Color primarySurface = Color(0xFFEFF6FF);
-  static const Color primaryBorder = Color(0xFFDBEAFE);
-
-  // Soft Slate Surfaces (calm for eyes)
-  static const Color background = Color(0xFFF8FAFC);
-  static const Color cardBackground = Colors.white;
-  static const Color cardBackgroundMuted = Color(0xFFF1F5F9);
-  static const Color border = Color(0xFFE2E8F0);
-  static const Color borderLight = Color(0xFFF1F5F9);
-
-  // High-Legibility Slate Typography
-  static const Color textDark = Color(0xFF0F172A);
-  static const Color textMuted = Color(0xFF475569);
-  static const Color textLight = Color(0xFF64748B);
-
-  // Subtle Interactive Elevations & Gradients
   static final BoxShadow shadowSubtle = BoxShadow(
-    color: const Color(0xFF1E40AF).withOpacity(0.04),
+    color: AppColors.primary.withOpacity(0.04),
     blurRadius: 16,
     offset: const Offset(0, 4),
-  );
-
-  static final BoxShadow shadowHover = BoxShadow(
-    color: const Color(0xFF1E40AF).withOpacity(0.08),
-    blurRadius: 24,
-    offset: const Offset(0, 8),
   );
 }
 
@@ -120,7 +42,7 @@ class HomeScreen extends StatelessWidget {
       textDirection: ui.TextDirection.rtl,
       child: Scaffold(
         key: _scaffoldKey,
-        backgroundColor: _T.background,
+        backgroundColor: AppColors.background,
         appBar: HomeAppBar(scaffoldKey: _scaffoldKey),
         drawer: HomeDrawer(),
         body: _buildBody(context),
@@ -140,7 +62,7 @@ class HomeScreen extends StatelessWidget {
                   width: 64,
                   height: 64,
                   decoration: BoxDecoration(
-                    gradient: _T.primaryGrad,
+                    gradient: AppGradients.primary,
                     borderRadius: BorderRadius.circular(18),
                   ),
                   child: const Padding(
@@ -156,7 +78,7 @@ class HomeScreen extends StatelessWidget {
                   'جاري تحميل البيانات...',
                   style: TextStyle(
                     color: AppColors.textSecondary,
-                    fontSize: 14,
+                    fontSize: HomeTypography.bodySmall,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -187,7 +109,7 @@ class HomeScreen extends StatelessWidget {
                   Text(
                     'لا توجد بيانات متاحة حالياً',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: HomeTypography.body,
                       fontWeight: FontWeight.bold,
                       color: AppColors.textSecondary,
                     ),
@@ -265,11 +187,11 @@ class HomeScreen extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        gradient: _T.headerGrad,
+        gradient: AppGradients.header,
         borderRadius: BorderRadius.circular(_T.radius),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF1E3A8A).withOpacity(0.35),
+            color: AppColors.primaryDark.withOpacity(0.35),
             blurRadius: 30,
             offset: const Offset(0, 10),
           ),
@@ -362,7 +284,7 @@ class HomeScreen extends StatelessWidget {
                               initial,
                               style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 24,
+                                fontSize: 26,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'Outfit',
                               ),
@@ -379,7 +301,7 @@ class HomeScreen extends StatelessWidget {
                               Text(
                                 '$greeting، ${user?.username ?? 'المستخدم'} 👋',
                                 style: const TextStyle(
-                                  fontSize: 28,
+                                  fontSize: HomeTypography.greeting,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                   letterSpacing: 0.3,
@@ -405,8 +327,8 @@ class HomeScreen extends StatelessWidget {
                                     child: Text(
                                       'نظام إدارة الطاقة والمياه والمواد الكيماوية • لوحة المراقبة الذكية',
                                       style: TextStyle(
-                                        fontSize: 14.5,
-                                        color: Colors.white.withOpacity(0.9),
+                                        fontSize: HomeTypography.greetingSub,
+                                        color: Colors.white.withOpacity(0.92),
                                         fontWeight: FontWeight.w500,
                                       ),
                                       maxLines: 1,
@@ -451,7 +373,7 @@ class HomeScreen extends StatelessWidget {
                                     Text(
                                       formattedDate,
                                       style: TextStyle(
-                                        fontSize: 12,
+                                        fontSize: HomeTypography.caption,
                                         color: Colors.white.withOpacity(0.95),
                                         fontWeight: FontWeight.w600,
                                       ),
@@ -494,7 +416,7 @@ class HomeScreen extends StatelessWidget {
                                       'النظام متصل',
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 11,
+                                        fontSize: HomeTypography.badge,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -540,7 +462,7 @@ class HomeScreen extends StatelessWidget {
                                     Text(
                                       formattedDate,
                                       style: const TextStyle(
-                                        fontSize: 11,
+                                        fontSize: HomeTypography.caption,
                                         color: Colors.white,
                                       ),
                                     ),
@@ -577,7 +499,7 @@ class HomeScreen extends StatelessWidget {
         if (width < 750) cols = 2;
         if (width < 450) cols = 1;
 
-        final double cardHeight = cols == 1 ? 95 : 140;
+        final double cardHeight = cols == 1 ? 105 : 155;
         final int rows = (7 / cols).ceil();
         final double totalHeight = (rows * cardHeight) + ((rows - 1) * 16);
 
@@ -608,7 +530,7 @@ class HomeScreen extends StatelessWidget {
                   targetValue: moneyVal,
                   suffix: 'جنيه',
                   icon: Icons.attach_money_rounded,
-                  gradient: _T.successGrad,
+                  gradient: AppGradients.success,
                   progress: 0.85,
                 ),
                 _HoverStatCard(
@@ -616,7 +538,7 @@ class HomeScreen extends StatelessWidget {
                   targetValue: waterVal,
                   suffix: 'م³',
                   icon: Icons.water_drop_rounded,
-                  gradient: _T.primaryGrad,
+                  gradient: AppGradients.primary,
                   progress: 0.75,
                 ),
                 _HoverStatCard(
@@ -624,7 +546,7 @@ class HomeScreen extends StatelessWidget {
                   targetValue: saintionVal,
                   suffix: 'م³',
                   icon: Icons.upload_rounded,
-                  gradient: _T.purpleGrad,
+                  gradient: AppGradients.purple,
                   progress: 0.65,
                 ),
                 _HoverStatCard(
@@ -632,7 +554,7 @@ class HomeScreen extends StatelessWidget {
                   targetValue: powerVal,
                   suffix: 'واط',
                   icon: Icons.bolt_rounded,
-                  gradient: _T.warningGrad,
+                  gradient: AppGradients.warning,
                   progress: 0.45,
                 ),
                 _HoverStatCard(
@@ -640,7 +562,7 @@ class HomeScreen extends StatelessWidget {
                   targetValue: chlorineVal,
                   suffix: 'كجم',
                   icon: Icons.science_rounded,
-                  gradient: _T.cyanGrad,
+                  gradient: AppGradients.info,
                   progress: 0.35,
                 ),
                 _HoverStatCard(
@@ -648,7 +570,7 @@ class HomeScreen extends StatelessWidget {
                   targetValue: liquidAlumVal,
                   suffix: 'كجم',
                   icon: Icons.opacity_rounded,
-                  gradient: _T.orangeGrad,
+                  gradient: AppGradients.orange,
                   progress: 0.55,
                 ),
                 _HoverStatCard(
@@ -656,7 +578,7 @@ class HomeScreen extends StatelessWidget {
                   targetValue: solidAlumVal,
                   suffix: 'كجم',
                   icon: Icons.grain_rounded,
-                  gradient: _T.purpleGrad,
+                  gradient: AppGradients.purple,
                   progress: 0.25,
                 ),
               ],
@@ -681,55 +603,55 @@ class HomeScreen extends StatelessWidget {
         data.overPowerConsump ?? [],
         'الكهرباء',
         Icons.bolt_rounded,
-        const Color(0xFFD97706),
-        _T.warningGrad,
+        AppColors.warningDark,
+        AppGradients.warning,
       ),
       _TabConfig(
         'مياه بدون طاقة',
         data.Waterformissingpower ?? [],
         'مياة بدون طاقة',
         Icons.priority_high_rounded,
-        const Color(0xFFDC2626),
-        _T.dangerGrad,
+        AppColors.errorDark,
+        AppGradients.danger,
       ),
       _TabConfig(
         'الإنارة الزائدة',
         data.overpowerfor0water ?? [],
         'الإنارة',
         Icons.lightbulb_rounded,
-        const Color(0xFFEA580C),
-        _T.orangeGrad,
+        AppColors.orangeDark,
+        AppGradients.orange,
       ),
       _TabConfig(
         'تجاوز الكلور',
         data.overChlorineConsump ?? [],
         'الكلور',
         Icons.science_rounded,
-        const Color(0xFF0891B2),
-        _T.cyanGrad,
+        AppColors.infoDark,
+        AppGradients.info,
       ),
       _TabConfig(
         'الشبة السائلة',
         data.overLiquidAlumConsump ?? [],
         'الشبة السائلة',
         Icons.opacity_rounded,
-        const Color(0xFF1E40AF),
-        _T.primaryGrad,
+        AppColors.primary,
+        AppGradients.primary,
       ),
       _TabConfig(
         'الشبة الصلبة',
         data.overSolidAlumConsump ?? [],
         'الشبة الصلبة',
         Icons.grain_rounded,
-        const Color(0xFF7C3AED),
-        _T.purpleGrad,
+        AppColors.purpleDark,
+        AppGradients.purple,
       ),
     ];
 
     return DefaultTabController(
       length: tabs.length,
       child: _DashCard(
-        headerGradient: _T.dangerGrad,
+        headerGradient: AppGradients.danger,
         icon: Icons.warning_amber_rounded,
         title: 'مركز التنبيهات وإدارة التجاوزات',
         subtitle: 'اضغط على أي تصنيف لاستعراض المحطات المتجاوزة للحد الأقصى',
@@ -748,18 +670,18 @@ class HomeScreen extends StatelessWidget {
                     vertical: 8,
                   ),
                   decoration: BoxDecoration(
-                    color: _T.cardBackgroundMuted,
+                    color: AppColors.cardBackgroundMuted,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: TabBar(
                     onTap: (index) => activeAlertTab.value = index,
                     isScrollable: isScrollable,
                     indicator: BoxDecoration(
-                      gradient: _T.primaryGrad,
+                      gradient: AppGradients.primary,
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
-                          color: _T.primary.withOpacity(0.35),
+                          color: AppColors.primary.withOpacity(0.35),
                           blurRadius: 8,
                           offset: const Offset(0, 3),
                         ),
@@ -770,9 +692,11 @@ class HomeScreen extends StatelessWidget {
                     unselectedLabelColor: AppColors.textSecondary,
                     labelStyle: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 12,
+                      fontSize: HomeTypography.tab,
                     ),
-                    unselectedLabelStyle: const TextStyle(fontSize: 12),
+                    unselectedLabelStyle: const TextStyle(
+                      fontSize: HomeTypography.tab,
+                    ),
                     dividerColor: Colors.transparent,
                     tabs:
                         tabs.map((t) {
@@ -793,7 +717,7 @@ class HomeScreen extends StatelessWidget {
                                   children: [
                                     Icon(
                                       t.icon,
-                                      size: 14,
+                                      size: 16,
                                       color:
                                           isSelected
                                               ? Colors.white
@@ -839,7 +763,7 @@ class HomeScreen extends StatelessWidget {
                                       child: Text(
                                         '${t.list.length}',
                                         style: TextStyle(
-                                          fontSize: 10,
+                                          fontSize: HomeTypography.badge,
                                           fontWeight: FontWeight.bold,
                                           color:
                                               isSelected
@@ -940,7 +864,7 @@ class HomeScreen extends StatelessWidget {
     final bool hasAlerts = totalAlerts > 0;
 
     return _DashCard(
-      headerGradient: _T.purpleGrad,
+      headerGradient: AppGradients.purple,
       icon: Icons.analytics_rounded,
       title: 'الملخص التحليلي وحالة المرافق',
       subtitle: 'نظرة شاملة وسريعة على مؤشرات الأداء الحالية',
@@ -952,20 +876,12 @@ class HomeScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors:
-                      hasAlerts
-                          ? [const Color(0xFFFEF2F2), const Color(0xFFFFF5F5)]
-                          : [const Color(0xFFECFDF5), const Color(0xFFF0FDF4)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                gradient: AppGradients.surfaceBanner(isAlert: hasAlerts),
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(
-                  color:
-                      hasAlerts
-                          ? const Color(0xFFFCA5A5)
-                          : const Color(0xFF6EE7B7),
+                  color: hasAlerts
+                      ? AppColors.error.withOpacity(0.45)
+                      : AppColors.success.withOpacity(0.55),
                   width: 1.5,
                 ),
               ),
@@ -974,7 +890,7 @@ class HomeScreen extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      gradient: hasAlerts ? _T.dangerGrad : _T.successGrad,
+                      gradient: hasAlerts ? AppGradients.danger : AppGradients.success,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Icon(
@@ -982,7 +898,7 @@ class HomeScreen extends StatelessWidget {
                           ? Icons.error_outline_rounded
                           : Icons.check_circle_rounded,
                       color: Colors.white,
-                      size: 18,
+                      size: 20,
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -995,12 +911,11 @@ class HomeScreen extends StatelessWidget {
                               ? 'يوجد تجاوزات تحتاج مراجعة'
                               : 'حالة ممتازة',
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: HomeTypography.bodySmall,
                             fontWeight: FontWeight.bold,
-                            color:
-                                hasAlerts
-                                    ? const Color(0xFF991B1B)
-                                    : const Color(0xFF065F46),
+                            color: hasAlerts
+                                ? AppColors.errorDark
+                                : AppColors.successDark,
                           ),
                         ),
                         const SizedBox(height: 2),
@@ -1009,11 +924,10 @@ class HomeScreen extends StatelessWidget {
                               ? 'تم رصد $totalAlerts تجاوزاً في المحطات'
                               : 'لم يتم رصد أي تجاوزات تشغيلية',
                           style: TextStyle(
-                            fontSize: 12,
-                            color:
-                                hasAlerts
-                                    ? const Color(0xFFB91C1C)
-                                    : const Color(0xFF047857),
+                            fontSize: HomeTypography.caption,
+                            color: hasAlerts
+                                ? AppColors.error
+                                : AppColors.success,
                           ),
                         ),
                       ],
@@ -1026,37 +940,37 @@ class HomeScreen extends StatelessWidget {
             _buildInsightRow(
               'تجاوز استهلاك الكهرباء',
               data.overPowerConsump?.length ?? 0,
-              _T.warningGrad,
+              AppGradients.warning,
             ),
             _buildInsightRow(
               'عدادات مياه بدون طاقة إلكترونية',
               data.Waterformissingpower?.length ?? 0,
-              _T.dangerGrad,
+              AppGradients.danger,
             ),
             _buildInsightRow(
               'الإنارة والعدادات المهملة',
               data.overpowerfor0water?.length ?? 0,
-              _T.orangeGrad,
+              AppGradients.orange,
             ),
             _buildInsightRow(
               'تجاوزات الكلور المضاف',
               data.overChlorineConsump?.length ?? 0,
-              _T.cyanGrad,
+              AppGradients.info,
             ),
             _buildInsightRow(
               'تجاوزات الشبة السائلة',
               data.overLiquidAlumConsump?.length ?? 0,
-              _T.primaryGrad,
+              AppGradients.primary,
             ),
             _buildInsightRow(
               'تجاوزات الشبة الصلبة',
               data.overSolidAlumConsump?.length ?? 0,
-              _T.purpleGrad,
+              AppGradients.purple,
             ),
             _buildInsightRow(
               'محطات تجاوزت الطاقة التصميمية',
               data.overWaterStations?.length ?? 0,
-              _T.tealGrad,
+              AppGradients.teal,
             ),
           ],
         ),
@@ -1066,7 +980,7 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildResourcePerformanceCard(ConsumptionModel data) {
     return _DashCard(
-      headerGradient: _T.cyanGrad,
+      headerGradient: AppGradients.info,
       icon: Icons.assessment_rounded,
       title: 'مؤشرات الاستهلاك والإنتاج الإجمالية',
       subtitle:
@@ -1081,7 +995,7 @@ class HomeScreen extends StatelessWidget {
               value: '${data.water?.toStringAsFixed(0) ?? '0'} م³',
               subtitle: 'مستهدف اليوم: 300,000 م³ • كفاءة الإنتاج: 94%',
               progress: 0.78,
-              progressGradient: _T.cyanGrad,
+              progressGradient: AppGradients.info,
               icon: Icons.water_drop_rounded,
             ),
             const SizedBox(height: 18),
@@ -1091,7 +1005,7 @@ class HomeScreen extends StatelessWidget {
               subtitle:
                   'معدل كفاءة الطاقة: 1.2 كيلوواط/م³ • حالة التوريد: مستقر',
               progress: 0.65,
-              progressGradient: _T.warningGrad,
+              progressGradient: AppGradients.warning,
               icon: Icons.bolt_rounded,
             ),
             const SizedBox(height: 18),
@@ -1102,7 +1016,7 @@ class HomeScreen extends StatelessWidget {
               subtitle:
                   'الكلور: ${data.chlorine?.toStringAsFixed(0) ?? '0'} كجم • الشبة: ${((data.liquidAlum ?? 0) + (data.solidAlum ?? 0)).toStringAsFixed(0)} كجم',
               progress: 0.82,
-              progressGradient: _T.purpleGrad,
+              progressGradient: AppGradients.purple,
               icon: Icons.science_rounded,
             ),
             const SizedBox(height: 18),
@@ -1111,7 +1025,7 @@ class HomeScreen extends StatelessWidget {
               value: '${data.sanitaion?.toStringAsFixed(0) ?? '0'} م³',
               subtitle: 'نسبة التغطية: 100% • كفاءة المعالجة البيئية: ممتازة',
               progress: 0.90,
-              progressGradient: _T.tealGrad,
+              progressGradient: AppGradients.teal,
               icon: Icons.eco_rounded,
             ),
           ],
@@ -1136,12 +1050,12 @@ class HomeScreen extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(icon, size: 16, color: progressGradient.colors.first),
+                Icon(icon, size: 18, color: progressGradient.colors.first),
                 const SizedBox(width: 8),
                 Text(
                   title,
                   style: const TextStyle(
-                    fontSize: 15,
+                    fontSize: HomeTypography.resourceTitle,
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
                   ),
@@ -1151,7 +1065,7 @@ class HomeScreen extends StatelessWidget {
             Text(
               value,
               style: TextStyle(
-                fontSize: 15,
+                fontSize: HomeTypography.resourceValue,
                 fontWeight: FontWeight.bold,
                 color: progressGradient.colors.first,
               ),
@@ -1182,7 +1096,10 @@ class HomeScreen extends StatelessWidget {
         const SizedBox(height: 6),
         Text(
           subtitle,
-          style: TextStyle(fontSize: 12.5, color: AppColors.textSecondary),
+          style: const TextStyle(
+            fontSize: HomeTypography.resourceSub,
+            color: AppColors.textSecondary,
+          ),
         ),
       ],
     );
@@ -1208,8 +1125,8 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(width: 12),
               Text(
                 label,
-                style: TextStyle(
-                  fontSize: 15,
+                style: const TextStyle(
+                  fontSize: HomeTypography.insightLabel,
                   color: AppColors.textPrimary,
                   fontWeight: FontWeight.w500,
                 ),
@@ -1236,7 +1153,7 @@ class HomeScreen extends StatelessWidget {
             child: Text(
               '$count',
               style: TextStyle(
-                fontSize: 13.5,
+                fontSize: HomeTypography.insightCount,
                 fontWeight: FontWeight.bold,
                 color: count > 0 ? Colors.white : AppColors.textSecondary,
               ),
@@ -1272,9 +1189,9 @@ class _DashCard extends StatelessWidget {
     final accentColor = headerGradient.colors.first;
     return Container(
       decoration: BoxDecoration(
-        color: _T.cardBackground,
+        color: AppColors.cardBackground,
         borderRadius: BorderRadius.circular(_T.radius),
-        border: Border.all(color: _T.border, width: 1),
+        border: Border.all(color: AppColors.border, width: 1),
         boxShadow: [_T.shadowSubtle],
       ),
       child: Column(
@@ -1288,14 +1205,7 @@ class _DashCard extends StatelessWidget {
                 topLeft: Radius.circular(_T.radius),
                 topRight: Radius.circular(_T.radius),
               ),
-              gradient: LinearGradient(
-                colors: [
-                  accentColor.withOpacity(0.04),
-                  accentColor.withOpacity(0.01),
-                ],
-                begin: Alignment.centerRight,
-                end: Alignment.centerLeft,
-              ),
+              gradient: AppGradients.cardHeaderTint(accentColor),
             ),
             child: Row(
               children: [
@@ -1312,7 +1222,7 @@ class _DashCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: Icon(icon, color: Colors.white, size: 18),
+                  child: Icon(icon, color: Colors.white, size: 20),
                 ),
                 const SizedBox(width: 14),
                 Expanded(
@@ -1322,9 +1232,9 @@ class _DashCard extends StatelessWidget {
                       Text(
                         title,
                         style: const TextStyle(
-                          fontSize: 15,
+                          fontSize: HomeTypography.cardTitle,
                           fontWeight: FontWeight.bold,
-                          color: _T.textDark,
+                          color: AppColors.textPrimary,
                           letterSpacing: 0.2,
                         ),
                       ),
@@ -1332,8 +1242,8 @@ class _DashCard extends StatelessWidget {
                       Text(
                         subtitle,
                         style: const TextStyle(
-                          fontSize: 11.5,
-                          color: _T.textMuted,
+                          fontSize: HomeTypography.cardSubtitle,
+                          color: AppColors.textSecondary,
                         ),
                       ),
                     ],
@@ -1342,7 +1252,7 @@ class _DashCard extends StatelessWidget {
               ],
             ),
           ),
-          const Divider(height: 1, color: _T.border),
+          const Divider(height: 1, color: AppColors.border),
           child,
         ],
       ),
@@ -1411,10 +1321,10 @@ class _HoverStatCardState extends State<_HoverStatCard> {
                 : Matrix4.identity(),
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: _T.cardBackground,
+          color: AppColors.cardBackground,
           borderRadius: BorderRadius.circular(_T.cardRadius),
           border: Border.all(
-            color: _isHovered ? startColor.withOpacity(0.4) : _T.border,
+            color: _isHovered ? startColor.withOpacity(0.4) : AppColors.border,
             width: 1,
           ),
           boxShadow: [
@@ -1442,8 +1352,8 @@ class _HoverStatCardState extends State<_HoverStatCard> {
                       child: Text(
                         widget.title,
                         style: const TextStyle(
-                          color: _T.textMuted,
-                          fontSize: 14,
+                          color: AppColors.textSecondary,
+                          fontSize: HomeTypography.statTitle,
                           fontWeight: FontWeight.w600,
                         ),
                         maxLines: 1,
@@ -1466,7 +1376,7 @@ class _HoverStatCardState extends State<_HoverStatCard> {
                           ),
                         ],
                       ),
-                      child: Icon(widget.icon, color: Colors.white, size: 16),
+                      child: Icon(widget.icon, color: Colors.white, size: 18),
                     ),
                   ],
                 ),
@@ -1474,8 +1384,8 @@ class _HoverStatCardState extends State<_HoverStatCard> {
                 Text(
                   '$formatted ${widget.suffix}',
                   style: const TextStyle(
-                    color: _T.textDark,
-                    fontSize: 21,
+                    color: AppColors.textPrimary,
+                    fontSize: HomeTypography.statValue,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

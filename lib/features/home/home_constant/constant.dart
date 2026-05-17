@@ -32,7 +32,7 @@ class AppConstants {
     fontSize: 14,
     fontWeight: FontWeight.w500,
   );
-  
+
   // Shadow
   static BoxShadow get defaultShadow => BoxShadow(
     color: Colors.black.withOpacity(0.08),
@@ -74,6 +74,36 @@ class AppConstants {
   // Animation Durations
   static const Duration defaultAnimationDuration = Duration(milliseconds: 300);
   static const Duration loadingAnimationDuration = Duration(milliseconds: 500);
+}
+
+/// Home screen typography — larger sizes for readability.
+class HomeTypography {
+  HomeTypography._();
+
+  static const double greeting = 32;
+  static const double greetingSub = 16;
+  static const double appBarTitle = 22;
+  static const double statTitle = 16;
+  static const double statValue = 24;
+  static const double cardTitle = 17;
+  static const double cardSubtitle = 13;
+  static const double body = 16;
+  static const double bodySmall = 14;
+  static const double caption = 13;
+  static const double badge = 12;
+  static const double tab = 14;
+  static const double insightLabel = 16;
+  static const double insightCount = 15;
+  static const double resourceTitle = 17;
+  static const double resourceValue = 17;
+  static const double resourceSub = 14;
+  static const double emptyTitle = 18;
+  static const double emptyDesc = 15;
+  static const double consumptionTitle = 18;
+  static const double consumptionSub = 13;
+  static const double consumptionLabel = 13;
+  static const double consumptionValue = 15;
+  static const double consumptionAction = 15;
 }
 
 /// User role access helper
