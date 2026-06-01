@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Backend uses HTTP (not HTTPS) on LAN and public IPs -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">172.16.0.10</domain>
+        <domain includeSubdomains="true">41.33.3.92</domain>
+        <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">127.0.0.1</domain>
+        <domain includeSubdomains="true">10.0.2.2</domain>
+    </domain-config>
+</network-security-config>

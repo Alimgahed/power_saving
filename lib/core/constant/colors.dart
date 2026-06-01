@@ -2,11 +2,11 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Primary Colors
-  static const Color primary = Color(0xFF1E40AF);
-  static const Color primaryLight = Color(0xFF3B82F6);
-  static const Color primaryDark = Color(0xFF1E3A8A);
-  static const Color primarySurface = Color(0xFFEFF6FF);
+  // Primary Colors (Deep Blue from logo)
+  static const Color primary = Color(0xFF145995);
+  static const Color primaryLight = Color(0xFF29B6F6); // Light Blue from logo water drop
+  static const Color primaryDark = Color(0xFF0D3A63);
+  static const Color primarySurface = Color(0xFFEBF3F9);
 
   // Background Colors
   static const Color background = Color(0xFFF8FAFC);
@@ -31,10 +31,11 @@ class AppColors {
 
   static const Color error = Color(0xFFEF4444);
   static const Color errorDark = Color(0xFFDC2626);
-  static const Color warning = Color(0xFFF59E0B);
-  static const Color warningDark = Color(0xFFD97706);
-  static const Color info = Color(0xFF3B82F6);
-  static const Color infoDark = Color(0xFF0891B2);
+  // Gold from logo lightning bolt/gear
+  static const Color warning = Color(0xFFF4B32A);
+  static const Color warningDark = Color(0xFFD69818);
+  static const Color info = Color(0xFF29B6F6);
+  static const Color infoDark = Color(0xFF0288D1);
 
   static const Color purple = Color(0xFF8B5CF6);
   static const Color purpleDark = Color(0xFF7C3AED);
@@ -63,7 +64,7 @@ class AppGradients {
   );
 
   static const LinearGradient header = LinearGradient(
-    colors: [AppColors.primaryDark, AppColors.primary, Color(0xFF2563EB)],
+    colors: [AppColors.primaryDark, AppColors.primary, Color(0xFF1A73E8)],
     begin: _begin,
     end: _end,
   );
@@ -87,7 +88,7 @@ class AppGradients {
   );
 
   static const LinearGradient info = LinearGradient(
-    colors: [AppColors.infoDark, Color(0xFF06B6D4)],
+    colors: [AppColors.infoDark, AppColors.info],
     begin: _begin,
     end: _end,
   );

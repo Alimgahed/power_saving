@@ -17,6 +17,8 @@ class CustomTextFormField extends StatelessWidget {
   Function()? validator;
   final bool allowOnlyDigits;
   final bool useValidator; // <-- NEW
+  final Function(String)? onFieldSubmitted;
+  final TextInputAction? textInputAction;
 
    CustomTextFormField({
     super.key,
@@ -33,6 +35,8 @@ class CustomTextFormField extends StatelessWidget {
     this.validator,
       
     this.useValidator = true, // <-- DEFAULT true
+    this.onFieldSubmitted,
+    this.textInputAction,
   });
 
   @override
@@ -44,6 +48,8 @@ class CustomTextFormField extends StatelessWidget {
         controller: controller,
         readOnly: readonly??false,
         keyboardType: allowOnlyDigits ? TextInputType.number : keyboardType,
+        textInputAction: textInputAction,
+        onFieldSubmitted: onFieldSubmitted,
         inputFormatters: allowOnlyDigits
             ? <TextInputFormatter>[
                 FilteringTextInputFormatter.allow(
