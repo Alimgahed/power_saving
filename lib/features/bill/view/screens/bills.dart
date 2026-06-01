@@ -163,25 +163,11 @@ class Bills extends StatelessWidget {
             ),
           ),
         
-        // Bills Grid
+        // Bills Table
         SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          sliver: SliverGrid(
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 350,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 0.75,
-            ),
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return _BillCard(
-                  bill: controller.bills[index],
-                  controller: controller,
-                );
-              },
-              childCount: controller.bills.length,
-            ),
+          sliver: SliverToBoxAdapter(
+            child: _buildDataTable(controller, context),
           ),
         ),
         
@@ -497,6 +483,93 @@ class Bills extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildDataTable(AllBills controller, BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            spreadRadius: 0,
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: DataTable(
+            headingRowColor: MaterialStateProperty.all(Colors.blue.shade50),
+            dataRowMinHeight: 60,
+            dataRowMaxHeight: 60,
+            columns: const [
+              DataColumn(label: Text('رقم الحساب', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87))),
+              DataColumn(label: Text('الشهر', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87))),
+              DataColumn(label: Text('السنة', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87))),
+              DataColumn(label: Text('الاستهلاك', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87))),
+              DataColumn(label: Text('إجمالي الفاتورة', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87))),
+              DataColumn(label: Text('الحالة', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87))),
+              DataColumn(label: Text('إجراءات', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87))),
+            ],
+            rows: controller.bills.map((bill) {
+              Color statusColor = bill.isPaid == true ? Colors.green : Colors.orange;
+              IconData statusIcon = bill.isPaid == true ? Icons.check_circle : Icons.pending;
+
+              return DataRow(
+                cells: [
+                  DataCell(Text(bill.accountNumber, style: const TextStyle(fontWeight: FontWeight.w500))),
+                  DataCell(Text(controller.getMonthName(bill.billMonth))),
+                  DataCell(Text(bill.billYear.toString())),
+                  DataCell(Text('${NumberFormat('#,###').format(bill.powerConsump)} كيلووات')),
+                  DataCell(Text('${NumberFormat('#,###').format(bill.billTotal)} ج.م', style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold))),
+                  DataCell(
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: statusColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: statusColor.withOpacity(0.5)),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(statusIcon, color: statusColor, size: 14),
+                          const SizedBox(width: 4),
+                          Text(
+                            bill.isPaid == true ? 'مدفوعة' : 'معلقة',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: statusColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  DataCell(
+                    IconButton(
+                      icon: const Icon(Icons.visibility, color: Colors.blue),
+                      onPressed: () {
+                        showBillDetailsDialog(bill, controller);
+                      },
+                      tooltip: 'عرض التفاصيل',
+                    ),
+                  ),
+                ],
+              );
+            }).toList(),
+          ),
+        ),
       ),
     );
   }

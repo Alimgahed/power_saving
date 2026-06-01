@@ -278,17 +278,8 @@ class TechBill extends StatelessWidget {
                     ),
                   ),
     
-                // Bills Grid
-                Wrap(
-                  spacing: 4,
-                  runSpacing: 4,
-                  children: filteredBills.map((bill) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: _buildBillCard(bill, controller),
-                    );
-                  }).toList(),
-                ),
+                // Bills Table
+                _buildDataTable(filteredBills, controller, context),
               ],
             ),
           );
@@ -453,6 +444,83 @@ class TechBill extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildDataTable(List<TechnologyBill> bills, TechBillscontroller controller, BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            spreadRadius: 0,
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: DataTable(
+            headingRowColor: MaterialStateProperty.all(Colors.blue.shade50),
+            dataRowMinHeight: 60,
+            dataRowMaxHeight: 60,
+            columns: const [
+              DataColumn(label: Text('المحطة', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87))),
+              DataColumn(label: Text('التقنية', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87))),
+              DataColumn(label: Text('الشهر', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87))),
+              DataColumn(label: Text('السنة', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87))),
+              DataColumn(label: Text('كمية المياه', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87))),
+              DataColumn(label: Text('استهلاك الكهرباء', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87))),
+              DataColumn(label: Text('النسبة', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87))),
+              DataColumn(label: Text('إجمالي الفاتورة', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87))),
+              DataColumn(label: Text('إجراءات', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87))),
+            ],
+            rows: bills.map((bill) {
+              return DataRow(
+                cells: [
+                  DataCell(Text(bill.stationName, style: const TextStyle(fontWeight: FontWeight.w500))),
+                  DataCell(Text(bill.technologyName)),
+                  DataCell(Text(controller.getMonthName(bill.billMonth))),
+                  DataCell(Text(bill.billYear.toString())),
+                  DataCell(Text(bill.technologyWaterAmount != null ? '${NumberFormat('#,###').format(bill.technologyWaterAmount)} م³' : '-')),
+                  DataCell(Text('${NumberFormat('#,###').format(bill.technologyPowerConsump)} كيلو واط')),
+                  DataCell(Text('${bill.technologyBillPercentage.toStringAsFixed(1)}%', style: const TextStyle(color: Colors.orange, fontWeight: FontWeight.bold))),
+                  DataCell(Text('${NumberFormat('#,###').format(num.tryParse(bill.technologyBillTotal) ?? 0)} ج.م', style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold))),
+                  DataCell(
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.visibility, color: Colors.blue),
+                          onPressed: () {
+                            showBillDetailsDialog(bill, controller);
+                          },
+                          tooltip: 'عرض التفاصيل',
+                        ),
+                        if (user?.groupId == 2 || user?.groupId == 1)
+                          IconButton(
+                            icon: const Icon(Icons.edit, color: Colors.green),
+                            onPressed: () {
+                              Get.offNamed('/EditTechBills', arguments: {'bill': bill});
+                            },
+                            tooltip: 'تعديل',
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            }).toList(),
+          ),
+        ),
       ),
     );
   }
