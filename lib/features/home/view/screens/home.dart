@@ -6,7 +6,6 @@ import 'dart:ui' as ui;
 
 import 'package:power_saving/features/home/controller/home.dart';
 import 'package:power_saving/features/home/model/home.dart';
-import 'package:power_saving/features/home/view/widgets/home_app_bar.dart';
 import 'package:power_saving/features/home/view/widgets/home_drawer.dart';
 import 'package:power_saving/features/home/view/widgets/consumpation_card.dart';
 import 'package:power_saving/features/home/view/widgets/empaty.dart';
@@ -43,9 +42,8 @@ class HomeScreen extends StatelessWidget {
       child: Scaffold(
         key: _scaffoldKey,
         backgroundColor: AppColors.background,
-        appBar: HomeAppBar(scaffoldKey: _scaffoldKey),
         drawer: HomeDrawer(),
-        body: _buildBody(context),
+        body: SafeArea(child: _buildBody(context)),
       ),
     );
   }
@@ -179,10 +177,6 @@ class HomeScreen extends StatelessWidget {
       greeting = 'طاب مساؤك';
     }
 
-    final initial =
-        (user?.username ?? 'U').trim().isNotEmpty
-            ? (user?.username ?? 'U').trim()[0].toUpperCase()
-            : 'U';
 
     return Container(
       width: double.infinity,
@@ -255,17 +249,17 @@ class HomeScreen extends StatelessWidget {
                     builder: (context, headerConstraints) {
                       final isMobile = headerConstraints.maxWidth < 650;
                       final mainRowChildren = [
+                        // Drawer Toggle
+                        IconButton(
+                          icon: const Icon(Icons.menu, color: Colors.white, size: 28),
+                          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+                        ),
+                        const SizedBox(width: 12),
                         // User Profile Glass Avatar
                         Container(
                           width: 60,
                           height: 60,
                           decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                Colors.white.withOpacity(0.25),
-                                Colors.white.withOpacity(0.1),
-                              ],
-                            ),
                             shape: BoxShape.circle,
                             border: Border.all(
                               color: Colors.white.withOpacity(0.4),
@@ -278,16 +272,9 @@ class HomeScreen extends StatelessWidget {
                                 offset: const Offset(0, 4),
                               ),
                             ],
-                          ),
-                          child: Center(
-                            child: Text(
-                              initial,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 26,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Outfit',
-                              ),
+                            image: const DecorationImage(
+                              image: AssetImage('images/Gemini_Generated_Image_f6db4f6db4f6db4f.png'),
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
@@ -994,7 +981,6 @@ class HomeScreen extends StatelessWidget {
               title: 'إنتاج المياه الصالحة للشرب',
               value: '${data.water?.toStringAsFixed(0) ?? '0'} م³',
               subtitle: 'مستهدف اليوم: 300,000 م³ • كفاءة الإنتاج: 94%',
-              progress: 0.78,
               progressGradient: AppGradients.info,
               icon: Icons.water_drop_rounded,
             ),
@@ -1004,7 +990,6 @@ class HomeScreen extends StatelessWidget {
               value: '${data.power?.toStringAsFixed(0) ?? '0'} كيلوواط',
               subtitle:
                   'معدل كفاءة الطاقة: 1.2 كيلوواط/م³ • حالة التوريد: مستقر',
-              progress: 0.65,
               progressGradient: AppGradients.warning,
               icon: Icons.bolt_rounded,
             ),
@@ -1015,7 +1000,6 @@ class HomeScreen extends StatelessWidget {
                   '${((data.chlorine ?? 0) + (data.liquidAlum ?? 0) + (data.solidAlum ?? 0)).toStringAsFixed(0)} كجم',
               subtitle:
                   'الكلور: ${data.chlorine?.toStringAsFixed(0) ?? '0'} كجم • الشبة: ${((data.liquidAlum ?? 0) + (data.solidAlum ?? 0)).toStringAsFixed(0)} كجم',
-              progress: 0.82,
               progressGradient: AppGradients.purple,
               icon: Icons.science_rounded,
             ),
@@ -1023,8 +1007,7 @@ class HomeScreen extends StatelessWidget {
             _buildResourceProgressSection(
               title: 'معالجة الصرف الصحي والبيئة',
               value: '${data.sanitaion?.toStringAsFixed(0) ?? '0'} م³',
-              subtitle: 'نسبة التغطية: 100% • كفاءة المعالجة البيئية: ممتازة',
-              progress: 0.90,
+              subtitle: "",
               progressGradient: AppGradients.teal,
               icon: Icons.eco_rounded,
             ),
@@ -1038,7 +1021,6 @@ class HomeScreen extends StatelessWidget {
     required String title,
     required String value,
     required String subtitle,
-    required double progress,
     required LinearGradient progressGradient,
     required IconData icon,
   }) {
@@ -1071,27 +1053,6 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ],
-        ),
-        const SizedBox(height: 8),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(4),
-          child: Stack(
-            children: [
-              Container(height: 8, color: AppColors.borderLight),
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  return Container(
-                    height: 8,
-                    width: constraints.maxWidth * progress,
-                    decoration: BoxDecoration(
-                      gradient: progressGradient,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
         ),
         const SizedBox(height: 6),
         Text(
@@ -1353,7 +1314,7 @@ class _HoverStatCardState extends State<_HoverStatCard> {
                         widget.title,
                         style: const TextStyle(
                           color: AppColors.textSecondary,
-                          fontSize: HomeTypography.statTitle,
+                          fontSize: HomeTypography.resourceValue,
                           fontWeight: FontWeight.w600,
                         ),
                         maxLines: 1,
@@ -1385,20 +1346,8 @@ class _HoverStatCardState extends State<_HoverStatCard> {
                   '$formatted ${widget.suffix}',
                   style: const TextStyle(
                     color: AppColors.textPrimary,
-                    fontSize: HomeTypography.statValue,
+                    fontSize: HomeTypography.statTitle,
                     fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
-                  child: SizedBox(
-                    height: 4,
-                    child: LinearProgressIndicator(
-                      value: widget.progress,
-                      backgroundColor: startColor.withOpacity(0.1),
-                      valueColor: AlwaysStoppedAnimation<Color>(startColor),
-                    ),
                   ),
                 ),
               ],
