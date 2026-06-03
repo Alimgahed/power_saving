@@ -3,52 +3,24 @@ import 'package:get/get.dart';
 import 'package:power_saving/features/tech_bills/controller/tech_bills/edit_techbills.dart';
 import 'package:power_saving/features/tech_bills/model/tech_bill.dart';
 import 'package:power_saving/my_widget/sharable.dart';
+import 'package:power_saving/core/widgets/app_scaffold.dart';
+import 'package:power_saving/core/widgets/custom_app_bar.dart';
 
 class EditTechBills extends StatelessWidget {
   const EditTechBills({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC),
-        appBar: AppBar(
-          title: const Text(
-            'تعديل فاتورة التقنية',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
-          ),
-          backgroundColor: const Color(0xFF1E40AF),
-          elevation: 0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              Get.back();
-            },
-          ),
-          actions: [
-            Container(
-              margin: const EdgeInsets.only(left: 16),
-              child: IconButton(
-                icon: const Icon(Icons.home, color: Colors.white),
-                onPressed: () {
-                  Get.offNamed('/home');
-                },
-                style: IconButton.styleFrom(
-                  backgroundColor: Colors.white.withOpacity(0.1),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        body: GetBuilder<EditTechbillsController>(
+    const appBarWidget = CustomAppBar(
+      title: 'تعديل فاتورة التقنية',
+      backRoute: '/home',
+    );
+
+    return AppScaffold(
+      title: 'تعديل فاتورة التقنية',
+      mobileAppBar: appBarWidget,
+      desktopHeader: appBarWidget,
+      body: GetBuilder<EditTechbillsController>(
           init: EditTechbillsController(),
           builder: (controller) {
             // Get the bill from arguments
@@ -448,8 +420,7 @@ class EditTechBills extends StatelessWidget {
             });
           },
         ),
-      ),
-    );
+      );
   }
 
   Widget _buildInfoRow(String label, String value, IconData icon) {

@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:power_saving/core/constant/AppDimensions.dart';
 import 'package:power_saving/core/constant/colors.dart';
 import 'package:power_saving/core/widgets/buttons.dart';
-import 'package:power_saving/core/widgets/rtl_scafold.dart';
+import 'package:power_saving/core/widgets/app_scaffold.dart';
 import 'package:power_saving/features/planning/controller/blance_chart/blance_chart.dart';
 import 'package:power_saving/features/stations/controller/add_stations_controller.dart';
 import 'package:power_saving/core/widgets/custom_app_bar.dart';
@@ -18,11 +18,15 @@ class AddStationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RTLScaffold(
-      appBar: const CustomAppBar(
-        title: "إضافة محطة جديدة",
-        backRoute: '/Stations',
-      ),
+    const appBarWidget = CustomAppBar(
+      title: "إضافة محطة جديدة",
+      backRoute: '/Stations',
+    );
+
+    return AppScaffold(
+      title: "إضافة محطة جديدة",
+      mobileAppBar: appBarWidget,
+      desktopHeader: appBarWidget,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppDimensions.paddingXL),
         child: GetBuilder<AddStationController>(

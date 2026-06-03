@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/tech_bills/controller/techbills.dart';
+import 'package:power_saving/features/tech_bills/controller/techbills.dart';
 import 'package:power_saving/my_widget/sharable.dart';
-
+import 'package:power_saving/core/widgets/app_scaffold.dart';
 class TechBills extends StatelessWidget {
   const TechBills({super.key});
 
@@ -10,13 +11,11 @@ class TechBills extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(Techbills());
 
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC),
-        appBar: _buildAppBar(controller),
-        body: Obx(() => _buildBody(controller)),
-      ),
+    return AppScaffold(
+      title: 'قائمة فواتير التقنيات',
+      mobileAppBar: _buildAppBar(controller),
+      desktopHeader: _buildAppBar(controller),
+      body: Obx(() => _buildBody(controller)),
     );
   }
 

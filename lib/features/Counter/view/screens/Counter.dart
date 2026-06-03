@@ -8,6 +8,7 @@ import 'package:power_saving/features/Counter/controller/counter.dart';
 import 'package:power_saving/features/Counter/model/Counter_model.dart';
 import 'package:power_saving/features/bill/model/bills_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
+import 'package:power_saving/core/widgets/app_scaffold.dart';
 class Counterscreen extends StatelessWidget {
   Counterscreen({super.key});
     final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
@@ -17,13 +18,11 @@ class Counterscreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(CounterController());
     
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC),
-        appBar: _buildAppBar(controller),
-        body: Obx(() => _buildBody(controller)),
-      ),
+    return AppScaffold(
+      title: 'قائمة العدادات',
+      mobileAppBar: _buildAppBar(controller),
+      desktopHeader: _buildAppBar(controller),
+      body: Obx(() => _buildBody(controller)),
     );
   }
 

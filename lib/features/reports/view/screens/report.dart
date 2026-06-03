@@ -17,6 +17,8 @@ import 'package:power_saving/global/data.dart';
 import 'package:power_saving/features/reports/model/report.dart';
 import 'package:power_saving/global/html_platform.dart';
 import 'package:power_saving/my_widget/sharable.dart';
+import 'package:power_saving/core/widgets/app_scaffold.dart';
+import 'package:power_saving/core/widgets/custom_app_bar.dart';
 
 class Reports extends StatelessWidget {
   Reports({super.key});
@@ -24,8 +26,10 @@ class Reports extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+    return AppScaffold(
+      title: 'التقارير',
+      desktopHeader: const SizedBox.shrink(),
+      mobileAppBar: const CustomAppBar(title: 'التقارير', backRoute: '/home'),
       body: GetBuilder<ReportsController>(
         init: ReportsController(),
         builder: (controller) {

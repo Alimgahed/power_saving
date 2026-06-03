@@ -3,8 +3,9 @@ import 'package:get/get.dart';
 import 'package:power_saving/features/analysis/controller/analysis.dart';
 import 'package:power_saving/features/home/model/home.dart';
 import 'dart:convert';
-
 import 'package:power_saving/features/analysis/model/analysis.dart';
+import 'package:power_saving/core/widgets/app_scaffold.dart';
+import 'package:power_saving/core/widgets/custom_app_bar.dart';
 
 class AnalysisView extends StatelessWidget {
   // Safe way to get arguments that handles null case
@@ -48,46 +49,17 @@ class AnalysisView extends StatelessWidget {
         ); // or Get.offAllNamed('/') depending on your home route
         return false;
       },
-      child: Directionality(
-        textDirection: TextDirection.rtl,
-        child: Scaffold(
-          backgroundColor: const Color(0xFFF8FAFC),
-          appBar: AppBar(
-            title: const Text(
-              'تحليل البيانات والرسوم البيانية',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              ),
-            ),
-            backgroundColor: const Color(0xFF1E40AF),
-            elevation: 0,
-            actions: [
-              Container(
-                margin: const EdgeInsets.only(left: 16),
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.home,
-                    color: Colors.white,
-                  ), // Changed to home icon
-                  onPressed: () {
-                    Get.offAllNamed(
-                      '/home',
-                    ); // Navigate to home instead of back
-                  },
-                  style: IconButton.styleFrom(
-                    backgroundColor: Colors.white.withOpacity(0.1),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-            automaticallyImplyLeading: false,
-          ),
-          body: GetBuilder<Analysis>(
+      child: AppScaffold(
+        title: 'تحليل البيانات والرسوم البيانية',
+        mobileAppBar: const CustomAppBar(
+          title: 'تحليل البيانات والرسوم البيانية',
+          backRoute: '/home',
+        ),
+        desktopHeader: const CustomAppBar(
+          title: 'تحليل البيانات والرسوم البيانية',
+          backRoute: '/home',
+        ),
+        body: GetBuilder<Analysis>(
             builder: (controller) {
               if (controller.anl == null) {
                 return const Center(
@@ -177,7 +149,6 @@ class AnalysisView extends StatelessWidget {
                 ),
               );
             },
-          ),
         ),
       ),
     );

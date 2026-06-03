@@ -5,7 +5,7 @@ import 'package:power_saving/core/constant/colors.dart';
 import 'package:power_saving/core/widgets/buttons.dart';
 import 'package:power_saving/core/widgets/custom_app_bar.dart';
 import 'package:power_saving/core/widgets/form_card.dart';
-import 'package:power_saving/core/widgets/rtl_scafold.dart';
+import 'package:power_saving/core/widgets/app_scaffold.dart';
 import 'package:power_saving/core/widgets/section_header.dart';
 import 'package:power_saving/features/technology/controller/edit_tech_controller.dart';
 import 'package:power_saving/features/technology/model/tech_model.dart';
@@ -27,11 +27,15 @@ class EditTechScreen extends StatelessWidget {
       });
     }
 
-    return RTLScaffold(
-      appBar: const CustomAppBar(
-        title: "تعديل بيانات التقنية",
-        backRoute: '/Technology',
-      ),
+    const appBarWidget = CustomAppBar(
+      title: "تعديل بيانات التقنية",
+      backRoute: '/Technology',
+    );
+
+    return AppScaffold(
+      title: "تعديل بيانات التقنية",
+      mobileAppBar: appBarWidget,
+      desktopHeader: appBarWidget,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppDimensions.paddingXL),
         child: GetBuilder<EditTechController>(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/chemcails/controller/chemacial.dart';
-
+import 'package:power_saving/core/widgets/app_scaffold.dart';
 class Chemicals extends StatelessWidget {
   const Chemicals({super.key});
 
@@ -9,71 +9,33 @@ class Chemicals extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(Chemacialcontroller());
 
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC),
-        appBar: AppBar(
-          title: const Text(
-            'قائمة المواد الكيميائية',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
-          ),
-          backgroundColor: const Color(0xFF1E40AF),
-          elevation: 0,
-          actions: [
-            Container(
-              margin: const EdgeInsets.only(left: 16),
-              child: Row(
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      Get.offNamed('/AddChemicalScreen');
-                    },
-                    icon: const Icon(Icons.add, size: 18),
-                    label: const Text(
-                      "إضافة مرجع جديد",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: const Color(0xFF1E40AF),
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  IconButton(
-                    icon: const Icon(Icons.arrow_forward, color: Colors.white),
-                    onPressed: () {
-                      Get.offNamed('/home');
-                    },
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.white.withOpacity(0.1),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                ],
+    return AppScaffold(
+      title: 'قائمة المواد الكيميائية',
+      actions: [
+        Container(
+          margin: const EdgeInsets.only(left: 16),
+          child: Row(
+            children: [
+              ElevatedButton.icon(
+                onPressed: () {
+                  Get.offNamed('/AddChemicalScreen');
+                },
+                icon: const Icon(Icons.add, size: 18),
+                label: const Text("إضافة مرجع جديد"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: const Color(0xFF1E40AF),
+                  elevation: 0,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                ),
               ),
-            ),
-          ],
-          automaticallyImplyLeading: false,
+              const SizedBox(width: 12),
+            ],
+          ),
         ),
-        body: GetBuilder<Chemacialcontroller>(
+      ],
+      body: GetBuilder<Chemacialcontroller>(
           builder: (controller) {
             if (controller.chemicals.isEmpty) {
               return Center(
@@ -347,8 +309,7 @@ class Chemicals extends StatelessWidget {
             );
           },
         ),
-      ),
-    );
+      );
   }
 
   Widget _buildInfoSection(

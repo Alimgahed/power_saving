@@ -42,6 +42,7 @@ import 'package:power_saving/features/technology/view/screens/add_tech.dart';
 import 'package:power_saving/features/technology/view/screens/edittech.dart';
 import 'package:power_saving/features/technology/view/screens/technology.dart';
 import 'package:power_saving/test.dart';
+import 'package:power_saving/global/app_theme.dart';
 
 import 'global/data.dart';
 
@@ -90,7 +91,7 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(textTheme: GoogleFonts.almaraiTextTheme()),
+      theme: AppTheme.lightTheme,
       initialRoute: user != null ? '/home' : '/Login', 
       getPages: [
                 GetPage(name: '/Charts', page: () =>         SunburstPage()),

@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:power_saving/features/chemcails/controller/add_chemacial.dart';
 import 'package:power_saving/features/chemcails/model/chemacial.dart';
 import 'package:power_saving/my_widget/sharable.dart';
+import 'package:power_saving/core/widgets/app_scaffold.dart';
+import 'package:power_saving/core/widgets/custom_app_bar.dart';
 
 // ignore: must_be_immutable
 class EditChemcials extends StatelessWidget {
@@ -49,42 +51,16 @@ class EditChemcials extends StatelessWidget {
       _initialized = true;
     }
 
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC),
-        appBar: AppBar(
-          title: const Text(
-            "تعديل المرجع الكيميائي",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          backgroundColor: const Color(0xFF1E40AF),
-          elevation: 0,
-          centerTitle: true,
-          actions: [
-            Container(
-              margin: const EdgeInsets.only(left: 16),
-              child: IconButton(
-                icon: const Icon(Icons.arrow_forward, color: Colors.white),
-                onPressed: () {
-                  Get.offNamed('/Chemicals');
-                },
-                style: IconButton.styleFrom(
-                  backgroundColor: Colors.white.withOpacity(0.1),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
-            ),
-          ],
-          automaticallyImplyLeading: false,
-        ),
-        body: SingleChildScrollView(
+    const appBarWidget = CustomAppBar(
+      title: "تعديل المرجع الكيميائي",
+      backRoute: '/Chemicals',
+    );
+
+    return AppScaffold(
+      title: "تعديل المرجع الكيميائي",
+      mobileAppBar: appBarWidget,
+      desktopHeader: appBarWidget,
+      body: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: GetBuilder<addchemical>(
             builder: (controller) {
@@ -495,8 +471,7 @@ class EditChemcials extends StatelessWidget {
             },
           ),
         ),
-      ),
-    );
+      );
   }
 
   Widget _buildSectionHeader(String title, IconData icon, Color color) {

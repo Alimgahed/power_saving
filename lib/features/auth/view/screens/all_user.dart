@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:power_saving/features/auth/controller/all_user.dart';
 import 'package:power_saving/features/auth/model/login.dart';
 import 'package:power_saving/my_widget/sharable.dart';
+import 'package:power_saving/core/widgets/app_scaffold.dart';
 
 class AllUserScreen extends StatelessWidget {
   const AllUserScreen({super.key});
@@ -11,119 +12,17 @@ class AllUserScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(AllUserController());
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
-      body: Column(
-        children: [
-          // Header Section with Gradient
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.blue.shade600, Colors.blue.shade800],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.blue.withOpacity(0.3),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-               
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: Colors.white.withOpacity(0.2),
-                      width: 1,
-                    ),
-                  ),
-                  child: const Icon(
-                    Icons.people,
-                    size: 32,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'إدارة المستخدمين',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      'عرض وتعديل بيانات المستخدمين',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white70,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-                const Spacer(),
-                // Refresh Button
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: Colors.white.withOpacity(0.2),
-                      width: 1,
-                    ),
-                  ),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(12),
-                      onTap: () => controller.loadUsers(),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                        child: const Row(
-                          children: [
-                            Icon(Icons.refresh, color: Colors.white, size: 20),
-                            SizedBox(width: 8),
-                            Text(
-                              'تحديث',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 10,),
-                 IconButton(
-                  onPressed: () => Get.offNamed("./home"),
-                  icon: const Icon(Icons.arrow_forward, color: Colors.white, size: 28),
-                ),
-                const SizedBox(width: 16),
-              ],
-            ),
-          ),
-          
-          // Content Section
-          Expanded(
-            child: Obx(() {
+    return AppScaffold(
+      title: 'إدارة المستخدمين',
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.refresh, color: Colors.white),
+          onPressed: () => controller.loadUsers(),
+          tooltip: 'تحديث',
+        ),
+        const SizedBox(width: 16),
+      ],
+      body: Obx(() {
               if (controller.users.isEmpty) {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -365,10 +264,7 @@ class AllUserScreen extends StatelessWidget {
                   ),
                 ),
               );
-            }),
-          ),
-        ],
-      ),
+      }),
     );
   }
 

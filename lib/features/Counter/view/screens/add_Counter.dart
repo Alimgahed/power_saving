@@ -5,7 +5,7 @@ import 'package:power_saving/core/constant/colors.dart';
 import 'package:power_saving/core/widgets/buttons.dart';
 import 'package:power_saving/core/widgets/custom_app_bar.dart';
 import 'package:power_saving/core/widgets/form_card.dart';
-import 'package:power_saving/core/widgets/rtl_scafold.dart';
+import 'package:power_saving/core/widgets/app_scaffold.dart';
 import 'package:power_saving/core/widgets/section_header.dart';
 import 'package:power_saving/features/Counter/controller/add_counter_controller.dart';
 import 'package:power_saving/features/Counter/model/Counter_model.dart';
@@ -18,11 +18,15 @@ class AddElectricMeterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RTLScaffold(
-      appBar: const CustomAppBar(
-        title: "إضافة عداد جديد",
-        backRoute: '/Countrts',
-      ),
+    const appBarWidget = CustomAppBar(
+      title: "إضافة عداد جديد",
+      backRoute: '/Countrts',
+    );
+
+    return AppScaffold(
+      title: "إضافة عداد جديد",
+      mobileAppBar: appBarWidget,
+      desktopHeader: appBarWidget,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppDimensions.paddingXL),
         child: GetBuilder<addcounter>(

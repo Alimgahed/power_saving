@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/auth/controller/new_user.dart';
 import 'package:power_saving/my_widget/sharable.dart';
+import 'package:power_saving/core/widgets/app_scaffold.dart';
+import 'package:power_saving/core/widgets/custom_app_bar.dart';
 
 class NewUser extends StatelessWidget {
   NewUser({super.key});
@@ -9,49 +11,16 @@ class NewUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC),
-        appBar: AppBar(
-          backgroundColor: const Color(0xFF1E40AF),
-          foregroundColor: Colors.white,
-          shadowColor: Colors.transparent,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          actions: [
-            Container(
-              margin: const EdgeInsets.only(left: 16),
-              child: Row(
-                children: [
-                  const SizedBox(width: 12),
-                  IconButton(
-                    icon: const Icon(Icons.arrow_forward, color: Colors.white),
-                    onPressed: () {
-                      Get.offNamed('/Login');
-                    },
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.white.withOpacity(0.1),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            )
-          ],
-          title: const Text(
-            'إنشاء حساب جديد',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
-          ),
-          centerTitle: true,
-        ),
-        body: Container(
+    const appBarWidget = CustomAppBar(
+      title: 'إنشاء حساب جديد',
+      backRoute: '/Login',
+    );
+
+    return AppScaffold(
+      title: 'إنشاء حساب جديد',
+      mobileAppBar: appBarWidget,
+      desktopHeader: appBarWidget,
+      body: Container(
           width: double.infinity,
           height: double.infinity,
           decoration: BoxDecoration(
@@ -300,7 +269,6 @@ class NewUser extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }

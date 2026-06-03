@@ -5,7 +5,7 @@ import 'package:power_saving/core/constant/colors.dart';
 import 'package:power_saving/core/widgets/buttons.dart';
 import 'package:power_saving/core/widgets/custom_app_bar.dart';
 import 'package:power_saving/core/widgets/form_card.dart';
-import 'package:power_saving/core/widgets/rtl_scafold.dart';
+import 'package:power_saving/core/widgets/app_scaffold.dart';
 import 'package:power_saving/core/widgets/section_header.dart';
 import 'package:power_saving/features/chemcails/controller/add_chemacial.dart';
 import 'package:power_saving/features/chemcails/model/chemacial.dart';
@@ -20,11 +20,15 @@ class AddChemicalScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(addchemical());
 
-    return RTLScaffold(
-      appBar: const CustomAppBar(
-        title: "إضافة مرجع كيميائي",
-        backRoute: '/Chemicals',
-      ),
+    const appBarWidget = CustomAppBar(
+      title: "إضافة مرجع كيميائي",
+      backRoute: '/Chemicals',
+    );
+
+    return AppScaffold(
+      title: "إضافة مرجع كيميائي",
+      mobileAppBar: appBarWidget,
+      desktopHeader: appBarWidget,
       body: GetBuilder<addchemical>(
         builder: (controller) {
           return SingleChildScrollView(

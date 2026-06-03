@@ -3,25 +3,24 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:power_saving/features/tech_bills/controller/new_tech_bills.dart';
 import 'package:power_saving/my_widget/sharable.dart';
+import 'package:power_saving/core/widgets/app_scaffold.dart';
+import 'package:power_saving/core/widgets/custom_app_bar.dart';
 
 class NewTechBillsScreen extends StatelessWidget {
   const NewTechBillsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC),
-        appBar: AppBar(
-          title: const Text(
-            "إضافة فاتورة تقنية",
-            style: TextStyle(fontWeight: FontWeight.w600),
-          ),
-          backgroundColor: const Color(0xFF1E40AF),
-          elevation: 0,
-        ),
-        body: GetBuilder<NewTechBillsController>(
+    const appBarWidget = CustomAppBar(
+      title: "إضافة فاتورة تقنية",
+      backRoute: '/home', // Or relevant back route
+    );
+
+    return AppScaffold(
+      title: "إضافة فاتورة تقنية",
+      mobileAppBar: appBarWidget,
+      desktopHeader: appBarWidget,
+      body: GetBuilder<NewTechBillsController>(
           init: NewTechBillsController(),
           builder: (controller) {
             return Stack(
@@ -247,8 +246,7 @@ class NewTechBillsScreen extends StatelessWidget {
             );
           },
         ),
-      ),
-    );
+      );
   }
 
   /// 🔹 Reusable Card

@@ -7,6 +7,8 @@ import 'dart:ui' as ui;
 import 'package:power_saving/features/home/controller/home.dart';
 import 'package:power_saving/features/home/model/home.dart';
 import 'package:power_saving/features/home/view/widgets/home_drawer.dart';
+import 'package:power_saving/features/home/view/widgets/enterprise_sidebar.dart';
+import 'package:power_saving/core/widgets/responsive_wrapper.dart';
 import 'package:power_saving/features/home/view/widgets/consumpation_card.dart';
 import 'package:power_saving/features/home/view/widgets/empaty.dart';
 import 'package:power_saving/features/home/home_constant/constant.dart';
@@ -39,11 +41,24 @@ class HomeScreen extends StatelessWidget {
     Get.put(HomeController());
     return Directionality(
       textDirection: ui.TextDirection.rtl,
-      child: Scaffold(
-        key: _scaffoldKey,
-        backgroundColor: AppColors.background,
-        drawer: HomeDrawer(),
-        body: SafeArea(child: _buildBody(context)),
+      child: ResponsiveWrapper(
+        mobile: Scaffold(
+          key: _scaffoldKey,
+          backgroundColor: AppColors.background,
+          drawer: HomeDrawer(),
+          body: SafeArea(child: _buildBody(context)),
+        ),
+        desktop: Scaffold(
+          backgroundColor: AppColors.background,
+          body: SafeArea(
+            child: Row(
+              children: [
+                EnterpriseSidebar(),
+                Expanded(child: _buildBody(context)),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

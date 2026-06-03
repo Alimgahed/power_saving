@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/auth/controller/chang_password.dart';
 import 'package:power_saving/my_widget/sharable.dart'; // Includes CustomTextFormField and dialog
+import 'package:power_saving/core/widgets/app_scaffold.dart';
+import 'package:power_saving/core/widgets/custom_app_bar.dart';
 
 class ChangePassword extends StatelessWidget {
   ChangePassword({super.key});
@@ -9,44 +11,16 @@ class ChangePassword extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC),
-        appBar: AppBar(
-          backgroundColor: const Color(0xFF1E40AF),
-          foregroundColor: Colors.white,
-          shadowColor: Colors.transparent,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          actions: [
-            Container(
-              margin: const EdgeInsets.only(left: 16),
-              child: IconButton(
-                icon: const Icon(Icons.arrow_forward, color: Colors.white),
-                onPressed: () {
-                  Get.back();
-                },
-                style: IconButton.styleFrom(
-                  backgroundColor: Colors.white.withOpacity(0.1),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
-            ),
-          ],
-          title: const Text(
-            'تغيير كلمة المرور',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
-          ),
-          centerTitle: true,
-        ),
-        body: Container(
+    const appBarWidget = CustomAppBar(
+      title: 'تغيير كلمة المرور',
+      backRoute: '/home', // Fallback, back method uses Get.back() if backRoute not specified but usually backRoute handles it
+    );
+
+    return AppScaffold(
+      title: 'تغيير كلمة المرور',
+      mobileAppBar: appBarWidget,
+      desktopHeader: appBarWidget,
+      body: Container(
           width: double.infinity,
           height: double.infinity,
           decoration: BoxDecoration(
@@ -248,7 +222,6 @@ class ChangePassword extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }

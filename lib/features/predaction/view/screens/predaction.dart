@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:power_saving/features/predaction/controller/prediaction.dart';
 import 'package:power_saving/features/stations/controller/all_stations_controller.dart';
 import 'package:power_saving/my_widget/sharable.dart';
+import 'package:power_saving/core/widgets/app_scaffold.dart';
+import 'package:power_saving/core/widgets/custom_app_bar.dart';
 
 // ignore: must_be_immutable
 class Predaction extends StatelessWidget {
@@ -16,39 +18,17 @@ class Predaction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC),
-        appBar: AppBar(
-          title: const Text(
-            'تحليل التنبؤ بالمياه',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
-          ),
-          backgroundColor: const Color(0xFF1E40AF),
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          actions: [
-            Container(
-              margin: const EdgeInsets.only(left: 16),
-              child: IconButton(
-                icon: const Icon(Icons.home, color: Colors.white),
-                onPressed: () => Get.offAllNamed('/home'),
-                style: IconButton.styleFrom(
-                  backgroundColor: Colors.white.withOpacity(0.1),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        body: GetBuilder<Prediactioncontroller>(
+    return AppScaffold(
+      title: 'تحليل التنبؤ بالمياه',
+      mobileAppBar: const CustomAppBar(
+        title: 'تحليل التنبؤ بالمياه',
+        backRoute: '/home',
+      ),
+      desktopHeader: const CustomAppBar(
+        title: 'تحليل التنبؤ بالمياه',
+        backRoute: '/home',
+      ),
+      body: GetBuilder<Prediactioncontroller>(
           init: Prediactioncontroller(),
           builder: (controller) {
             return SingleChildScrollView(
@@ -92,8 +72,7 @@ class Predaction extends StatelessWidget {
             );
           },
         ),
-      ),
-    );
+      );
   }
 Widget _buildStationSelector(Prediactioncontroller controller) {
   return Row(

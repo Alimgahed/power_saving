@@ -4,6 +4,8 @@ import 'package:power_saving/core/constant/AppDimensions.dart';
 import 'package:power_saving/core/constant/colors.dart';
 import 'package:power_saving/features/planning/controller/blance_chart/blance_chart.dart';
 import 'package:power_saving/my_widget/sharable.dart';
+import 'package:power_saving/core/widgets/app_scaffold.dart';
+import 'package:power_saving/core/widgets/custom_app_bar.dart';
 
 class BlanceCart extends StatelessWidget {
   BlanceCart({super.key});
@@ -13,47 +15,17 @@ class BlanceCart extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(BalanceChartController());
 
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC),
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: const Color(0xFF1E40AF),
-          title: const Center(
-            child: Text(
-              "منحني الأتزان",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          
-          actions: [
-              Container(
-                margin: const EdgeInsets.only(left: AppDimensions.paddingL),
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_forward, color: AppColors.textWhite),
-                  onPressed: () {
-                    Get.offNamed('/home');
-                    
-                  
-                  
-                  },
-                  style: IconButton.styleFrom(
-                    backgroundColor: AppColors.overlayBackground,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppDimensions.radiusS),
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        ),
-        body: Obx(() => _buildBody(controller)),
+    return AppScaffold(
+      title: 'منحني الأتزان',
+      mobileAppBar: const CustomAppBar(
+        title: 'منحني الأتزان',
+        backRoute: '/home',
       ),
+      desktopHeader: const CustomAppBar(
+        title: 'منحني الأتزان',
+        backRoute: '/home',
+      ),
+      body: Obx(() => _buildBody(controller)),
     );
   }
 

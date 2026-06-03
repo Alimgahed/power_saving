@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:power_saving/core/constant/colors.dart';
 import 'package:power_saving/core/widgets/buttons.dart';
 import 'package:power_saving/core/widgets/main_screen/reuseable_appbar.dart';
-import 'package:power_saving/core/widgets/rtl_scafold.dart';
+import 'package:power_saving/core/widgets/app_scaffold.dart';
 
 import 'package:power_saving/features/stations/controller/all_stations_controller.dart';
 import 'package:power_saving/features/stations/view/widgets/stations_body.dart';
@@ -17,32 +17,29 @@ class StationsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(StationsController());
 
-    return RTLScaffold(
-      backgroundColor: AppColors.background,
-      appBar: ReusableAppBar(
-          title: 'قائمة المحطات',
-          isSearching: controller.isSearching,
-          searchController: controller.searchController,
-          onSearchChanged: controller.onSearchChanged,
-          onSearchToggle: () {
-          
-              controller.toggleSearch();
-            
-          },
-          onNavigateHome: () => Get.offNamed('/home'),
-          customActions: [
-            // if (controller.isSearching.value)
-            
-            if(user?.groupId==1||user?.groupId==2)
-              ReusableActionButton(
-                label: 'إضافة محطة',
-                icon: Icons.add,
-                route: '/addstations',
-              
-              ),
-         
-          ],
-        ),
+    final appBarWidget = ReusableAppBar(
+      title: 'قائمة المحطات',
+      isSearching: controller.isSearching,
+      searchController: controller.searchController,
+      onSearchChanged: controller.onSearchChanged,
+      onSearchToggle: () {
+        controller.toggleSearch();
+      },
+      onNavigateHome: () => Get.offNamed('/home'),
+      customActions: [
+        if(user?.groupId==1||user?.groupId==2)
+          ReusableActionButton(
+            label: 'إضافة محطة',
+            icon: Icons.add,
+            route: '/addstations',
+          ),
+      ],
+    );
+
+    return AppScaffold(
+      title: 'قائمة المحطات',
+      mobileAppBar: appBarWidget,
+      desktopHeader: appBarWidget,
       body: StationsBody(controller: controller)
     );
   }

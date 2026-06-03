@@ -5,7 +5,7 @@ import 'package:power_saving/core/constant/colors.dart';
 import 'package:power_saving/core/widgets/buttons.dart';
 import 'package:power_saving/core/widgets/custom_app_bar.dart';
 import 'package:power_saving/core/widgets/form_card.dart';
-import 'package:power_saving/core/widgets/rtl_scafold.dart';
+import 'package:power_saving/core/widgets/app_scaffold.dart';
 import 'package:power_saving/core/widgets/section_header.dart';
 import 'package:power_saving/features/Counter/controller/edit_counter_controller.dart';
 import 'package:power_saving/features/Counter/model/Counter_model.dart';
@@ -27,11 +27,15 @@ class EditCounterScreen extends StatelessWidget {
       });
     }
 
-    return RTLScaffold(
-      appBar: const CustomAppBar(
-        title: "تعديل عداد",
-        backRoute: '/Countrts',
-      ),
+    const appBarWidget = CustomAppBar(
+      title: "تعديل عداد",
+      backRoute: '/Countrts',
+    );
+
+    return AppScaffold(
+      title: "تعديل عداد",
+      mobileAppBar: appBarWidget,
+      desktopHeader: appBarWidget,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppDimensions.paddingXL),
         child: GetBuilder<EditCounter>(

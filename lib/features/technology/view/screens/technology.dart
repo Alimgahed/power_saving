@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:power_saving/core/widgets/main_screen/totl_header.dart';
 import 'package:power_saving/features/home/view/widgets/empaty.dart';
 import 'package:power_saving/features/technology/controller/technlogy.dart';
+import 'package:power_saving/core/widgets/app_scaffold.dart';
 
 class Technology extends StatelessWidget {
   const Technology({super.key});
@@ -11,148 +12,133 @@ class Technology extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(TechnlogyController());
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC),
-        appBar: AppBar(
-          title: const Text(
-            'قائمة تقنيات الترشيح',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
-          ),
-          backgroundColor: const Color(0xFF1E40AF),
-          elevation: 0,
-          actions: [
-            Container(
-              margin: const EdgeInsets.only(left: 16),
-              child: Row(
-                children: [
-                  // Filter Button
-                  GetBuilder<TechnlogyController>(
-                    builder: (controller) {
-                      return PopupMenuButton<String>(
-                        icon: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(8),
+    return AppScaffold(
+      title: 'قائمة تقنيات الترشيح',
+      actions: [
+        Container(
+          margin: const EdgeInsets.only(left: 16),
+          child: Row(
+            children: [
+              // Filter Button
+              GetBuilder<TechnlogyController>(
+                builder: (controller) {
+                  return PopupMenuButton<String>(
+                    icon: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.filter_list,
+                            color: Colors.white,
+                            size: 18,
                           ),
+                          const SizedBox(width: 4),
+                          Text(
+                            controller.selectedFilter == 'all'
+                                ? 'الكل'
+                                : controller.selectedFilter,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    onSelected: (String value) {
+                      controller.filterByType(value);
+                    },
+                    itemBuilder: (BuildContext context) {
+                      // Get unique main types
+                      Set<String> mainTypes = controller.all_technology
+                          .map((tech) => tech.main_type)
+                          .toSet();
+
+                      return [
+                        const PopupMenuItem<String>(
+                          value: 'all',
                           child: Row(
                             children: [
-                              const Icon(
-                                Icons.filter_list,
-                                color: Colors.white,
-                                size: 18,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                controller.selectedFilter == 'all'
-                                    ? 'الكل'
-                                    : controller.selectedFilter,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                              Icon(Icons.all_inclusive, size: 18),
+                              SizedBox(width: 8),
+                              Text('الكل'),
                             ],
                           ),
                         ),
-                        onSelected: (String value) {
-                          controller.filterByType(value);
-                        },
-                        itemBuilder: (BuildContext context) {
-                          // Get unique main types
-                          Set<String> mainTypes = controller.all_technology
-                              .map((tech) => tech.main_type)
-                              .toSet();
+                        ...mainTypes.map((type) {
+                          IconData icon = type == 'معالجة'
+                              ? Icons.cleaning_services
+                              : type == 'ضخ'
+                                  ? Icons.water_drop
+                                  : Icons.settings;
 
-                          return [
-                            const PopupMenuItem<String>(
-                              value: 'all',
-                              child: Row(
-                                children: [
-                                  Icon(Icons.all_inclusive, size: 18),
-                                  SizedBox(width: 8),
-                                  Text('الكل'),
-                                ],
-                              ),
+                          return PopupMenuItem<String>(
+                            value: type,
+                            child: Row(
+                              children: [
+                                Icon(icon, size: 18),
+                                const SizedBox(width: 8),
+                                Text(type),
+                              ],
                             ),
-                            ...mainTypes.map((type) {
-                              IconData icon = type == 'معالجة'
-                                  ? Icons.cleaning_services
-                                  : type == 'ضخ'
-                                      ? Icons.water_drop
-                                      : Icons.settings;
-
-                              return PopupMenuItem<String>(
-                                value: type,
-                                child: Row(
-                                  children: [
-                                    Icon(icon, size: 18),
-                                    const SizedBox(width: 8),
-                                    Text(type),
-                                  ],
-                                ),
-                              );
-                            }).toList(),
-                          ];
-                        },
-                      );
+                          );
+                        }).toList(),
+                      ];
                     },
-                  ),
-                  const SizedBox(width: 8),
-                  // Add Button
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      Get.offNamed('/addTech');
-                    },
-                    icon: const Icon(Icons.add, size: 18),
-                    label: const Text(
-                      "إضافة تقنية",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: const Color(0xFF1E40AF),
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  // Back Button
-                  IconButton(
-                    icon: const Icon(Icons.arrow_forward, color: Colors.white),
-                    onPressed: () {
-                      Get.offNamed('/home');
-                    },
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.white.withOpacity(0.1),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                ],
+                  );
+                },
               ),
-            ),
-          ],
-          automaticallyImplyLeading: false,
+              const SizedBox(width: 8),
+              // Add Button
+              ElevatedButton.icon(
+                onPressed: () {
+                  Get.offNamed('/addTech');
+                },
+                icon: const Icon(Icons.add, size: 18),
+                label: const Text(
+                  "إضافة تقنية",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: const Color(0xFF1E40AF),
+                  elevation: 0,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              // Back Button
+              IconButton(
+                icon: const Icon(Icons.arrow_forward, color: Colors.white),
+                onPressed: () {
+                  Get.offNamed('/home');
+                },
+                style: IconButton.styleFrom(
+                  backgroundColor: Colors.white.withOpacity(0.1),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-        body: GetBuilder<TechnlogyController>(
+      ],
+      body: GetBuilder<TechnlogyController>(
           init: TechnlogyController(),
           builder: (controller) {
             // Loading State
@@ -630,7 +616,6 @@ class Technology extends StatelessWidget {
             );
           },
         ),
-      ),
-    );
+      );
   }
 }
