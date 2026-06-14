@@ -14,28 +14,25 @@ class RelationsGrid extends StatelessWidget {
         // Get the width of the available space
         final double width = constraints.crossAxisExtent;
     
-        // Define aspect ratio based on width
-        final double aspectRatio = width > 600 ? 0.7 : 0.8;
-    
         // Determine the number of columns based on the width
         final int crossAxisCount = (width / 200).floor().clamp(1, 4);
+        
+        const double spacing = 12.0;
+        double itemWidth = (width - (spacing * (crossAxisCount - 1))) / crossAxisCount;
     
-        return SliverGrid(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: crossAxisCount,
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-            childAspectRatio: aspectRatio,
-          ),
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              // Build individual relation cards
-              return RelationsCard( 
-                relation: controller.relations[index],
-                controller: controller,
+        return SliverToBoxAdapter(
+          child: Wrap(
+            spacing: spacing,
+            runSpacing: spacing,
+            children: controller.relations.map((relation) {
+              return SizedBox(
+                width: itemWidth,
+                child: RelationsCard( 
+                  relation: relation,
+                  controller: controller,
+                ),
               );
-            },
-            childCount: controller.relations.length,
+            }).toList(),
           ),
         );
       },

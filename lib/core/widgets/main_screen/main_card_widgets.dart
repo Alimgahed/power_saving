@@ -12,7 +12,7 @@ class CardHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: height ?? 90,
+      constraints: BoxConstraints(minHeight: height ?? 90),
       padding: const EdgeInsets.all(AppDimensions.paddingL),
       decoration: const BoxDecoration(
         color: AppColors.primary,

@@ -80,6 +80,16 @@ class NewTechBillsController extends GetxController {
     monthController = TextEditingController();
     calculatedWaterController = TextEditingController();
     measuredWaterController = TextEditingController();
+
+    void updateProducedWater() {
+      double measured = double.tryParse(measuredWaterController.text) ?? 0.0;
+      double calculated = double.tryParse(calculatedWaterController.text) ?? 0.0;
+      waterProducedController.text = (measured + calculated).toString();
+    }
+
+    measuredWaterController.addListener(updateProducedWater);
+    calculatedWaterController.addListener(updateProducedWater);
+
     stationsTechs();
   }
 

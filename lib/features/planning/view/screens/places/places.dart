@@ -95,20 +95,19 @@ class PlacesScreen extends StatelessWidget {
           int crossAxisCount = (availableWidth / 280).floor();
           if (crossAxisCount < 1) crossAxisCount = 1;
 
-          return SliverGrid(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: crossAxisCount,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: aspectRatio,
-            ),
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return PlaceCard(
-                  place: controller.places[index],
+          const double spacing = 12.0;
+          double itemWidth = (availableWidth - (spacing * (crossAxisCount - 1))) / crossAxisCount;
+
+          return SliverToBoxAdapter(
+            child: Wrap(
+              spacing: spacing,
+              runSpacing: spacing,
+              children: controller.places.map((place) {
+                return SizedBox(
+                  width: itemWidth,
+                  child: PlaceCard(place: place),
                 );
-              },
-              childCount: controller.places.length,
+              }).toList(),
             ),
           );
         },

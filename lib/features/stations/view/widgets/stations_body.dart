@@ -50,19 +50,23 @@ class StationsBody extends StatelessWidget {
               ),
             ),
           ),
-          SliverGrid(
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 300,
-              mainAxisSpacing: AppDimensions.paddingS,
-              crossAxisSpacing: AppDimensions.paddingS,
-              childAspectRatio: 0.8,
-            ),
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return _StationCard(station: controller.stations[index]);
-              },
-              childCount: controller.stations.length,
-            ),
+          SliverLayoutBuilder(
+            builder: (context, constraints) {
+              double spacing = AppDimensions.paddingS;
+              int columns = (constraints.crossAxisExtent / 300).ceil();
+              if (columns < 1) columns = 1;
+              double itemWidth = (constraints.crossAxisExtent - (spacing * (columns - 1))) / columns;
+              return SliverToBoxAdapter(
+                child: Wrap(
+                  spacing: spacing,
+                  runSpacing: spacing,
+                  children: controller.stations.map((station) => SizedBox(
+                    width: itemWidth,
+                    child: _StationCard(station: station),
+                  )).toList(),
+                ),
+              );
+            }
           ),
         ],
       );

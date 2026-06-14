@@ -206,22 +206,26 @@ class Counterscreen extends StatelessWidget {
           // Counters Grid
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            sliver: SliverGrid(
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 300,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-                childAspectRatio: 0.50,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return _CounterCard(
-                    meter: displayCounters[index],
-                    globalKey: _globalKey,
-                  );
-                },
-                childCount: displayCounters.length,
-              ),
+            sliver: SliverLayoutBuilder(
+              builder: (context, constraints) {
+                double spacing = 10.0;
+                int columns = (constraints.crossAxisExtent / 300).ceil();
+                if (columns < 1) columns = 1;
+                double itemWidth = (constraints.crossAxisExtent - (spacing * (columns - 1))) / columns;
+                return SliverToBoxAdapter(
+                  child: Wrap(
+                    spacing: spacing,
+                    runSpacing: spacing,
+                    children: displayCounters.map((meter) => SizedBox(
+                      width: itemWidth,
+                      child: _CounterCard(
+                        meter: meter,
+                        globalKey: _globalKey,
+                      ),
+                    )).toList(),
+                  ),
+                );
+              }
             ),
           ),
 

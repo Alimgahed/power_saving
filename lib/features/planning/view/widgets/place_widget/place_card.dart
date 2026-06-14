@@ -98,10 +98,13 @@ class PlaceCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Row(
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: [
-              for (var population in place.populations ?? []) ...[
-                Expanded(
+              for (var population in place.populations ?? [])
+                SizedBox(
+                  width: 120,
                   child: InfoCard(
                     label: '${population.populationYear}',
                     value: population.population.toString(),
@@ -109,8 +112,6 @@ class PlaceCard extends StatelessWidget {
                     color: Colors.green,
                   ),
                 ),
-                SizedBox(width: 8),
-              ]
             ],
           ),
         ],
