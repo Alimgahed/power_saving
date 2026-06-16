@@ -14,10 +14,17 @@ class TechBillscontroller extends GetxController {
   String selectedMonth = 'all';
   String selectedStationName = 'all';
   String selectedTechnologyName = 'all';
+  var searchQuery = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
+    
+    // Setup debounce worker for smooth searching
+    debounce(searchQuery, (_) {
+      update();
+    }, time: const Duration(milliseconds: 500));
+
     allbills();
   }
 
@@ -70,6 +77,16 @@ class TechBillscontroller extends GetxController {
 
     if (selectedTechnologyName != 'all') {
       filtered = filtered.where((bill) => bill.technologyName == selectedTechnologyName).toList();
+    }
+
+    if (searchQuery.value.isNotEmpty) {
+      final query = searchQuery.value.toLowerCase();
+      filtered = filtered.where((bill) => 
+        bill.stationName.toLowerCase().contains(query) ||
+        bill.technologyName.toLowerCase().contains(query) ||
+        bill.billYear.toString().contains(query) ||
+        getMonthName(bill.billMonth).contains(query)
+      ).toList();
     }
 
     return filtered;
@@ -137,7 +154,14 @@ class TechBillscontroller extends GetxController {
     selectedMonth = 'all';
     selectedStationName = 'all';
     selectedTechnologyName = 'all';
+    searchQuery.value = '';
     update();
+  }
+
+  // Update search query
+  void updateSearchQuery(String query) {
+    searchQuery.value = query;
+    // UI update is handled by the debounce worker!
   }
 
   // Get month name in Arabic

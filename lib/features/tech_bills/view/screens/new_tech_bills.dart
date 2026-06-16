@@ -19,7 +19,7 @@ class NewTechBillsScreen extends StatelessWidget {
     return AppScaffold(
       title: "إضافة فاتورة تقنية",
       mobileAppBar: appBarWidget,
-      desktopHeader: appBarWidget,
+      desktopHeader: const SizedBox.shrink(),
       body: GetBuilder<NewTechBillsController>(
         init: NewTechBillsController(),
         builder: (controller) {
@@ -388,6 +388,16 @@ class NewTechBillsScreen extends StatelessWidget {
 
             if (controller.monthController.text.isEmpty || controller.yearController.text.isEmpty) {
               showCustomErrorDialog(errorMessage: "من فضلك ادخل الشهر والسنة");
+              return;
+            }
+            
+            if (controller.measuredWaterController.text.isEmpty ||
+                controller.calculatedWaterController.text.isEmpty ||
+                controller.waterProducedController.text.isEmpty ||
+                controller.chlorineController.text.isEmpty ||
+                controller.liquidAlumController.text.isEmpty ||
+                controller.solidAlumController.text.isEmpty) {
+              showCustomErrorDialog(errorMessage: "من فضلك املأ جميع الحقول");
               return;
             }
 

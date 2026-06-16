@@ -160,7 +160,7 @@ class HomeDrawer extends StatelessWidget {
         onTap: () => _navigationHelper.navigateWithAuth('./BlanceCart'),
       ),
       
-      if (_hasAccess([1, 2, 3,6,7]))
+      if (_hasAccess([1, 2, 4,3,6,7]))
         _buildMenuItem(
           icon: Icons.report,
           text: "التقارير",

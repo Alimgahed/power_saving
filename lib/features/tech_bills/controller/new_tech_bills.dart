@@ -170,30 +170,35 @@ class NewTechBillsController extends GetxController {
             "technology_liquid_alum_consump": liquid,
             "technology_solid_alum_consump": solid,
             "technology_water_amount": water,
-            "measured_water": double.parse(measuredWaterController.text),
-            "calculated_water": double.parse(calculatedWaterController.text),
+            "measured_water": measuredWater,
+            "calculated_water": calculatedWater,
             
-            "station_id": selectedStation?.stationId,
-            "technology_id": selectedTech?.technologyId,
-            "bill_month": int.parse(monthController.text),
-            "bill_year": int.parse(yearController.text),
+            "station_id": staionid,
+            "technology_id": techid,
+            "bill_month": int.tryParse(monthController.text) ?? 0,
+            "bill_year": int.tryParse(yearController.text) ?? 0,
           });
 
-      if (res.statusCode == 200) {
+      if (res.statusCode == 200 || res.statusCode == 201) {
         loading.value = false;
         showSuccessToast("تمت الإضافة بنجاح");
 
         // Clear input fields after successful submission
       } else {
         loading.value = false;
-        final errorBody = jsonDecode(res.body);
-        final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';
-        showCustomErrorDialog(errorMessage: errorMessage);
+        try {
+          final errorBody = jsonDecode(res.body);
+          final errorMessage = errorBody['message'] ?? errorBody['error'] ?? 'حدث خطأ غير متوقع';
+          showCustomErrorDialog(errorMessage: errorMessage.toString());
+        } catch (e) {
+          showCustomErrorDialog(errorMessage: 'حدث خطأ غير متوقع');
+        }
       }
     } catch (e) {
       loading.value = false;
       print("Error during bill submission: $e");
-    } finally {}
+      showCustomErrorDialog(errorMessage: "حدث خطأ: ${e.toString()}");
+    }
   }
 
   void onStationChanged(Station? station) {

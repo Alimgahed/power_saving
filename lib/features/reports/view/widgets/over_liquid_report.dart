@@ -24,17 +24,17 @@ class OverLiquidAlumReport  extends BaseReportTable {
 
   @override
   List<DataRow> buildRows() {
-    return controller.branchs.map((b) {
+    return controller.filteredBranchs.map((b) {
       return DataRow(cells: [
         styledCell(b.branchName, Colors.blue),
         styledCell(b.stationname ?? "", Colors.green),
         dataCell(b.techname ?? ""),
         dataCell('${b.wateramount?.toStringAsFixed(1)} م³'),
-          dataCell('${b.liquidalum?.toStringAsFixed(1)} واط'),
+          dataCell('${b.liquidalum?.toStringAsFixed(1)} جرام / م³'),
          dataCell('${b.month}'),
          dataCell('${b.year}'),
-          dataCell('${b.minratio?.toStringAsFixed(1)} واط'),
-            dataCell('${b.maxratio?.toStringAsFixed(1)} واط'),
+          dataCell('${b.maxratio?.toStringAsFixed(1)} جرام / م³'),
+            dataCell('${b.minratio?.toStringAsFixed(1)} جرام / م³'),
          dataCell('${b.actialratio?.toStringAsFixed(1)}%'),
          dataCell(b.statues ?? ""),
       ]);
@@ -67,8 +67,8 @@ class OverLiquidAlumReportPrinter extends BaseReportPrinter {
         '<td>${formatNum(b.liquidalum)}</td>',
         '<td>${b.month}</td>',
          '<td>${b.year}</td>',
-      '<td>${b.minratio?.toStringAsFixed(1)} ك واط/م³</td>',
-      '<td>${b.maxratio?.toStringAsFixed(1)} ك واط/م³</td>',
+      '<td>${b.maxratio?.toStringAsFixed(1)} جرام / م³</td>',
+      '<td>${b.minratio?.toStringAsFixed(1)} جرام / م³</td>',
       '<td>${b.actialratio?.toStringAsFixed(1)}%</td>',
       '<td>${b.statues ?? ""}</td>'
       ];

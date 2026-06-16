@@ -13,6 +13,7 @@ class AppScaffold extends StatelessWidget {
   final List<Widget>? actions;
   final PreferredSizeWidget? mobileAppBar;
   final Widget? desktopHeader;
+  final bool showDrawer;
 
   AppScaffold({
     super.key,
@@ -22,6 +23,7 @@ class AppScaffold extends StatelessWidget {
     this.actions,
     this.mobileAppBar,
     this.desktopHeader,
+    this.showDrawer = true,
   });
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -39,7 +41,7 @@ class AppScaffold extends StatelessWidget {
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
         ),
-        drawer: HomeDrawer(),
+        drawer: showDrawer ? HomeDrawer() : null,
         body: SafeArea(child: body),
         floatingActionButton: floatingActionButton,
       ),

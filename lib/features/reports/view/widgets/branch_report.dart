@@ -23,7 +23,7 @@ class BranchReportTable extends BaseReportTable {
 
   @override
   List<DataRow> buildRows() {
-    return controller.branchs.map((b) {
+    return controller.filteredBranchs.map((b) {
       return DataRow(cells: [
         styledCell(b.branchName, Colors.blue),
         styledCell(numFmt(b.totalBill), Colors.orange),

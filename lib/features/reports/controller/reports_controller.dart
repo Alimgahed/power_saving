@@ -28,9 +28,21 @@ class ReportsController extends GetxController {
   late TextEditingController startdate;
   late TextEditingController enddate;
 
-  /// SEARCH
+  /// SEARCH AND FILTERS
   final TextEditingController searchController = TextEditingController();
-  Timer? _debounceTimer;
+  final RxString searchQuery = ''.obs;
+  Worker? _searchWorker;
+
+  /// DROPDOWN FILTERS
+  RxnString selectedFilterBranch = RxnString(null);
+  RxnString selectedFilterStation = RxnString(null);
+  RxnString selectedFilterMonth = RxnString(null);
+  RxnString selectedFilterTech = RxnString(null);
+
+  List<String> get availableBranches => ["الكل", ...branchs.map((e) => e.branchName).where((e) => e.isNotEmpty).toSet()];
+  List<String> get availableStations => ["الكل", ...branchs.map((e) => e.stationname ?? "").where((e) => e.isNotEmpty).toSet()];
+  List<String> get availableMonths => ["الكل", ...branchs.map((e) => e.month.toString()).toSet()];
+  List<String> get availableTechs => ["الكل", ...branchs.map((e) => e.techname ?? "").where((e) => e.isNotEmpty).toSet()];
 
   @override
   void onInit() {
@@ -38,7 +50,25 @@ class ReportsController extends GetxController {
     startdate = TextEditingController();
     enddate = TextEditingController();
 
-    // Listen to text changes with debounce
+    _searchWorker = debounce(
+      searchQuery,
+      (_) {
+        applyFilters();
+        isSearching.value = false;
+      },
+      time: const Duration(milliseconds: 300),
+    );
+
+    everAll([
+      selectedFilterBranch,
+      selectedFilterStation,
+      selectedFilterMonth,
+      selectedFilterTech,
+    ], (_) {
+      applyFilters();
+    });
+
+    // Listen to text changes
     searchController.addListener(_onSearchChanged);
   }
 
@@ -47,28 +77,26 @@ class ReportsController extends GetxController {
     startdate.dispose();
     enddate.dispose();
     searchController.dispose();
-    _debounceTimer?.cancel();
+    _searchWorker?.dispose();
     super.onClose();
   }
 
   // ================== SEARCH DEBOUNCE ==================
   void _onSearchChanged() {
-    _debounceTimer?.cancel();
-    
-    // Show searching indicator
     if (searchController.text.isNotEmpty) {
       isSearching.value = true;
     }
-
-    _debounceTimer = Timer(const Duration(milliseconds: 300), () {
-      _performSearch(searchController.text);
-      isSearching.value = false;
-    });
+    searchQuery.value = searchController.text;
   }
 
   // ================== CLEAR SEARCH ==================
   void clearSearch() {
     searchController.clear();
+    searchQuery.value = '';
+    selectedFilterBranch.value = null;
+    selectedFilterStation.value = null;
+    selectedFilterMonth.value = null;
+    selectedFilterTech.value = null;
     filteredBranchs.value = List.from(branchs);
     sumvalueofreport(filteredBranchs);
   }
@@ -86,23 +114,30 @@ class ReportsController extends GetxController {
     }
   }
 
-  // ================== OPTIMIZED SEARCH ======================
-  void _performSearch(String query) {
-    final q = query.trim().toLowerCase();
+  // ================== OPTIMIZED SEARCH & FILTER ======================
+  void applyFilters() {
+    final q = searchQuery.value.trim().toLowerCase();
 
-    if (q.isEmpty) {
-      filteredBranchs.value = List.from(branchs);
-    } else {
-      // Multi-field search using precomputed index
-      filteredBranchs.value = _index
-          .where((e) {
-            // Search in branch name, station name, and other relevant fields
-            return e.branchLower.contains(q) || 
-                   e.stationLower.contains(q);
-          })
-          .map((e) => e.branch)
-          .toList();
+    var result = branchs.where((b) {
+      bool matchesBranch = selectedFilterBranch.value == null || selectedFilterBranch.value == "الكل" || b.branchName == selectedFilterBranch.value;
+      bool matchesStation = selectedFilterStation.value == null || selectedFilterStation.value == "الكل" || b.stationname == selectedFilterStation.value;
+      bool matchesMonth = selectedFilterMonth.value == null || selectedFilterMonth.value == "الكل" || b.month.toString() == selectedFilterMonth.value;
+      bool matchesTech = selectedFilterTech.value == null || selectedFilterTech.value == "الكل" || b.techname == selectedFilterTech.value;
+
+      return matchesBranch && matchesStation && matchesMonth && matchesTech;
+    }).toList();
+
+    if (q.isNotEmpty) {
+      result = result.where((b) {
+        return b.branchName.toLowerCase().contains(q) ||
+               (b.stationname ?? '').toLowerCase().contains(q) ||
+               b.month.toString().contains(q) ||
+               b.year.toString().contains(q) ||
+               (b.techname ?? '').toLowerCase().contains(q);
+      }).toList();
     }
+
+    filteredBranchs.value = result;
 
     sumvalueofreport(filteredBranchs);
   }
@@ -176,6 +211,8 @@ class ReportsController extends GetxController {
         branch: b,
         branchLower: b.branchName.toLowerCase(),
         stationLower: (b.stationname ?? '').toLowerCase(),
+        monthStr: b.month.toString(),
+        yearStr: b.year.toString(),
       );
     }).toList();
   }
@@ -186,10 +223,14 @@ class _BranchIndex {
   final ReportBranch branch;
   final String branchLower;
   final String stationLower;
+  final String monthStr;
+  final String yearStr;
 
   _BranchIndex({
     required this.branch,
     required this.branchLower,
     required this.stationLower,
+    required this.monthStr,
+    required this.yearStr,
   });
 }

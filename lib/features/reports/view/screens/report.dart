@@ -29,7 +29,7 @@ class Reports extends StatelessWidget {
     return AppScaffold(
       title: 'التقارير',
       desktopHeader: const SizedBox.shrink(),
-      mobileAppBar: const CustomAppBar(title: 'التقارير', backRoute: '/home'),
+      mobileAppBar: const PreferredSize(preferredSize: Size.zero, child: SizedBox.shrink()),
       body: GetBuilder<ReportsController>(
         init: ReportsController(),
         builder: (controller) {
@@ -45,6 +45,11 @@ class Reports extends StatelessWidget {
                     children: [
                       _buildTableHeader(controller),
 
+                      // 🎛️ LOCAL FILTERS
+                      controller.branchs.isEmpty
+                          ? const SizedBox.shrink()
+                          : _buildLocalFilters(controller),
+
                       // 🔍 SEARCH BAR
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
@@ -52,7 +57,7 @@ class Reports extends StatelessWidget {
                           controller: controller.searchController,
                           // controller manages search via its listener/debounce
                           decoration: InputDecoration(
-                            hintText: 'بحث باسم الفرع أو المحطة',
+                            hintText: 'بحث باسم الفرع، المحطة، الشهر أو السنة',
                             prefixIcon: const Icon(Icons.search),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -64,6 +69,7 @@ class Reports extends StatelessWidget {
                       // ================= TABLE =================
                       Expanded(
                         child: Obx(() {
+                          final _ = controller.filteredBranchs.length;
                           return controller.isLoading.value
                               ? _buildLoadingState()
                               : controller.filteredBranchs.isEmpty
@@ -137,6 +143,56 @@ class Reports extends StatelessWidget {
     );
   }
 
+  Widget _buildLocalFilters(ReportsController controller) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Wrap(
+        spacing: 12,
+        runSpacing: 12,
+        children: [
+          _buildLocalFilterDropdown("تصفية بالفرع", controller.availableBranches, controller.selectedFilterBranch),
+          _buildLocalFilterDropdown("تصفية بالمحطة", controller.availableStations, controller.selectedFilterStation),
+          _buildLocalFilterDropdown("تصفية بالشهر", controller.availableMonths, controller.selectedFilterMonth),
+          _buildLocalFilterDropdown("تصفية بالتقنية", controller.availableTechs, controller.selectedFilterTech),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLocalFilterDropdown(String label, List<String> items, RxnString selectedValue) {
+    if (items.isEmpty || (items.length == 1 && items.first == "الكل")) return const SizedBox.shrink();
+
+    return Obx(() {
+      return Container(
+        width: 160,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+        decoration: BoxDecoration(
+          color: Colors.blue.shade50.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.blue.shade200),
+        ),
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton<String>(
+            isExpanded: true,
+            hint: Text(label, style: TextStyle(fontSize: 13, color: Colors.blue.shade800, fontWeight: FontWeight.bold)),
+            value: selectedValue.value,
+            icon: Icon(Icons.filter_list_rounded, size: 18, color: Colors.blue.shade700),
+            style: TextStyle(fontSize: 13, color: Colors.grey.shade900, fontWeight: FontWeight.w600),
+            items: items.map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: (val) {
+              selectedValue.value = val;
+            },
+          ),
+        ),
+      );
+    });
+  }
+
   Widget _buildFiltersSection(ReportsController controller) {
     return Container(
       margin: const EdgeInsets.fromLTRB(24, 24, 24, 0),
@@ -203,14 +259,14 @@ class Reports extends StatelessWidget {
       if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6) {"value": "branch_total", "label": "إجمالي تقرير الفروع"},
       if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6) {"value": "technology_per_month", "label": "تقرير التكنولوجيا شهرياً"},
       if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6) {"value": "technology_total", "label": "إجمالي تقرير التكنولوجيا"},
-      {"value": "station_total", "label": "إجمالي المحطات"},
-        if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6)
+      if (user?.groupId != 4) {"value": "station_total", "label": "إجمالي المحطات"},
+        if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6 || user?.groupId == 4)
       {"value": "over_solid_alum_consumption", "label": " الأستهلاك الزائد (الشبة الصلب)"},
-        if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6)
+        if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6 || user?.groupId == 4)
       {"value": "over_liquid_alum_consumption", "label": " الأستهلاك الزائد (الشبة السائل)"},
         if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6)
       {"value": "power_for_zero_water", "label": "أستهلاك خارج الحد المسموح للأنارة"},
-          if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6)
+          if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6 || user?.groupId == 4)
       {"value": "over_chlorine_consumption", "label": " الأستهلاك الزائد (كلور)"},
       
                 if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6)
@@ -279,7 +335,7 @@ class Reports extends StatelessWidget {
       controller: controller.searchController,
       // controller manages search via its listener/debounce
       decoration: InputDecoration(
-        hintText: 'بحث باسم الفرع أو المحطة',
+        hintText: 'بحث باسم الفرع، المحطة، الشهر أو السنة',
         prefixIcon: const Icon(Icons.search),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
@@ -582,7 +638,7 @@ abstract class BaseReportPrinter {
     final reportTitle = title(controller.reportname ?? "");
 
     final th = headers(controller.reportname ?? "").map((h) => '<th>$h</th>').join('');
-    final rows = controller.branchs.map((b) {
+    final rows = controller.filteredBranchs.map((b) {
       final cells = rowCells(b, controller.reportname ?? "");
       return '<tr>${cells.join('')}</tr>';
     }).join('');

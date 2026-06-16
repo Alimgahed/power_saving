@@ -11,7 +11,6 @@ class Prediactioncontroller extends GetxController {
 
   Future<void> prediactions(int stationId) async {
     try {
-      print({ApiConfig.baseUrl});
       isLoading.value = true;
       update();
 
@@ -20,7 +19,6 @@ class Prediactioncontroller extends GetxController {
       predictionModel = PredictionModel.fromJson(jsonData);
       
     } catch (e) {
-      print(e.toString());
       if (e is ApiException) {
         showCustomErrorDialog(errorMessage: e.message);
       } else {
