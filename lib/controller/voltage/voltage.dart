@@ -65,6 +65,7 @@ class Voltage extends GetxController {
         // Debug prints
       }
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       print("Error fetching branches: $e");
     }
   }
@@ -84,6 +85,7 @@ class Voltage extends GetxController {
         // Debug prints
       }
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       print("Error fetching branches: $e");
     }
   }

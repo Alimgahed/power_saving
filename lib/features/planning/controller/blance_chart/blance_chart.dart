@@ -6,6 +6,7 @@ import 'package:power_saving/features/planning/model/area_model.dart';
 import 'package:power_saving/features/planning/model/blance_model.dart';
 import 'package:power_saving/features/planning/view/screens/blance_chart/blance_chart_print_screen.dart';
 import 'package:power_saving/global/ip_config.dart';
+import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class BalanceChartController extends GetxController {
@@ -64,6 +65,7 @@ class BalanceChartController extends GetxController {
         );
       }
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       Get.snackbar(
         'خطأ',
         'حدث خطأ أثناء تحميل البيانات',
@@ -99,6 +101,7 @@ class BalanceChartController extends GetxController {
         );
       }
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       Get.snackbar(
         'خطأ',
         'حدث خطأ أثناء تحميل البيانات',
@@ -165,6 +168,7 @@ Future<void> submitData(int id) async {
       );
     }
   } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
     isloading.value = false;
     Get.snackbar(
       'خطأ',

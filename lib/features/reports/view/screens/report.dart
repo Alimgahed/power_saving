@@ -24,6 +24,18 @@ class Reports extends StatelessWidget {
   Reports({super.key});
   final GlobalKey<FormState> globalKey = GlobalKey<FormState>();
 
+  // ─── Design tokens (page-local) ───
+  static const _kHeaderPaddingH = 24.0;
+  static const _kHeaderPaddingV = 16.0;
+  static const _kSectionMargin = 16.0;
+  static const _kCardRadius = 10.0;
+  static const _kInputRadius = 8.0;
+  static const _kInputHeight = 48.0;
+  static final _kBorderColor = Colors.grey.shade300;
+  static final _kNeutralBg = const Color(0xFFF8FAFC);
+  static final _kHeaderBlue = const Color(0xFF1E40AF);
+  static final _kHeaderBlueDark = const Color(0xFF1E3A8A);
+
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
@@ -35,38 +47,21 @@ class Reports extends StatelessWidget {
         builder: (controller) {
           return Column(
             children: [
+              // ── Level 1: Header ──
               _buildHeader(controller),
+              // ── Level 2: Filters ──
               _buildFiltersSection(controller),
+              // ── Level 3+4: Report card (toolbar + table) ──
               Expanded(
                 child: Container(
-                  margin: const EdgeInsets.all(24),
+                  margin: const EdgeInsets.fromLTRB(_kSectionMargin, 12, _kSectionMargin, _kSectionMargin),
                   decoration: _cardDecoration(),
+                  clipBehavior: Clip.antiAlias,
                   child: Column(
                     children: [
-                      _buildTableHeader(controller),
-
-                      // 🎛️ LOCAL FILTERS
-                      controller.branchs.isEmpty
-                          ? const SizedBox.shrink()
-                          : _buildLocalFilters(controller),
-
-                      // 🔍 SEARCH BAR
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-                        child: TextField(
-                          controller: controller.searchController,
-                          // controller manages search via its listener/debounce
-                          decoration: InputDecoration(
-                            hintText: 'بحث باسم الفرع، المحطة، الشهر أو السنة',
-                            prefixIcon: const Icon(Icons.search),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      // ================= TABLE =================
+                      // Level 3: Report toolbar header
+                      _buildReportToolbar(controller),
+                      // Level 4: Table
                       Expanded(
                         child: Obx(() {
                           final _ = controller.filteredBranchs.length;
@@ -76,11 +71,11 @@ class Reports extends StatelessWidget {
                                   ? _buildEmptyState()
                                   : _buildReportTable(controller);
                         }),
-                      )
+                      ),
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           );
         },
@@ -88,36 +83,521 @@ class Reports extends StatelessWidget {
     );
   }
 
-  // UI helpers
+  // ═══════════════════════════════════════════════════
+  //  CARD DECORATION
+  // ═══════════════════════════════════════════════════
   BoxDecoration _cardDecoration() {
     return BoxDecoration(
       color: Colors.white,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(_kCardRadius),
+      border: Border.all(color: Colors.grey.shade200, width: 1),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.08),
-          spreadRadius: 0,
-          blurRadius: 24,
-          offset: const Offset(0, 8),
+          color: Colors.black.withOpacity(0.03),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
         ),
       ],
     );
   }
 
+  // ═══════════════════════════════════════════════════
+  //  LEVEL 1: HEADER
+  // ═══════════════════════════════════════════════════
+  Widget _buildHeader(ReportsController controller) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: _kHeaderPaddingH, vertical: _kHeaderPaddingV),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [_kHeaderBlueDark, _kHeaderBlue],
+          begin: Alignment.centerRight,
+          end: Alignment.centerLeft,
+        ),
+      ),
+      child: Row(
+        children: [
+          // ── Report icon ──
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.15),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Icon(Icons.assessment_outlined, color: Colors.white, size: 22),
+          ),
+          const SizedBox(width: 12),
+          // ── Title + Subtitle ──
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'تقارير الفروع',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white, height: 1.2),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'عرض شامل لبيانات جميع الفروع',
+                  style: TextStyle(fontSize: 13, color: Colors.white.withOpacity(0.8), height: 1.3),
+                ),
+              ],
+            ),
+          ),
+          // ── Print button ──
+          ElevatedButton.icon(
+            onPressed: () async {
+              controller.sumvalueofreport(controller.filteredBranchs);
+              ReportPrinterFactory.forType(controller.reportname ?? '').print(controller);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              foregroundColor: _kHeaderBlue,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              elevation: 0,
+            ),
+            icon: const Icon(Icons.print_outlined, size: 16),
+            label: const Text('طباعة التقرير', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+          ),
+          const SizedBox(width: 10),
+          // ── Back button ──
+          Material(
+            color: Colors.white.withOpacity(0.12),
+            borderRadius: BorderRadius.circular(8),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(8),
+              onTap: () => Get.offNamed("/home"),
+              child: const Padding(
+                padding: EdgeInsets.all(8),
+                child: Icon(Icons.arrow_forward, color: Colors.white, size: 20),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  LEVEL 2: FILTER SECTION
+  // ═══════════════════════════════════════════════════
+  Widget _buildFiltersSection(ReportsController controller) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(_kSectionMargin, 12, _kSectionMargin, 0),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: _cardDecoration(),
+      child: Form(
+        key: globalKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // ── Header row: label + record count ──
+            Row(
+              children: [
+                Icon(Icons.tune, color: Colors.grey.shade600, size: 18),
+                const SizedBox(width: 6),
+                Text(
+                  'المرشحات',
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.grey.shade800),
+                ),
+                const Spacer(),
+                Obx(() => Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: _kNeutralBg,
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(color: _kBorderColor),
+                      ),
+                      child: Text(
+                        'إجمالي السجلات: ${controller.filteredBranchs.length}',
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.grey.shade700),
+                      ),
+                    )),
+              ],
+            ),
+            const SizedBox(height: 10),
+            // ── Filter controls ── uses LayoutBuilder for responsive flex
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final availableWidth = constraints.maxWidth;
+                // If wide enough, use a single horizontal row with flexible children
+                if (availableWidth > 700) {
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(flex: 2, child: _buildDateFieldInline(controller.startdate, "بداية التاريخ")),
+                      const SizedBox(width: 10),
+                      Expanded(flex: 2, child: _buildDateFieldInline(controller.enddate, "نهاية التاريخ")),
+                      const SizedBox(width: 10),
+                      Expanded(flex: 3, child: _buildReportTypeInline(controller)),
+                      const SizedBox(width: 10),
+                      _buildSearchButton(controller),
+                    ],
+                  );
+                }
+                // Narrower screens: wrap into 2 rows
+                return Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(child: _buildDateFieldInline(controller.startdate, "بداية التاريخ")),
+                        const SizedBox(width: 10),
+                        Expanded(child: _buildDateFieldInline(controller.enddate, "نهاية التاريخ")),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(child: _buildReportTypeInline(controller)),
+                        const SizedBox(width: 10),
+                        _buildSearchButton(controller),
+                      ],
+                    ),
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ── Page-local date field (neutral borders, no extra padding) ──
+  Widget _buildDateFieldInline(TextEditingController controller, String label) {
+    return SizedBox(
+      height: _kInputHeight,
+      child: TextFormField(
+        controller: controller,
+        readOnly: true,
+        style: const TextStyle(fontSize: 14),
+        decoration: InputDecoration(
+          labelText: label.tr,
+          labelStyle: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+          prefixIcon: Icon(Icons.calendar_today_outlined, size: 18, color: Colors.grey.shade500),
+          filled: true,
+          fillColor: Colors.white,
+          isDense: true,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: _kBorderColor),
+            borderRadius: BorderRadius.circular(_kInputRadius),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: _kHeaderBlue, width: 1.5),
+            borderRadius: BorderRadius.circular(_kInputRadius),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.red),
+            borderRadius: BorderRadius.circular(_kInputRadius),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.red, width: 1.5),
+            borderRadius: BorderRadius.circular(_kInputRadius),
+          ),
+        ),
+        validator: (value) {
+          if (value == null || value.isEmpty) return 'هذا الحقل مطلوب';
+          return null;
+        },
+        onTap: () async {
+          DateTime? pickedDate = await showDatePicker(
+            context: Get.context!,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(DateTime.now().year - 10),
+            lastDate: DateTime.now(),
+          );
+          if (pickedDate != null) {
+            controller.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+          }
+        },
+      ),
+    );
+  }
+
+  // ── Page-local report-type dropdown (neutral borders) ──
+  Widget _buildReportTypeInline(ReportsController controller) {
+    final reportTypes = [
+      if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6) {"value": "branch_per_month", "label": "تقرير الفروع شهرياً"},
+      if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6) {"value": "branch_total", "label": "إجمالي تقرير الفروع"},
+      if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6) {"value": "technology_per_month", "label": "تقرير التكنولوجيا شهرياً"},
+      if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6) {"value": "technology_total", "label": "إجمالي تقرير التكنولوجيا"},
+      if (user?.groupId != 4) {"value": "station_total", "label": "إجمالي المحطات"},
+      if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6 || user?.groupId == 4) {"value": "over_solid_alum_consumption", "label": "الأستهلاك الزائد (الشبة الصلب)"},
+      if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6 || user?.groupId == 4) {"value": "over_liquid_alum_consumption", "label": "الأستهلاك الزائد (الشبة السائل)"},
+      if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6) {"value": "power_for_zero_water", "label": "أستهلاك خارج الحد المسموح للأنارة"},
+      if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6 || user?.groupId == 4) {"value": "over_chlorine_consumption", "label": "الأستهلاك الزائد (كلور)"},
+      if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6) {"value": "over_power_consumption", "label": "الأستهلاك الزائد (كهرياء)"},
+      if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6) {"value": "station_per_month", "label": "تقرير المحطات شهرياً"},
+      if (user?.groupId == 3 || user?.groupId == 1) {"value": "station-bills", "label": "فواتير المحطات"},
+      if (user?.groupId == 3 || user?.groupId == 1) {"value": "water-techs-3-month", "label": "تقرير المياه (3 أشهر)"},
+      if (user?.groupId == 3 || user?.groupId == 1) {"value": "sanity-techs-3-month", "label": "تقرير الصرف (3 أشهر)"},
+      if (user?.groupId == 3 || user?.groupId == 1) {"value": "bills", "label": "(المالي) تقرير فواتير"},
+    ];
+
+    return SizedBox(
+      height: _kInputHeight,
+      child: DropdownButtonFormField<String>(
+        decoration: InputDecoration(
+          labelText: 'نوع التقرير',
+          labelStyle: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+          hintText: 'اختر نوع التقرير',
+          prefixIcon: Icon(Icons.category_outlined, size: 18, color: Colors.grey.shade500),
+          filled: true,
+          fillColor: Colors.white,
+          isDense: true,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: _kBorderColor),
+            borderRadius: BorderRadius.circular(_kInputRadius),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: _kHeaderBlue, width: 1.5),
+            borderRadius: BorderRadius.circular(_kInputRadius),
+          ),
+        ),
+        items: reportTypes.map((type) => DropdownMenuItem(value: type["value"], child: Text(type["label"]!, style: const TextStyle(fontSize: 13)))).toList(),
+        onChanged: (val) => controller.reportname = val!,
+        validator: (val) => val == null ? 'الرجاء اختيار نوع التقرير' : null,
+        isExpanded: true,
+        style: TextStyle(fontSize: 14, color: Colors.grey.shade900),
+      ),
+    );
+  }
+
+  // ── Search button ──
+  Widget _buildSearchButton(ReportsController controller) {
+    return SizedBox(
+      height: _kInputHeight,
+      child: Material(
+        color: _kHeaderBlue,
+        borderRadius: BorderRadius.circular(_kInputRadius),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(_kInputRadius),
+          onTap: () {
+            if (globalKey.currentState!.validate()) {
+              controller.getReports(start: controller.startdate.text, end: controller.enddate.text, name: controller.reportname!);
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Obx(() {
+              return AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                child: controller.isLoading.value
+                    ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                    : const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.search, color: Colors.white, size: 18),
+                          SizedBox(width: 6),
+                          Text('بحث', style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w600)),
+                        ],
+                      ),
+              );
+            }),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  LEVEL 3: REPORT TOOLBAR (header + search + local filters)
+  // ═══════════════════════════════════════════════════
+  Widget _buildReportToolbar(ReportsController controller) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // ── Report title bar ──
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          decoration: BoxDecoration(
+            color: _kNeutralBg,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(_kCardRadius),
+              topRight: Radius.circular(_kCardRadius),
+            ),
+          ),
+          child: Row(
+            children: [
+              Icon(Icons.table_chart_outlined, color: Colors.grey.shade700, size: 18),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  _getTableTitle(controller.reportname ?? ""),
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: Colors.grey.shade900),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Obx(() => Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(color: _kBorderColor),
+                    ),
+                    child: Text(
+                      '${controller.filteredBranchs.length} سجل',
+                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Colors.grey.shade700),
+                    ),
+                  )),
+              const SizedBox(width: 6),
+              _buildStatusBadge(),
+            ],
+          ),
+        ),
+        // ── Divider ──
+        Divider(height: 1, thickness: 1, color: Colors.grey.shade200),
+        // ── Search bar + local filters ──
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // ── Single row: Search + All Filters ──
+              Row(
+                children: [
+                  // Search field
+                  SizedBox(
+                    width: 220,
+                    height: 36,
+                    child: TextField(
+                      controller: controller.searchController,
+                      style: const TextStyle(fontSize: 13),
+                      decoration: InputDecoration(
+                        hintText: 'بحث داخل التقرير...',
+                        hintStyle: TextStyle(fontSize: 12, color: Colors.grey.shade400),
+                        prefixIcon: Icon(Icons.search, size: 16, color: Colors.grey.shade400),
+                        filled: true,
+                        fillColor: _kNeutralBg,
+                        isDense: true,
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(6),
+                          borderSide: BorderSide(color: Colors.grey.shade200),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(6),
+                          borderSide: BorderSide(color: Colors.grey.shade200),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(6),
+                          borderSide: BorderSide(color: _kHeaderBlue, width: 1),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  // All filters in one row
+                                  // All filters in one row
+                  Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Wrap(
+                            spacing: 8,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              Text('عرض:', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.grey.shade600)),
+                              _buildLocalFilterDropdown("الفرع", controller.availableBranches, controller.selectedFilterBranch),
+                              _buildLocalFilterDropdown("المحطة", controller.availableStations, controller.selectedFilterStation),
+                              _buildLocalFilterDropdown("السنة", controller.availableYears, controller.selectedFilterYear),
+                              _buildLocalFilterDropdown("الشهر", controller.availableMonths, controller.selectedFilterMonth),
+                              _buildLocalFilterDropdown("التقنية", controller.availableTechs, controller.selectedFilterTech),
+                              _buildLocalFilterDropdown("السداد", controller.availableIsPaid, controller.selectedFilterIsPaid),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        // ── Bottom divider before table ──
+        Divider(height: 1, thickness: 1, color: Colors.grey.shade200),
+      ],
+    );
+  }
+
+  // ── Status badge ──
+  Widget _buildStatusBadge() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: const Color(0xFFECFDF5),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: const Color(0xFF86EFAC)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(width: 5, height: 5, decoration: const BoxDecoration(color: Color(0xFF22C55E), shape: BoxShape.circle)),
+          const SizedBox(width: 4),
+          const Text('محدث', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Color(0xFF15803D))),
+        ],
+      ),
+    );
+  }
+
+  // ── Local filters ──
+  Widget _buildLocalFilterDropdown(String label, List<String> items, RxnString selectedValue) {
+    final hasItems = items.isNotEmpty && !(items.length == 1 && items.first == "الكل");
+    if (!hasItems) return const SizedBox.shrink();
+
+    return Obx(() {
+      return Container(
+        height: 32,
+        constraints: const BoxConstraints(minWidth: 100, maxWidth: 150),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(color: _kBorderColor),
+        ),
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton<String>(
+            isExpanded: true,
+            hint: Text(label, style: TextStyle(fontSize: 11, color: Colors.grey.shade700)),
+            value: items.contains(selectedValue.value) ? selectedValue.value : null,
+            icon: Icon(Icons.unfold_more, size: 13, color: Colors.grey.shade400),
+            style: TextStyle(fontSize: 12, color: Colors.grey.shade900),
+            items: items.map((String value) {
+              return DropdownMenuItem<String>(value: value, child: Text(value));
+            }).toList(),
+            onChanged: (val) {
+              selectedValue.value = val;
+            },
+          ),
+        ),
+      );
+    });
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  STATES: LOADING / EMPTY
+  // ═══════════════════════════════════════════════════
   Widget _buildLoadingState() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const CircularProgressIndicator(),
-          const SizedBox(height: 16),
+          SizedBox(
+            width: 32,
+            height: 32,
+            child: CircularProgressIndicator(strokeWidth: 3, color: _kHeaderBlue),
+          ),
+          const SizedBox(height: 12),
           Text(
             'جاري تحميل البيانات...',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey.shade600,
-              fontWeight: FontWeight.w500,
-            ),
+            style: TextStyle(fontSize: 14, color: Colors.grey.shade500, fontWeight: FontWeight.w500),
           ),
         ],
       ),
@@ -129,310 +609,25 @@ class Reports extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.inbox_outlined, size: 80, color: Colors.grey.shade400),
-          const SizedBox(height: 14),
+          Icon(Icons.inbox_outlined, size: 56, color: Colors.grey.shade300),
+          const SizedBox(height: 12),
           Text(
             'لا توجد بيانات للعرض',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey.shade600),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.grey.shade500),
           ),
-          const SizedBox(height: 8),
-          Text('تأكد من اختيار التواريخ والفلاتر المناسبة', style: TextStyle(fontSize: 14, color: Colors.grey.shade500)),
-          const SizedBox(height: 10),
+          const SizedBox(height: 4),
+          Text(
+            'تأكد من اختيار التواريخ والفلاتر المناسبة',
+            style: TextStyle(fontSize: 13, color: Colors.grey.shade400),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildLocalFilters(ReportsController controller) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Wrap(
-        spacing: 12,
-        runSpacing: 12,
-        children: [
-          _buildLocalFilterDropdown("تصفية بالفرع", controller.availableBranches, controller.selectedFilterBranch),
-          _buildLocalFilterDropdown("تصفية بالمحطة", controller.availableStations, controller.selectedFilterStation),
-          _buildLocalFilterDropdown("تصفية بالشهر", controller.availableMonths, controller.selectedFilterMonth),
-          _buildLocalFilterDropdown("تصفية بالتقنية", controller.availableTechs, controller.selectedFilterTech),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildLocalFilterDropdown(String label, List<String> items, RxnString selectedValue) {
-    if (items.isEmpty || (items.length == 1 && items.first == "الكل")) return const SizedBox.shrink();
-
-    return Obx(() {
-      return Container(
-        width: 160,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-        decoration: BoxDecoration(
-          color: Colors.blue.shade50.withOpacity(0.5),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.blue.shade200),
-        ),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton<String>(
-            isExpanded: true,
-            hint: Text(label, style: TextStyle(fontSize: 13, color: Colors.blue.shade800, fontWeight: FontWeight.bold)),
-            value: selectedValue.value,
-            icon: Icon(Icons.filter_list_rounded, size: 18, color: Colors.blue.shade700),
-            style: TextStyle(fontSize: 13, color: Colors.grey.shade900, fontWeight: FontWeight.w600),
-            items: items.map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (val) {
-              selectedValue.value = val;
-            },
-          ),
-        ),
-      );
-    });
-  }
-
-  Widget _buildFiltersSection(ReportsController controller) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-      padding: const EdgeInsets.all(20),
-      decoration: _cardDecoration(),
-      child: Form(
-        key: globalKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.filter_list_outlined, color: Colors.blue.shade600, size: 20),
-                const SizedBox(width: 8),
-                Text('المرشحات:', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.grey.shade700)),
-                const Spacer(),
-                Obx(() => Text(
-                      'إجمالي السجلات: ${controller.filteredBranchs.length}',
-                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.blue.shade700),
-                    )),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                SizedBox(width: 250, child: _buildDateField(controller.startdate, "بداية التاريخ")),
-                const SizedBox(width: 10),
-                SizedBox(width: 250, child: _buildDateField(controller.enddate, "نهاية التاريخ")),
-                const SizedBox(width: 10),
-                SizedBox(width: 350, child: _buildReportTypeDropdown(controller)),
-                const SizedBox(width: 10),
-                _buildSearchButton(controller),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDateField(TextEditingController controller, String label) {
-    return CustomTextFormField(
-      controller: controller,
-      icon: Icons.calendar_month,
-      label: label.tr,
-      readonly: true,
-      onTap: () async {
-        DateTime? pickedDate = await showDatePicker(
-          context: Get.context!,
-          initialDate: DateTime.now(),
-          firstDate: DateTime(DateTime.now().year - 10),
-          lastDate: DateTime.now(),
-        );
-        if (pickedDate != null) {
-          controller.text = DateFormat('yyyy-MM-dd').format(pickedDate);
-        }
-      },
-    );
-  }
-
-  Widget _buildReportTypeDropdown(ReportsController controller) {
-    final reportTypes = [
-      if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6) {"value": "branch_per_month", "label": "تقرير الفروع شهرياً"},
-      if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6) {"value": "branch_total", "label": "إجمالي تقرير الفروع"},
-      if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6) {"value": "technology_per_month", "label": "تقرير التكنولوجيا شهرياً"},
-      if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6) {"value": "technology_total", "label": "إجمالي تقرير التكنولوجيا"},
-      if (user?.groupId != 4) {"value": "station_total", "label": "إجمالي المحطات"},
-        if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6 || user?.groupId == 4)
-      {"value": "over_solid_alum_consumption", "label": " الأستهلاك الزائد (الشبة الصلب)"},
-        if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6 || user?.groupId == 4)
-      {"value": "over_liquid_alum_consumption", "label": " الأستهلاك الزائد (الشبة السائل)"},
-        if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6)
-      {"value": "power_for_zero_water", "label": "أستهلاك خارج الحد المسموح للأنارة"},
-          if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6 || user?.groupId == 4)
-      {"value": "over_chlorine_consumption", "label": " الأستهلاك الزائد (كلور)"},
-      
-                if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6)
-
-
-
-           {"value": "over_power_consumption", "label": " الأستهلاك الزائد (كهرياء)"},
-          if (user?.groupId == 2 || user?.groupId == 1 || user?.groupId == 6)
-
-      {"value": "station_per_month", "label": "تقرير المحطات شهرياً"},
-      if (user?.groupId == 3 || user?.groupId == 1) {"value": "station-bills", "label": "فواتير المحطات"},
-      if (user?.groupId == 3 || user?.groupId == 1) {"value": "water-techs-3-month", "label": "تقرير المياه (3 أشهر)"},
-      if (user?.groupId == 3 || user?.groupId == 1) {"value": "sanity-techs-3-month", "label": "تقرير الصرف (3 أشهر)"},
-      if (user?.groupId == 3 || user?.groupId == 1) {"value": "bills", "label": "(المالي) تقرير فواتير"},
-    ];
-
-    return CustomDropdownFormField<String>(
-      items: reportTypes.map((type) => DropdownMenuItem(value: type["value"], child: Text(type["label"]!))).toList(),
-      onChanged: (val) => controller.reportname = val!,
-      labelText: 'نوع التقرير',
-      hintText: 'اختر نوع التقرير',
-      prefixIcon: Icons.category,
-      validator: (val) => val == null ? 'الرجاء اختيار نوع التقرير' : null,
-    );
-  }
-
-  Widget _buildSearchButton(ReportsController controller) {
-    return Container(
-      height: 50,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [Colors.blue.shade600, Colors.blue.shade700], begin: Alignment.topLeft, end: Alignment.bottomRight),
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [BoxShadow(color: Colors.blue.withOpacity(0.3), blurRadius: 8, offset: const Offset(0, 4))],
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () {
-          if (globalKey.currentState!.validate()) {
-            controller.getReports(start: controller.startdate.text, end: controller.enddate.text, name: controller.reportname!);
-          }
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-          child: Obx(() {
-            return AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              child: controller.isLoading.value
-                  ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                  : const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.search, color: Colors.white, size: 20),
-                        SizedBox(width: 8),
-                        Text('بحث', style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600)),
-                      ],
-                    ),
-            );
-          }),
-        ),
-      ),
-    );
-  }
-
-  Widget buildSearchBar(ReportsController controller) {
-    return TextField(
-      controller: controller.searchController,
-      // controller manages search via its listener/debounce
-      decoration: InputDecoration(
-        hintText: 'بحث باسم الفرع، المحطة، الشهر أو السنة',
-        prefixIcon: const Icon(Icons.search),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHeader(ReportsController controller) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [Colors.blue.shade600, Colors.blue.shade800], begin: Alignment.topLeft, end: Alignment.bottomRight),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(12)),
-            child: const Icon(Icons.analytics_outlined, color: Colors.white, size: 28),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('تقارير الفروع', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white)),
-                const SizedBox(height: 4),
-                Text('عرض شامل لبيانات جميع الفروع', style: TextStyle(fontSize: 16, color: Colors.white.withOpacity(0.9))),
-              ],
-            ),
-          ),
-          ElevatedButton.icon(
-            onPressed: () async {
-              controller.sumvalueofreport(controller.filteredBranchs);
-              ReportPrinterFactory.forType(controller.reportname ?? '').print(controller);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: Colors.blue.shade700,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              elevation: 0,
-            ),
-            icon: const Icon(Icons.print_outlined, size: 18),
-            label: const Text('طباعة التقرير', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
-          ),
-          const SizedBox(width: 10),
-          IconButton(
-            onPressed: () => Get.offNamed("/home"),
-            icon: const Icon(Icons.arrow_circle_left_outlined, color: Colors.white, size: 30),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTableHeader(ReportsController controller) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade50,
-        borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.table_chart_outlined, color: Colors.blue.shade600, size: 20),
-          const SizedBox(width: 8),
-          Text(_getTableTitle(controller.reportname ?? ""), style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey.shade800)),
-          const Spacer(),
-          _buildStatusIndicator(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatusIndicator() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.green.shade50,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.green.shade200),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(width: 8, height: 8, decoration: BoxDecoration(color: Colors.green.shade400, shape: BoxShape.circle)),
-          const SizedBox(width: 6),
-          Text('محدث', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.green.shade700)),
-        ],
-      ),
-    );
-  }
-
-  // Report view switcher
+  // ═══════════════════════════════════════════════════
+  //  LEVEL 4: TABLE
+  // ═══════════════════════════════════════════════════
   Widget _buildReportTable(ReportsController controller) {
     final ScrollController verticalController = ScrollController();
     final ScrollController horizontalController = ScrollController();
@@ -440,27 +635,24 @@ class Reports extends StatelessWidget {
 
     Widget table = ReportTableFactory.forType(reportType, controller);
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: Scrollbar(
+    return Scrollbar(
+      controller: verticalController,
+      thumbVisibility: true,
+      trackVisibility: true,
+      child: SingleChildScrollView(
         controller: verticalController,
-        thumbVisibility: true,
-        trackVisibility: true,
-        child: SingleChildScrollView(
-          controller: verticalController,
-          scrollDirection: Axis.vertical,
-          child: Scrollbar(
+        scrollDirection: Axis.vertical,
+        child: Scrollbar(
+          controller: horizontalController,
+          thumbVisibility: true,
+          trackVisibility: true,
+          notificationPredicate: (notif) => notif.depth == 1,
+          child: SingleChildScrollView(
             controller: horizontalController,
-            thumbVisibility: true,
-            trackVisibility: true,
-            notificationPredicate: (notif) => notif.depth == 1,
-            child: SingleChildScrollView(
-              controller: horizontalController,
-              scrollDirection: Axis.horizontal,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minWidth: Get.width - 100),
-                child: table,
-              ),
+            scrollDirection: Axis.horizontal,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minWidth: Get.width - 64),
+              child: table,
             ),
           ),
         ),
@@ -468,6 +660,9 @@ class Reports extends StatelessWidget {
     );
   }
 
+  // ═══════════════════════════════════════════════════
+  //  TABLE TITLE LOOKUP
+  // ═══════════════════════════════════════════════════
   String _getTableTitle(String reportName) {
     final titles = {
       "branch_per_month": "بيانات الفروع الشهرية",
@@ -477,10 +672,10 @@ class Reports extends StatelessWidget {
       "station-bills": "فواتير المحطات",
       "water-techs-3-month": "تقرير المياه",
       "sanity-techs-3-month": "تقرير الصرف",
-      "over_power_consumption":"الأسنهلاك الزائد(كهرباء)",
-      "bills": "تقرير الفواتير (المالي) ",
+      "over_power_consumption": "الأسنهلاك الزائد(كهرباء)",
+      "bills": "تقرير الفواتير (المالي)",
       "station_total": "إجمالي المحطات",
-      "station_per_month": " إجمالي المحطات شهرياً",
+      "station_per_month": "إجمالي المحطات شهرياً",
       "over_chlorine_consumption": "الاستهلاك الزائد (كلور)",
       "over_solid_alum_consumption": "الاستهلاك الزائد (الشبة الصلبة)",
       "over_liquid_alum_consumption": "الاستهلاك الزائد (الشبة السائلة)",
@@ -503,8 +698,8 @@ abstract class BaseReportTable extends StatelessWidget {
       label: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 14, color: Colors.blue.shade600),
-          const SizedBox(width: 6),
+          Icon(icon, size: 13, color: Colors.grey.shade500),
+          const SizedBox(width: 5),
           Text(label),
         ],
       ),
@@ -514,11 +709,10 @@ abstract class BaseReportTable extends StatelessWidget {
   DataCell styledCell(String text, Color color) {
     return DataCell(
       Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: color.withOpacity(0.3)),
+          color: color.withOpacity(0.08),
+          borderRadius: BorderRadius.circular(4),
         ),
         child: Text(text, style: TextStyle(fontWeight: FontWeight.w600, color: color, fontSize: 12)),
       ),
@@ -527,24 +721,27 @@ abstract class BaseReportTable extends StatelessWidget {
 
   DataCell dataCell(String text) {
     return DataCell(
-      Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        decoration: BoxDecoration(color: Colors.grey.shade50, borderRadius: BorderRadius.circular(6)),
-        child: Text(text, style: TextStyle(fontWeight: FontWeight.w500, color: Colors.grey.shade700, fontSize: 12)),
-      ),
+      Text(text, style: TextStyle(fontWeight: FontWeight.w400, color: Colors.grey.shade800, fontSize: 13)),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return DataTable(
-      columnSpacing: 16,
-      headingRowHeight: 50,
-      dataRowHeight: 56,
-      headingTextStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.grey.shade800),
-      dataTextStyle: TextStyle(fontSize: 12, color: Colors.grey.shade700),
-      columns: buildColumns(),
-      rows: buildRows(),
+    return Theme(
+      data: Theme.of(context).copyWith(
+        dividerColor: Colors.grey,
+      ),
+      child: DataTable(
+        columnSpacing: 20,
+        horizontalMargin: 16,
+        headingRowHeight: 42,
+        dataRowHeight: 44,
+        headingTextStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Colors.grey.shade900),
+        dataTextStyle: TextStyle(fontSize: 13, color: Colors.grey.shade800),
+        headingRowColor: MaterialStateProperty.resolveWith((states) => const Color(0xFFF1F5F9)),
+        columns: buildColumns(),
+        rows: buildRows(),
+      ),
     );
   }
 
@@ -662,17 +859,17 @@ abstract class BaseReportPrinter {
     .info-item { text-align: center; padding: 4px; background: white; border-radius: 8px; }
     .info-label { font-size: 10px; color: #64748b; margin-bottom: 5px; text-transform: uppercase; font-weight: 600; }
     .info-value { font-size: 12px; color: #1e293b; font-weight: bold; }
-    .table-container { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; }
-    table { width: 100%; border-collapse: collapse; }
-    th { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; padding: 16px 12px; text-align: right; font-weight: bold; font-size: 14px; border-bottom: 2px solid #1d4ed8; }
-    td { padding: 14px 12px; border-bottom: 1px solid #f1f5f9; text-align: right; font-size: 13px; }
+    .table-container { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; margin-top: 20px; }
+    table { width: 100%; border-collapse: collapse; table-layout: auto; }
+    th { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; padding: 14px 10px; text-align: center; font-weight: bold; font-size: 14px; border-bottom: 2px solid #1d4ed8; white-space: nowrap; }
+    td { padding: 14px 10px; border-bottom: 1px solid #f1f5f9; text-align: center; font-size: 13px; vertical-align: middle; }
     tr:nth-child(even) { background: #f8fafc; }
     tr:hover { background: #e0f2fe; transition: all 0.2s ease; }
-    .highlight-cell { background: #dbeafe !important; color: #1e40af; font-weight: 600; border-radius: 6px; }
-    .paid-yes { background: #d1fae5 !important; color: #065f46; font-weight: 600; border-radius: 6px; }
-    .paid-no { background: #fee2e2 !important; color: #991b1b; font-weight: 600; border-radius: 6px; }
+    .highlight-cell { background: #dbeafe !important; color: #1e40af; font-weight: 600; }
+    .paid-yes { background: #d1fae5 !important; color: #065f46; font-weight: 600; }
+    .paid-no { background: #fee2e2 !important; color: #991b1b; font-weight: 600; }
     .summary-row { background: white !important; color: #1f2937; font-weight: bold; }
-    .summary-row td { background: white !important; color: #1f2937; font-weight: bold; border-top: 2px solid #2563eb; border-bottom: 1px solid #e2e8f0; }
+    .summary-row td { background: white !important; color: #1f2937; font-weight: bold; border-top: 2px solid #2563eb; border-bottom: 1px solid #e2e8f0; text-align: center; }
     .summary-row:hover { background: white !important; transform: none; }
     .footer { margin-top: 40px; text-align: center; color: #64748b; font-size: 12px; border-top: 2px solid #e2e8f0; padding-top: 20px; }
     .no-print { text-align: center; margin-bottom: 30px; }

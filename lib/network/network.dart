@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:power_saving/shared_pref/cache.dart';
-
+import 'package:get/get.dart';
+import 'package:power_saving/features/auth/view/screens/login.dart';
 class ApiException implements Exception {
   final int statusCode;
   final String message;
@@ -25,11 +26,15 @@ Future<http.Response> fetchData(String url) async {
 
   if (res.statusCode >= 200 && res.statusCode < 300) {
     return res;
+  } else if (res.statusCode == 401 || res.statusCode == 403) {
+    Cache.sharedPreferences.remove('token');
+    Get.offAll(() => const Login());
+    throw ApiException(statusCode: res.statusCode, message: 'انتهت صلاحية الجلسة');
   } else {
     String errorMessage = 'حدث خطأ غير متوقع أثناء تحميل البيانات';
     try {
       final errorBody = jsonDecode(res.body);
-      errorMessage = errorBody['error'] ?? errorMessage;
+      errorMessage = errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();
     } catch (_) {}
     throw ApiException(statusCode: res.statusCode, message: errorMessage);
   }
@@ -48,11 +53,15 @@ Future<http.Response> postData(String url, Map<String, dynamic> body) async {
   );
   if (res.statusCode >= 200 && res.statusCode < 300) {
     return res;
+  } else if (res.statusCode == 401 || res.statusCode == 403) {
+    Cache.sharedPreferences.remove('token');
+    Get.offAll(() => const Login());
+    throw ApiException(statusCode: res.statusCode, message: 'انتهت صلاحية الجلسة');
   } else {
     String errorMessage = 'حدث خطأ غير متوقع';
     try {
       final errorBody = jsonDecode(res.body);
-      errorMessage = errorBody['error'] ?? errorMessage;
+      errorMessage = errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();
     } catch (_) {}
     throw ApiException(statusCode: res.statusCode, message: errorMessage);
   }

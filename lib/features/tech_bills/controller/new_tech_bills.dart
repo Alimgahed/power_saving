@@ -188,7 +188,7 @@ class NewTechBillsController extends GetxController {
         loading.value = false;
         try {
           final errorBody = jsonDecode(res.body);
-          final errorMessage = errorBody['message'] ?? errorBody['error'] ?? 'حدث خطأ غير متوقع';
+          final errorMessage = errorBody['message'] ?? errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();
           showCustomErrorDialog(errorMessage: errorMessage.toString());
         } catch (e) {
           showCustomErrorDialog(errorMessage: 'حدث خطأ غير متوقع');

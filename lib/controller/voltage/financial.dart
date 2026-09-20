@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart'; // kIsWeb
 import 'package:get/get.dart';
 import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/global/iframe_platform.dart';
+import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class FinancialController extends GetxController {
@@ -34,6 +35,7 @@ class FinancialController extends GetxController {
         update();
       }
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       loading.value = false;
       debugPrint("Error fetching financial analysis: $e");
     }

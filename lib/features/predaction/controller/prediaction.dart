@@ -20,7 +20,9 @@ class Prediactioncontroller extends GetxController {
       
     } catch (e) {
       if (e is ApiException) {
-        showCustomErrorDialog(errorMessage: e.message);
+        if (e.statusCode != 401 && e.statusCode != 403) {
+          showCustomErrorDialog(errorMessage: e.message);
+        }
       } else {
         showCustomErrorDialog(errorMessage: "تعذر الاتصال بالخادم. الرجاء المحاولة لاحقاً.\nالخطأ: $e");
       }

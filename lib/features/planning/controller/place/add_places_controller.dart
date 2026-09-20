@@ -56,10 +56,11 @@ required   Place  place,
       } else {
         looading.value = false;
         final errorBody = jsonDecode(res.body);
-        final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';
+        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();
         showCustomErrorDialog(errorMessage: errorMessage);
       }
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       looading.value = false;
     }
   }
@@ -88,6 +89,7 @@ update();
       }
     // ignore: empty_catches
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
     }
   }
   }

@@ -105,6 +105,7 @@ class AddElectricMeterScreen extends StatelessWidget {
                     Obx(() {
                       return PrimaryButton(
                         label: 'حفظ العداد',
+                        backgroundColor: AppColors.primaryDark,
                         icon: Icons.save,
                         isLoading: controller.looading.value,
                         onPressed: () async {

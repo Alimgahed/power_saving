@@ -62,12 +62,13 @@ class AddTechController extends GetxController {
         final errorBody = jsonDecode(res.body);
 
         // Extract Arabic error message
-        final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';
+        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();
 
         // Show custom dialog or toast with Arabic error
         showCustomErrorDialog(errorMessage: errorMessage);
       }
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       looading.value = false;
       print("Error adding station: $e");
     }

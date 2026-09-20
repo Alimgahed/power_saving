@@ -31,7 +31,7 @@ class StationGaugeTechnologyRelation {
       stationName: json['station_name'],
       technologyId: json['technology_id'],
       technologyName: json['technology_name'],
-      issource: json['issource'],
+      issource: json['is_source'],
     );
   }
 
@@ -42,7 +42,7 @@ class StationGaugeTechnologyRelation {
       'station_guage_technology_id': stationGaugeTechnologyId,
       'station_id': stationId,
       'branch_name': branchName,
-      'issource': issource,
+      'is_source': issource,
       'station_name': stationName,
       'technology_id': technologyId,
       'technology_name': technologyName,

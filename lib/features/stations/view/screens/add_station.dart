@@ -5,7 +5,7 @@ import 'package:power_saving/core/constant/AppDimensions.dart';
 import 'package:power_saving/core/constant/colors.dart';
 import 'package:power_saving/core/widgets/buttons.dart';
 import 'package:power_saving/core/widgets/app_scaffold.dart';
-import 'package:power_saving/features/planning/controller/blance_chart/blance_chart.dart';
+
 import 'package:power_saving/features/stations/controller/add_stations_controller.dart';
 import 'package:power_saving/core/widgets/custom_app_bar.dart';
 import 'package:power_saving/core/widgets/form_card.dart';
@@ -123,27 +123,20 @@ class AddStationScreen extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: 20,),
-                     GetBuilder<BalanceChartController>(
-                      init: BalanceChartController(),
-
-                       builder:(area)=>
-                        CustomDropdownFormField<int>(
-                                           items: area.areas.map((area) {
+                    CustomDropdownFormField<int>(
+                      items: controller.areas.map((area) {
                         return DropdownMenuItem<int>(
                           value: area.areaId,
                           child: Text(area.areaName),
                         );
-                                           }).toList(),
-                                           onChanged: (value) {
+                      }).toList(),
+                      onChanged: (value) {
                         controller.areaId = value!;
-                                           },
-                                           labelText: 'منطقة الخدمة',
-                                           hintText: 'اختر منطقة الخدمة',
-                                           prefixIcon: Icons.location_on,
-                                           
-                                      
-                                         ),
-                     ),
+                      },
+                      labelText: 'منطقة الخدمة',
+                      hintText: 'اختر منطقة الخدمة',
+                      prefixIcon: Icons.location_on,
+                    ),
 
                     const SizedBox(height: AppDimensions.paddingL),
 

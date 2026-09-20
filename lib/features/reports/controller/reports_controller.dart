@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/reports/model/report.dart';
 import 'package:power_saving/global/ip_config.dart';
+import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class ReportsController extends GetxController {
@@ -37,12 +38,23 @@ class ReportsController extends GetxController {
   RxnString selectedFilterBranch = RxnString(null);
   RxnString selectedFilterStation = RxnString(null);
   RxnString selectedFilterMonth = RxnString(null);
+  RxnString selectedFilterYear = RxnString(null);
   RxnString selectedFilterTech = RxnString(null);
-
+  RxnString selectedFilterIsPaid = RxnString(null);
+  
   List<String> get availableBranches => ["الكل", ...branchs.map((e) => e.branchName).where((e) => e.isNotEmpty).toSet()];
-  List<String> get availableStations => ["الكل", ...branchs.map((e) => e.stationname ?? "").where((e) => e.isNotEmpty).toSet()];
+  List<String> get availableStations => [
+    "الكل", 
+    ...branchs.map((e) => e.stationnames?.isNotEmpty == true ? e.stationnames! : (e.stationname ?? "")).where((e) => e.isNotEmpty).toSet()
+  ];
   List<String> get availableMonths => ["الكل", ...branchs.map((e) => e.month.toString()).toSet()];
+  List<String> get availableYears => ["الكل", ...branchs.map((e) => e.year.toString()).toSet()];
   List<String> get availableTechs => ["الكل", ...branchs.map((e) => e.techname ?? "").where((e) => e.isNotEmpty).toSet()];
+  List<String> get availableIsPaid {
+    bool hasPaidData = branchs.any((e) => e.ispaid != null);
+    if (!hasPaidData) return ["الكل"];
+    return ["الكل", "نعم", "لا"];
+  }
 
   @override
   void onInit() {
@@ -63,7 +75,9 @@ class ReportsController extends GetxController {
       selectedFilterBranch,
       selectedFilterStation,
       selectedFilterMonth,
+      selectedFilterYear,
       selectedFilterTech,
+      selectedFilterIsPaid,
     ], (_) {
       applyFilters();
     });
@@ -96,7 +110,9 @@ class ReportsController extends GetxController {
     selectedFilterBranch.value = null;
     selectedFilterStation.value = null;
     selectedFilterMonth.value = null;
+    selectedFilterYear.value = null;
     selectedFilterTech.value = null;
+    selectedFilterIsPaid.value = null;
     filteredBranchs.value = List.from(branchs);
     sumvalueofreport(filteredBranchs);
   }
@@ -119,18 +135,28 @@ class ReportsController extends GetxController {
     final q = searchQuery.value.trim().toLowerCase();
 
     var result = branchs.where((b) {
+      String actualStation = b.stationnames?.isNotEmpty == true ? b.stationnames! : (b.stationname ?? "");
+      
       bool matchesBranch = selectedFilterBranch.value == null || selectedFilterBranch.value == "الكل" || b.branchName == selectedFilterBranch.value;
-      bool matchesStation = selectedFilterStation.value == null || selectedFilterStation.value == "الكل" || b.stationname == selectedFilterStation.value;
+      bool matchesStation = selectedFilterStation.value == null || selectedFilterStation.value == "الكل" || actualStation == selectedFilterStation.value;
       bool matchesMonth = selectedFilterMonth.value == null || selectedFilterMonth.value == "الكل" || b.month.toString() == selectedFilterMonth.value;
+      bool matchesYear = selectedFilterYear.value == null || selectedFilterYear.value == "الكل" || b.year.toString() == selectedFilterYear.value;
       bool matchesTech = selectedFilterTech.value == null || selectedFilterTech.value == "الكل" || b.techname == selectedFilterTech.value;
+      
+      bool matchesIsPaid = true;
+      if (selectedFilterIsPaid.value != null && selectedFilterIsPaid.value != "الكل") {
+        String paidVal = b.ispaid == true ? "نعم" : "لا";
+        matchesIsPaid = paidVal == selectedFilterIsPaid.value;
+      }
 
-      return matchesBranch && matchesStation && matchesMonth && matchesTech;
+      return matchesBranch && matchesStation && matchesMonth && matchesYear && matchesTech && matchesIsPaid;
     }).toList();
 
     if (q.isNotEmpty) {
       result = result.where((b) {
+        String actualStation = b.stationnames?.isNotEmpty == true ? b.stationnames! : (b.stationname ?? "");
         return b.branchName.toLowerCase().contains(q) ||
-               (b.stationname ?? '').toLowerCase().contains(q) ||
+               actualStation.toLowerCase().contains(q) ||
                b.month.toString().contains(q) ||
                b.year.toString().contains(q) ||
                (b.techname ?? '').toLowerCase().contains(q);
@@ -182,6 +208,7 @@ class ReportsController extends GetxController {
           try {
             branchs.add(ReportBranch.fromJson(i));
           } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
             debugPrint("Parsing error: $e");
           }
         }
@@ -198,6 +225,7 @@ class ReportsController extends GetxController {
       isLoading.value = false;
       update();
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       isLoading.value = false;
       update();
       debugPrint("Error fetching reports: $e");

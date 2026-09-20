@@ -136,6 +136,7 @@ class CounterController extends GetxController {
         );
       }
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       Get.snackbar(
         'خطأ',
         'حدث خطأ أثناء تحميل البيانات',

@@ -21,9 +21,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(title, style: AppTextStyles.appBarTitle),
-      backgroundColor: AppColors.primary,
-      elevation: AppDimensions.elevationNone,
+      flexibleSpace: Container(
+        decoration: const BoxDecoration(gradient: AppGradients.header),
+      ),
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      title: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: AppColors.textWhite,
+        ),
+      ),
       centerTitle: true,
       actions: [
         if (showBackButton)
@@ -32,16 +42,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: IconButton(
               icon: const Icon(Icons.arrow_forward, color: AppColors.textWhite),
               onPressed: () {
-                if (backRoute != null) {
-                  Get.offNamed(backRoute!);
-                } else {
-                  Get.back();
-                }
+                // To avoid lag and rebuilding screens, simply use Get.back()
+                Get.back();
               },
               style: IconButton.styleFrom(
-                backgroundColor: AppColors.overlayBackground,
+                backgroundColor: Colors.white.withOpacity(0.2),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusM),
                 ),
               ),
             ),

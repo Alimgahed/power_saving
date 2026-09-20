@@ -1,6 +1,7 @@
 import 'dart:html' as html;
 import 'dart:ui_web' as ui_web;
 import 'package:flutter/material.dart';
+import 'package:power_saving/my_widget/sharable.dart';
 
 void registerIframe(String id, String htmlContent) {
   try {
@@ -15,6 +16,7 @@ void registerIframe(String id, String htmlContent) {
       (int viewId) => iframeElement,
     );
   } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
     debugPrint("Error registering iframe: $e");
   }
 }

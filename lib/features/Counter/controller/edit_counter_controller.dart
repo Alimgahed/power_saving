@@ -67,6 +67,7 @@ class EditCounter extends GetxController {
         );
       }
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       looadig.value = false;
       
     }
@@ -95,6 +96,7 @@ class EditCounter extends GetxController {
         );
       }
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       Get.snackbar(
         "خطأ",
         "حدث خطأ أثناء تحميل أنواع الجهد",

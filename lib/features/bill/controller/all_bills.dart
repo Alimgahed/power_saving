@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/bill/model/bills_model.dart';
 import 'package:power_saving/global/ip_config.dart';
+import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class AllBills extends GetxController {
@@ -86,6 +87,7 @@ class AllBills extends GetxController {
         }
       }
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       errorMessage.value = 'خطأ في الاتصال: ${e.toString()}';
     } finally {
       isLoading.value = false;

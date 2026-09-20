@@ -23,9 +23,19 @@ class EditTechbillsController extends GetxController {
     wateramount = TextEditingController();
     liquidAlumController = TextEditingController();
     calculatedWaterController = TextEditingController();
-      measuredWaterController = TextEditingController();
+    measuredWaterController = TextEditingController();
     solidAlumController = TextEditingController();
     waterProducedController = TextEditingController();
+
+    void updateWaterProduced() {
+      final calc = double.tryParse(calculatedWaterController.text) ?? 0.0;
+      final meas = double.tryParse(measuredWaterController.text) ?? 0.0;
+      waterProducedController.text = (calc + meas).toString();
+    }
+
+    calculatedWaterController.addListener(updateWaterProduced);
+    measuredWaterController.addListener(updateWaterProduced);
+
     super.onInit();
   }
   

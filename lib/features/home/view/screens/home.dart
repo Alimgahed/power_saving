@@ -985,7 +985,7 @@ class HomeScreen extends StatelessWidget {
             _buildResourceProgressSection(
               title: 'إنتاج المياه الصالحة للشرب',
               value: '${data.water?.toStringAsFixed(0) ?? '0'} م³',
-              subtitle: 'مستهدف اليوم: 300,000 م³ • كفاءة الإنتاج: 94%',
+              subtitle: '',
               progressGradient: AppGradients.info,
               icon: Icons.water_drop_rounded,
             ),
@@ -993,8 +993,7 @@ class HomeScreen extends StatelessWidget {
             _buildResourceProgressSection(
               title: 'استهلاك الطاقة الكهربائية',
               value: '${data.power?.toStringAsFixed(0) ?? '0'} كيلوواط',
-              subtitle:
-                  'معدل كفاءة الطاقة: 1.2 كيلوواط/م³ • حالة التوريد: مستقر',
+              subtitle: '',
               progressGradient: AppGradients.warning,
               icon: Icons.bolt_rounded,
             ),
@@ -1059,14 +1058,16 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 6),
-        Text(
-          subtitle,
-          style: const TextStyle(
-            fontSize: HomeTypography.resourceSub,
-            color: AppColors.textSecondary,
+        if (subtitle.isNotEmpty) ...[
+          const SizedBox(height: 6),
+          Text(
+            subtitle,
+            style: const TextStyle(
+              fontSize: HomeTypography.resourceSub,
+              color: AppColors.textSecondary,
+            ),
           ),
-        ),
+        ],
       ],
     );
   }

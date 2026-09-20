@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/shared_pref/cache.dart';
 import '../errors/exceptions.dart';
 
@@ -63,6 +64,7 @@ class ApiClient {
         attempts++;
         return await action();
       } on SocketException catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
         if (attempts >= maxRetryAttempts) {
           throw NetworkException(
             'لا يوجد اتصال بالإنترنت. يرجى التحقق من اتصال الشبكة.',
@@ -70,6 +72,7 @@ class ApiClient {
           );
         }
       } on http.ClientException catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
         if (attempts >= maxRetryAttempts) {
           throw NetworkException(
             'فشل الاتصال بالخادم. يرجى المحاولة لاحقاً.',
@@ -77,6 +80,7 @@ class ApiClient {
           );
         }
       } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
         if (e is AppException) rethrow;
         if (attempts >= maxRetryAttempts) {
           throw ServerException(

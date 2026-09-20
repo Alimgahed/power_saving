@@ -36,9 +36,13 @@ class AppScaffold extends StatelessWidget {
         key: _scaffoldKey,
         backgroundColor: AppColors.background,
         appBar: mobileAppBar ?? AppBar(
-          title: Text(title, style: AppTextStyles.appBarTitle),
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(gradient: AppGradients.header),
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          title: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
           actions: actions,
-          backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
         ),
         drawer: showDrawer ? HomeDrawer() : null,

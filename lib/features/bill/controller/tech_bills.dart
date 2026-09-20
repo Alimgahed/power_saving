@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:power_saving/features/tech_bills/model/tech_bill.dart';
 import 'package:power_saving/global/ip_config.dart';
+import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class TechBillscontroller extends GetxController {
@@ -9,11 +10,17 @@ class TechBillscontroller extends GetxController {
   var isLoading = false.obs;
   var errorMessage = ''.obs;
   
+  // Pagination
+  int currentPage = 1;
+  int totalPages = 1;
+  int perPage = 20;
+  int totalItems = 0;
+  bool hasNext = false;
+  bool hasPrev = false;
+
   // Filter properties
   String selectedYear = 'all';
   String selectedMonth = 'all';
-  String selectedStationName = 'all';
-  String selectedTechnologyName = 'all';
   var searchQuery = ''.obs;
 
   @override
@@ -22,7 +29,8 @@ class TechBillscontroller extends GetxController {
     
     // Setup debounce worker for smooth searching
     debounce(searchQuery, (_) {
-      update();
+      currentPage = 1;
+      allbills();
     }, time: const Duration(milliseconds: 500));
 
     allbills();
@@ -34,128 +42,99 @@ class TechBillscontroller extends GetxController {
       errorMessage.value = '';
       bills = [];
 
-      final res = await fetchData("${ApiConfig.baseUrl}/view-tech-bills");
+      Map<String, String> queryParams = {
+        'page': currentPage.toString(),
+        'per_page': perPage.toString(),
+      };
+
+      if (selectedYear != 'all') queryParams['bill_year'] = selectedYear;
+      if (selectedMonth != 'all') queryParams['bill_month'] = selectedMonth;
+      if (searchQuery.value.isNotEmpty) queryParams['search'] = searchQuery.value;
+
+      final uri = Uri.parse("${ApiConfig.baseUrl}/view-tech-bills").replace(queryParameters: queryParams);
+      final res = await fetchData(uri.toString());
 
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
         
-        if (jsonData is List) {
-          bills = jsonData.map((bill) => TechnologyBill.fromJson(bill)).toList();
+        if (jsonData is Map && jsonData.containsKey('data')) {
+          bills = (jsonData['data'] as List).map((bill) => TechnologyBill.fromJson(bill)).toList();
           
-          // Sort by year and month descending (newest first)
-          bills.sort((a, b) {
-            if (a.billYear != b.billYear) {
-              return b.billYear.compareTo(a.billYear);
-            }
-            return b.billMonth.compareTo(a.billMonth);
-          });
+          if (jsonData.containsKey('meta')) {
+            final meta = jsonData['meta'];
+            currentPage = meta['page'] ?? 1;
+            totalPages = meta['total_pages'] ?? 1;
+            totalItems = meta['total'] ?? bills.length;
+            hasNext = meta['has_next'] ?? false;
+            hasPrev = meta['has_prev'] ?? false;
+          }
         }
         update();
       }
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       errorMessage.value = 'خطأ في الاتصال: ${e.toString()}';
     } finally {
       isLoading.value = false;
     }
   }
 
-  // Get filtered bills
+  // Pagination methods
+  void nextPage() {
+    if (hasNext) {
+      currentPage++;
+      allbills();
+    }
+  }
+
+  void previousPage() {
+    if (hasPrev) {
+      currentPage--;
+      allbills();
+    }
+  }
+
+  // Get filtered bills (now directly returns bills since filtering is server-side)
   List<TechnologyBill> getFilteredBills() {
-    List<TechnologyBill> filtered = bills;
-
-    if (selectedYear != 'all') {
-      filtered = filtered.where((bill) => bill.billYear.toString() == selectedYear).toList();
-    }
-
-    if (selectedMonth != 'all') {
-      filtered = filtered.where((bill) => bill.billMonth.toString() == selectedMonth).toList();
-    }
-
-    if (selectedStationName != 'all') {
-      filtered = filtered.where((bill) => bill.stationName == selectedStationName).toList();
-    }
-
-    if (selectedTechnologyName != 'all') {
-      filtered = filtered.where((bill) => bill.technologyName == selectedTechnologyName).toList();
-    }
-
-    if (searchQuery.value.isNotEmpty) {
-      final query = searchQuery.value.toLowerCase();
-      filtered = filtered.where((bill) => 
-        bill.stationName.toLowerCase().contains(query) ||
-        bill.technologyName.toLowerCase().contains(query) ||
-        bill.billYear.toString().contains(query) ||
-        getMonthName(bill.billMonth).contains(query)
-      ).toList();
-    }
-
-    return filtered;
+    return bills;
   }
 
-  // Get unique years from bills
+  // Get unique years (hardcoded since server handles filtering)
   List<String> getUniqueYears() {
-    Set<String> years = bills.map((bill) => bill.billYear.toString()).toSet();
-    List<String> yearsList = years.toList();
-    yearsList.sort((a, b) => b.compareTo(a));
-    return yearsList;
+    int currentYear = DateTime.now().year;
+    List<String> years = [];
+    for (int i = currentYear; i >= 2020; i--) {
+      years.add(i.toString());
+    }
+    return years;
   }
 
-  // Get unique months from bills
+  // Get unique months
   List<String> getUniqueMonths() {
-    Set<String> months = bills.map((bill) => bill.billMonth.toString()).toSet();
-    List<String> monthsList = months.toList();
-    monthsList.sort((a, b) => int.parse(a).compareTo(int.parse(b)));
-    return monthsList;
-  }
-
-  // Get unique station names from bills
-  List<String> getUniqueStationNames() {
-    Set<String> stations = bills.map((bill) => bill.stationName).toSet();
-    List<String> stationsList = stations.toList();
-    stationsList.sort();
-    return stationsList;
-  }
-
-  // Get unique technology names from bills
-  List<String> getUniqueTechnologyNames() {
-    Set<String> technologies = bills.map((bill) => bill.technologyName).toSet();
-    List<String> technologiesList = technologies.toList();
-    technologiesList.sort();
-    return technologiesList;
+    return List.generate(12, (index) => (index + 1).toString());
   }
 
   // Filter by year
   void filterByYear(String year) {
     selectedYear = year;
-    update();
+    currentPage = 1;
+    allbills();
   }
 
   // Filter by month
   void filterByMonth(String month) {
     selectedMonth = month;
-    update();
-  }
-
-  // Filter by station name
-  void filterByStationName(String stationName) {
-    selectedStationName = stationName;
-    update();
-  }
-
-  // Filter by technology name
-  void filterByTechnologyName(String technologyName) {
-    selectedTechnologyName = technologyName;
-    update();
+    currentPage = 1;
+    allbills();
   }
 
   // Reset all filters
   void resetFilters() {
     selectedYear = 'all';
     selectedMonth = 'all';
-    selectedStationName = 'all';
-    selectedTechnologyName = 'all';
     searchQuery.value = '';
-    update();
+    currentPage = 1;
+    allbills();
   }
 
   // Update search query

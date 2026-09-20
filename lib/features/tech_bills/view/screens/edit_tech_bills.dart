@@ -12,12 +12,12 @@ class EditTechBills extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const appBarWidget = CustomAppBar(
-      title: 'تعديل فاتورة التقنية',
+      title: 'تعديل فاتورة ',
       backRoute: '/home',
     );
 
     return AppScaffold(
-      title: 'تعديل فاتورة التقنية',
+      title: 'تعديل فاتورة ',
       mobileAppBar: appBarWidget,
       desktopHeader: appBarWidget,
       body: GetBuilder<EditTechbillsController>(
@@ -28,11 +28,11 @@ class EditTechBills extends StatelessWidget {
             TechnologyBill bill = args?['bill'];
 
             controller.chlorineController.text =
-                bill.technologyChlorineConsump.toString();
+                ((bill.technologyChlorineConsump ?? 0) / 1000).toStringAsFixed(2);
             controller.liquidAlumController.text =
-                bill.technologyLiquidAlumConsump.toString();
+                ((bill.technologyLiquidAlumConsump ?? 0) / 1000).toStringAsFixed(2);
             controller.solidAlumController.text =
-                bill.technologySolidAlumConsump.toString();
+                ((bill.technologySolidAlumConsump ?? 0) / 1000).toStringAsFixed(2);
             controller.waterProducedController.text =
                 bill.technologyWaterAmount.toString();
             controller.calculatedWaterController.text =

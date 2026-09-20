@@ -58,12 +58,12 @@ class addcounter extends GetxController {
       } else {
         looading.value = false;
         final errorBody = jsonDecode(res.body);
-        final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';
-        showCustomErrorDialog(errorMessage: errorMessage);
+        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? res.body;
+        showCustomErrorDialog(errorMessage: errorMessage.toString());
       }
     } catch (e) {
       looading.value = false;
-     
+      showCustomErrorDialog(errorMessage: e.toString());
     }
   }
 
@@ -84,6 +84,7 @@ class addcounter extends GetxController {
       }
     // ignore: empty_catches
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       
     }
   }

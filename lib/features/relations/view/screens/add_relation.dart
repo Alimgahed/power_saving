@@ -95,22 +95,6 @@ class AddRelationScreen extends StatelessWidget {
       val == null ? 'يجب ادخال اسم التكنولوجيا' : null,
 ),
                     const SizedBox(height: AppDimensions.paddingL),
-                      CustomSearchableDropdown<String>(
-  items: controller.electricMeterList.map((p) {
-    return DropdownMenuItem<String>(
-      value: p.accountNumber!,
-      child: Text(p.accountNumber!),
-    );
-  }).toList(),
-
-  onChanged: (value) => controller.counterid = value!,
-  labelText: 'العداد',
-  hintText: 'اختر العداد',
-  prefixIcon: Icons.bolt,
-  validator: (val) =>
-      val == null ? 'يجب ادخال اسم العداد' : null,
-),
-                    const SizedBox(height: AppDimensions.paddingL),
 
                  CustomSearchableDropdown<bool>(
                   initialValue: controller.issource,
@@ -139,6 +123,7 @@ class AddRelationScreen extends StatelessWidget {
                     Obx(() {
                       return PrimaryButton(
                         label: 'حفظ الربط',
+                        backgroundColor: AppColors.primaryDark,
                         icon: Icons.save,
                         isLoading: controller.looading.value,
                         onPressed: () async {

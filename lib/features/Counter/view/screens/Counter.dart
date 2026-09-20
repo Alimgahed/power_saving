@@ -9,6 +9,8 @@ import 'package:power_saving/features/Counter/model/Counter_model.dart';
 import 'package:power_saving/features/bill/model/bills_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/core/widgets/app_scaffold.dart';
+import 'package:power_saving/core/widgets/main_screen/reuseable_appbar.dart';
+import 'package:power_saving/core/widgets/buttons.dart';
 class Counterscreen extends StatelessWidget {
   Counterscreen({super.key});
     final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
@@ -26,122 +28,33 @@ class Counterscreen extends StatelessWidget {
     );
   }
 
-  PreferredSizeWidget _buildAppBar( CounterController controller) {
-    return AppBar(
-      title: Obx(() => controller.isSearching.value
-          ? TextField(
-              controller: controller.searchController,
-              autofocus: true,
-              style: const TextStyle(color: Colors.white),
-              decoration: const InputDecoration(
-                hintText: 'ابحث برقم العداد أو الفرع أو رقم الاشتراك...',
-                hintStyle: TextStyle(color: Colors.white70),
-                border: InputBorder.none,
-              ),
-              onChanged: controller.onSearchChanged,
-            )
-          : const Text(
-              'قائمة العدادات',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              ),
-            )),
-      backgroundColor: const Color(0xFF1E40AF),
-      elevation: 0,
-      actions: [
-        Container(
-          margin: const EdgeInsets.only(left: 16),
-          child: Obx(() => Row(
-                children: [
-                  if (!controller.isSearching.value) ...[
-                    IconButton(
-                      icon: const Icon(Icons.search, color: Colors.white),
-                      onPressed: controller.toggleSearch,
-                      style: IconButton.styleFrom(
-                        backgroundColor: Colors.white.withOpacity(0.1),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    ElevatedButton.icon(
-                      onPressed: () => Get.offNamed('/addCounter'),
-                      icon: const Icon(Icons.add, size: 18),
-                      label: const Text(
-                        "إضافة عداد جديد",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: const Color(0xFF1E40AF),
-                        elevation: 0,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    ElevatedButton.icon(
-                      onPressed: () => Get.offNamed('/Addrelation'),
-                      icon: const Icon(Icons.add, size: 18),
-                      label: const Text(
-                        "إضافة ربط جديد",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: const Color(0xFF1E40AF),
-                        elevation: 0,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                  ] else ...[
-                    IconButton(
-                      icon: const Icon(Icons.close, color: Colors.white),
-                      onPressed: controller.toggleSearch,
-                      style: IconButton.styleFrom(
-                        backgroundColor: Colors.white.withOpacity(0.1),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                  ],
-                  const SizedBox(width: 12),
-                  IconButton(
-                    icon: const Icon(Icons.arrow_forward, color: Colors.white),
-                    onPressed: () => Get.offNamed('/home'),
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.white.withOpacity(0.1),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                ],
-              )),
-        ),
+  PreferredSizeWidget _buildAppBar(CounterController controller) {
+    return ReusableAppBar(
+      title: 'قائمة العدادات',
+      hintText: 'ابحث برقم العداد أو الفرع أو رقم الاشتراك...',
+      isSearching: controller.isSearching,
+      searchController: controller.searchController,
+      onSearchChanged: controller.onSearchChanged,
+      onSearchToggle: controller.toggleSearch,
+      onNavigateHome: () => Get.offNamed('/home'),
+      customActions: [
+        if (!controller.isSearching.value) ...[
+          const ReusableActionButton(
+            label: "إضافة عداد جديد",
+            icon: Icons.add,
+            route: '/addCounter',
+            backgroundColor: Colors.white,
+            foregroundColor: Color(0xFF1E40AF),
+          ),
+          const ReusableActionButton(
+            label: "إضافة ربط جديد",
+            icon: Icons.add,
+            route: '/Addrelation',
+            backgroundColor: Colors.white,
+            foregroundColor: Color(0xFF1E40AF),
+          ),
+        ]
       ],
-      automaticallyImplyLeading: false,
     );
   }
 

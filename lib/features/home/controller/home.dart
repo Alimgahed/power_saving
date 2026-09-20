@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/global/iframe_platform.dart';
 import 'package:power_saving/features/home/model/home.dart';
+import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class HomeController extends GetxController {
@@ -53,6 +54,7 @@ class HomeController extends GetxController {
         animateAll();
       }
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       debugPrint("❌ Error fetching home: $e");
     } finally {
       loading.value = false;

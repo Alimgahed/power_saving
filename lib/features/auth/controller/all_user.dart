@@ -46,6 +46,7 @@ class AllUserController extends GetxController {
 
       } 
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       errorMessage.value = 'خطأ في الاتصال: ${e.toString()}';
     } finally {
       isLoading.value = false;
@@ -93,6 +94,7 @@ class AllUserController extends GetxController {
       //   _showErrorSnackbar('خطأ', 'فشل في تحديث حالة المستخدم');
       // }
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       // Revert on error
       loadUsers();
       print('Error toggling status: $e');
@@ -217,6 +219,7 @@ showCustomErrorDialog(errorMessage: "خطأ");
       //   _showErrorSnackbar('خطأ', 'فشل في حذف المستخدم');
       // }
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       // Reload on error
     } finally {
       isLoading.value = false;

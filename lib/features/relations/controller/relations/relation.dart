@@ -79,6 +79,7 @@ class RelationsController extends GetxController {
         );
       }
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       debugPrint('Relations error: $e');
       Get.snackbar(
         'خطأ',
@@ -111,10 +112,11 @@ class RelationsController extends GetxController {
         showSuccessToast(successMessage);
       } else {
         final errorBody = jsonDecode(response.body);
-        final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';
+        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();
         showCustomErrorDialog(errorMessage: errorMessage);
       }
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       debugPrint('Edit relation error: $e');
       Get.snackbar(
         'خطأ',

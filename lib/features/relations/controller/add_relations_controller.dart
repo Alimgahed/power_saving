@@ -67,6 +67,7 @@ class addrelationcontroller extends GetxController {
       } 
     // ignore: empty_catches
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
     }
   }
 
@@ -93,12 +94,13 @@ class addrelationcontroller extends GetxController {
         final errorBody = jsonDecode(res.body);
 
         // Extract Arabic error message
-        final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';
+        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? res.body;
 
         // Show custom dialog or toast with Arabic error
-        showCustomErrorDialog(errorMessage: errorMessage);
+        showCustomErrorDialog(errorMessage: errorMessage.toString());
       }
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
                     looading.value=false;
 
       print("Error fetching branches: $e");

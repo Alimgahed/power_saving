@@ -509,14 +509,10 @@ class Bills extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minWidth: constraints.maxWidth),
-                child: DataTable(
-                  headingRowColor: MaterialStateProperty.all(Colors.blue.shade50),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: DataTable(
+            headingRowColor: MaterialStateProperty.all(Colors.blue.shade50),
             dataRowMinHeight: 60,
             dataRowMaxHeight: 60,
             columns: const [
@@ -577,9 +573,6 @@ class Bills extends StatelessWidget {
               );
             }).toList(),
           ),
-              ),
-            );
-          },
         ),
       ),
     );

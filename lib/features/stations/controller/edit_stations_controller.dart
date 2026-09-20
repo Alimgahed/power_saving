@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:power_saving/features/planning/model/area_model.dart';
 import 'package:power_saving/features/stations/model/station_model.dart';
 import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
@@ -12,6 +13,7 @@ import 'package:power_saving/network/network.dart';
 class EditStationsController extends GetxController {
     List<Branch> branchList = [];
   List<WaterSource> waterSourceList = [];
+  List<AreaOfService> areas = [];
    RxBool looading = false.obs;
   late TextEditingController name;
   late TextEditingController capacity;
@@ -33,6 +35,7 @@ class EditStationsController extends GetxController {
     stationTypeId = null;
 
     allBranches();
+    allareas();
     super.onInit();
   }
 
@@ -57,8 +60,27 @@ class EditStationsController extends GetxController {
       }
     // ignore: empty_catches
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
     }
   }
+
+  Future<void> allareas() async {
+    try {
+      final response = await fetchData("${ApiConfig.baseUrl}/all-areas");
+      
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body) as List<dynamic>;
+        areas.clear();
+        areas.addAll(
+          jsonData.map((json) => AreaOfService.fromJson(json))
+        );
+        update();
+      }
+    } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
+    }
+  }
+
   Future<void> edit_Stations({
     // ignore: non_constant_identifier_names
     required int Stations_id,

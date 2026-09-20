@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:power_saving/features/analysis/model/analysis.dart';
 import 'package:power_saving/core/widgets/app_scaffold.dart';
 import 'package:power_saving/core/widgets/custom_app_bar.dart';
+import 'package:power_saving/my_widget/sharable.dart';
 
 class AnalysisView extends StatelessWidget {
   // Safe way to get arguments that handles null case
@@ -164,6 +165,7 @@ class AnalysisView extends StatelessWidget {
       if (analysisModel.liquid.isNotEmpty) images.add(analysisModel.liquid);
       if (analysisModel.power.isNotEmpty) images.add(analysisModel.power);
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       // Handle any parsing errors
       print('Error extracting images: $e');
       // On error, also navigate to home

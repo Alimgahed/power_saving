@@ -15,6 +15,7 @@ import 'package:power_saving/features/relations/view/screens/relatiuons.dart';
 import 'package:power_saving/features/reports/view/screens/report.dart';
 import 'package:power_saving/features/stations/view/screens/following_stations.dart';
 import 'package:power_saving/features/tech_bills/view/screens/new_tech_bills.dart';
+import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/shared_pref/cache.dart';
 import 'package:power_saving/features/Counter/view/screens/Counter.dart';
 import 'package:power_saving/features/Counter/view/screens/add_Counter.dart';
@@ -66,6 +67,7 @@ void main() async {
       }
       user = User.fromJson(decoded as Map<String, dynamic>);
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       debugPrint("Error parsing cached user: $e");
     }
   }

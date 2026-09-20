@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:power_saving/features/chemcails/model/chemacial.dart';
 import 'package:power_saving/global/ip_config.dart';
+import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class Chemacialcontroller extends GetxController {
@@ -35,6 +36,7 @@ class Chemacialcontroller extends GetxController {
       }
     // ignore: empty_catches
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
     }
   }
 }

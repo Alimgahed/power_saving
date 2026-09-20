@@ -21,6 +21,15 @@ class TechBills extends StatelessWidget {
 
   PreferredSizeWidget _buildAppBar(Techbills controller) {
     return AppBar(
+      flexibleSpace: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF1E3A8A), Color(0xFF3B82F6)], // Similar to AppGradients.header
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+          ),
+        ),
+      ),
       title: Obx(() => controller.isSearching.value
           ? TextField(
               controller: controller.searchController,
@@ -43,7 +52,7 @@ class TechBills extends StatelessWidget {
                 color: Colors.white,
               ),
             )),
-      backgroundColor: const Color(0xFF1E40AF),
+      backgroundColor: Colors.transparent,
       elevation: 0,
       actions: [
         Container(
@@ -77,7 +86,7 @@ class TechBills extends StatelessWidget {
                   const SizedBox(width: 12),
                   IconButton(
                     icon: const Icon(Icons.arrow_forward, color: Colors.white),
-                    onPressed: () => Get.offNamed('/home'),
+                    onPressed: () => Get.back(),
                     style: IconButton.styleFrom(
                       backgroundColor: Colors.white.withOpacity(0.1),
                       shape: RoundedRectangleBorder(

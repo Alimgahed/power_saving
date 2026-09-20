@@ -131,14 +131,7 @@ class Login extends StatelessWidget {
                               Container(
                                 width: double.infinity,
                                 decoration: BoxDecoration(
-                                  gradient: const LinearGradient(
-                                    colors: [
-                                      AppColors.primaryLight,
-                                      AppColors.primary,
-                                    ],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                  ),
+                                  color: AppColors.primary,
                                   borderRadius: BorderRadius.circular(12),
                                   boxShadow: [
                                     BoxShadow(

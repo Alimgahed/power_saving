@@ -66,7 +66,7 @@ class addchemical extends GetxController {
         final errorBody = jsonDecode(res.body);
 
         // Extract Arabic error message
-        final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';
+        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();
 
         // Show custom dialog or toast with Arabic error
         showCustomErrorDialog(errorMessage: errorMessage);
@@ -74,6 +74,7 @@ class addchemical extends GetxController {
       }
     // ignore: empty_catches
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       loading.value = false;
      
     }
@@ -96,13 +97,14 @@ class addchemical extends GetxController {
         final errorBody = jsonDecode(res.body);
 
         // Extract Arabic error message
-        final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';
+        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();
 
         // Show custom dialog or toast with Arabic error
         showCustomErrorDialog(errorMessage: errorMessage);
       }
     // ignore: empty_catches
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
     
      
     }
@@ -129,6 +131,7 @@ class addchemical extends GetxController {
       }
     // ignore: empty_catches
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
     }
   }
 }

@@ -27,27 +27,42 @@ class ReusableAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.customActions = const [],
     this.formKey,
   });
+
   @override
   Widget build(BuildContext context) {
     return Obx(
       () => AppBar(
-        backgroundColor: AppColors.primary,
-        elevation: AppDimensions.elevationNone,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(gradient: AppGradients.header),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         automaticallyImplyLeading: false,
         title:
-            isSearching
-                    .value // Access the value of RxBool
+            isSearching.value
                 ? TextFormField(
                   controller: searchController,
                   autofocus: true,
-                  style: AppTextStyles.appBarTitle,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: AppColors.textWhite,
+                  ),
                   decoration: InputDecoration(
                     hintText: hintText ?? 'ابحث باسم الفرع أو المحطة...',
-                    hintStyle: const TextStyle(
-                      color: AppColors.textWhite,
+                    hintStyle: TextStyle(
+                      color: AppColors.textWhite.withOpacity(0.8),
                       fontSize: 14,
                     ),
-                    border: InputBorder.none,
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.15),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: AppDimensions.paddingM,
+                      vertical: AppDimensions.paddingXS,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                      borderSide: BorderSide.none,
+                    ),
                     errorStyle: const TextStyle(color: Colors.red),
                   ),
                   onChanged: onSearchChanged,
@@ -58,13 +73,20 @@ class ReusableAppBar extends StatelessWidget implements PreferredSizeWidget {
                     return null;
                   },
                 )
-                : Text(title, style: AppTextStyles.appBarTitle),
+                : Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textWhite,
+                  ),
+                ),
         actions: [
           ...customActions,
-          if (!isSearching.value) // Use the value of RxBool
+          if (!isSearching.value)
             _IconAction(icon: Icons.search, onTap: onSearchToggle),
           if (!isSearching.value) const SizedBox(width: AppDimensions.paddingS),
-          _IconAction(icon: Icons.arrow_forward, onTap: onNavigateHome),
+          _IconAction(icon: Icons.arrow_forward, onTap: () => Get.back()),
           const SizedBox(width: AppDimensions.paddingS),
         ],
       ),
@@ -87,9 +109,9 @@ class _IconAction extends StatelessWidget {
       icon: Icon(icon, color: AppColors.textWhite),
       onPressed: onTap,
       style: IconButton.styleFrom(
-        backgroundColor: AppColors.overlayBackground,
+        backgroundColor: Colors.white.withOpacity(0.2),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+          borderRadius: BorderRadius.circular(AppDimensions.radiusM),
         ),
       ),
     );

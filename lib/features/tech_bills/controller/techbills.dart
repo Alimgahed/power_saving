@@ -220,6 +220,7 @@ class Techbills extends GetxController {
         applyFilters();
       }
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       print("Error fetching tech bills: $e");
     } finally {
       loading.value = false;
@@ -268,10 +269,11 @@ class Techbills extends GetxController {
       } else {
         loading.value = false;
         final errorBody = jsonDecode(res.body);
-        final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';
+        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();
         showCustomErrorDialog(errorMessage: errorMessage);
       }
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       loading.value = false;
       print("Error during bill submission: $e");
     } finally {

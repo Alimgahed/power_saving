@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/planning/model/all_places_model.dart';
 import 'package:power_saving/global/ip_config.dart';
+import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class PlacesController extends GetxController {
@@ -81,6 +82,7 @@ class PlacesController extends GetxController {
         );
       }
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       Get.snackbar(
         'خطأ',
         'حدث خطأ أثناء تحميل البيانات',

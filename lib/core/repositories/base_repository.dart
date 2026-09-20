@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:power_saving/my_widget/sharable.dart';
 import '../errors/exceptions.dart';
 import '../errors/failures.dart';
 import '../utils/result.dart';
-
+import 'package:get/get.dart';
+import 'package:power_saving/features/auth/view/screens/login.dart';
+import 'package:power_saving/shared_pref/cache.dart';
 /// Base Repository class providing safe remote operations and unified exception to failure mappings
 abstract class BaseRepository {
   /// Safely executes remote block mapping any caught AppExceptions into failures
@@ -12,10 +15,13 @@ abstract class BaseRepository {
       final result = await call();
       return Result.success(result);
     } on NetworkException catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       return Result.failure(
         NetworkFailure(e.message, statusCode: e.statusCode, exception: e),
       );
     } on AuthenticationException catch (e) {
+      Cache.sharedPreferences.remove('token');
+      Get.offAll(() => const Login());
       return Result.failure(
         AuthenticationFailure(
           e.message,
@@ -24,16 +30,20 @@ abstract class BaseRepository {
         ),
       );
     } on ValidationException catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       return Result.failure(
         ValidationFailure(e.message, statusCode: e.statusCode, exception: e),
       );
     } on ServerException catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       return Result.failure(
         ServerFailure(e.message, statusCode: e.statusCode, exception: e),
       );
     } on ParsingException catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       return Result.failure(ParsingFailure(e.message, exception: e));
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       return Result.failure(Failure('حدث خطأ غير متوقع: ${e.toString()}'));
     }
   }
@@ -51,6 +61,7 @@ abstract class BaseRepository {
         throw ParsingException('تنسيق البيانات المستلمة غير صالح.');
       }
     } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
       if (e is ParsingException) rethrow;
       throw ParsingException(
         'فشل في تحليل بيانات الاستجابة من الخادم.',
