@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/tech_bills/controller/techbills.dart';
-import 'package:power_saving/features/tech_bills/controller/techbills.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/core/widgets/app_scaffold.dart';
 class TechBills extends StatelessWidget {
@@ -9,13 +8,18 @@ class TechBills extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(Techbills());
+    final controller = Get.find<Techbills>();
 
     return AppScaffold(
       title: 'قائمة فواتير التقنيات',
       mobileAppBar: _buildAppBar(controller),
       desktopHeader: _buildAppBar(controller),
-      body: Obx(() => _buildBody(controller)),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await controller.refreshData();
+        },
+        child: Obx(() => _buildBody(controller)),
+      ),
     );
   }
 

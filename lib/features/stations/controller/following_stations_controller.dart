@@ -42,6 +42,7 @@ class Station {
 }
 
 class FollowingStationsController extends GetxController {
+  static List<dynamic>? sessionCache;
   RxList<Station> stations = <Station>[].obs;
 
   Station? selectedStation;
@@ -56,14 +57,25 @@ class FollowingStationsController extends GetxController {
     stationsTechs();
   }
 
-  Future<void> stationsTechs() async {
+  Future<void> stationsTechs({bool isBackground = false}) async {
+    if (!isBackground && sessionCache != null) {
+      stations.value = sessionCache!.map((e) => Station.fromJson(e)).toList();
+      update();
+      _fetchLatestBackground();
+      return;
+    }
     final res = await fetchData("${ApiConfig.baseUrl}/station-techs");
 
     if (res.statusCode == 200) {
       final List data = json.decode(res.body);
+      sessionCache = data;
       stations.value = data.map((e) => Station.fromJson(e)).toList();
       update();
     }
+  }
+  
+  Future<void> _fetchLatestBackground() async {
+    stationsTechs(isBackground: true);
   }
 
   void onStationChanged(Station? station) {

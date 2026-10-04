@@ -12,6 +12,9 @@ class StationsController extends GetxController {
   final isSearching = false.obs;
   final searchError = ''.obs;
 
+  // Static Session Cache
+  static List<dynamic>? sessionCache;
+
   // Master & display data
   final List<Station> allStations = [];      // non-observable
   final stations = <Station>[].obs;           // observable for UI
@@ -54,40 +57,67 @@ class StationsController extends GetxController {
   // -------------------------------
   // API Call
   // -------------------------------
-  Future<void> getStations() async {
+  Future<void> getStations({bool isBackground = false}) async {
     try {
-      loading.value = true;
+      if (!isBackground) {
+        if (sessionCache != null) {
+          // 1. Display cached data instantly
+          final List<Station> parsedCache = sessionCache!.map((e) => Station.fromJson(e)).toList();
+          allStations.clear();
+          allStations.addAll(parsedCache);
+          stations.value = List.from(allStations);
+          
+          // 2. Fetch in background silently
+          _fetchLatestBackground();
+          return;
+        } else {
+          loading.value = true;
+        }
+      }
 
       final response = await fetchData("${ApiConfig.baseUrl}/stations");
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = jsonDecode(response.body);
+        
+        // Update Static Cache
+        sessionCache = jsonData;
 
         allStations
           ..clear()
-          ..addAll(
-            jsonData.map((e) => Station.fromJson(e)),
-          );
+          ..addAll(jsonData.map((e) => Station.fromJson(e)));
 
-        stations.value = List.from(allStations);
+        // If a search is active, we should re-apply it instead of just copying allStations.
+        if (isSearching.value && searchController.text.isNotEmpty) {
+           _performSearch(searchController.text);
+        } else {
+           stations.value = List.from(allStations);
+        }
       } else {
-        Get.snackbar(
-          'خطأ',
-          'فشل تحميل المحطات',
-          snackPosition: SnackPosition.BOTTOM,
-        );
+        if (!isBackground) {
+          Get.snackbar('خطأ', 'فشل تحميل المحطات', snackPosition: SnackPosition.BOTTOM);
+        }
       }
     } catch (e) {
-      showCustomErrorDialog(errorMessage: e.toString());
+      if (!isBackground) {
+        showCustomErrorDialog(errorMessage: e.toString());
+        Get.snackbar('خطأ', 'حدث خطأ أثناء تحميل البيانات', snackPosition: SnackPosition.BOTTOM);
+      }
       debugPrint('Stations error: $e');
-      Get.snackbar(
-        'خطأ',
-        'حدث خطأ أثناء تحميل البيانات',
-        snackPosition: SnackPosition.BOTTOM,
-      );
     } finally {
-      loading.value = false;
+      if (!isBackground) {
+        loading.value = false;
+      }
     }
+  }
+
+  Future<void> _fetchLatestBackground() async {
+    await getStations(isBackground: true);
+  }
+
+  Future<void> forceRefresh() async {
+    loading.value = true;
+    await getStations(isBackground: false);
   }
 
   // -------------------------------

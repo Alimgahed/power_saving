@@ -8,10 +8,20 @@ import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class AllBills extends GetxController {
+  static Map<String, dynamic>? sessionCache;
   // Data storage - separated for performance
   final List<GuageBill> _allBills = [];  // Master data (non-observable)
   final bills = <GuageBill>[].obs;  // Display data (observable)
   
+
+  // Pagination state
+  RxInt currentPage = 1.obs;
+  RxInt perPage = 20.obs;
+  RxInt totalItems = 0.obs;
+  RxInt totalPages = 1.obs;
+  RxBool hasNext = false.obs;
+  RxBool hasPrev = false.obs;
+
   // Observable states
   final isLoading = false.obs;
   final isSearching = false.obs;
@@ -57,41 +67,146 @@ class AllBills extends GetxController {
     _searchQuery.value = query;
   }
 
-  Future<void> allbills() async {
+  void nextPage() {
+    if (hasNext.value) {
+      currentPage.value++;
+      allbills();
+    }
+  }
+
+  void prevPage() {
+    if (hasPrev.value) {
+      currentPage.value--;
+      allbills();
+    }
+  }
+
+  Future<void> allbills({bool isBackground = false}) async {
+    final bool isDefaultState = currentPage.value == 1 &&
+        _searchQuery.value.trim().isEmpty &&
+        selectedYear == 'all' &&
+        selectedMonth == 'all' &&
+        selectedFilter == 'all' &&
+        (selectedAccountNumber == 'all' || selectedAccountNumber.isEmpty);
+
+    if (!isBackground && isDefaultState && sessionCache != null) {
+      // Restore from cache instantly
+      final jsonData = sessionCache!;
+      _allBills.clear();
+      bills.clear();
+
+      if (jsonData.containsKey('data')) {
+        List<dynamic> responseData = jsonData['data'];
+        _allBills.addAll(responseData.map((bill) => GuageBill.fromJson(bill)).toList());
+        
+        if (jsonData.containsKey('meta')) {
+          final meta = jsonData['meta'];
+          currentPage.value = meta['page'] ?? 1;
+          perPage.value = meta['per_page'] ?? 20;
+          totalItems.value = meta['total'] ?? 0;
+          totalPages.value = meta['total_pages'] ?? 1;
+          hasNext.value = meta['has_next'] ?? false;
+          hasPrev.value = meta['has_prev'] ?? false;
+        }
+      }
+
+      bills.value = List.from(_allBills);
+      searchError.value = '';
+
+      // Trigger silent background refresh
+      _fetchLatestBackground();
+      return;
+    }
+
     try {
-      isLoading.value = true;
+      if (!isBackground) {
+        isLoading.value = true;
+      }
       errorMessage.value = '';
 
-      final res = await fetchData("${ApiConfig.baseUrl}/view-bills");
+      Map<String, String> queryParams = {
+        'page': currentPage.value.toString(),
+        'per_page': perPage.value.toString(),
+      };
+
+      if (_searchQuery.value.isNotEmpty) {
+        queryParams['search'] = _searchQuery.value.trim();
+      }
+
+      if (selectedYear != 'all') {
+        queryParams['bill_year'] = selectedYear;
+      }
+      
+      if (selectedMonth != 'all') {
+        queryParams['bill_month'] = selectedMonth;
+      }
+      
+      if (selectedFilter != 'all') {
+        queryParams['is_paid'] = selectedFilter == 'paid' ? 'true' : 'false';
+      }
+
+      if (selectedAccountNumber != 'all' && selectedAccountNumber.isNotEmpty) {
+        queryParams['account_number'] = selectedAccountNumber;
+      }
+
+      Uri uri = Uri.parse("${ApiConfig.baseUrl}/view-bills").replace(queryParameters: queryParams);
+      final res = await fetchData(uri.toString());
 
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
         
-        if (jsonData is List) {
-          // Clear and populate master list
-          _allBills.clear();
-          _allBills.addAll(
-            jsonData.map((bill) => GuageBill.fromJson(bill)).toList()
-          );
-          
-          // Sort by year and month descending (newest first)
-          _allBills.sort((a, b) {
-            if (a.billYear != b.billYear) {
-              return b.billYear.compareTo(a.billYear);
-            }
-            return b.billMonth.compareTo(a.billMonth);
-          });
-
-          // Update display list
-          bills.value = List.from(_allBills);
+        if (isDefaultState) {
+          sessionCache = jsonData;
         }
+
+        _allBills.clear();
+        bills.clear();
+
+        if (jsonData is Map<String, dynamic> && jsonData.containsKey('data')) {
+          List<dynamic> responseData = jsonData['data'];
+          _allBills.addAll(responseData.map((bill) => GuageBill.fromJson(bill)).toList());
+          
+          if (jsonData.containsKey('meta')) {
+            final meta = jsonData['meta'];
+            currentPage.value = meta['page'] ?? 1;
+            perPage.value = meta['per_page'] ?? 20;
+            totalItems.value = meta['total'] ?? 0;
+            totalPages.value = meta['total_pages'] ?? 1;
+            hasNext.value = meta['has_next'] ?? false;
+            hasPrev.value = meta['has_prev'] ?? false;
+          }
+        } else if (jsonData is List) {
+          _allBills.addAll(jsonData.map((bill) => GuageBill.fromJson(bill)).toList());
+          totalItems.value = _allBills.length;
+          totalPages.value = 1;
+          hasNext.value = false;
+          hasPrev.value = false;
+        }
+
+        bills.value = List.from(_allBills);
+        
+        if (bills.isEmpty && _searchQuery.value.isNotEmpty) {
+           searchError.value = 'لا توجد نتائج تطابق "${_searchQuery.value}"';
+        } else {
+           searchError.value = '';
+        }
+      } else if (!isBackground) {
+        errorMessage.value = 'فشل تحميل الفواتير: ${res.statusCode}';
       }
     } catch (e) {
-      showCustomErrorDialog(errorMessage: e.toString());
-      errorMessage.value = 'خطأ في الاتصال: ${e.toString()}';
+      if (!isBackground) {
+        showCustomErrorDialog(errorMessage: e.toString());
+        errorMessage.value = 'خطأ في الاتصال: ${e.toString()}';
+      }
     } finally {
-      isLoading.value = false;
+      if (!isBackground) {
+        isLoading.value = false;
+      }
     }
+  }
+
+  Future<void> _fetchLatestBackground() async {
+    allbills(isBackground: true);
   }
 
   // Toggle search mode
@@ -101,45 +216,19 @@ class AllBills extends GetxController {
     if (!isSearching.value) {
       // Clear search state
       searchController.clear();
-      _searchQuery.value = '';
       searchError.value = '';
-      bills.value = List.from(_allBills);
+      if (_searchQuery.value.isNotEmpty) {
+        _searchQuery.value = '';
+        currentPage.value = 1;
+        allbills();
+      }
     }
   }
 
   // Perform the actual search (called after debounce)
   void _performSearch(String query) {
-    if (query.isEmpty) {
-      bills.value = List.from(_allBills);
-      searchError.value = '';
-      return;
-    }
-
-    final lowerQuery = query.toLowerCase();
-    
-    // Apply search on all bills
-    final searchResults = _allBills.where((bill) {
-      final accountNumber = bill.accountNumber.toLowerCase();
-      final monthName = getMonthName(bill.billMonth).toLowerCase();
-      final year = bill.billYear.toString();
-      final total = bill.billTotal.toString();
-      final consumption = bill.powerConsump.toString();
-      
-      return accountNumber.contains(lowerQuery) ||
-             monthName.contains(lowerQuery) ||
-             year.contains(lowerQuery) ||
-             total.contains(lowerQuery) ||
-             consumption.contains(lowerQuery);
-    }).toList();
-
-    // Update results
-    if (searchResults.isEmpty) {
-      searchError.value = 'لا توجد نتائج تطابق "$query"';
-      bills.value = [];
-    } else {
-      searchError.value = '';
-      bills.value = searchResults;
-    }
+    currentPage.value = 1;
+    allbills();
   }
 
   // Get filtered bills (for external use)
@@ -207,10 +296,18 @@ class AllBills extends GetxController {
   }
 
   // Refresh bills data
+  @override
   Future<void> refresh() async {
+    sessionCache = null;
     searchController.clear();
     _searchQuery.value = '';
     searchError.value = '';
-    await allbills();
+    currentPage.value = 1;
+    selectedYear = 'all';
+    selectedMonth = 'all';
+    selectedFilter = 'all';
+    selectedAccountNumber = 'all';
+    isLoading.value = true;
+    await allbills(isBackground: false);
   }
 }

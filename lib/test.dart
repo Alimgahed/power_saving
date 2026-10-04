@@ -30,7 +30,9 @@ class GaugeController extends GetxController {
 }
 
 class AnimatedGauge extends StatelessWidget {
-  final GaugeController gaugeController = Get.put(GaugeController()); // إنشاء الـ Controller باستخدام GetX
+  final GaugeController gaugeController = Get.put(GaugeController());
+
+   AnimatedGauge({super.key}); // إنشاء الـ Controller باستخدام GetX
 
   @override
   Widget build(BuildContext context) {

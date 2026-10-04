@@ -8,6 +8,7 @@ import 'package:power_saving/features/relations/model/relations.dart';
 import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
+import 'package:power_saving/features/bill/controller/all_bills.dart';
 
 class Bills extends GetxController {
   RxBool isLoading = false.obs;
@@ -305,6 +306,7 @@ class Bills extends GetxController {
       );
 
       if (res.statusCode == 200) {
+        AllBills.sessionCache = null;
         showSuccessToast("تم تسجيل الفاتورة بنجاح");
         isLoading.value = false;
 

@@ -10,7 +10,7 @@ class AllUserScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(AllUserController());
+    final AllUserController controller = Get.find<AllUserController>();
 
     return AppScaffold(
       title: 'إدارة المستخدمين',
@@ -22,7 +22,9 @@ class AllUserScreen extends StatelessWidget {
         ),
         const SizedBox(width: 16),
       ],
-      body: Obx(() {
+      body: RefreshIndicator(
+        onRefresh: controller.refreshData,
+        child: Obx(() {
               if (controller.users.isEmpty) {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -70,9 +72,12 @@ class AllUserScreen extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.all(32),
                 child: SingleChildScrollView(
-                  child: Wrap(
-                    spacing: 20,
-                    runSpacing: 20,
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 20,
+                      runSpacing: 20,
                     children: List.generate(controller.users.length, (index) {
                       final user = controller.users[index];
                             
@@ -263,8 +268,9 @@ class AllUserScreen extends StatelessWidget {
                     }),
                   ),
                 ),
-              );
+              ));
       }),
+      ),
     );
   }
 

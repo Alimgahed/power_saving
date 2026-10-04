@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/core/widgets/empty_widget.dart';
 import 'package:power_saving/core/widgets/main_screen/main_card_widgets.dart';
-import 'package:power_saving/core/widgets/main_screen/totl_header.dart';
+import 'package:power_saving/features/Counter/view/widgets/counter_branch_list.dart';
 import 'package:power_saving/features/bill/controller/bills.dart';
 import 'package:power_saving/features/Counter/controller/counter.dart';
 import 'package:power_saving/features/Counter/model/Counter_model.dart';
@@ -18,7 +18,7 @@ class Counterscreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(CounterController());
+    final controller = Get.find<CounterController>();
     
     return AppScaffold(
       title: 'قائمة العدادات',
@@ -111,8 +111,9 @@ class Counterscreen extends StatelessWidget {
           SliverPadding(
             padding: const EdgeInsets.all(20),
             sliver: SliverToBoxAdapter(
-              child:                   TotalHeader(count: controller.displayCounters.length.toString(), title: 'إجمالي العدادات'),
-
+              child: CounterBranchStats(
+                counters: controller.displayCounters,
+              ),
             ),
           ),
 

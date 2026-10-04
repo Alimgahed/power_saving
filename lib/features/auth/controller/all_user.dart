@@ -7,6 +7,7 @@ import 'package:power_saving/network/network.dart';
 import 'package:flutter/material.dart';
 
 class AllUserController extends GetxController {
+  static List<dynamic>? sessionCache;
   var users = <User>[].obs;
     RxBool resetPassword = false.obs;
 
@@ -20,37 +21,52 @@ class AllUserController extends GetxController {
   }
 
   /// Load all users from API
-  Future<void> loadUsers() async {
+  Future<void> loadUsers({bool isBackground = false}) async {
+    if (!isBackground && sessionCache != null) {
+      users.value = sessionCache!.map((user) => User.fromJson(user)).toList();
+      _fetchLatestBackground();
+      return;
+    }
     try {
-      isLoading.value = true;
-      errorMessage.value = '';
-      users.value = [];
-
+      if (!isBackground) {
+        isLoading.value = true;
+        errorMessage.value = '';
+      }
+      
       final res = await fetchData("${ApiConfig.baseUrl}/all-users");
 
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
+        List<dynamic> data = [];
         
-        // Check if response is a list
         if (jsonData is List) {
-          users.value = jsonData.map((user) => User.fromJson(user)).toList();
+          data = jsonData;
         } else if (jsonData['users'] != null) {
-          // If response has 'users' key
-          users.value = (jsonData['users'] as List)
-              .map((user) => User.fromJson(user))
-              .toList();
+          data = jsonData['users'] as List;
         } else {
-          // Single user object
-          users.value = [User.fromJson(jsonData)];
+          data = [jsonData];
         }
-
+        
+        sessionCache = data;
+        users.value = data.map((user) => User.fromJson(user)).toList();
       } 
     } catch (e) {
-      showCustomErrorDialog(errorMessage: e.toString());
-      errorMessage.value = 'خطأ في الاتصال: ${e.toString()}';
+      if (!isBackground) {
+        showCustomErrorDialog(errorMessage: e.toString());
+        errorMessage.value = 'خطأ في الاتصال: ${e.toString()}';
+      }
     } finally {
-      isLoading.value = false;
+      if (!isBackground) isLoading.value = false;
     }
+  }
+
+  Future<void> _fetchLatestBackground() async {
+    loadUsers(isBackground: true);
+  }
+  
+  Future<void> refreshData() async {
+    sessionCache = null;
+    await loadUsers(isBackground: false);
   }
 
   /// Toggle user active status
@@ -133,7 +149,8 @@ class AllUserController extends GetxController {
       if (res.statusCode == 200) {
         isLoading.value=false;
         showSuccessToast('تم تحديث بيانات المستخدم بنجاح');
-        loadUsers();
+        sessionCache = null;
+        loadUsers(isBackground: true);
       } else {
                 isLoading.value=false;
 

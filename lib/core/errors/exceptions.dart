@@ -12,32 +12,27 @@ abstract class AppException implements Exception {
 
 /// Thrown when network connection is absent, times out, or returns a DNS error
 class NetworkException extends AppException {
-  NetworkException(String message, {int? statusCode, dynamic originalError})
-    : super(message, statusCode: statusCode, originalError: originalError);
+  NetworkException(super.message, {super.statusCode, super.originalError});
 }
 
 /// Thrown when local parameter or response payload schema validation fails
 class ValidationException extends AppException {
-  ValidationException(String message, {int? statusCode})
-    : super(message, statusCode: statusCode);
+  ValidationException(super.message, {super.statusCode});
 }
 
 /// Thrown on token expiry, missing authorization credentials, or invalid permissions (401/403)
 class AuthenticationException extends AppException {
-  AuthenticationException(String message, {int? statusCode})
-    : super(message, statusCode: statusCode);
+  AuthenticationException(super.message, {super.statusCode});
 }
 
 /// Thrown when response parsing fails due to type mismatches or corrupted payload structure
 class ParsingException extends AppException {
-  ParsingException(String message, {dynamic originalError})
-    : super(message, originalError: originalError);
+  ParsingException(super.message, {super.originalError});
 }
 
 /// Thrown on unexpected server failures (5xx status codes)
 class ServerException extends AppException {
-  ServerException(String message, {int? statusCode, dynamic originalError})
-    : super(message, statusCode: statusCode, originalError: originalError);
+  ServerException(super.message, {super.statusCode, super.originalError});
 }
 
 /// Mapping utility to convert status codes into localized Arabic messages

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:power_saving/core/constant/colors.dart';
 import 'package:power_saving/core/constant/styles.dart';
+import 'package:power_saving/core/widgets/main_screen/totl_header.dart';
 
 import '../../../../core/constant/AppDimensions.dart';
 
@@ -20,25 +21,34 @@ class BranchStats extends StatelessWidget {
     return Wrap(
       spacing: AppDimensions.paddingS,
       runSpacing: AppDimensions.paddingS,
-      children: stats.entries.map((e) {
-        return Container(
-          width: 140,
-          padding: const EdgeInsets.all(AppDimensions.paddingM),
-          decoration: BoxDecoration(
-            color: AppColors.cardBackground,
-            borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-            border: Border.all(color: AppColors.borderLight),
+      children: [
+        SizedBox(
+          width: 250,
+          child: TotalHeader(
+            count: stations.length.toString(),
+            title: 'إجمالي المحطات',
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(e.key, style: AppTextStyles.bodySmall),
-              const SizedBox(height: AppDimensions.paddingXS),
-              Text('${e.value} محطة', style: AppTextStyles.h3),
-            ],
-          ),
-        );
-      }).toList(),
+        ),
+        ...stats.entries.map((e) {
+          return Container(
+            width: 140,
+            padding: const EdgeInsets.all(AppDimensions.paddingM),
+            decoration: BoxDecoration(
+              color: AppColors.cardBackground,
+              borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+              border: Border.all(color: AppColors.borderLight),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(e.key, style: AppTextStyles.bodySmall),
+                const SizedBox(height: AppDimensions.paddingXS),
+                Text('${e.value} محطة', style: AppTextStyles.h3),
+              ],
+            ),
+          );
+        }),
+      ],
     );
   }
 }

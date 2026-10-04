@@ -108,7 +108,14 @@ class _BalanceChartPrintScreenState extends State<BalanceChartPrintScreen> {
               }
               return SingleChildScrollView(
                 padding: const EdgeInsets.all(24),
-                child: _buildPrintContent(controller),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.topCenter,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(minWidth: 800, maxWidth: 1200),
+                    child: _buildPrintContent(controller),
+                  ),
+                ),
               );
             }),
           ),

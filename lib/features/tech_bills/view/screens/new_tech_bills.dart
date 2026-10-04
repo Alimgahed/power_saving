@@ -21,7 +21,6 @@ class NewTechBillsScreen extends StatelessWidget {
       mobileAppBar: appBarWidget,
       desktopHeader: const SizedBox.shrink(),
       body: GetBuilder<NewTechBillsController>(
-        init: NewTechBillsController(),
         builder: (controller) {
           return Stack(
             children: [
@@ -29,7 +28,7 @@ class NewTechBillsScreen extends StatelessWidget {
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 900),
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -37,20 +36,20 @@ class NewTechBillsScreen extends StatelessWidget {
                         const Text(
                           "أدخل بيانات الفاتورة التقنية",
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 22,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF1E293B),
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 4),
                         const Text(
                           "يرجى التأكد من صحة البيانات والمحطة المحددة قبل الحفظ.",
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 13,
                             color: Color(0xFF64748B),
                           ),
                         ),
-                        const SizedBox(height: 32),
+                        const SizedBox(height: 16),
 
                         /// 🔷 FILTER CARD
                         _buildCard(
@@ -58,7 +57,7 @@ class NewTechBillsScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               _buildSectionTitle("اختيار البيانات", Icons.account_balance_rounded, Colors.indigo),
-                              const SizedBox(height: 24),
+                              const SizedBox(height: 12),
 
                               _buildResponsiveRow([
                                 _buildDropdown(
@@ -87,14 +86,14 @@ class NewTechBillsScreen extends StatelessWidget {
 
                               if (controller.selectedBranch.value != null && controller.filteredStations.isEmpty)
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 10),
+                                  padding: const EdgeInsets.only(top: 8),
                                   child: Text(
                                     'لا توجد محطات في هذا الفرع',
                                     style: TextStyle(color: Colors.red.shade700, fontWeight: FontWeight.w500),
                                   ),
                                 ),
 
-                              const SizedBox(height: 16),
+                              const SizedBox(height: 12),
 
                               if (controller.selectedStation != null)
                                 Row(
@@ -113,7 +112,7 @@ class NewTechBillsScreen extends StatelessWidget {
                                         onChanged: (value) => controller.onTechChanged(value),
                                       ),
                                     ),
-                                    const SizedBox(width: 16),
+                                    const SizedBox(width: 12),
                                     const Spacer(), // Keeps dropdown half-width on large screens
                                   ],
                                 ),
@@ -121,7 +120,6 @@ class NewTechBillsScreen extends StatelessWidget {
                           ),
                         ),
 
-                        const SizedBox(height: 24),
 
                         /// 🔷 DATE CARD
                         _buildCard(
@@ -129,7 +127,7 @@ class NewTechBillsScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               _buildSectionTitle("التاريخ", Icons.calendar_today_rounded, Colors.amber.shade700),
-                              const SizedBox(height: 24),
+                              const SizedBox(height: 12),
 
                               _buildResponsiveRow([
                                 _buildInput(
@@ -147,7 +145,6 @@ class NewTechBillsScreen extends StatelessWidget {
                           ),
                         ),
 
-                        const SizedBox(height: 24),
 
                         /// 🔷 VALUES CARD
                         _buildCard(
@@ -155,57 +152,80 @@ class NewTechBillsScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               _buildSectionTitle("القيم والإحصائيات", Icons.analytics_rounded, Colors.teal),
-                              const SizedBox(height: 24),
+                              const SizedBox(height: 12),
 
-                              _buildResponsiveRow([
-                                _buildInput(
-                                  controller.measuredWaterController,
-                                  "كمية المياه المقاسة",
-                                  Icons.water,
-                                ),
-                                _buildInput(
-                                  controller.calculatedWaterController,
-                                  "كمية المياه المحسوبة",
-                                  Icons.water_drop,
-                                ),
-                              ]),
-                              const SizedBox(height: 16),
+                              LayoutBuilder(
+                                builder: (context, constraints) {
+                                  final bool isMobile = constraints.maxWidth < 600;
+                                  final int columns = isMobile ? 1 : 3; 
+                                  final double spacing = 12.0;
+                                  final double itemWidth = (constraints.maxWidth - (spacing * (columns - 1))) / columns;
 
-                              _buildResponsiveRow([
-                                _buildInput(
-                                  controller.waterProducedController,
-                                  "كمية المياه المنتجة",
-                                  Icons.waves,
-                                ),
-                                _buildInput(
-                                  controller.chlorineController,
-                                  "الكلور",
-                                  Icons.science,
-                                ),
-                              ]),
-                              const SizedBox(height: 16),
-
-                              _buildResponsiveRow([
-                                _buildInput(
-                                  controller.liquidAlumController,
-                                  "الشبة السائلة",
-                                  Icons.opacity,
-                                ),
-                                _buildInput(
-                                  controller.solidAlumController,
-                                  "الشبة الصلبة",
-                                  Icons.ac_unit,
-                                ),
-                              ]),
+                                  return Wrap(
+                                    spacing: spacing,
+                                    runSpacing: spacing,
+                                    children: [
+                                      SizedBox(
+                                        width: itemWidth,
+                                        child: _buildInput(
+                                          controller.measuredWaterController,
+                                          "كمية المياه المقاسة",
+                                          Icons.water,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: itemWidth,
+                                        child: _buildInput(
+                                          controller.calculatedWaterController,
+                                          "كمية المياه المحسوبة",
+                                          Icons.water_drop,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: itemWidth,
+                                        child: _buildInput(
+                                          controller.waterProducedController,
+                                          "كمية المياه المنتجة",
+                                          Icons.waves,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: itemWidth,
+                                        child: _buildInput(
+                                          controller.chlorineController,
+                                          "الكلور",
+                                          Icons.science,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: itemWidth,
+                                        child: _buildInput(
+                                          controller.liquidAlumController,
+                                          "الشبة السائلة",
+                                          Icons.opacity,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: itemWidth,
+                                        child: _buildInput(
+                                          controller.solidAlumController,
+                                          "الشبة الصلبة",
+                                          Icons.ac_unit,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
                             ],
                           ),
                         ),
 
-                        const SizedBox(height: 40),
+                        const SizedBox(height: 16),
 
                         /// 🔷 PREMIUM SUBMIT BUTTON
                         _buildSubmitButton(controller),
-                        const SizedBox(height: 40),
+                        const SizedBox(height: 24),
                       ],
                     ),
                   ),
@@ -229,7 +249,7 @@ class NewTechBillsScreen extends StatelessWidget {
   /// 🔹 Premium Reusable Card
   Widget _buildCard({required Widget child}) {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),

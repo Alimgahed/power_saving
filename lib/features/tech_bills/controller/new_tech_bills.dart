@@ -5,6 +5,7 @@ import 'package:power_saving/features/technology/model/tech_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 import 'package:power_saving/global/ip_config.dart';
+import 'package:power_saving/features/bill/controller/tech_bills.dart';
 
 class Station {
   final int stationId;
@@ -43,6 +44,7 @@ class Station {
 }
 
 class NewTechBillsController extends GetxController {
+  static List<dynamic>? sessionCache;
   RxList<Station> stations = <Station>[].obs;
   Station? selectedStation;
   TechnologyModel? selectedTech;
@@ -104,8 +106,17 @@ class NewTechBillsController extends GetxController {
     super.onClose();
   }
 
-  Future<void> stationsTechs() async {
-    loading.value = true;
+  Future<void> stationsTechs({bool isBackground = false}) async {
+    if (!isBackground && sessionCache != null) {
+      stations.value = sessionCache!
+          .whereType<Map<String, dynamic>>()
+          .map((e) => Station.fromJson(e))
+          .toList();
+      update();
+      _fetchLatestBackground();
+      return;
+    }
+    if (!isBackground) loading.value = true;
     try {
       final res = await fetchData("${ApiConfig.baseUrl}/station-techs");
       if (res.statusCode == 200) {
@@ -121,6 +132,8 @@ class NewTechBillsController extends GetxController {
             data = decoded['data'] as List<dynamic>;
           }
         }
+        
+        sessionCache = data;
 
         stations.value =
             data
@@ -135,19 +148,19 @@ class NewTechBillsController extends GetxController {
           selectedTech = null;
         }
       } else {
-        showCustomErrorDialog(
-          errorMessage: 'فشل في جلب بيانات المحطات. حاول مرة أخرى.',
-        );
+        if (!isBackground) showCustomErrorDialog(errorMessage: 'فشل في جلب بيانات المحطات. حاول مرة أخرى.');
       }
     } catch (e) {
       print('Error fetching station techs: $e');
-      showCustomErrorDialog(
-        errorMessage: 'حدث خطأ أثناء تحميل بيانات الفروع والمحطات.',
-      );
+      if (!isBackground) showCustomErrorDialog(errorMessage: 'حدث خطأ أثناء تحميل بيانات الفروع والمحطات.');
     } finally {
-      loading.value = false;
+      if (!isBackground) loading.value = false;
       update();
     }
+  }
+  
+  Future<void> _fetchLatestBackground() async {
+    stationsTechs(isBackground: true);
   }
 
   void addTechBills({
@@ -181,6 +194,7 @@ class NewTechBillsController extends GetxController {
 
       if (res.statusCode == 200 || res.statusCode == 201) {
         loading.value = false;
+        TechBillscontroller.sessionCache = null;
         showSuccessToast("تمت الإضافة بنجاح");
 
         // Clear input fields after successful submission

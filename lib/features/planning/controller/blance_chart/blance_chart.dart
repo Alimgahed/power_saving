@@ -10,6 +10,8 @@ import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class BalanceChartController extends GetxController {
+  static List<dynamic>? areasCache;
+  static List<dynamic>? valuesCache;
   var isloading = false.obs;
   int areaid=0;
   bool edited = true;
@@ -39,76 +41,78 @@ class BalanceChartController extends GetxController {
       selectedMethod.value = value;
     }
   }
-   Future<void> allareas() async {
+  Future<void> allareas({bool isBackground = false}) async {
+    if (!isBackground && areasCache != null) {
+      areas.clear();
+      areas.addAll(areasCache!.map((json) => AreaOfService.fromJson(json)));
+      areas.value = List.from(areas);
+      update();
+      _fetchLatestBackgroundAreas();
+      return;
+    }
     try {
-
       final response = await fetchData("${ApiConfig.baseUrl}/all-areas");
-      
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body) as List<dynamic>;
-
-        // Clear and populate master list
+        areasCache = jsonData;
         areas.clear();
-        areas.addAll(
-          jsonData.map((json) => AreaOfService.fromJson(json))
-        );
-        
-        // Update display list
-       areas.value = List.from(areas);
-       update();
-        
+        areas.addAll(jsonData.map((json) => AreaOfService.fromJson(json)));
+        areas.value = List.from(areas);
+        update();
       } else {
-        Get.snackbar(
-          'خطأ',
-          'فشل تحميل البيانات: ${response.statusCode}',
-          snackPosition: SnackPosition.BOTTOM,
-        );
+        if (!isBackground) Get.snackbar('خطأ', 'فشل تحميل البيانات: ${response.statusCode}', snackPosition: SnackPosition.BOTTOM);
       }
     } catch (e) {
-      showCustomErrorDialog(errorMessage: e.toString());
-      Get.snackbar(
-        'خطأ',
-        'حدث خطأ أثناء تحميل البيانات',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      debugPrint("Error fetching places: $e");
+      if (!isBackground) {
+        showCustomErrorDialog(errorMessage: e.toString());
+        Get.snackbar('خطأ', 'حدث خطأ أثناء تحميل البيانات', snackPosition: SnackPosition.BOTTOM);
+      }
     }
   }
+  
+  Future<void> _fetchLatestBackgroundAreas() async {
+    allareas(isBackground: true);
+  }
 
-  Future<void> allvalues() async {
+  Future<void> allvalues({bool isBackground = false}) async {
+    if (!isBackground && valuesCache != null) {
+      allTypes.clear();
+      textControllers.clear();
+      for (var json in valuesCache!) {
+        final type = PlaceType.fromJson(json);
+        allTypes.add(type);
+        textControllers[type.placeTypeId] = TextEditingController();
+      }
+      _fetchLatestBackgroundValues();
+      return;
+    }
     try {
       final response = await fetchData("${ApiConfig.baseUrl}/place-types");
-
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = jsonDecode(response.body);
-
+        valuesCache = jsonData;
         allTypes.clear();
         textControllers.clear();
-
         for (var json in jsonData) {
           final type = PlaceType.fromJson(json);
           allTypes.add(type);
-
-          /// create controller per place type
           textControllers[type.placeTypeId] = TextEditingController();
         }
-
       } else {
-        Get.snackbar(
-          'خطأ',
-          'فشل تحميل البيانات: ${response.statusCode}',
-          snackPosition: SnackPosition.BOTTOM,
-        );
+        if (!isBackground) Get.snackbar('خطأ', 'فشل تحميل البيانات: ${response.statusCode}', snackPosition: SnackPosition.BOTTOM);
       }
     } catch (e) {
-      showCustomErrorDialog(errorMessage: e.toString());
-      Get.snackbar(
-        'خطأ',
-        'حدث خطأ أثناء تحميل البيانات',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      if (!isBackground) {
+        showCustomErrorDialog(errorMessage: e.toString());
+        Get.snackbar('خطأ', 'حدث خطأ أثناء تحميل البيانات', snackPosition: SnackPosition.BOTTOM);
+      }
     }
   }
+  
+  Future<void> _fetchLatestBackgroundValues() async {
+    allvalues(isBackground: true);
+  }
+
     Map<String, dynamic> buildRequestBody() {
     final Map<String, dynamic> body = {
       "calc_type": selectedMethod.value,

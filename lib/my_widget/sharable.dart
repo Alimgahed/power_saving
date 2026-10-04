@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 class CustomTextFormField extends StatelessWidget {
   final String? label;
   final String? hintText;
+  final String? suffixText; // <-- NEW
+  final Widget? suffixIcon; // <-- NEW
   final IconData? icon;
   final TextEditingController? controller;
   final TextInputType keyboardType;
@@ -26,6 +28,8 @@ class CustomTextFormField extends StatelessWidget {
      this.readonly,
     this.onTap,
     this.hintText,
+    this.suffixText,
+    this.suffixIcon, // <-- NEW
     this.allowOnlyDigits = false,
     this.icon,
     this.padding,
@@ -62,6 +66,8 @@ class CustomTextFormField extends StatelessWidget {
         decoration: InputDecoration(
           labelText: label,
           hintText: hintText,
+          suffixText: suffixText, 
+          suffixIcon: suffixIcon, // <-- NEW
           prefixIcon: icon != null ? Icon(icon, color: Colors.blue) : null,
           contentPadding: const EdgeInsets.symmetric(
             vertical: 16,

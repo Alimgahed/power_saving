@@ -46,55 +46,81 @@ class AddElectricMeterScreen extends StatelessWidget {
                       icon: Icons.electric_meter,
                       color: AppColors.primary,
                     ),
+                    const SizedBox(height: 16),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final bool isMobile = constraints.maxWidth < 600;
+                        final int columns = isMobile ? 1 : 2; // 2 columns is better for 5 fields
+                        final double spacing = 16.0;
+                        final double itemWidth = (constraints.maxWidth - (spacing * (columns - 1))) / columns;
 
-                    CustomTextFormField(
-                      label: 'رقم الاشتراك',
-                      hintText: 'أدخل رقم الاشتراك',
-                      icon: Icons.numbers,
-                      controller: controller.Counter_number,
-                    ),
-
-                    CustomTextFormField(
-                      label: 'الرقم التسلسلي للعداد',
-                      hintText: 'أدخل الرقم التسلسلي للعداد',
-                      icon: Icons.confirmation_number,
-                      allowOnlyDigits: true,
-                      controller: controller.meterId,
-                    ),
-
-                    CustomDropdownFormField<int>(
-                      items: controller.allVoltage.map((type) {
-                        return DropdownMenuItem<int>(
-                          value: type.voltageId,
-                          child: Text(type.voltageType),
+                        return Wrap(
+                          spacing: spacing,
+                          runSpacing: spacing,
+                          children: [
+                            SizedBox(
+                              width: itemWidth,
+                              child: CustomTextFormField(
+                                label: 'رقم الاشتراك',
+                                hintText: 'أدخل رقم الاشتراك',
+                                icon: Icons.numbers,
+                                controller: controller.Counter_number,
+                              ),
+                            ),
+                            SizedBox(
+                              width: itemWidth,
+                              child: CustomTextFormField(
+                                label: 'الرقم التسلسلي للعداد',
+                                hintText: 'أدخل الرقم التسلسلي للعداد',
+                                icon: Icons.confirmation_number,
+                                allowOnlyDigits: true,
+                                controller: controller.meterId,
+                              ),
+                            ),
+                            SizedBox(
+                              width: itemWidth,
+                              child: CustomDropdownFormField<int>(
+                                items: controller.allVoltage.map((type) {
+                                  return DropdownMenuItem<int>(
+                                    value: type.voltageId,
+                                    child: Text(type.voltageType),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  controller.voltage = value;
+                                },
+                                labelText: 'جهد العداد',
+                                hintText: 'اختر نوع الجهد',
+                                prefixIcon: Icons.flash_on,
+                                validator: (val) =>
+                                    val == null ? 'الرجاء اختيار الجهد' : null,
+                              ),
+                            ),
+                            SizedBox(
+                              width: itemWidth,
+                              child: CustomTextFormField(
+                                label: 'القراءة النهائية',
+                                hintText: 'أدخل القراءة النهائية',
+                                icon: Icons.speed,
+                                allowOnlyDigits: true,
+                                controller: controller.finalReading,
+                                keyboardType: TextInputType.number,
+                              ),
+                            ),
+                            SizedBox(
+                              width: itemWidth,
+                              child: CustomTextFormField(
+                                label: 'معامل العداد',
+                                hintText: 'أدخل معامل العداد',
+                                icon: Icons.straighten,
+                                allowOnlyDigits: true,
+                                controller: controller.meterFactor,
+                                keyboardType: TextInputType.number,
+                              ),
+                            ),
+                          ],
                         );
-                      }).toList(),
-                      onChanged: (value) {
-                        controller.voltage = value;
-                      },
-                      labelText: 'جهد العداد',
-                      hintText: 'اختر نوع الجهد',
-                      prefixIcon: Icons.flash_on,
-                      validator: (val) =>
-                          val == null ? 'الرجاء اختيار الجهد' : null,
-                    ),
-
-                    CustomTextFormField(
-                      label: 'القراءة النهائية',
-                      hintText: 'أدخل القراءة النهائية',
-                      icon: Icons.speed,
-                      allowOnlyDigits: true,
-                      controller: controller.finalReading,
-                      keyboardType: TextInputType.number,
-                    ),
-
-                    CustomTextFormField(
-                      label: 'معامل العداد',
-                      hintText: 'أدخل معامل العداد',
-                      icon: Icons.straighten,
-                      allowOnlyDigits: true,
-                      controller: controller.meterFactor,
-                      keyboardType: TextInputType.number,
+                      }
                     ),
 
                     const SizedBox(height: AppDimensions.paddingL),

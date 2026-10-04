@@ -5,7 +5,6 @@ import 'package:power_saving/core/constant/colors.dart';
 import 'package:power_saving/core/widgets/buttons.dart';
 import 'package:power_saving/core/widgets/empty_widget.dart';
 import 'package:power_saving/core/widgets/main_screen/main_card_widgets.dart';
-import 'package:power_saving/core/widgets/main_screen/totl_header.dart';
 import 'package:power_saving/features/stations/view/widgets/branch_list.dart';
 import '../../../../core/constant/styles.dart';
 import '../../controller/all_stations_controller.dart';
@@ -35,40 +34,64 @@ class StationsBody extends StatelessWidget {
         );
       }
 
-      return CustomScrollView(
-        slivers: [
-          SliverPadding(
-            padding: const EdgeInsets.all(AppDimensions.paddingXL),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  TotalHeader(count: controller.stations.length.toString(), title: 'إجمالي المحطات'),
-                  const SizedBox(height: AppDimensions.paddingL),
-                  BranchStats(stations: controller.stations),
-                  const SizedBox(height: AppDimensions.paddingXL),
-                ],
+      return RefreshIndicator(
+        onRefresh: () async {
+          await controller.forceRefresh();
+        },
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.all(AppDimensions.paddingXL),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    BranchStats(stations: controller.stations),
+                    const SizedBox(height: AppDimensions.paddingXL),
+                  ],
+                ),
               ),
             ),
-          ),
-          SliverLayoutBuilder(
-            builder: (context, constraints) {
-              double spacing = AppDimensions.paddingS;
-              int columns = (constraints.crossAxisExtent / 300).ceil();
-              if (columns < 1) columns = 1;
-              double itemWidth = (constraints.crossAxisExtent - (spacing * (columns - 1))) / columns;
-              return SliverToBoxAdapter(
-                child: Wrap(
-                  spacing: spacing,
-                  runSpacing: spacing,
-                  children: controller.stations.map((station) => SizedBox(
-                    width: itemWidth,
-                    child: _StationCard(station: station),
-                  )).toList(),
-                ),
-              );
-            }
-          ),
-        ],
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingXL),
+              sliver: SliverLayoutBuilder(
+                builder: (context, constraints) {
+                  int columns = (constraints.crossAxisExtent / 350).ceil();
+                  if (columns < 1) columns = 1;
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        int start = index * columns;
+                        int end = start + columns;
+                        if (end > controller.stations.length) end = controller.stations.length;
+                        List rowStations = controller.stations.sublist(start, end);
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: AppDimensions.paddingS),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ...rowStations.map((station) => Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingS / 2),
+                                      child: _StationCard(station: station),
+                                    ),
+                                  )),
+                              ...List.generate(
+                                columns - rowStations.length,
+                                (_) => const Expanded(child: SizedBox()),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      childCount: (controller.stations.length / columns).ceil(),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       );
     });
   }

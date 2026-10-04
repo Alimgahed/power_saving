@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/relations/controller/relations/relation.dart';
-import 'package:power_saving/core/constant/colors.dart';
 import 'package:power_saving/core/widgets/main_screen/reuseable_appbar.dart';
 import 'package:power_saving/core/widgets/app_scaffold.dart';
 import 'package:power_saving/features/relations/view/widgets/body.dart';
@@ -11,7 +10,7 @@ class RelationsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(RelationsController());
+    final controller = Get.find<RelationsController>();
 
     final appBarWidget = ReusableAppBar(
       title: 'قائمة الربط',

@@ -339,7 +339,7 @@ class TechBill extends StatelessWidget {
                   ],
                 ),
               );
-            }).toList(),
+            }),
           ],
           onChanged: (value) {
             if (value != null) onSelected(value);
@@ -605,12 +605,16 @@ class TechBill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(TechBillscontroller());
+    Get.find<TechBillscontroller>();
     return AppScaffold(
       title: 'فواتير التقنيات',
       showDrawer: false,
       mobileAppBar: const CustomAppBar(title: 'فواتير التقنيات', backRoute: '/home'),
-      body: GetBuilder<TechBillscontroller>(
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await Get.find<TechBillscontroller>().refreshBills();
+        },
+        child: GetBuilder<TechBillscontroller>(
         builder: (controller) {
           // Loading State
           if (controller.isLoading.value) {
@@ -657,6 +661,7 @@ class TechBill extends StatelessWidget {
           );
         },
       ),
+    ),
     );
   }
 }

@@ -12,20 +12,20 @@ class FollowingStationsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const appBarWidget = CustomAppBar(
+      title: 'متابعة المحطات',
+      backRoute: '/home',
+    );
+
     return AppScaffold(
       title: 'متابعة المحطات',
       showDrawer: false,
-      desktopHeader: const SizedBox.shrink(),
-      mobileAppBar:
-          const CustomAppBar(title: 'متابعة المحطات', backRoute: '/home'),
+      desktopHeader: appBarWidget,
+      mobileAppBar: appBarWidget,
       body: GetBuilder<FollowingStationsController>(
-        init: FollowingStationsController(),
         builder: (controller) {
           return Column(
             children: [
-              // ─── Compact Header Bar ───
-              _buildHeader(),
-
               // ─── Main Content (no scroll needed) ───
               Expanded(
                 child: Center(
@@ -33,7 +33,7 @@ class FollowingStationsScreen extends StatelessWidget {
                     constraints: const BoxConstraints(maxWidth: 900),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 32, vertical: 24),
+                          horizontal: 16, vertical: 16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
@@ -61,58 +61,6 @@ class FollowingStationsScreen extends StatelessWidget {
             ],
           );
         },
-      ),
-    );
-  }
-
-  // ═══════════════════════════════════════════════════════
-  // Header
-  // ═══════════════════════════════════════════════════════
-  Widget _buildHeader() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
-      decoration: const BoxDecoration(gradient: AppGradients.header),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Icon(Icons.ev_station, size: 28, color: Colors.white),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'متابعة المحطات',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  'اختر المحطة والتكنولوجيا لعرض التحليل التفصيلي',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.white.withOpacity(0.85),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          IconButton(
-            onPressed: () => Get.offNamed('/home'),
-            icon: const Icon(Icons.arrow_circle_left_outlined,
-                color: Colors.white, size: 30),
-          ),
-        ],
       ),
     );
   }
@@ -156,60 +104,81 @@ class FollowingStationsScreen extends StatelessWidget {
           const SizedBox(height: 20),
 
           // Dropdowns row
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Station dropdown
-              Expanded(
-                flex: 3,
-                child: _buildStationDropdown(controller),
-              ),
-              const SizedBox(width: 16),
-
-              // Tech dropdown
-              Expanded(
-                flex: 3,
-                child: _buildTechDropdown(controller),
-              ),
-              const SizedBox(width: 16),
-
-              // Action button
-              SizedBox(
-                height: 52,
-                child: ElevatedButton.icon(
-                  onPressed: (controller.selectedStation != null &&
-                          controller.selectedTech != null)
-                      ? () {
-                          Get.toNamed(
-                            '/analysis',
-                            arguments: {
-                              'station': controller.selectedStation?.stationId,
-                              'tech': controller.selectedTech?.technologyId,
-                            },
-                          );
-                        }
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    disabledBackgroundColor: AppColors.border,
-                    disabledForegroundColor: AppColors.textMuted,
-                    elevation: 0,
-                    padding: const EdgeInsets.symmetric(horizontal: 28),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              if (constraints.maxWidth < 600) {
+                // Mobile layout
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _buildStationDropdown(controller),
+                    const SizedBox(height: 12),
+                    _buildTechDropdown(controller),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      height: 52,
+                      child: _buildActionButton(controller),
                     ),
-                  ),
-                  icon: const Icon(Icons.analytics_outlined, size: 20),
-                  label: const Text(
-                    'عرض التحليل',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-                  ),
-                ),
-              ),
-            ],
+                  ],
+                );
+              } else {
+                // Desktop layout
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: _buildStationDropdown(controller),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      flex: 3,
+                      child: _buildTechDropdown(controller),
+                    ),
+                    const SizedBox(width: 16),
+                    SizedBox(
+                      height: 52,
+                      child: _buildActionButton(controller),
+                    ),
+                  ],
+                );
+              }
+            },
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildActionButton(FollowingStationsController controller) {
+    return ElevatedButton.icon(
+      onPressed: (controller.selectedStation != null &&
+              controller.selectedTech != null)
+          ? () {
+              Get.toNamed(
+                '/analysis',
+                arguments: {
+                  'station': controller.selectedStation?.stationId,
+                  'tech': controller.selectedTech?.technologyId,
+                },
+              );
+            }
+          : null,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.primary,
+        foregroundColor: Colors.white,
+        disabledBackgroundColor: AppColors.border,
+        disabledForegroundColor: AppColors.textMuted,
+        elevation: 0,
+        padding: const EdgeInsets.symmetric(horizontal: 28),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+      icon: const Icon(Icons.analytics_outlined, size: 20),
+      label: const Text(
+        'عرض التحليل',
+        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
       ),
     );
   }

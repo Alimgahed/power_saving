@@ -5,15 +5,15 @@ import 'package:power_saving/my_widget/sharable.dart';
 
 void registerIframe(String id, String htmlContent) {
   try {
-    final iframeElement = html.IFrameElement()
-      ..style.width = '100%'
-      ..style.height = '100%'
-      ..style.border = 'none'
-      ..srcdoc = htmlContent;
-
     ui_web.platformViewRegistry.registerViewFactory(
       id,
-      (int viewId) => iframeElement,
+      (int viewId) {
+        return html.IFrameElement()
+          ..style.width = '100%'
+          ..style.height = '100%'
+          ..style.border = 'none'
+          ..srcdoc = htmlContent;
+      },
     );
   } catch (e) {
       showCustomErrorDialog(errorMessage: e.toString());

@@ -13,7 +13,7 @@ class HomeController extends GetxController {
   RxBool loading = false.obs;
   ConsumptionModel? consumptionModel;
 
-  String? waterChartHtml;
+
 
   // Animated values
   RxnNum animatedMoney = RxnNum();
@@ -41,15 +41,7 @@ class HomeController extends GetxController {
         final jsonData = jsonDecode(res.body);
 
         consumptionModel = ConsumptionModel.fromJson(jsonData);
-        waterChartHtml = jsonData["water_chart"] as String?;
 
-        // Register dynamic iframe view for web compilation
-        if (waterChartHtml != null && kIsWeb) {
-          Future.delayed(const Duration(milliseconds: 100), () {
-            registerIframe('sunburst-chart', waterChartHtml!);
-            update();
-          });
-        }
 
         animateAll();
       }

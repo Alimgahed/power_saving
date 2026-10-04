@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:power_saving/core/constant/AppDimensions.dart';
 import 'package:power_saving/core/constant/colors.dart';
-import 'package:power_saving/core/constant/styles.dart';
 import 'package:power_saving/features/relations/controller/relations/relation.dart';
 import 'package:power_saving/features/relations/model/relations.dart';
 
@@ -169,7 +167,7 @@ class _RelationsCardState extends State<RelationsCard> {
         _DetailRow(
           icon: Icons.tag_rounded,
           label: 'رقم الاشتراك',
-          value: widget.relation.accountNumber ?? 'غير محدد',
+          value: widget.relation.accountNumber,
           iconColor: Colors.purpleAccent,
         ),
       ],

@@ -35,7 +35,7 @@ class ChangePasswordController extends GetxController {
         (success) {
           if (success) {
             showSuccessToast("تم تغيير كلمة المرور بنجاح");
-            Get.offNamed('/home');
+            Get.offAllNamed('/Login');
           } else {
             showCustomErrorDialog(errorMessage: "فشل تغيير كلمة المرور.");
           }

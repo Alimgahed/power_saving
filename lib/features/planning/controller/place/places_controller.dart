@@ -13,6 +13,7 @@ class PlacesController extends GetxController {
   final isSearching = false.obs;
   final searchError = ''.obs;
 
+  static List<dynamic>? sessionCache;
   // Data storage - separated for performance
   final List<Place> _allPlaces = [];  // Master data (non-observable)
   final places = <Place>[].obs;  // Display data (observable)
@@ -56,25 +57,42 @@ class PlacesController extends GetxController {
   }
 
   // Fetch all places from API
-  Future<void> allPlaces() async {
+  Future<void> allPlaces({bool isBackground = false}) async {
+    if (!isBackground) {
+      if (sessionCache != null) {
+        _allPlaces.clear();
+        _allPlaces.addAll(sessionCache!.map((json) => Place.fromJson(json)));
+        places.value = List.from(_allPlaces);
+        
+        // Background fetch
+        _fetchLatestBackground();
+        return;
+      } else {
+        loading.value = true;
+      }
+    }
+
     try {
-      loading.value = true;
+      if (!isBackground) {
+        _allPlaces.clear();
+        places.clear();
+      }
 
       final response = await fetchData("${ApiConfig.baseUrl}/places");
 
       if (response.statusCode == 200) {
-        final jsonData = jsonDecode(response.body) as List<dynamic>;
+        final List<dynamic> jsonData = jsonDecode(response.body) as List<dynamic>;
+        
+        sessionCache = jsonData;
 
-        // Clear and populate master list
+        final List<Place> parsed = jsonData.map((json) => Place.fromJson(json)).toList();
+
         _allPlaces.clear();
-        _allPlaces.addAll(
-          jsonData.map((json) => Place.fromJson(json))
-        );
-
-        // Update display list
-        places.value = List.from(_allPlaces);
-
-      } else {
+        _allPlaces.addAll(parsed);
+        
+        // Apply search filter again to keep current UI state consistent
+        _performSearch(_searchQuery.value);
+      } else if (!isBackground) {
         Get.snackbar(
           'خطأ',
           'فشل تحميل البيانات: ${response.statusCode}',
@@ -82,16 +100,24 @@ class PlacesController extends GetxController {
         );
       }
     } catch (e) {
-      showCustomErrorDialog(errorMessage: e.toString());
-      Get.snackbar(
-        'خطأ',
-        'حدث خطأ أثناء تحميل البيانات',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      debugPrint("Error fetching places: $e");
+      if (!isBackground) {
+        showCustomErrorDialog(errorMessage: e.toString());
+        Get.snackbar(
+          'خطأ',
+          'حدث خطأ أثناء تحميل البيانات',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        debugPrint("Error fetching places: $e");
+      }
     } finally {
-      loading.value = false;
+      if (!isBackground) {
+        loading.value = false;
+      }
     }
+  }
+
+  Future<void> _fetchLatestBackground() async {
+    allPlaces(isBackground: true);
   }
 
   // Toggle search mode
@@ -151,9 +177,11 @@ class PlacesController extends GetxController {
 
   @override
   Future<void> refresh() async {
+    sessionCache = null;
     searchController.clear();
     _searchQuery.value = '';
     searchError.value = '';
-    await allPlaces();
+    loading.value = true;
+    await allPlaces(isBackground: false);
   }
 }

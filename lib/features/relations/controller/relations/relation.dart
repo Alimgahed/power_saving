@@ -13,6 +13,7 @@ class RelationsController extends GetxController {
   final searchError = ''.obs;
   final isProcessing = false.obs;
 
+  static List<dynamic>? sessionCache;
   // Master & display data
   final List<StationGaugeTechnologyRelation> allRelations = [];  // non-observable
   final relations = <StationGaugeTechnologyRelation>[].obs;       // observable for UI
@@ -55,23 +56,42 @@ class RelationsController extends GetxController {
   // -------------------------------
   // API Call - Get Relations
   // -------------------------------
-  Future<void> getRelations() async {
+  Future<void> getRelations({bool isBackground = false}) async {
+    if (!isBackground) {
+      if (sessionCache != null) {
+        allRelations.clear();
+        allRelations.addAll(sessionCache!.map((e) => StationGaugeTechnologyRelation.fromJson(e)));
+        relations.value = List.from(allRelations);
+        
+        // Background fetch
+        _fetchLatestBackground();
+        return;
+      } else {
+        loading.value = true;
+      }
+    }
+
     try {
-      loading.value = true;
+      if (!isBackground) {
+        allRelations.clear();
+        relations.clear();
+      }
 
       final response = await fetchData("${ApiConfig.baseUrl}/stg-relations");
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = jsonDecode(response.body);
+        
+        sessionCache = jsonData;
 
-        allRelations
-          ..clear()
-          ..addAll(
-            jsonData.map((e) => StationGaugeTechnologyRelation.fromJson(e)),
-          );
+        final List<StationGaugeTechnologyRelation> parsed = jsonData.map((e) => StationGaugeTechnologyRelation.fromJson(e)).toList();
 
-        relations.value = List.from(allRelations);
-      } else {
+        allRelations.clear();
+        allRelations.addAll(parsed);
+        
+        // Apply search filter again to keep current UI state consistent
+        _performSearch(_searchQuery.value);
+      } else if (!isBackground) {
         Get.snackbar(
           'خطأ',
           'فشل تحميل قائمة الربط',
@@ -79,16 +99,29 @@ class RelationsController extends GetxController {
         );
       }
     } catch (e) {
-      showCustomErrorDialog(errorMessage: e.toString());
-      debugPrint('Relations error: $e');
-      Get.snackbar(
-        'خطأ',
-        'حدث خطأ أثناء تحميل البيانات',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      if (!isBackground) {
+        showCustomErrorDialog(errorMessage: e.toString());
+        debugPrint('Relations error: $e');
+        Get.snackbar(
+          'خطأ',
+          'حدث خطأ أثناء تحميل البيانات',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
     } finally {
-      loading.value = false;
+      if (!isBackground) {
+        loading.value = false;
+      }
     }
+  }
+
+  Future<void> _fetchLatestBackground() async {
+    getRelations(isBackground: true);
+  }
+
+  Future<void> forceRefresh() async {
+    loading.value = true;
+    getRelations(isBackground: false);
   }
 
   // -------------------------------
@@ -101,14 +134,10 @@ class RelationsController extends GetxController {
       final response = await fetchData("${ApiConfig.baseUrl}/edit-relation/$id");
 
       if (response.statusCode == 200) {
-        // Refresh data from server to get updated status
-        await getRelations();
+        // Cache invalidation and silent refresh
+        sessionCache = null;
+        await _fetchLatestBackground();
         
-        // Reapply search filter if active
-        if (_searchQuery.value.isNotEmpty) {
-          _performSearch(_searchQuery.value);
-        }
-
         showSuccessToast(successMessage);
       } else {
         final errorBody = jsonDecode(response.body);
@@ -131,16 +160,28 @@ class RelationsController extends GetxController {
   // -------------------------------
   // Search Logic
   // -------------------------------
-  void _performSearch(String query) {
-    if (query.isEmpty) {
-      relations.value = List.from(allRelations);
-      searchError.value = '';
-      return;
-    }
+  final RxString selectedFilter = 'all'.obs; // 'all', 'active', 'inactive'
 
+  void setFilter(String filter) {
+    selectedFilter.value = filter;
+    _performSearch(_searchQuery.value);
+  }
+
+  void _performSearch(String query) {
     final lowerQuery = query.toLowerCase();
 
     final filtered = allRelations.where((relation) {
+      // 1. Status Filter
+      if (selectedFilter.value == 'active' && relation.relationStatus != true) {
+        return false;
+      }
+      if (selectedFilter.value == 'inactive' && relation.relationStatus == true) {
+        return false;
+      }
+
+      // 2. Text Search
+      if (query.isEmpty) return true;
+
       final stationName = relation.stationName?.toLowerCase() ?? '';
       final accountNumber = relation.accountNumber.toLowerCase();
 
@@ -148,8 +189,8 @@ class RelationsController extends GetxController {
              accountNumber.contains(lowerQuery);
     }).toList();
 
-    if (filtered.isEmpty) {
-      searchError.value = 'لا توجد نتائج تطابق "$query"';
+    if (filtered.isEmpty && (query.isNotEmpty || selectedFilter.value != 'all')) {
+      searchError.value = 'لا توجد نتائج متطابقة';
       relations.value = [];
     } else {
       searchError.value = '';

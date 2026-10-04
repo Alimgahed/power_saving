@@ -20,6 +20,12 @@ class GuageBill {
   final int? delayMonth;
   List<double>? percentMoney;
   List<double>? percentPower;
+  
+  // New fields from backend to_dict()
+  final String? voltageType;
+  final String? branchName;
+  final String? stationNames;
+  final List<String>? stationNamesList;
 
   GuageBill({
     this.guageBillId,
@@ -43,31 +49,39 @@ class GuageBill {
     required this.prevPayments,
     required this.rounding,
     required this.billTotal,
+    this.voltageType,
+    this.branchName,
+    this.stationNames,
+    this.stationNamesList,
   });
 
   factory GuageBill.fromJson(Map<String, dynamic> json) {
     return GuageBill(
-      delayMonth: json[""],
+      delayMonth: json["delay_month"],
       delayYear: json["delay_year"],
-      settlementsratio: json["settlement_qty"],
+      settlementsratio: json["settlement_qty"] ?? 0.0,
       guageBillId: json['guage_bill_id'],
-      accountNumber: json['account_number'],
-      billMonth: json['bill_month'],
-      billYear: json['bill_year'],
-      prevReading: json['prev_reading'],
-      currentReading: json['current_reading'],
-      readingFactor: json['reading_factor'],
-      powerConsump: json['power_consump'],
-      percentMoney: json["percent_money"],
-      percentPower: json["percent_power"],
-      fixedInstallment: json['fixed_installment'],
-      settlements: json['settlements'].toDouble(),
-      stamp: json['stamp'].toDouble(),
-      prevPayments: json['prev_payments'].toDouble(),
-      rounding: json['rounding'].toDouble(),
-      billTotal: json['bill_total'].toDouble(),
+      accountNumber: json['account_number'] ?? '',
+      billMonth: json['bill_month'] ?? 1,
+      billYear: json['bill_year'] ?? 2024,
+      prevReading: json['prev_reading'] ?? 0,
+      currentReading: json['current_reading'] ?? 0,
+      readingFactor: json['reading_factor'] ?? 1,
+      powerConsump: json['power_consump'] ?? 0,
+      percentMoney: json["percent_money"] != null ? List<double>.from(json["percent_money"].map((x) => x.toDouble())) : null,
+      percentPower: json["percent_power"] != null ? List<double>.from(json["percent_power"].map((x) => x.toDouble())) : null,
+      fixedInstallment: json['fixed_installment'] ?? 0.0,
+      settlements: json['settlements']?.toDouble() ?? 0.0,
+      stamp: json['stamp']?.toDouble() ?? 0.0,
+      prevPayments: json['prev_payments']?.toDouble() ?? 0.0,
+      rounding: json['rounding']?.toDouble() ?? 0.0,
+      billTotal: json['bill_total']?.toDouble() ?? 0.0,
       isPaid: json['is_paid'],
       notes: json["notes"],
+      voltageType: json['voltage_type'],
+      branchName: json['branch_name'],
+      stationNames: json['station_names'],
+      stationNamesList: json['station_names_list'] != null ? List<String>.from(json['station_names_list']) : null,
     );
   }
 
@@ -94,6 +108,10 @@ class GuageBill {
       'rounding': rounding,
       'bill_total': billTotal,
       'is_paid': isPaid,
+      'voltage_type': voltageType,
+      'branch_name': branchName,
+      'station_names': stationNames,
+      'station_names_list': stationNamesList,
     };
   }
 }

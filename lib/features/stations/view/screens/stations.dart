@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:power_saving/core/constant/colors.dart';
 import 'package:power_saving/core/widgets/buttons.dart';
 import 'package:power_saving/core/widgets/main_screen/reuseable_appbar.dart';
 import 'package:power_saving/core/widgets/app_scaffold.dart';
@@ -15,7 +14,7 @@ class StationsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(StationsController());
+    final controller = Get.find<StationsController>();
 
     final appBarWidget = ReusableAppBar(
       title: 'قائمة المحطات',

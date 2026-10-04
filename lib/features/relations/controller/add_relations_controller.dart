@@ -7,6 +7,7 @@ import 'package:power_saving/features/Counter/model/Counter_model.dart';
 import 'package:power_saving/features/relations/model/relations.dart';
 import 'package:power_saving/features/stations/model/station_model.dart';
 import 'package:power_saving/features/technology/model/tech_model.dart';
+import 'package:power_saving/features/relations/controller/relations/relation.dart';
 import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
@@ -83,6 +84,7 @@ class addrelationcontroller extends GetxController {
       if (res.statusCode == 200) {
               looading.value=false;
 
+        RelationsController.sessionCache = null;
         showSuccessToast('تمت الاضافة بنجاح');
         // Parse with the existing model
         // Assign to local lists

@@ -12,12 +12,12 @@ class EditTechBills extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const appBarWidget = CustomAppBar(
-      title: 'تعديل فاتورة ',
+      title: 'تعديل فاتورة التقنية',
       backRoute: '/home',
     );
 
     return AppScaffold(
-      title: 'تعديل فاتورة ',
+      title: 'تعديل فاتورة التقنية',
       mobileAppBar: appBarWidget,
       desktopHeader: appBarWidget,
       body: GetBuilder<EditTechbillsController>(
@@ -313,26 +313,26 @@ class EditTechBills extends StatelessWidget {
                                                         0,
                                                     id: bill.techBillId,
                                                     chlorine:
-                                                        double.tryParse(
+                                                        (double.tryParse(
                                                           controller
                                                               .chlorineController
                                                               .text,
                                                         ) ??
-                                                        0,
+                                                        0) * 1000,
                                                     liquid:
-                                                        double.tryParse(
+                                                        (double.tryParse(
                                                           controller
                                                               .liquidAlumController
                                                               .text,
                                                         ) ??
-                                                        0,
+                                                        0) * 1000,
                                                     solid:
-                                                        double.tryParse(
+                                                        (double.tryParse(
                                                           controller
                                                               .solidAlumController
                                                               .text,
                                                         ) ??
-                                                        0,
+                                                        0) * 1000,
                                                     water:
                                                         double.tryParse(
                                                           controller

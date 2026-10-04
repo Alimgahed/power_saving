@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:power_saving/core/constant/AppDimensions.dart';
-import 'package:power_saving/core/constant/colors.dart';
 import 'package:power_saving/features/planning/controller/blance_chart/blance_chart.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/core/widgets/app_scaffold.dart';

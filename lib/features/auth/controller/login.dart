@@ -9,6 +9,7 @@ class LoginController extends GetxController {
   late TextEditingController name;
   late TextEditingController password;
   final RxBool isLoading = false.obs;
+  final RxBool obscurePassword = true.obs;
   
   // Dependency injection via GetX
   final AuthRepository _authRepository = Get.put<AuthRepository>(AuthRepositoryImpl());

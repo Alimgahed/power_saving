@@ -7,10 +7,11 @@ import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/core/widgets/app_scaffold.dart';
 import 'package:power_saving/core/widgets/custom_app_bar.dart';
 
+// ignore: must_be_immutable
 class Predaction extends StatelessWidget {
   Predaction({super.key});
 
-  final StationsController stationsController = Get.put(StationsController());
+  final StationsController stationsController = Get.find<StationsController>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   int? stationId;
 
@@ -27,7 +28,6 @@ class Predaction extends StatelessWidget {
         backRoute: '/home',
       ),
       body: GetBuilder<Prediactioncontroller>(
-        init: Prediactioncontroller(),
         builder: (controller) {
           return Stack(
             children: [

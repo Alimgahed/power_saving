@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/technology/model/tech_model.dart';
+import 'package:power_saving/features/technology/controller/technlogy.dart';
 import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
@@ -56,6 +57,7 @@ class AddTechController extends GetxController {
 
       if (res.statusCode == 200) {
         looading.value = false;
+        TechnlogyController.sessionCache = null;
         showSuccessToast("تم اضافة التقنية بنجاح");
       } else {
         looading.value = false;

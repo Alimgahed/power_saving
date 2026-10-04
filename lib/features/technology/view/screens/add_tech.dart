@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:power_saving/core/constant/AppDimensions.dart';
 import 'package:power_saving/core/constant/colors.dart';
 import 'package:power_saving/core/widgets/buttons.dart';
-import 'package:power_saving/core/widgets/buttons.dart';
 import 'package:power_saving/core/widgets/app_scaffold.dart';
 import 'package:power_saving/core/widgets/custom_app_bar.dart';
 import 'package:power_saving/core/widgets/form_card.dart';

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:power_saving/core/constant/colors.dart';
-import 'package:power_saving/core/constant/styles.dart';
 
 import 'package:power_saving/features/home/view/widgets/home_drawer.dart';
 import 'dart:ui' as ui;

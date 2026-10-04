@@ -9,6 +9,7 @@ import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class Techbills extends GetxController {
+  static List<dynamic>? sessionCache;
   RxBool loading = false.obs;
   final Map<int, GlobalKey<FormState>> formKeys = {};
   
@@ -203,29 +204,57 @@ class Techbills extends GetxController {
     }
   }
 
-  // Fetch tech bills data
-  void fetchTechBills() async {
-    try {
-      loading.value = true;
+  Future<void> fetchTechBills({bool isBackground = false}) async {
+    if (!isBackground && sessionCache != null) {
       techBills.clear();
+      for (var i in sessionCache!) {
+        techBills.add(TechnologyBill.fromJson(i));
+      }
+      applyFilters();
+      _fetchLatestBackground();
+      return;
+    }
+
+    try {
+      if (!isBackground) {
+        loading.value = true;
+      }
+      
       final res = await fetchData("${ApiConfig.baseUrl}/tech-bills");
 
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
-        List<dynamic> responseData = jsonData;
-        for (var i in responseData) {
-          TechnologyBill technologyBill = TechnologyBill.fromJson(i);
-          techBills.add(technologyBill);
+        sessionCache = jsonData;
+        
+        techBills.clear();
+        for (var i in jsonData) {
+          techBills.add(TechnologyBill.fromJson(i));
         }
         applyFilters();
       }
     } catch (e) {
-      showCustomErrorDialog(errorMessage: e.toString());
+      if (!isBackground) {
+        showCustomErrorDialog(errorMessage: e.toString());
+      }
       print("Error fetching tech bills: $e");
     } finally {
-      loading.value = false;
-      update();
+      if (!isBackground) {
+        loading.value = false;
+      }
     }
+  }
+
+  Future<void> _fetchLatestBackground() async {
+    fetchTechBills(isBackground: true);
+  }
+  
+  Future<void> refreshData() async {
+    sessionCache = null;
+    searchController.clear();
+    stationFilterController.clear();
+    selectedBranch.value = null;
+    selectedStation.value = null;
+    await fetchTechBills(isBackground: false);
   }
 
   void addTechBills({
@@ -256,7 +285,8 @@ class Techbills extends GetxController {
 
       if (res.statusCode == 200) {
         loading.value = false;
-        fetchTechBills();
+        sessionCache = null;
+        fetchTechBills(isBackground: true);
         showSuccessToast("تمت الإضافة بنجاح");
 
         // Clear input fields after successful submission

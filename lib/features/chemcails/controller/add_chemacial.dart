@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:power_saving/features/chemcails/model/chemacial.dart';
 import 'package:power_saving/features/stations/model/station_model.dart';
 import 'package:power_saving/features/technology/model/tech_model.dart';
+import 'package:power_saving/features/chemcails/controller/chemacial.dart';
 import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart' show fetchData, postData;
@@ -59,6 +60,7 @@ class addchemical extends GetxController {
 
       if (res.statusCode == 200) {
         loading.value = false;
+        Chemacialcontroller.sessionCache = null;
         showSuccessToast("تم الاضافة  بنجاح");
         Get.offNamed('/Chemicals');
 
@@ -91,6 +93,7 @@ class addchemical extends GetxController {
       );
 
       if (res.statusCode == 200) {
+        Chemacialcontroller.sessionCache = null;
         showSuccessToast("تم التعديل  بنجاح");
         Get.offNamed('/Chemicals');
       } else {

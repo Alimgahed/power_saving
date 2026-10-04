@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:power_saving/core/constant/colors.dart';
 import 'package:power_saving/core/constant/styles.dart';
 import 'package:power_saving/core/constant/AppDimensions.dart';
-import 'package:power_saving/features/home/home_constant/constant.dart';
 import 'package:power_saving/features/home/view/widgets/navigation_helper.dart';
 import 'package:power_saving/features/home/view/widgets/voltaige.dart';
 import 'package:power_saving/global/data.dart';

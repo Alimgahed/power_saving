@@ -160,6 +160,7 @@ class EditChemcials extends StatelessWidget {
                                           child: CustomTextFormField(
                                             label: 'من',
                                             hintText: 'القيمة الدنيا',
+                                            suffixText: 'كجم',
                                             icon: Icons.water_drop,
                                             controller:
                                                 controller.chlorineFromController,
@@ -172,6 +173,7 @@ class EditChemcials extends StatelessWidget {
                                           child: CustomTextFormField(
                                             label: 'إلى',
                                             hintText: 'القيمة العليا',
+                                            suffixText: 'كجم',
                                             icon: Icons.water_drop_outlined,
                                             controller:
                                                 controller.chlorineToController,
@@ -202,6 +204,7 @@ class EditChemcials extends StatelessWidget {
                                           child: CustomTextFormField(
                                             label: 'من',
                                             hintText: 'القيمة الدنيا',
+                                            suffixText: 'كجم',
                                             icon: Icons.ac_unit,
                                             controller:
                                                 controller.solidAlumFromController,
@@ -214,6 +217,7 @@ class EditChemcials extends StatelessWidget {
                                           child: CustomTextFormField(
                                             label: 'إلى',
                                             hintText: 'القيمة العليا',
+                                            suffixText: 'كجم',
                                             icon: Icons.ac_unit_outlined,
                                             controller:
                                                 controller.solidAlumToController,
@@ -252,6 +256,7 @@ class EditChemcials extends StatelessWidget {
                                           child: CustomTextFormField(
                                             label: 'من',
                                             hintText: 'القيمة الدنيا',
+                                            suffixText: 'كجم',
                                             icon: Icons.liquor,
                                             controller:
                                                 controller.liquidAlumFromController,
@@ -264,6 +269,7 @@ class EditChemcials extends StatelessWidget {
                                           child: CustomTextFormField(
                                             label: 'إلى',
                                             hintText: 'القيمة العليا',
+                                            suffixText: 'كجم',
                                             icon: Icons.liquor_outlined,
                                             controller:
                                                 controller.liquidAlumToController,

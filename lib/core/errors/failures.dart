@@ -14,37 +14,36 @@ class Failure {
 
 class NetworkFailure extends Failure {
   const NetworkFailure(
-    String message, {
-    int? statusCode,
-    NetworkException? exception,
-  }) : super(message, statusCode: statusCode, exception: exception);
+    super.message, {
+    super.statusCode,
+    NetworkException? super.exception,
+  });
 }
 
 class ValidationFailure extends Failure {
   const ValidationFailure(
-    String message, {
-    int? statusCode,
-    ValidationException? exception,
-  }) : super(message, statusCode: statusCode, exception: exception);
+    super.message, {
+    super.statusCode,
+    ValidationException? super.exception,
+  });
 }
 
 class AuthenticationFailure extends Failure {
   const AuthenticationFailure(
-    String message, {
-    int? statusCode,
-    AuthenticationException? exception,
-  }) : super(message, statusCode: statusCode, exception: exception);
+    super.message, {
+    super.statusCode,
+    AuthenticationException? super.exception,
+  });
 }
 
 class ParsingFailure extends Failure {
-  const ParsingFailure(String message, {ParsingException? exception})
-    : super(message, exception: exception);
+  const ParsingFailure(super.message, {ParsingException? super.exception});
 }
 
 class ServerFailure extends Failure {
   const ServerFailure(
-    String message, {
-    int? statusCode,
-    ServerException? exception,
-  }) : super(message, statusCode: statusCode, exception: exception);
+    super.message, {
+    super.statusCode,
+    ServerException? super.exception,
+  });
 }

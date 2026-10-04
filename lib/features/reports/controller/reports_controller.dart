@@ -43,10 +43,21 @@ class ReportsController extends GetxController {
   RxnString selectedFilterIsPaid = RxnString(null);
   
   List<String> get availableBranches => ["الكل", ...branchs.map((e) => e.branchName).where((e) => e.isNotEmpty).toSet()];
-  List<String> get availableStations => [
-    "الكل", 
-    ...branchs.map((e) => e.stationnames?.isNotEmpty == true ? e.stationnames! : (e.stationname ?? "")).where((e) => e.isNotEmpty).toSet()
-  ];
+  List<String> get availableStations {
+    Set<String> stations = {"الكل"};
+    for (var b in branchs) {
+      String actual = b.stationnames?.isNotEmpty == true ? b.stationnames! : (b.stationname ?? "");
+      if (actual.isNotEmpty) {
+        var parts = actual.split(',');
+        for (var p in parts) {
+          if (p.trim().isNotEmpty) {
+            stations.add(p.trim());
+          }
+        }
+      }
+    }
+    return stations.toList();
+  }
   List<String> get availableMonths => ["الكل", ...branchs.map((e) => e.month.toString()).toSet()];
   List<String> get availableYears => ["الكل", ...branchs.map((e) => e.year.toString()).toSet()];
   List<String> get availableTechs => ["الكل", ...branchs.map((e) => e.techname ?? "").where((e) => e.isNotEmpty).toSet()];
@@ -138,7 +149,11 @@ class ReportsController extends GetxController {
       String actualStation = b.stationnames?.isNotEmpty == true ? b.stationnames! : (b.stationname ?? "");
       
       bool matchesBranch = selectedFilterBranch.value == null || selectedFilterBranch.value == "الكل" || b.branchName == selectedFilterBranch.value;
-      bool matchesStation = selectedFilterStation.value == null || selectedFilterStation.value == "الكل" || actualStation == selectedFilterStation.value;
+      
+      bool matchesStation = selectedFilterStation.value == null || selectedFilterStation.value == "الكل";
+      if (!matchesStation && actualStation.isNotEmpty) {
+        matchesStation = actualStation.split(',').map((e) => e.trim()).contains(selectedFilterStation.value);
+      }
       bool matchesMonth = selectedFilterMonth.value == null || selectedFilterMonth.value == "الكل" || b.month.toString() == selectedFilterMonth.value;
       bool matchesYear = selectedFilterYear.value == null || selectedFilterYear.value == "الكل" || b.year.toString() == selectedFilterYear.value;
       bool matchesTech = selectedFilterTech.value == null || selectedFilterTech.value == "الكل" || b.techname == selectedFilterTech.value;

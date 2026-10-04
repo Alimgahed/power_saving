@@ -16,9 +16,7 @@ import 'package:power_saving/features/reports/view/widgets/technology_report.dar
 import 'package:power_saving/global/data.dart';
 import 'package:power_saving/features/reports/model/report.dart';
 import 'package:power_saving/global/html_platform.dart';
-import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/core/widgets/app_scaffold.dart';
-import 'package:power_saving/core/widgets/custom_app_bar.dart';
 
 class Reports extends StatelessWidget {
   Reports({super.key});
@@ -43,7 +41,6 @@ class Reports extends StatelessWidget {
       desktopHeader: const SizedBox.shrink(),
       mobileAppBar: const PreferredSize(preferredSize: Size.zero, child: SizedBox.shrink()),
       body: GetBuilder<ReportsController>(
-        init: ReportsController(),
         builder: (controller) {
           return Column(
             children: [
@@ -553,6 +550,7 @@ class Reports extends StatelessWidget {
     if (!hasItems) return const SizedBox.shrink();
 
     return Obx(() {
+      final currentVal = selectedValue.value;
       return Container(
         height: 32,
         constraints: const BoxConstraints(minWidth: 100, maxWidth: 150),
@@ -566,7 +564,7 @@ class Reports extends StatelessWidget {
           child: DropdownButton<String>(
             isExpanded: true,
             hint: Text(label, style: TextStyle(fontSize: 11, color: Colors.grey.shade700)),
-            value: items.contains(selectedValue.value) ? selectedValue.value : null,
+            value: items.contains(currentVal) ? currentVal : null,
             icon: Icon(Icons.unfold_more, size: 13, color: Colors.grey.shade400),
             style: TextStyle(fontSize: 12, color: Colors.grey.shade900),
             items: items.map((String value) {

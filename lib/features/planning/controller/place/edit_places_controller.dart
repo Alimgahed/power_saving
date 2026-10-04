@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:power_saving/features/planning/model/all_places_model.dart';
 import 'package:power_saving/features/planning/model/area_model.dart';
 import 'package:power_saving/features/stations/model/station_model.dart';
+import 'package:power_saving/features/planning/controller/place/places_controller.dart';
 import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
@@ -52,6 +53,7 @@ required   Place  place,
 
       if (res.statusCode == 200) {
         looading.value = false;
+        PlacesController.sessionCache = null;
         showSuccessToast("تم تعديل المكان بنجاح");
       } else {
         looading.value = false;

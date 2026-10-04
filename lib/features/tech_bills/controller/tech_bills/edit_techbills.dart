@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
+import 'package:power_saving/features/bill/controller/tech_bills.dart';
 
 class EditTechbillsController extends GetxController {
     RxBool looading = false.obs;
@@ -17,6 +19,8 @@ class EditTechbillsController extends GetxController {
   late TextEditingController calculatedWaterController;
   late TextEditingController measuredWaterController;
 
+  Timer? _debounce;
+
   @override
   void onInit() {
     chlorineController = TextEditingController();
@@ -28,9 +32,12 @@ class EditTechbillsController extends GetxController {
     waterProducedController = TextEditingController();
 
     void updateWaterProduced() {
-      final calc = double.tryParse(calculatedWaterController.text) ?? 0.0;
-      final meas = double.tryParse(measuredWaterController.text) ?? 0.0;
-      waterProducedController.text = (calc + meas).toString();
+      if (_debounce?.isActive ?? false) _debounce?.cancel();
+      _debounce = Timer(const Duration(milliseconds: 300), () {
+        final calc = double.tryParse(calculatedWaterController.text) ?? 0.0;
+        final meas = double.tryParse(measuredWaterController.text) ?? 0.0;
+        waterProducedController.text = (calc + meas).toString();
+      });
     }
 
     calculatedWaterController.addListener(updateWaterProduced);
@@ -41,6 +48,7 @@ class EditTechbillsController extends GetxController {
   
   @override
   void onClose() {
+    _debounce?.cancel();
     chlorineController.dispose();
     liquidAlumController.dispose();
     wateramount.dispose();
@@ -76,6 +84,7 @@ class EditTechbillsController extends GetxController {
 
       if (res.statusCode == 200) {
         looading.value = false;
+        TechBillscontroller.sessionCache = null;
         showSuccessToast("تم التعديل بنجاح");
 
        

@@ -9,7 +9,7 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+    final GlobalKey<FormState> globalKey = GlobalKey<FormState>();
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -23,7 +23,7 @@ class Login extends StatelessWidget {
               init: LoginController(),
               builder: (controller) {
                 void submitForm() {
-                  if (_globalKey.currentState!.validate()) {
+                  if (globalKey.currentState!.validate()) {
                     controller.login(
                       controller.name.text,
                       controller.password.text,
@@ -106,7 +106,7 @@ class Login extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(32.0),
                         child: Form(
-                          key: _globalKey,
+                          key: globalKey,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -118,15 +118,27 @@ class Login extends StatelessWidget {
                                 textInputAction: TextInputAction.next,
                               ),
                               const SizedBox(height: 24),
-                              CustomTextFormField(
+                              Obx(() => CustomTextFormField(
                                 label: 'كلمة المرور',
                                 hintText: 'أدخل كلمة المرور',
                                 icon: Icons.lock_outline,
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    controller.obscurePassword.value
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                    color: Colors.grey,
+                                  ),
+                                  onPressed: () {
+                                    controller.obscurePassword.value =
+                                        !controller.obscurePassword.value;
+                                  },
+                                ),
                                 controller: controller.password,
-                                obscureText: true,
+                                obscureText: controller.obscurePassword.value,
                                 textInputAction: TextInputAction.done,
                                 onFieldSubmitted: (_) => submitForm(),
-                              ),
+                              )),
                               const SizedBox(height: 32),
                               Container(
                                 width: double.infinity,

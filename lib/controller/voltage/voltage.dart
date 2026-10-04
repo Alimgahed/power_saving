@@ -40,7 +40,7 @@ class Voltage extends GetxController {
     try {
       vlotages = [];
       final res = await fetchData(
-      ApiConfig.baseUrl,
+        "${ApiConfig.baseUrl}/voltage-costs",
       );
 
       if (res.statusCode == 200) {

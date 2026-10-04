@@ -235,6 +235,7 @@ class AddChemicalScreen extends StatelessWidget {
                 child: CustomTextFormField(
                   label: 'من',
                   hintText: 'القيمة الدنيا',
+                  suffixText: 'كجم',
                   icon: icon,
                   controller: from,
                   keyboardType: TextInputType.number,
@@ -246,6 +247,7 @@ class AddChemicalScreen extends StatelessWidget {
                 child: CustomTextFormField(
                   label: 'إلى',
                   hintText: 'القيمة العليا',
+                  suffixText: 'كجم',
                   icon: icon,
                   controller: to,
                   keyboardType: TextInputType.number,

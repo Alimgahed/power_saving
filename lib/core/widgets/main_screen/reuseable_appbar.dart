@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/core/constant/AppDimensions.dart';
 import 'package:power_saving/core/constant/colors.dart';
-import 'package:power_saving/core/constant/styles.dart';
 
 class ReusableAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;

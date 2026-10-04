@@ -5,7 +5,7 @@ import 'package:power_saving/global/iframe_platform.dart';
 
 // ignore: use_key_in_widget_constructors
 class SunburstPage extends StatelessWidget {
-  final FinancialController controller = Get.put(FinancialController());
+  final FinancialController controller = Get.find<FinancialController>();
 
   @override
   Widget build(BuildContext context) {

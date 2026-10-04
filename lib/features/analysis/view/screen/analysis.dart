@@ -16,6 +16,8 @@ class AnalysisView extends StatelessWidget {
 
   final Analysis controller = Get.put(Analysis());
 
+   AnalysisView({super.key});
+
   @override
   Widget build(BuildContext context) {
 
@@ -51,13 +53,14 @@ class AnalysisView extends StatelessWidget {
         return false;
       },
       child: AppScaffold(
-        title: 'تحليل البيانات والرسوم البيانية',
+        title: 'التحليل الاقتصادي',
+        showDrawer: false,
         mobileAppBar: const CustomAppBar(
-          title: 'تحليل البيانات والرسوم البيانية',
+          title: 'التحليل الاقتصادي',
           backRoute: '/home',
         ),
         desktopHeader: const CustomAppBar(
-          title: 'تحليل البيانات والرسوم البيانية',
+          title: 'التحليل الاقتصادي',
           backRoute: '/home',
         ),
         body: GetBuilder<Analysis>(
@@ -411,24 +414,38 @@ class AnalysisView extends StatelessWidget {
     double localWidth,
     double localHeight,
   ) {
-    return Wrap(
-      spacing: 8, // horizontal spacing between items
-      runSpacing: 8, // vertical spacing between lines
-      alignment: WrapAlignment.center,
-      children: List.generate(images.length, (index) {
-        return SizedBox(
-          width: localWidth > 800 ? (localWidth - 60) / 2 : (localWidth - 30),
-          height: 450, // Fixed height for consistent cards
-          child: _buildChartCard(
-            context,
-            images[index],
-            index + 1,
-            _getChartTitle(index),
-            localWidth,
-            localHeight,
-          ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double width = constraints.maxWidth;
+        int columns = (width / 400).floor();
+        if (columns < 1) columns = 1;
+        
+        const double spacing = 16.0;
+        double itemWidth = (width - (spacing * (columns - 1))) / columns;
+        
+        // Subtract a tiny fraction to prevent floating point rounding issues
+        itemWidth = itemWidth - 0.1;
+
+        return Wrap(
+          spacing: spacing, 
+          runSpacing: spacing,
+          alignment: WrapAlignment.center,
+          children: List.generate(images.length, (index) {
+            return SizedBox(
+              width: itemWidth,
+              height: 450, // Fixed height for consistent cards
+              child: _buildChartCard(
+                context,
+                images[index],
+                index + 1,
+                _getChartTitle(index),
+                localWidth,
+                localHeight,
+              ),
+            );
+          }),
         );
-      }),
+      },
     );
   }
 }

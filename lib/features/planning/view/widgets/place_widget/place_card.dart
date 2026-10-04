@@ -51,28 +51,18 @@ class PlaceCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Flexible(
-                flex: 3,
-                child: InfoCard(
-                  label: 'نوع المكان',
-                  value: place.placeTypeName ?? "",
-                  icon: Icons.place,
-                  color: Colors.blue,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Flexible(
-                flex: 1,
-                child: InfoCard(
-                  label: 'الفرع',
-                  value: place.branchName ?? 'غير محدد',
-                  icon: Icons.business,
-                  color: Colors.purple,
-                ),
-              ),
-            ],
+          InfoCard(
+            label: 'نوع المكان',
+            value: place.placeTypeName ?? "",
+            icon: Icons.place,
+            color: Colors.blue,
+          ),
+          const SizedBox(height: 8),
+          InfoCard(
+            label: 'الفرع',
+            value: place.branchName ?? 'غير محدد',
+            icon: Icons.business,
+            color: Colors.purple,
           ),
 
           const SizedBox(height: 8),

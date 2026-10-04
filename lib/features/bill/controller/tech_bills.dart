@@ -6,6 +6,7 @@ import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class TechBillscontroller extends GetxController {
+  static Map<String, dynamic>? sessionCache;
   List<TechnologyBill> bills = [];
   var isLoading = false.obs;
   var errorMessage = ''.obs;
@@ -36,11 +37,39 @@ class TechBillscontroller extends GetxController {
     allbills();
   }
 
-  Future<void> allbills() async {
-    try {
-      isLoading.value = true;
-      errorMessage.value = '';
+  Future<void> allbills({bool isBackground = false}) async {
+    final bool isDefaultState = currentPage == 1 &&
+        searchQuery.value.trim().isEmpty &&
+        selectedYear == 'all' &&
+        selectedMonth == 'all';
+
+    if (!isBackground && isDefaultState && sessionCache != null) {
+      final jsonData = sessionCache!;
       bills = [];
+      if (jsonData is Map && jsonData.containsKey('data')) {
+        bills = (jsonData['data'] as List).map((bill) => TechnologyBill.fromJson(bill)).toList();
+        if (jsonData.containsKey('meta')) {
+          final meta = jsonData['meta'];
+          currentPage = meta['page'] ?? 1;
+          totalPages = meta['total_pages'] ?? 1;
+          totalItems = meta['total'] ?? bills.length;
+          hasNext = meta['has_next'] ?? false;
+          hasPrev = meta['has_prev'] ?? false;
+        }
+      }
+      update();
+      _fetchLatestBackground();
+      return;
+    }
+
+    try {
+      if (!isBackground) {
+        isLoading.value = true;
+      }
+      errorMessage.value = '';
+      if (!isBackground) {
+        bills = [];
+      }
 
       Map<String, String> queryParams = {
         'page': currentPage.toString(),
@@ -56,6 +85,9 @@ class TechBillscontroller extends GetxController {
 
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
+        if (isDefaultState) {
+          sessionCache = jsonData;
+        }
         
         if (jsonData is Map && jsonData.containsKey('data')) {
           bills = (jsonData['data'] as List).map((bill) => TechnologyBill.fromJson(bill)).toList();
@@ -72,11 +104,19 @@ class TechBillscontroller extends GetxController {
         update();
       }
     } catch (e) {
-      showCustomErrorDialog(errorMessage: e.toString());
-      errorMessage.value = 'خطأ في الاتصال: ${e.toString()}';
+      if (!isBackground) {
+        showCustomErrorDialog(errorMessage: e.toString());
+        errorMessage.value = 'خطأ في الاتصال: ${e.toString()}';
+      }
     } finally {
-      isLoading.value = false;
+      if (!isBackground) {
+        isLoading.value = false;
+      }
     }
+  }
+
+  Future<void> _fetchLatestBackground() async {
+    allbills(isBackground: true);
   }
 
   // Pagination methods
@@ -230,6 +270,13 @@ class TechBillscontroller extends GetxController {
 
   // Refresh bills data
   Future<void> refreshBills() async {
-    await allbills();
+    sessionCache = null;
+    searchQuery.value = '';
+    currentPage = 1;
+    selectedYear = 'all';
+    selectedMonth = 'all';
+    isLoading.value = true;
+    update();
+    await allbills(isBackground: false);
   }
 }

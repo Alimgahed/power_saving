@@ -44,98 +44,113 @@ class AddStationScreen extends StatelessWidget {
                       icon: Icons.location_city,
                       color: AppColors.primary,
                     ),
-                    CustomTextFormField(
-                      label: 'اسم المحطة',
-                      hintText: 'أدخل اسم المحطة',
-                      icon: Icons.location_city,
-                      controller: controller.name,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: CustomDropdownFormField<String>(
-                            items: const [
-                              DropdownMenuItem(value: "مياة", child: Text("مياة")),
-                              DropdownMenuItem(value: "صرف", child: Text("صرف")),
-                            ],
-                            onChanged: (val) {
-                              controller.stationTypeId = val!;
-                            },
-                            labelText: 'نوع المحطة',
-                            hintText: 'اختر نوع المحطة',
-                            prefixIcon: Icons.category,
-                            validator: (val) =>
-                                val == null ? 'الرجاء اختيار نوع المحطة' : null,
-                          ),
-                        ),
-                        const SizedBox(width: AppDimensions.paddingL),
-                        Expanded(
-                          child: CustomTextFormField(
-                            label: 'الطاقة التصميمية',
-                            hintText: 'ادخل الطاقة المحطه',
-                            icon: Icons.water,
-                            allowOnlyDigits: true,
-                            controller: controller.capacity,
-                            keyboardType: TextInputType.number,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: CustomDropdownFormField<int>(
-                            items: controller.branchList.map((branch) {
-                              return DropdownMenuItem<int>(
-                                value: branch.branchId,
-                                child: Text(branch.branchName),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              controller.branchId = value;
-                            },
-                            labelText: 'الفرع',
-                            hintText: 'اختر الفرع',
-                            prefixIcon: Icons.map,
-                            validator: (val) =>
-                                val == null ? 'الرجاء اختيار الفرع' : null,
-                          ),
-                        ),
-                        const SizedBox(width: AppDimensions.paddingL),
-                        Expanded(
-                          child: CustomDropdownFormField<int>(
-                            items: controller.waterSourceList.map((source) {
-                              return DropdownMenuItem<int>(
-                                value: source.waterSourceId,
-                                child: Text(source.waterSourceName!),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              controller.sourceId = value;
-                            },
-                            labelText: 'مصدر المياه',
-                            hintText: 'اختر مصدر المياه',
-                            prefixIcon: Icons.water_drop,
-                            validator: (val) =>
-                                val == null ? 'الرجاء اختيار مصدر المياه' : null,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20,),
-                    CustomDropdownFormField<int>(
-                      items: controller.areas.map((area) {
-                        return DropdownMenuItem<int>(
-                          value: area.areaId,
-                          child: Text(area.areaName),
+                    const SizedBox(height: 16),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final bool isMobile = constraints.maxWidth < 600;
+                        final int columns = isMobile ? 1 : 3;
+                        final double spacing = 16.0;
+                        final double itemWidth = (constraints.maxWidth - (spacing * (columns - 1))) / columns;
+
+                        return Wrap(
+                          spacing: spacing,
+                          runSpacing: spacing,
+                          children: [
+                            SizedBox(
+                              width: itemWidth,
+                              child: CustomTextFormField(
+                                label: 'اسم المحطة',
+                                hintText: 'أدخل اسم المحطة',
+                                icon: Icons.location_city,
+                                controller: controller.name,
+                              ),
+                            ),
+                            SizedBox(
+                              width: itemWidth,
+                              child: CustomDropdownFormField<String>(
+                                items: const [
+                                  DropdownMenuItem(value: "مياة", child: Text("مياه")),
+                                  DropdownMenuItem(value: "صرف", child: Text("صرف")),
+                                ],
+                                onChanged: (val) {
+                                  controller.stationTypeId = val!;
+                                },
+                                labelText: 'نوع المحطة',
+                                hintText: 'اختر نوع المحطة',
+                                prefixIcon: Icons.category,
+                                validator: (val) =>
+                                    val == null ? 'الرجاء اختيار نوع المحطة' : null,
+                              ),
+                            ),
+                            SizedBox(
+                              width: itemWidth,
+                              child: CustomTextFormField(
+                                label: 'الطاقة التصميمية',
+                                hintText: 'ادخل الطاقة المحطه',
+                                icon: Icons.water,
+                                allowOnlyDigits: true,
+                                controller: controller.capacity,
+                                keyboardType: TextInputType.number,
+                              ),
+                            ),
+                            SizedBox(
+                              width: itemWidth,
+                              child: CustomDropdownFormField<int>(
+                                items: controller.branchList.map((branch) {
+                                  return DropdownMenuItem<int>(
+                                    value: branch.branchId,
+                                    child: Text(branch.branchName),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  controller.branchId = value;
+                                },
+                                labelText: 'الفرع',
+                                hintText: 'اختر الفرع',
+                                prefixIcon: Icons.map,
+                                validator: (val) =>
+                                    val == null ? 'الرجاء اختيار الفرع' : null,
+                              ),
+                            ),
+                            SizedBox(
+                              width: itemWidth,
+                              child: CustomDropdownFormField<int>(
+                                items: controller.waterSourceList.map((source) {
+                                  return DropdownMenuItem<int>(
+                                    value: source.waterSourceId,
+                                    child: Text(source.waterSourceName!),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  controller.sourceId = value;
+                                },
+                                labelText: 'مصدر المياه',
+                                hintText: 'اختر مصدر المياه',
+                                prefixIcon: Icons.water_drop,
+                                validator: (val) =>
+                                    val == null ? 'الرجاء اختيار مصدر المياه' : null,
+                              ),
+                            ),
+                            SizedBox(
+                              width: itemWidth,
+                              child: CustomDropdownFormField<int>(
+                                items: controller.areas.map((area) {
+                                  return DropdownMenuItem<int>(
+                                    value: area.areaId,
+                                    child: Text(area.areaName),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  controller.areaId = value!;
+                                },
+                                labelText: 'منطقة الخدمة',
+                                hintText: 'اختر منطقة الخدمة',
+                                prefixIcon: Icons.location_on,
+                              ),
+                            ),
+                          ],
                         );
-                      }).toList(),
-                      onChanged: (value) {
-                        controller.areaId = value!;
                       },
-                      labelText: 'منطقة الخدمة',
-                      hintText: 'اختر منطقة الخدمة',
-                      prefixIcon: Icons.location_on,
                     ),
 
                     const SizedBox(height: AppDimensions.paddingL),
@@ -164,6 +179,7 @@ class AddStationScreen extends StatelessWidget {
               ),
             );
           },
+
         ),
       ),
     );

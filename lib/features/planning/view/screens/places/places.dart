@@ -13,7 +13,7 @@ class PlacesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(PlacesController());
+    final controller = Get.find<PlacesController>();
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -49,8 +49,13 @@ class PlacesScreen extends StatelessWidget {
         return const ReusableEmptyView(message: 'لا توجد أماكن متاحة');
       }
 
-      return CustomScrollView(
+      return RefreshIndicator(
+        onRefresh: () async {
+          await controller.refresh();
+        },
+        child: CustomScrollView(
         slivers: _buildSlivers(controller),
+      ),
       );
     });
   }
@@ -91,6 +96,7 @@ class PlacesScreen extends StatelessWidget {
       sliver: SliverLayoutBuilder(
         builder: (context, constraints) {
           final double availableWidth = constraints.crossAxisExtent;
+          // ignore: unused_local_variable
           final double aspectRatio = availableWidth > 600 ? 0.7 : 0.8;
           int crossAxisCount = (availableWidth / 280).floor();
           if (crossAxisCount < 1) crossAxisCount = 1;
