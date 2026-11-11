@@ -153,11 +153,12 @@ class AllUserController extends GetxController {
         loadUsers(isBackground: true);
       } else {
                 isLoading.value=false;
-
-showCustomErrorDialog(errorMessage: "خطأ");   
+        final errorBody = jsonDecode(res.body);
+        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();
+        showCustomErrorDialog(errorMessage: errorMessage.toString());   
       }
     } catch (e) {
-      showCustomErrorDialog(errorMessage: "خطأ");   
+      showCustomErrorDialog(errorMessage: e.toString());   
 
       // Revert on error
     } finally {

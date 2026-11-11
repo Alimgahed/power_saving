@@ -14,6 +14,7 @@ class WaterData {
   final num qFire;
   final num currentProduction;
   final num maxProduction;
+  final num? futureProduction;
   
   // New area-related fields
   final int? areaId;
@@ -39,6 +40,7 @@ class WaterData {
     required this.qFire,
     required this.currentProduction,
     required this.maxProduction,
+    this.futureProduction,
     this.areaId,
     this.areaName,
     this.branchId,
@@ -64,6 +66,7 @@ class WaterData {
       qFire: json['Q_fire'],
       currentProduction: json['current_production'],
       maxProduction: json['max_production'],
+      futureProduction: json['future_production'],
       areaId: json['area_id'],
       areaName: json['area_name'],
       branchId: json['branch_id'],

@@ -27,6 +27,11 @@ class PlacesScreen extends StatelessWidget {
           onSearchChanged: controller.onSearchChanged,
           customActions: const [
             ReusableActionButton(
+              label: 'أنواع الأماكن',
+              icon: Icons.category_outlined,
+              route: '/placeTypes',
+            ),
+            ReusableActionButton(
               label: 'إضافة مكان',
               icon: Icons.add,
               route: '/AddPlaces',

@@ -176,11 +176,6 @@ class CounterController extends GetxController {
     } catch (e) {
       if (!isBackground) {
         showCustomErrorDialog(errorMessage: e.toString());
-        Get.snackbar(
-          'خطأ',
-          'حدث خطأ أثناء تحميل البيانات',
-          snackPosition: SnackPosition.BOTTOM,
-        );
         debugPrint("Error fetching counters: $e");
       }
     } finally {
@@ -211,7 +206,7 @@ class CounterController extends GetxController {
         showCustomErrorDialog(errorMessage: error);
       }
     } catch (e) {
-      showCustomErrorDialog(errorMessage: 'فشل الاتصال بالسيرفر');
+      showCustomErrorDialog(errorMessage: e.toString());
       debugPrint("Error adding counter: $e");
     }
   }

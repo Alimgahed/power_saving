@@ -1,451 +1,502 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:power_saving/features/analysis/controller/analysis.dart';
-import 'package:power_saving/features/home/model/home.dart';
-import 'dart:convert';
-import 'package:power_saving/features/analysis/model/analysis.dart';
+import 'package:power_saving/core/constant/colors.dart';
 import 'package:power_saving/core/widgets/app_scaffold.dart';
 import 'package:power_saving/core/widgets/custom_app_bar.dart';
+import 'package:power_saving/features/analysis/controller/analysis.dart';
+import 'package:power_saving/features/analysis/model/analysis.dart';
+import 'package:power_saving/features/home/model/home.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 
 class AnalysisView extends StatelessWidget {
-  // Safe way to get arguments that handles null case
   final int? station = Get.arguments != null ? Get.arguments['station'] : null;
   final int? tech = Get.arguments != null ? Get.arguments['tech'] : null;
   final OverConsump? data = Get.arguments != null ? Get.arguments['data'] : null;
 
   final Analysis controller = Get.put(Analysis());
 
-   AnalysisView({super.key});
+  AnalysisView({super.key});
 
   @override
   Widget build(BuildContext context) {
-
-    // Check if arguments are null (page reload) and navigate to home
+    // If navigated without arguments, return back safely
     if (station == null || tech == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        Get.offAllNamed('/home');
+        Get.back();
       });
-      // Return a loading screen while navigating
       return const Scaffold(
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircularProgressIndicator(),
-              SizedBox(height: 16),
-              Text('جاري إعادة التوجيه...'),
-            ],
-          ),
+          child: CircularProgressIndicator(),
         ),
       );
     }
 
-    // Fetch analysis data when widget builds (only if we have valid arguments)
     controller.getAnalysis(station: station!, tech: tech!);
 
-    return WillPopScope(
-      onWillPop: () async {
-        // Navigate to home instead of going back
-        Get.offAllNamed(
-          '/home',
-        ); // or Get.offAllNamed('/') depending on your home route
-        return false;
-      },
+    return PopScope(
+      canPop: true,
       child: AppScaffold(
-        title: 'التحليل الاقتصادي',
+        title: 'التحليل الاقتصادي والإحصاءات',
         showDrawer: false,
         mobileAppBar: const CustomAppBar(
-          title: 'التحليل الاقتصادي',
-          backRoute: '/home',
+          title: 'التحليل الاقتصادي والإحصاءات',
         ),
         desktopHeader: const CustomAppBar(
-          title: 'التحليل الاقتصادي',
-          backRoute: '/home',
+          title: 'التحليل الاقتصادي والإحصاءات',
         ),
         body: GetBuilder<Analysis>(
-            builder: (controller) {
-              if (controller.anl == null) {
-                return const Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          Color(0xFF1E40AF),
-                        ),
-                        strokeWidth: 3,
+          builder: (controller) {
+            if (controller.anl == null) {
+              return Center(
+                child: Container(
+                  padding: const EdgeInsets.all(32),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.04),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
                       ),
-                      SizedBox(height: 16),
-                      Text(
-                        'جاري تحميل البيانات...',
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(
+                        width: 48,
+                        height: 48,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 3.5,
+                          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2563EB)),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      const Text(
+                        'جاري إعداد وتحليل البيانات...',
                         style: TextStyle(
                           fontSize: 16,
-                          color: Colors.black54,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF1E293B),
                         ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        'يتم رسم وتوليد المنحنيات البيانية لاستهلاكات المحطة',
+                        style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
                       ),
                     ],
                   ),
-                );
-              }
-
-              // Check if we have images
-              List<String> images = extractImages(controller.anl!);
-
-              if (images.isEmpty) {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(24),
-                        decoration: BoxDecoration(
-                          color: Colors.orange.shade50,
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        child: Icon(
-                          Icons.analytics,
-                          size: 48,
-                          color: Colors.orange.shade300,
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      const Text(
-                        'لا توجد بيانات تحليلية',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        'لم يتم العثور على رسوم بيانية لهذا التحليل',
-                        style: TextStyle(fontSize: 14, color: Colors.black54),
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton.icon(
-                        onPressed: () => Get.offAllNamed('/home'),
-                        icon: const Icon(Icons.home),
-                        label: const Text('العودة للرئيسية'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF1E40AF),
-                          foregroundColor: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }
-
-              final double localWidth = MediaQuery.of(context).size.width;
-              final double localHeight = MediaQuery.of(context).size.height;
-
-              return SingleChildScrollView(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Analysis Charts Grid
-                    buildChartsGrid(context, images, localWidth, localHeight),
-                  ],
                 ),
               );
-            },
+            }
+
+            final List<Map<String, dynamic>> charts = _extractChartsList(controller.anl!);
+
+            if (charts.isEmpty) {
+              return Center(
+                child: Container(
+                  padding: const EdgeInsets.all(36),
+                  margin: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.04),
+                        blurRadius: 16,
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.amber.shade50,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(Icons.analytics_outlined, size: 48, color: Colors.amber.shade700),
+                      ),
+                      const SizedBox(height: 20),
+                      const Text(
+                        'لا توجد رسوم بيانية متاحة',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1E293B)),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'لم يتم العثور على فواتير أو بيانات كافية لرسم منحنيات هذه المحطة.',
+                        style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 24),
+                      ElevatedButton.icon(
+                        onPressed: () => Get.back(),
+                        icon: const Icon(Icons.arrow_forward, size: 18),
+                        label: const Text('العودة للمحطات'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF2563EB),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+
+            return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _buildHeaderSection(context, charts.length),
+                  const SizedBox(height: 20),
+                  _buildChartsGrid(context, charts),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );
   }
 
-  List<String> extractImages(AnalysisModel analysisModel) {
-    List<String> images = [];
-
-    // Extract images based on your actual model structure
-    try {
-      if (analysisModel.clorhine.isNotEmpty) images.add(analysisModel.clorhine);
-      if (analysisModel.soild.isNotEmpty) images.add(analysisModel.soild);
-      if (analysisModel.liquid.isNotEmpty) images.add(analysisModel.liquid);
-      if (analysisModel.power.isNotEmpty) images.add(analysisModel.power);
-    } catch (e) {
-      showCustomErrorDialog(errorMessage: e.toString());
-      // Handle any parsing errors
-      print('Error extracting images: $e');
-      // On error, also navigate to home
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Get.offAllNamed('/home');
-      });
-    }
-
-    return images;
-  }
-
-  String _getChartTitle(int index) {
-    switch (index) {
-      case 0:
-        return 'الكلور';
-      case 1:
-        return 'الشبة الصلبة';
-      case 2:
-        return 'الشبة السائلة';
-      case 3:
-        return 'الطاقة';
-      default:
-        return 'الرسم البياني ${index + 1}';
-    }
-  }
-
-  Widget _buildChartCard(
-    BuildContext context,
-    String base64Image,
-    int chartNumber,
-    String chartTitle,
-    double localWidth,
-    double localHeight,
-  ) {
-    return GestureDetector(
-      onTap: () => _showFullScreenImage(context, base64Image, chartTitle, localWidth, localHeight),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-              spreadRadius: 0,
-              blurRadius: 20,
-              offset: const Offset(0, 4),
-            ),
-          ],
-          border: Border.all(color: Colors.grey.shade100, width: 1),
-        ),
-        child: Column(
-          children: [
-            // Header
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.green.shade600, Colors.green.shade700],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
+  Widget _buildHeaderSection(BuildContext context, int chartsCount) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Right: Info & breadcrumb-style title
+          Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.arrow_forward_ios, size: 18, color: Color(0xFF475569)),
+                onPressed: () => Get.back(),
+                tooltip: 'رجوع',
               ),
-              child: Row(
+              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEFF6FF),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0xFFBFDBFE)),
+                ),
+                child: const Icon(Icons.stacked_line_chart_rounded, color: Color(0xFF2563EB), size: 24),
+              ),
+              const SizedBox(width: 14),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: const Icon(
-                      Icons.show_chart,
-                      color: Colors.white,
-                      size: 14,
+                  const Text(
+                    'لوحة التحليل الاقتصادي والإحصاءات',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF0F172A),
                     ),
                   ),
-                  const SizedBox(width: 6),
-                  Expanded(
-                    child: Text(
-                      chartTitle,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        color: Colors.white,
-                      ),
-                    ),
+                  const SizedBox(height: 2),
+                  Text(
+                    'منحنيات تتبع ومقارنة استهلاك المواد والطاقة بالمقارنة مع معدلات التشغيل',
+                    style: TextStyle(fontSize: 12, color: Colors.blueGrey.shade600),
                   ),
                 ],
               ),
-            ),
+            ],
+          ),
 
-            // Chart Image
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: 350, // Fixed height for image area
-                margin: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey.shade200),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.memory(
-                    base64Decode(base64Image),
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        color: Colors.grey.shade100,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.error_outline,
-                              color: Colors.grey.shade400,
-                              size: 32,
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'خطأ في تحميل الصورة',
-                              style: TextStyle(
-                                color: Colors.grey.shade600,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
+          // Left: Count Badge
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF1F5F9),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: const Color(0xFFCBD5E1)),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.pie_chart_outline, size: 18, color: Color(0xFF2563EB)),
+                const SizedBox(width: 8),
+                Text(
+                  'عدد المنحنيات: $chartsCount',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF1E293B),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  void _showFullScreenImage(
-    BuildContext context,
-    String base64Image,
-    String chartTitle,
-    double localWidth,
-    double localHeight,
-  ) {
+  List<Map<String, dynamic>> _extractChartsList(AnalysisModel model) {
+    final List<Map<String, dynamic>> list = [];
+
+    if (model.clorhine.isNotEmpty) {
+      list.add({
+        'title': 'منحنى استهلاك الكلور',
+        'subtitle': 'مقارنة استهلاك الكلور بالنسبة لكمية المياه المنتجة',
+        'image': model.clorhine,
+        'icon': Icons.water_damage_outlined,
+        'color': const Color(0xFF0284C7),
+      });
+    }
+
+    if (model.power.isNotEmpty) {
+      list.add({
+        'title': 'منحنى استهلاك الطاقة الكهربائية',
+        'subtitle': 'مقارنة استهلاك الطاقة الكهربائية ومعدلات التشغيل',
+        'image': model.power,
+        'icon': Icons.bolt_outlined,
+        'color': const Color(0xFFD97706),
+      });
+    }
+
+    if (model.liquid.isNotEmpty) {
+      list.add({
+        'title': 'منحنى الشبة السائلة',
+        'subtitle': 'مقارنة استهلاك الشبة السائلة بالنسبة للإنتاج',
+        'image': model.liquid,
+        'icon': Icons.opacity_outlined,
+        'color': const Color(0xFF059669),
+      });
+    }
+
+    if (model.soild.isNotEmpty) {
+      list.add({
+        'title': 'منحنى الشبة الصلبة',
+        'subtitle': 'مقارنة استهلاك الشبة الصلبة بالنسبة للإنتاج',
+        'image': model.soild,
+        'icon': Icons.grain_outlined,
+        'color': const Color(0xFF7C3AED),
+      });
+    }
+
+    return list;
+  }
+
+  Widget _buildChartsGrid(BuildContext context, List<Map<String, dynamic>> charts) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double width = constraints.maxWidth;
+        // 2 columns for desktop/large screen, 1 column for smaller screens
+        final int columns = width >= 900 ? 2 : 1;
+        const double spacing = 20.0;
+        final double cardWidth = (width - (spacing * (columns - 1))) / columns;
+
+        return Wrap(
+          spacing: spacing,
+          runSpacing: spacing,
+          children: charts.map((item) {
+            return SizedBox(
+              width: cardWidth,
+              child: _buildChartCard(context, item),
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
+
+  Widget _buildChartCard(BuildContext context, Map<String, dynamic> item) {
+    final String title = item['title'];
+    final String subtitle = item['subtitle'];
+    final String base64Image = item['image'];
+    final IconData icon = item['icon'];
+    final Color color = item['color'];
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 14,
+            offset: const Offset(0, 4),
+          ),
+        ],
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Header
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: color.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(icon, color: color, size: 20),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF0F172A),
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle,
+                        style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.fullscreen_rounded, color: Color(0xFF64748B), size: 22),
+                  onPressed: () => _showFullScreenImage(context, base64Image, title),
+                  tooltip: 'عرض بحجم الشاشة',
+                ),
+              ],
+            ),
+          ),
+          const Divider(height: 1, color: Color(0xFFF1F5F9)),
+
+          // Image View with gesture detector to enlarge
+          InkWell(
+            onTap: () => _showFullScreenImage(context, base64Image, title),
+            child: Container(
+              height: 380,
+              padding: const EdgeInsets.all(12),
+              color: const Color(0xFFFAFAFA),
+              alignment: Alignment.center,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.memory(
+                  base64Decode(base64Image),
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.broken_image_outlined, color: Colors.grey.shade400, size: 36),
+                          const SizedBox(height: 8),
+                          Text('تعذر تحميل المنحنى', style: TextStyle(color: Colors.grey.shade600, fontSize: 13)),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showFullScreenImage(BuildContext context, String base64Image, String chartTitle) {
     Get.dialog(
       Dialog(
         backgroundColor: Colors.transparent,
-        insetPadding: const EdgeInsets.all(10),
-        child: Stack(
-          children: [
-            // Background
-            GestureDetector(
-              onTap: () => Get.back(),
-              child: Container(
-                color: Colors.black54,
-                width: double.infinity,
-                height: double.infinity,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.95,
+          height: MediaQuery.of(context).size.height * 0.9,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 24,
+                offset: Offset(0, 8),
               ),
-            ),
-            // Image Container
-            Center(
-              child: Container(
-                constraints: BoxConstraints(
-                  maxWidth: localWidth * 0.95,
-                  maxHeight: localHeight * 0.85,
+            ],
+          ),
+          child: Column(
+            children: [
+              // Header
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                decoration: const BoxDecoration(
+                  color: Color(0xFFF8FAFC),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                  border: Border(bottom: BorderSide(color: Color(0xFFE2E8F0))),
                 ),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                child: Row(
                   children: [
-                    // Header
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.green.shade600,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
+                    const Icon(Icons.show_chart, color: Color(0xFF2563EB), size: 22),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        chartTitle,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF0F172A),
                         ),
-                      ),
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.show_chart,
-                            color: Colors.white,
-                            size: 24,
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Text(
-                              '$chartTitle ',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () => Get.back(),
-                            icon: const Icon(Icons.close, color: Colors.white),
-                          ),
-                        ],
                       ),
                     ),
-                    // Image
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: InteractiveViewer(
-                          boundaryMargin: const EdgeInsets.all(20),
-                          minScale: 0.5,
-                          maxScale: 3.0,
-                          child: Image.memory(
-                            base64Decode(base64Image),
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
+                    IconButton(
+                      icon: const Icon(Icons.close_rounded, color: Color(0xFF64748B)),
+                      onPressed: () => Get.back(),
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
+
+              // Image
+              Expanded(
+                child: Container(
+                  color: const Color(0xFFF1F5F9),
+                  padding: const EdgeInsets.all(16),
+                  child: InteractiveViewer(
+                    boundaryMargin: const EdgeInsets.all(20),
+                    minScale: 0.8,
+                    maxScale: 4.0,
+                    child: Center(
+                      child: Image.memory(
+                        base64Decode(base64Image),
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-    );
-  }
-
-  Widget buildChartsGrid(
-    BuildContext context,
-    List<String> images,
-    double localWidth,
-    double localHeight,
-  ) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final double width = constraints.maxWidth;
-        int columns = (width / 400).floor();
-        if (columns < 1) columns = 1;
-        
-        const double spacing = 16.0;
-        double itemWidth = (width - (spacing * (columns - 1))) / columns;
-        
-        // Subtract a tiny fraction to prevent floating point rounding issues
-        itemWidth = itemWidth - 0.1;
-
-        return Wrap(
-          spacing: spacing, 
-          runSpacing: spacing,
-          alignment: WrapAlignment.center,
-          children: List.generate(images.length, (index) {
-            return SizedBox(
-              width: itemWidth,
-              height: 450, // Fixed height for consistent cards
-              child: _buildChartCard(
-                context,
-                images[index],
-                index + 1,
-                _getChartTitle(index),
-                localWidth,
-                localHeight,
-              ),
-            );
-          }),
-        );
-      },
     );
   }
 }

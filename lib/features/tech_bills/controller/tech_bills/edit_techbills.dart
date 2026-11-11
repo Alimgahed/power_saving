@@ -86,16 +86,23 @@ class EditTechbillsController extends GetxController {
         looading.value = false;
         TechBillscontroller.sessionCache = null;
         showSuccessToast("تم التعديل بنجاح");
-
-       
       } else {
         looading.value = false;
-        final errorBody = jsonDecode(res.body);
-        final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';
+        String errorMessage = 'حدث خطأ غير متوقع';
+        try {
+          final errorBody = jsonDecode(res.body);
+          if (errorBody is Map) {
+            errorMessage = errorBody['error'] ?? errorBody['message'] ?? 'حدث خطأ غير متوقع';
+          }
+        } catch (_) {
+          // If the backend returns HTML or plain text (e.g., 500 Server Error)
+          errorMessage = 'حدث خطأ في الخادم (${res.statusCode})';
+        }
         showCustomErrorDialog(errorMessage: errorMessage);
       }
     } catch (e) {
       looading.value = false;
+      showCustomErrorDialog(errorMessage: e.toString());
       print("Error during bill submission: $e");
     } 
   }

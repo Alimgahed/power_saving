@@ -93,15 +93,10 @@ class StationsController extends GetxController {
         } else {
            stations.value = List.from(allStations);
         }
-      } else {
-        if (!isBackground) {
-          Get.snackbar('خطأ', 'فشل تحميل المحطات', snackPosition: SnackPosition.BOTTOM);
-        }
       }
     } catch (e) {
       if (!isBackground) {
         showCustomErrorDialog(errorMessage: e.toString());
-        Get.snackbar('خطأ', 'حدث خطأ أثناء تحميل البيانات', snackPosition: SnackPosition.BOTTOM);
       }
       debugPrint('Stations error: $e');
     } finally {

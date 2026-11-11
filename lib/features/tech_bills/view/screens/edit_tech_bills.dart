@@ -318,21 +318,21 @@ class EditTechBills extends StatelessWidget {
                                                               .chlorineController
                                                               .text,
                                                         ) ??
-                                                        0) * 1000,
+                                                        0) ,
                                                     liquid:
                                                         (double.tryParse(
                                                           controller
                                                               .liquidAlumController
                                                               .text,
                                                         ) ??
-                                                        0) * 1000,
+                                                        0) ,
                                                     solid:
                                                         (double.tryParse(
                                                           controller
                                                               .solidAlumController
                                                               .text,
                                                         ) ??
-                                                        0) * 1000,
+                                                        0) ,
                                                     water:
                                                         double.tryParse(
                                                           controller

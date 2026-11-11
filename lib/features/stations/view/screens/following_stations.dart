@@ -26,35 +26,29 @@ class FollowingStationsScreen extends StatelessWidget {
         builder: (controller) {
           return Column(
             children: [
-              // ─── Main Content (no scroll needed) ───
+              // ─── Main Content (Full Width) ───
               Expanded(
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 900),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          // ─── Selection Card ───
-                          _buildSelectionCard(controller),
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // ─── Selection Card ───
+                      _buildSelectionCard(controller),
 
-                          const SizedBox(height: 20),
+                      const SizedBox(height: 20),
 
-                          // ─── Station Info + Action ───
-                          if (controller.selectedStation != null)
-                            _buildStationInfoCard(controller),
+                      // ─── Station Info + Action ───
+                      if (controller.selectedStation != null)
+                        _buildStationInfoCard(controller),
 
-                          if (controller.selectedStation != null &&
-                              controller.selectedStation!.techs.isEmpty)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 16),
-                              child: _buildWarningBanner(),
-                            ),
-                        ],
-                      ),
-                    ),
+                      if (controller.selectedStation != null &&
+                          controller.selectedStation!.techs.isEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16),
+                          child: _buildWarningBanner(),
+                        ),
+                    ],
                   ),
                 ),
               ),
@@ -370,29 +364,39 @@ class FollowingStationsScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          Row(
-            children: [
-              _infoChip(Icons.location_city, 'المحطة', station.stationName,
-                  AppColors.primary),
-              const SizedBox(width: 12),
-              _infoChip(Icons.business, 'الفرع', station.branchName,
-                  AppColors.teal),
-              const SizedBox(width: 12),
-              _infoChip(Icons.water_drop, 'مصدر المياه',
-                  station.waterSourceName, AppColors.info),
-              const SizedBox(width: 12),
-              _infoChip(Icons.category, 'النوع', station.stationType,
-                  AppColors.purple),
-              const SizedBox(width: 12),
-              _infoChip(
-                  Icons.speed,
-                  'السعة',
-                  '${station.stationWaterCapacity} م³',
-                  AppColors.warning),
-              const SizedBox(width: 12),
-              _infoChip(Icons.memory, 'التكنولوجيا',
-                  '${station.techs.length}', AppColors.success),
-            ],
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final isSmall = constraints.maxWidth < 750;
+              if (isSmall) {
+                return Wrap(
+                  spacing: 12,
+                  runSpacing: 12,
+                  children: [
+                    SizedBox(width: (constraints.maxWidth - 12) / 2, child: _infoChip(Icons.location_city, 'المحطة', station.stationName, AppColors.primary)),
+                    SizedBox(width: (constraints.maxWidth - 12) / 2, child: _infoChip(Icons.business, 'الفرع', station.branchName, AppColors.teal)),
+                    SizedBox(width: (constraints.maxWidth - 12) / 2, child: _infoChip(Icons.water_drop, 'مصدر المياه', station.waterSourceName, AppColors.info)),
+                    SizedBox(width: (constraints.maxWidth - 12) / 2, child: _infoChip(Icons.category, 'النوع', station.stationType, AppColors.purple)),
+                    SizedBox(width: (constraints.maxWidth - 12) / 2, child: _infoChip(Icons.speed, 'السعة', '${station.stationWaterCapacity} م³', AppColors.warning)),
+                    SizedBox(width: (constraints.maxWidth - 12) / 2, child: _infoChip(Icons.memory, 'التكنولوجيا', '${station.techs.length}', AppColors.success)),
+                  ],
+                );
+              }
+              return Row(
+                children: [
+                  _infoChip(Icons.location_city, 'المحطة', station.stationName, AppColors.primary),
+                  const SizedBox(width: 12),
+                  _infoChip(Icons.business, 'الفرع', station.branchName, AppColors.teal),
+                  const SizedBox(width: 12),
+                  _infoChip(Icons.water_drop, 'مصدر المياه', station.waterSourceName, AppColors.info),
+                  const SizedBox(width: 12),
+                  _infoChip(Icons.category, 'النوع', station.stationType, AppColors.purple),
+                  const SizedBox(width: 12),
+                  _infoChip(Icons.speed, 'السعة', '${station.stationWaterCapacity} م³', AppColors.warning),
+                  const SizedBox(width: 12),
+                  _infoChip(Icons.memory, 'التكنولوجيا', '${station.techs.length}', AppColors.success),
+                ],
+              );
+            },
           ),
         ],
       ),
@@ -401,44 +405,42 @@ class FollowingStationsScreen extends StatelessWidget {
 
   Widget _infoChip(
       IconData icon, String label, String value, Color accentColor) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: accentColor.withOpacity(0.06),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: accentColor.withOpacity(0.15)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(icon, size: 14, color: accentColor),
-                const SizedBox(width: 6),
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: accentColor.withOpacity(0.8),
-                  ),
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: accentColor.withOpacity(0.06),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: accentColor.withOpacity(0.15)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, size: 14, color: accentColor),
+              const SizedBox(width: 6),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: accentColor.withOpacity(0.8),
                 ),
-              ],
-            ),
-            const SizedBox(height: 6),
-            Text(
-              value,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary,
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              color: AppColors.textPrimary,
             ),
-          ],
-        ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
       ),
     );
   }

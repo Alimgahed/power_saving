@@ -119,6 +119,7 @@ class EditStationsController extends GetxController {
       }
     } catch (e) {
       looading.value = false;
+      showCustomErrorDialog(errorMessage: e.toString());
     }
   }
 

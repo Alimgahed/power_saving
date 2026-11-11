@@ -92,21 +92,10 @@ class PlacesController extends GetxController {
         
         // Apply search filter again to keep current UI state consistent
         _performSearch(_searchQuery.value);
-      } else if (!isBackground) {
-        Get.snackbar(
-          'خطأ',
-          'فشل تحميل البيانات: ${response.statusCode}',
-          snackPosition: SnackPosition.BOTTOM,
-        );
       }
     } catch (e) {
       if (!isBackground) {
         showCustomErrorDialog(errorMessage: e.toString());
-        Get.snackbar(
-          'خطأ',
-          'حدث خطأ أثناء تحميل البيانات',
-          snackPosition: SnackPosition.BOTTOM,
-        );
         debugPrint("Error fetching places: $e");
       }
     } finally {

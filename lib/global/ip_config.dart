@@ -12,7 +12,7 @@ class ApiConfig {
   
   // Configuration
   static const String localIP = "172.16.0.10:5000";
-  static const String publicIP = "41.33.3.92:5000";
+  static const String publicIP = "41.33.3.89:5000";
   static const String localhostIP = "localhost:5000";
   
   /// Automatically detect and return the appropriate API URL

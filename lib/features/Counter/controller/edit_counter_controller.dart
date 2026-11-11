@@ -97,12 +97,6 @@ class EditCounter extends GetxController {
       }
     } catch (e) {
       showCustomErrorDialog(errorMessage: e.toString());
-      Get.snackbar(
-        "خطأ",
-        "حدث خطأ أثناء تحميل أنواع الجهد",
-        backgroundColor: Colors.red.shade100,
-        colorText: Colors.black87,
-      );
     }
   }
 }

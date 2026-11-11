@@ -3,6 +3,8 @@ import 'package:power_saving/features/reports/binding/reports_binding.dart';
 import 'package:power_saving/features/predaction/binding/prediction_binding.dart';
 import 'package:power_saving/features/auth/binding/all_user_binding.dart';
 import 'package:power_saving/features/planning/binding/blance_binding.dart';
+import 'package:power_saving/features/planning/binding/place_types_binding.dart';
+import 'package:power_saving/features/planning/view/screens/places/place_types_list_screen.dart';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -132,6 +134,7 @@ class MyApp extends StatelessWidget {
                 GetPage(name: '/all_users', page: () => AllUserScreen(), binding: AllUserBinding()),
                 GetPage(name: '/EditTechBills', page: () => EditTechBills()),
         GetPage(name: '/Places', page: () => PlacesScreen(), binding: PlacesBinding()),
+        GetPage(name: '/placeTypes', page: () => const PlaceTypesListScreen(), binding: PlaceTypesBinding()),
                 GetPage(name: '/AddPlaces', page: () => AddPlacesScreen()),
         GetPage(name: '/BlanceCart', page: () => BlanceCart(), binding: BalanceChartBinding()), //
                 

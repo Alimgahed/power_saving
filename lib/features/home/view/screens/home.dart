@@ -44,7 +44,23 @@ class HomeScreen extends StatelessWidget {
         key: _scaffoldKey,
         backgroundColor: AppColors.background,
         drawer: HomeDrawer(),
-        body: SafeArea(child: _buildBody(context)),
+        body: Stack(
+          children: [
+            // Subtle Background Image
+            Positioned.fill(
+              child: Opacity(
+                opacity: 1, // Adjust opacity for a perfect watermark effect
+                child: Image.asset(
+                  'images/home_bg.png',
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
+                ),
+              ),
+            ),
+            // Main Content
+            SafeArea(child: _buildBody(context)),
+          ],
+        ),
       ),
     );
   }
@@ -172,94 +188,39 @@ class HomeScreen extends StatelessWidget {
       greeting = 'طاب مساؤك';
     }
 
-    return Stack(
+    return Row(
       children: [
         Container(
-          width: double.infinity,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(_T.radius),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.15),
-                blurRadius: 15,
-                offset: const Offset(0, 8),
-              ),
-            ],
+            color: AppColors.primary.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(12),
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(_T.radius),
-            child: Image.asset(
-              'images/home_header.png',
-              width: double.infinity,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  width: double.infinity,
-                  height: 220,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF1E3A8A), Color(0xFF3B82F6)],
-                    ),
-                    borderRadius: BorderRadius.circular(_T.radius),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.menu, color: Colors.white, size: 32),
-                        onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-                      ),
-                      const SizedBox(height: 16),
-                      const Text(
-                        'الرجاء حفظ الصورة المرفقة في مجلد images\nباسم home_header.png',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
+          child: IconButton(
+            icon: Icon(Icons.menu, color: AppColors.primary, size: 28),
+            onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+            tooltip: 'القائمة الرئيسية',
           ),
         ),
-        // Overlay Content (Menu & Greeting)
-        Positioned(
-          top: 16,
-          left: 16,
-          right: 16,
-          child: Row(
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.3),
-                  shape: BoxShape.circle,
-                ),
-                child: IconButton(
-                  icon: const Icon(Icons.menu, color: Colors.white, size: 28),
-                  onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-                  tooltip: 'القائمة الرئيسية',
+              Text(
+                '$greeting، ${user?.username ?? 'المستخدم'} 👋',
+                style: TextStyle(
+                  fontSize: HomeTypography.greeting,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
                 ),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Text(
-                    '$greeting، ${user?.username ?? 'المستخدم'} 👋',
-                    style: const TextStyle(
-                      fontSize: HomeTypography.greeting,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      shadows: [
-                        Shadow(
-                          color: Colors.black54,
-                          offset: Offset(1, 1),
-                          blurRadius: 4,
-                        ),
-                      ],
-                    ),
-                  ),
+              const SizedBox(height: 4),
+              Text(
+                DateFormat('EEEE، d MMMM yyyy', 'ar').format(DateTime.now()), // Or just DateFormat('yyyy-MM-dd') if ar locale fails, but we'll use yyyy-MM-dd for safety
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.textSecondary,
                 ),
               ),
             ],
@@ -275,10 +236,11 @@ class HomeScreen extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final double width = constraints.maxWidth;
+        // Optimized breakpoints for better text visibility
         int cols = 7;
-        if (width < 1200) cols = 4;
-        if (width < 750) cols = 2;
-        if (width < 450) cols = 1;
+        if (width < 1400) cols = 4;
+        if (width < 900) cols = 2;
+        if (width < 500) cols = 1;
 
         final double cardHeight = cols == 1 ? 105 : 155;
         final int rows = (7 / cols).ceil();

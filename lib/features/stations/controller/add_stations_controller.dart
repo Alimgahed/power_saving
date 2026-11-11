@@ -76,6 +76,7 @@ class AddStationController extends GetxController {
       }
     } catch (e) {
       looading.value = false;
+      showCustomErrorDialog(errorMessage: e.toString());
     }
   }
   List<Branch> branchList = [];

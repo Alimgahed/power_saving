@@ -152,7 +152,7 @@ class NewTechBillsController extends GetxController {
       }
     } catch (e) {
       print('Error fetching station techs: $e');
-      if (!isBackground) showCustomErrorDialog(errorMessage: 'حدث خطأ أثناء تحميل بيانات الفروع والمحطات.');
+      if (!isBackground) showCustomErrorDialog(errorMessage: e.toString());
     } finally {
       if (!isBackground) loading.value = false;
       update();
@@ -205,7 +205,7 @@ class NewTechBillsController extends GetxController {
           final errorMessage = errorBody['message'] ?? errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();
           showCustomErrorDialog(errorMessage: errorMessage.toString());
         } catch (e) {
-          showCustomErrorDialog(errorMessage: 'حدث خطأ غير متوقع');
+          showCustomErrorDialog(errorMessage: e.toString());
         }
       }
     } catch (e) {

@@ -91,22 +91,11 @@ class RelationsController extends GetxController {
         
         // Apply search filter again to keep current UI state consistent
         _performSearch(_searchQuery.value);
-      } else if (!isBackground) {
-        Get.snackbar(
-          'خطأ',
-          'فشل تحميل قائمة الربط',
-          snackPosition: SnackPosition.BOTTOM,
-        );
       }
     } catch (e) {
       if (!isBackground) {
         showCustomErrorDialog(errorMessage: e.toString());
         debugPrint('Relations error: $e');
-        Get.snackbar(
-          'خطأ',
-          'حدث خطأ أثناء تحميل البيانات',
-          snackPosition: SnackPosition.BOTTOM,
-        );
       }
     } finally {
       if (!isBackground) {
@@ -147,11 +136,6 @@ class RelationsController extends GetxController {
     } catch (e) {
       showCustomErrorDialog(errorMessage: e.toString());
       debugPrint('Edit relation error: $e');
-      Get.snackbar(
-        'خطأ',
-        'حدث خطأ أثناء تحديث الربط',
-        snackPosition: SnackPosition.BOTTOM,
-      );
     } finally {
       isProcessing.value = false;
     }
