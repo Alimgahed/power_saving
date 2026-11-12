@@ -27,13 +27,15 @@ class ApiClient {
   Future<http.Response> get(
     String url, {
     int timeoutSeconds = defaultTimeoutSeconds,
+    bool Function()? isCurrent,
   }) async {
     return _executeWithRetry(() async {
       final response = await _client
           .get(Uri.parse(url), headers: _buildHeaders())
           .timeout(Duration(seconds: timeoutSeconds));
+      if (isCurrent != null && !isCurrent()) throw StateError('Obsolete request');
       return _processResponse(response);
-    });
+    }, isCurrent: isCurrent);
   }
 
   /// Safe POST request with body serialization
@@ -41,6 +43,7 @@ class ApiClient {
     String url,
     Map<String, dynamic> body, {
     int timeoutSeconds = defaultTimeoutSeconds,
+    bool Function()? isCurrent,
   }) async {
     return _executeWithRetry(() async {
       final response = await _client
@@ -50,20 +53,24 @@ class ApiClient {
             body: jsonEncode(body),
           )
           .timeout(Duration(seconds: timeoutSeconds));
+      if (isCurrent != null && !isCurrent()) throw StateError('Obsolete request');
       return _processResponse(response);
-    });
+    }, isCurrent: isCurrent);
   }
 
   /// Dynamic request wrapper implementing retry count policies
   Future<http.Response> _executeWithRetry(
-    Future<http.Response> Function() action,
-  ) async {
+    Future<http.Response> Function() action, {
+    bool Function()? isCurrent,
+  }) async {
     int attempts = 0;
     while (true) {
+      if (isCurrent != null && !isCurrent()) throw StateError('Obsolete request');
       try {
         attempts++;
         return await action();
       } on SocketException catch (e) {
+      if (isCurrent != null && !isCurrent()) rethrow;
       showCustomErrorDialog(errorMessage: e.toString());
         if (attempts >= maxRetryAttempts) {
           throw NetworkException(
@@ -72,6 +79,7 @@ class ApiClient {
           );
         }
       } on http.ClientException catch (e) {
+      if (isCurrent != null && !isCurrent()) rethrow;
       showCustomErrorDialog(errorMessage: e.toString());
         if (attempts >= maxRetryAttempts) {
           throw NetworkException(
@@ -80,6 +88,7 @@ class ApiClient {
           );
         }
       } catch (e) {
+      if (isCurrent != null && !isCurrent()) rethrow;
       showCustomErrorDialog(errorMessage: e.toString());
         if (e is AppException) rethrow;
         if (attempts >= maxRetryAttempts) {

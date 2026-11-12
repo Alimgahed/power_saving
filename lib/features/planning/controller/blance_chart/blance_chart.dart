@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:power_saving/core/utils/request_guard.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/planning/model/all_places_model.dart';
@@ -28,8 +29,28 @@ class FutureCapacityEntry {
 }
 
 class BalanceChartController extends GetxController {
-  static List<dynamic>? areasCache;
-  static List<dynamic>? valuesCache;
+  final _areaRequests = RequestGuard();
+  final _typeRequests = RequestGuard();
+  final _submitRequests = RequestGuard();
+  AreaOfService? selectedArea;
+
+  void _applyAreas(List<AreaOfService> updated) {
+    selectedArea = updated.firstWhereOrNull((a) => a.areaId == areaid)
+        ?? selectedArea;
+    areas.assignAll(updated);
+    update();
+  }
+
+  void _applyTypes(List<PlaceType> updated) {
+    // Retain removed drafts until this form closes, so a temporarily absent
+    // reference can return without losing input. Only allTypes is submitted.
+    for (final type in updated) {
+      textControllers.putIfAbsent(type.placeTypeId, () => TextEditingController());
+    }
+    allTypes.assignAll(updated);
+  }
+
+
   var isloading = false.obs;
   int areaid = 0;
   final isIncreasableArea = false.obs;
@@ -89,75 +110,52 @@ class BalanceChartController extends GetxController {
     if (newAreaId == null) return;
     areaid = newAreaId;
     final selected = areas.firstWhereOrNull((a) => a.areaId == newAreaId);
+    selectedArea = selected;
     isIncreasableArea.value = selected?.increasable ?? false;
     if (!isIncreasableArea.value) {
       incresableController.clear();
     }
   }
   Future<void> allareas({bool isBackground = false}) async {
-    if (!isBackground && areasCache != null) {
-      areas.clear();
-      areas.addAll(areasCache!.map((json) => AreaOfService.fromJson(json)));
-      areas.value = List.from(areas);
-      update();
-      _fetchLatestBackgroundAreas();
-      return;
-    }
+    final request = _areaRequests.begin();
+    if (!request.isCurrent) return;
+
     try {
-      final response = await fetchData("${ApiConfig.baseUrl}/all-areas");
+      final response = await fetchData("${ApiConfig.baseUrl}/all-areas",
+          isCurrent: () => request.isCurrent);
+      if (!request.isCurrent) return;
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body) as List<dynamic>;
-        areasCache = jsonData;
-        areas.clear();
-        areas.addAll(jsonData.map((json) => AreaOfService.fromJson(json)));
-        areas.value = List.from(areas);
-        update();
+        final updated = jsonData.map((json) => AreaOfService.fromJson(json)).toList();
+
+        _applyAreas(updated);
       }
     } catch (e) {
-      if (!isBackground) {
+      if (request.isCurrent && !isBackground) {
         showCustomErrorDialog(errorMessage: e.toString());
       }
     }
-  }
-  
-  Future<void> _fetchLatestBackgroundAreas() async {
-    allareas(isBackground: true);
   }
 
   Future<void> allvalues({bool isBackground = false}) async {
-    if (!isBackground && valuesCache != null) {
-      allTypes.clear();
-      textControllers.clear();
-      for (var json in valuesCache!) {
-        final type = PlaceType.fromJson(json);
-        allTypes.add(type);
-        textControllers[type.placeTypeId] = TextEditingController();
-      }
-      _fetchLatestBackgroundValues();
-      return;
-    }
+    final request = _typeRequests.begin();
+    if (!request.isCurrent) return;
+
     try {
-      final response = await fetchData("${ApiConfig.baseUrl}/place-types");
+      final response = await fetchData("${ApiConfig.baseUrl}/place-types",
+          isCurrent: () => request.isCurrent);
+      if (!request.isCurrent) return;
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = jsonDecode(response.body);
-        valuesCache = jsonData;
-        allTypes.clear();
-        textControllers.clear();
-        for (var json in jsonData) {
-          final type = PlaceType.fromJson(json);
-          allTypes.add(type);
-          textControllers[type.placeTypeId] = TextEditingController();
-        }
+        final updated = jsonData.map((json) => PlaceType.fromJson(json)).toList();
+
+        _applyTypes(updated);
       }
     } catch (e) {
-      if (!isBackground) {
+      if (request.isCurrent && !isBackground) {
         showCustomErrorDialog(errorMessage: e.toString());
       }
     }
-  }
-  
-  Future<void> _fetchLatestBackgroundValues() async {
-    allvalues(isBackground: true);
   }
 
     Map<String, dynamic> buildRequestBody() {
@@ -194,6 +192,8 @@ class BalanceChartController extends GetxController {
     return body;
   }
 Future<void> submitData(int id) async {
+  final request = _submitRequests.begin();
+  if (!request.isCurrent) return;
   isloading.value = true;
   final body = buildRequestBody();
 
@@ -201,12 +201,14 @@ Future<void> submitData(int id) async {
     final response = await postData(
       "${ApiConfig.baseUrl}/balance-plot-calc/$id",
       body,
+      isCurrent: () => request.isCurrent,
     );
+    if (!request.isCurrent) return;
 
     if (response.statusCode == 200) {
       // Parse response
       final responseJson = jsonDecode(response.body);
-      
+
       // If Machine Learning response
       if (responseJson['best_model'] != null) {
         final mlResponse = MLForecastResponse.fromJson(responseJson);
@@ -219,10 +221,11 @@ Future<void> submitData(int id) async {
       } else if (responseJson['table'] is List) {
         // Validate and store equation/ministry data
         balanceData.value = WaterDataResponse.fromJson(responseJson);
-        
+
         isloading.value = false;
-        
+
         Future.delayed(const Duration(milliseconds: 100), () {
+          if (!request.isCurrent) return;
           Get.to(
             () => BalanceChartPrintScreen(),
             transition: Transition.rightToLeft,
@@ -237,6 +240,7 @@ Future<void> submitData(int id) async {
       isloading.value = false;
     }
   } catch (e) {
+    if (!request.isCurrent) return;
     showCustomErrorDialog(errorMessage: e.toString());
     isloading.value = false;
     debugPrint("Error: $e");
@@ -249,6 +253,9 @@ Future<void> submitData(int id) async {
 
   @override
   void onClose() {
+    _areaRequests.close();
+    _typeRequests.close();
+    _submitRequests.close();
     incresableController.dispose();
     yearController.dispose();
     for (var item in futureCapacities) {

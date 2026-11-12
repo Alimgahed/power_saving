@@ -8,7 +8,6 @@ import 'package:power_saving/features/relations/model/relations.dart';
 import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
-import 'package:power_saving/features/bill/controller/all_bills.dart';
 
 class Bills extends GetxController {
   RxBool isLoading = false.obs;
@@ -53,7 +52,7 @@ class Bills extends GetxController {
   var calculatedSubtotal = 0.0.obs;
   var calculatedTotal = 0.0.obs;
   var isCalculating = false.obs;
-  
+
   // Add observable for negative consumption warning
   var hasNegativeConsumption = false.obs;
 
@@ -147,7 +146,7 @@ class Bills extends GetxController {
     if (readingDiff < 0) {
       final numDigits = prevReading.toString().split('.')[0].length;
       final rolloverValue = pow(10, numDigits).toDouble();
-      
+
       // Calculate rolled-over reading
       readingDiff = (rolloverValue-1 - prevReading) + currentReading;
 
@@ -285,12 +284,12 @@ class Bills extends GetxController {
         // Call update() to notify GetBuilder widgets
         update();
 
-       
+
       }
     // ignore: empty_catches
     } catch (e) {
       showCustomErrorDialog(errorMessage: e.toString());
-      
+
     }
   }
 
@@ -306,7 +305,7 @@ class Bills extends GetxController {
       );
 
       if (res.statusCode == 200) {
-        AllBills.sessionCache = null;
+
         showSuccessToast("تم تسجيل الفاتورة بنجاح");
         isLoading.value = false;
 

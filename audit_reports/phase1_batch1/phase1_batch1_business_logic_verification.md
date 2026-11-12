@@ -1,0 +1,13 @@
+# Phase 1 — Batch 1 business logic verification
+
+Existing code remains the authority for calculations. No meter rollover, replacement-reading, multiplier, rounding, tax, unit or total recalculation rule was invented or altered.
+
+- Planning buildRequestBody is byte-for-byte identical to HEAD. Characterization verifies method, modified flag, increase, goal year, future flag/capacity rows and active place ID numeric payloads. Result parsing and destinations remain unchanged; only obsolete result navigation is suppressed.
+- Reference refresh reuses editing controllers instead of resetting user input. New types receive blank inputs. Removed type drafts remain local until form disposal and are not added to an active payload; reappearing IDs restore the saved text. Current area selection/increase is retained, with removed selection rendered as a disabled existing choice. Explicit user selection keeps the original increase-clearing rule.
+- Operational save still parses the same six fields with the same double.tryParse/default-zero handling and validators. Only field ownership changes from mutable index to the existing bill ID. The exact six-key POST body is tested. Successful save clears unchanged submitted fields; edits entered since submission remain. Removed records' controller resources are disposed and never recreated by save completion.
+- Both history views retain page metadata, filtering/search conventions and page total calculations. Characterization verifies known synthetic totals and requests. New guards determine which response may commit, not how totals are calculated.
+- Every model file, other billing/calculation controller, authentication/permission file, route definition, API base configuration and legacy technology controller remains unchanged relative to Phase 0. pubspec.lock retains the user's pre-existing changes exactly.
+
+Evidence: four pre-change characterization tests; final 36-test passing runnable suite; successful web build; complete diff inspection; compatibility_checks.json hashes and exact planning builder comparison. Only seven existing source files changed, plus one new request-ownership helper. Additional baseline changes are ignored generated unit-test assets from verification. No backend, formula, valid-user permission or feature redesign change was made.
+
+Limits: no real billing records or production server execution was used; malformed/duplicate domain IDs are not reinterpreted. Existing security/cache isolation issues and broader business-rule questions remain in the Phase 0 backlog. This batch is complete and stops at its approved boundary.

@@ -1,0 +1,658 @@
+diff --git a/lib/features/planning/controller/blance_chart/blance_chart.dart b/lib/features/planning/controller/blance_chart/blance_chart.dart
+index ae6f77d..f26ec73 100644
+--- a/lib/features/planning/controller/blance_chart/blance_chart.dart
++++ b/lib/features/planning/controller/blance_chart/blance_chart.dart
+@@ -1,4 +1,5 @@
+ import 'dart:convert';
++import 'package:power_saving/core/utils/request_guard.dart';
+ import 'package:flutter/material.dart';
+ import 'package:get/get.dart';
+ import 'package:power_saving/features/planning/model/all_places_model.dart';
+@@ -28,6 +29,27 @@ class FutureCapacityEntry {
+ }
+ 
+ class BalanceChartController extends GetxController {
++  final _areaRequests = RequestGuard();
++  final _typeRequests = RequestGuard();
++  final _submitRequests = RequestGuard();
++  AreaOfService? selectedArea;
++
++  void _applyAreas(List<AreaOfService> updated) {
++    selectedArea = updated.firstWhereOrNull((a) => a.areaId == areaid)
++        ?? selectedArea;
++    areas.assignAll(updated);
++    update();
++  }
++
++  void _applyTypes(List<PlaceType> updated) {
++    // Retain removed drafts until this form closes, so a temporarily absent
++    // reference can return without losing input. Only allTypes is submitted.
++    for (final type in updated) {
++      textControllers.putIfAbsent(type.placeTypeId, () => TextEditingController());
++    }
++    allTypes.assignAll(updated);
++  }
++
+   static List<dynamic>? areasCache;
+   static List<dynamic>? valuesCache;
+   var isloading = false.obs;
+@@ -89,76 +111,61 @@ class BalanceChartController extends GetxController {
+     if (newAreaId == null) return;
+     areaid = newAreaId;
+     final selected = areas.firstWhereOrNull((a) => a.areaId == newAreaId);
++    selectedArea = selected;
+     isIncreasableArea.value = selected?.increasable ?? false;
+     if (!isIncreasableArea.value) {
+       incresableController.clear();
+     }
+   }
+   Future<void> allareas({bool isBackground = false}) async {
++    final request = _areaRequests.begin();
++    if (!request.isCurrent) return;
+     if (!isBackground && areasCache != null) {
+-      areas.clear();
+-      areas.addAll(areasCache!.map((json) => AreaOfService.fromJson(json)));
+-      areas.value = List.from(areas);
+-      update();
+-      _fetchLatestBackgroundAreas();
++      _applyAreas(areasCache!.map((json) => AreaOfService.fromJson(json)).toList());
++      await allareas(isBackground: true);
+       return;
+     }
+     try {
+-      final response = await fetchData("${ApiConfig.baseUrl}/all-areas");
++      final response = await fetchData("${ApiConfig.baseUrl}/all-areas",
++          isCurrent: () => request.isCurrent);
++      if (!request.isCurrent) return;
+       if (response.statusCode == 200) {
+         final jsonData = jsonDecode(response.body) as List<dynamic>;
++        final updated = jsonData.map((json) => AreaOfService.fromJson(json)).toList();
+         areasCache = jsonData;
+-        areas.clear();
+-        areas.addAll(jsonData.map((json) => AreaOfService.fromJson(json)));
+-        areas.value = List.from(areas);
+-        update();
++        _applyAreas(updated);
+       }
+     } catch (e) {
+-      if (!isBackground) {
++      if (request.isCurrent && !isBackground) {
+         showCustomErrorDialog(errorMessage: e.toString());
+       }
+     }
+   }
+-  
+-  Future<void> _fetchLatestBackgroundAreas() async {
+-    allareas(isBackground: true);
+-  }
+ 
+   Future<void> allvalues({bool isBackground = false}) async {
++    final request = _typeRequests.begin();
++    if (!request.isCurrent) return;
+     if (!isBackground && valuesCache != null) {
+-      allTypes.clear();
+-      textControllers.clear();
+-      for (var json in valuesCache!) {
+-        final type = PlaceType.fromJson(json);
+-        allTypes.add(type);
+-        textControllers[type.placeTypeId] = TextEditingController();
+-      }
+-      _fetchLatestBackgroundValues();
++      _applyTypes(valuesCache!.map((json) => PlaceType.fromJson(json)).toList());
++      await allvalues(isBackground: true);
+       return;
+     }
+     try {
+-      final response = await fetchData("${ApiConfig.baseUrl}/place-types");
++      final response = await fetchData("${ApiConfig.baseUrl}/place-types",
++          isCurrent: () => request.isCurrent);
++      if (!request.isCurrent) return;
+       if (response.statusCode == 200) {
+         final List<dynamic> jsonData = jsonDecode(response.body);
++        final updated = jsonData.map((json) => PlaceType.fromJson(json)).toList();
+         valuesCache = jsonData;
+-        allTypes.clear();
+-        textControllers.clear();
+-        for (var json in jsonData) {
+-          final type = PlaceType.fromJson(json);
+-          allTypes.add(type);
+-          textControllers[type.placeTypeId] = TextEditingController();
+-        }
++        _applyTypes(updated);
+       }
+     } catch (e) {
+-      if (!isBackground) {
++      if (request.isCurrent && !isBackground) {
+         showCustomErrorDialog(errorMessage: e.toString());
+       }
+     }
+   }
+-  
+-  Future<void> _fetchLatestBackgroundValues() async {
+-    allvalues(isBackground: true);
+-  }
+ 
+     Map<String, dynamic> buildRequestBody() {
+     final Map<String, dynamic> body = {
+@@ -194,6 +201,8 @@ class BalanceChartController extends GetxController {
+     return body;
+   }
+ Future<void> submitData(int id) async {
++  final request = _submitRequests.begin();
++  if (!request.isCurrent) return;
+   isloading.value = true;
+   final body = buildRequestBody();
+ 
+@@ -201,7 +210,9 @@ Future<void> submitData(int id) async {
+     final response = await postData(
+       "${ApiConfig.baseUrl}/balance-plot-calc/$id",
+       body,
++      isCurrent: () => request.isCurrent,
+     );
++    if (!request.isCurrent) return;
+ 
+     if (response.statusCode == 200) {
+       // Parse response
+@@ -223,6 +234,7 @@ Future<void> submitData(int id) async {
+         isloading.value = false;
+         
+         Future.delayed(const Duration(milliseconds: 100), () {
++          if (!request.isCurrent) return;
+           Get.to(
+             () => BalanceChartPrintScreen(),
+             transition: Transition.rightToLeft,
+@@ -237,6 +249,7 @@ Future<void> submitData(int id) async {
+       isloading.value = false;
+     }
+   } catch (e) {
++    if (!request.isCurrent) return;
+     showCustomErrorDialog(errorMessage: e.toString());
+     isloading.value = false;
+     debugPrint("Error: $e");
+@@ -249,6 +262,9 @@ Future<void> submitData(int id) async {
+ 
+   @override
+   void onClose() {
++    _areaRequests.close();
++    _typeRequests.close();
++    _submitRequests.close();
+     incresableController.dispose();
+     yearController.dispose();
+     for (var item in futureCapacities) {
+diff --git a/lib/features/planning/view/screens/blance_chart/blance.dart b/lib/features/planning/view/screens/blance_chart/blance.dart
+index 9485d6a..bf3878e 100644
+--- a/lib/features/planning/view/screens/blance_chart/blance.dart
++++ b/lib/features/planning/view/screens/blance_chart/blance.dart
+@@ -53,12 +53,22 @@ class BlanceCart extends StatelessWidget {
+                 // Area Dropdown
+                 Expanded(
+                   child: CustomDropdownFormField<int>(
+-                    items: controller.areas.map((area) {
++                    initialValue: controller.selectedArea?.areaId,
++                    items: [
++                      ...controller.areas.map((area) {
+                       return DropdownMenuItem<int>(
+                         value: area.areaId,
+                         child: Text(area.areaName),
+                       );
+-                    }).toList(),
++                    }),
++                      if (controller.selectedArea != null &&
++                          !controller.areas.any((a) => a.areaId == controller.areaid))
++                        DropdownMenuItem<int>(
++                          value: controller.selectedArea!.areaId,
++                          enabled: false,
++                          child: Text(controller.selectedArea!.areaName),
++                        ),
++                    ],
+                     onChanged: (value) {
+                       controller.onAreaChanged(value);
+                     },
+diff --git a/lib/features/tech_bills/controller/techbills.dart b/lib/features/tech_bills/controller/techbills.dart
+index 2d034d6..6b25c57 100644
+--- a/lib/features/tech_bills/controller/techbills.dart
++++ b/lib/features/tech_bills/controller/techbills.dart
+@@ -1,5 +1,6 @@
+ import 'dart:async';
+ import 'dart:convert';
++import 'package:power_saving/core/utils/request_guard.dart';
+ 
+ import 'package:flutter/material.dart';
+ import 'package:get/get.dart';
+@@ -9,15 +10,35 @@ import 'package:power_saving/my_widget/sharable.dart';
+ import 'package:power_saving/network/network.dart';
+ 
+ class Techbills extends GetxController {
++  final _reads = RequestGuard();
++  final _saves = RequestGuard();
++
++  List<Map<int, TextEditingController>> get _draftMaps => [
++    chlorineControllers, liquidAlumControllers, solidAlumControllers,
++    waterProducedControllers, calculatedWaterControllers, measuredWaterControllers,
++  ];
++
++  void _applyBills(List<TechnologyBill> updated) {
++    final ids = updated.map((bill) => bill.techBillId).toSet();
++    for (final drafts in _draftMaps) {
++      for (final id in drafts.keys.where((id) => !ids.contains(id)).toList()) {
++        drafts.remove(id)!.dispose();
++      }
++    }
++    formKeys.removeWhere((id, _) => !ids.contains(id));
++    techBills.assignAll(updated);
++    applyFilters();
++  }
++
+   static List<dynamic>? sessionCache;
+   RxBool loading = false.obs;
+   final Map<int, GlobalKey<FormState>> formKeys = {};
+   
+-  GlobalKey<FormState> getFormKey(int index) {
+-    return formKeys.putIfAbsent(index, () => GlobalKey<FormState>());
++  GlobalKey<FormState> getFormKey(int billId) {
++    return formKeys.putIfAbsent(billId, () => GlobalKey<FormState>());
+   }
+ 
+-  RxnInt loadingIndex = RxnInt();
++  RxnInt loadingBillId = RxnInt();
+   RxList<TechnologyBill> techBills = <TechnologyBill>[].obs;
+   RxList<TechnologyBill> filteredTechBills = <TechnologyBill>[].obs;
+   
+@@ -51,7 +72,7 @@ class Techbills extends GetxController {
+       ..sort();
+   }
+ 
+-  // Create maps of TextEditingControllers per bill (by index)
++  // Create maps of TextEditingControllers per bill (by stable techBillId)
+   final chlorineControllers = <int, TextEditingController>{};
+   final liquidAlumControllers = <int, TextEditingController>{};
+   final solidAlumControllers = <int, TextEditingController>{};
+@@ -59,48 +80,50 @@ class Techbills extends GetxController {
+   final calculatedWaterControllers = <int, TextEditingController>{};
+   final measuredWaterControllers = <int, TextEditingController>{};
+ 
+-    TextEditingController getcalculatedWaterControllers(int index) {
++    TextEditingController getcalculatedWaterControllers(int billId) {
+       return calculatedWaterControllers.putIfAbsent(
+-        index,
++        billId,
+         () => TextEditingController(),
+       );
+     } 
+-     TextEditingController getmeasuredWaterControllers(int index) {
++     TextEditingController getmeasuredWaterControllers(int billId) {
+       return measuredWaterControllers.putIfAbsent(
+-        index,
++        billId,
+         () => TextEditingController(),
+       );
+     } 
+-  TextEditingController getChlorineController(int index) {
++  TextEditingController getChlorineController(int billId) {
+     return chlorineControllers.putIfAbsent(
+-      index,
++      billId,
+       () => TextEditingController(),
+     );
+   }
+ 
+-  TextEditingController getLiquidAlumController(int index) {
++  TextEditingController getLiquidAlumController(int billId) {
+     return liquidAlumControllers.putIfAbsent(
+-      index,
++      billId,
+       () => TextEditingController(),
+     );
+   }
+ 
+-  TextEditingController getSolidAlumController(int index) {
++  TextEditingController getSolidAlumController(int billId) {
+     return solidAlumControllers.putIfAbsent(
+-      index,
++      billId,
+       () => TextEditingController(),
+     );
+   }
+ 
+-  TextEditingController getWaterProducedController(int index) {
++  TextEditingController getWaterProducedController(int billId) {
+     return waterProducedControllers.putIfAbsent(
+-      index,
++      billId,
+       () => TextEditingController(),
+     );
+   }
+ 
+   @override
+   void onClose() {
++    _reads.close();
++    _saves.close();
+     // Dispose all controllers
+     _searchWorker?.dispose();
+     _debounceTimer?.cancel();
+@@ -205,49 +228,37 @@ class Techbills extends GetxController {
+   }
+ 
+   Future<void> fetchTechBills({bool isBackground = false}) async {
++    final request = _reads.begin();
++    if (!request.isCurrent) return;
+     if (!isBackground && sessionCache != null) {
+-      techBills.clear();
+-      for (var i in sessionCache!) {
+-        techBills.add(TechnologyBill.fromJson(i));
+-      }
+-      applyFilters();
+-      _fetchLatestBackground();
++      _applyBills(sessionCache!.map((i) => TechnologyBill.fromJson(i)).toList());
++      loading.value = false;
++      await fetchTechBills(isBackground: true);
+       return;
+     }
+-
+     try {
+-      if (!isBackground) {
+-        loading.value = true;
+-      }
+-      
+-      final res = await fetchData("${ApiConfig.baseUrl}/tech-bills");
+-
++      if (!isBackground) loading.value = true;
++      final res = await fetchData("${ApiConfig.baseUrl}/tech-bills",
++          isCurrent: () => request.isCurrent);
++      if (!request.isCurrent) return;
+       if (res.statusCode == 200) {
+         final jsonData = json.decode(res.body);
+-        sessionCache = jsonData;
+-        
+-        techBills.clear();
++        final updated = <TechnologyBill>[];
+         for (var i in jsonData) {
+-          techBills.add(TechnologyBill.fromJson(i));
++          updated.add(TechnologyBill.fromJson(i));
+         }
+-        applyFilters();
++        sessionCache = jsonData;
++        _applyBills(updated);
+       }
+     } catch (e) {
+-      if (!isBackground) {
+-        showCustomErrorDialog(errorMessage: e.toString());
+-      }
++      if (!request.isCurrent) return;
++      if (!isBackground) showCustomErrorDialog(errorMessage: e.toString());
+       print("Error fetching tech bills: $e");
+     } finally {
+-      if (!isBackground) {
+-        loading.value = false;
+-      }
++      if (request.isCurrent) loading.value = false;
+     }
+   }
+ 
+-  Future<void> _fetchLatestBackground() async {
+-    fetchTechBills(isBackground: true);
+-  }
+-  
+   Future<void> refreshData() async {
+     sessionCache = null;
+     searchController.clear();
+@@ -257,7 +268,7 @@ class Techbills extends GetxController {
+     await fetchTechBills(isBackground: false);
+   }
+ 
+-  void addTechBills({
++  Future<void> addTechBills({
+     required int id,
+     required double chlorine,
+     required double liquid,
+@@ -265,11 +276,17 @@ class Techbills extends GetxController {
+     required double water,
+     required double calculatedWater,
+     required double measuredWater,
+-    required int index,
+   }) async {
++    final request = _saves.begin();
++    if (!request.isCurrent) return;
++    _reads.invalidate();
++    final submittedDrafts = {
++      for (final drafts in _draftMaps)
++        if (drafts[id] != null) drafts[id]!: drafts[id]!.text,
++    };
+     try {
+       loading.value = true;
+-      loadingIndex.value = index;
++      loadingBillId.value = id;
+ 
+       final res = await postData(
+         "${ApiConfig.baseUrl}/edit-tech-bill/$id",
+@@ -281,7 +298,9 @@ class Techbills extends GetxController {
+           "measured_water": measuredWater,
+           "calculated_water": calculatedWater,
+         },
++        isCurrent: () => request.isCurrent,
+       );
++      if (!request.isCurrent) return;
+ 
+       if (res.statusCode == 200) {
+         loading.value = false;
+@@ -289,13 +308,13 @@ class Techbills extends GetxController {
+         fetchTechBills(isBackground: true);
+         showSuccessToast("تمت الإضافة بنجاح");
+ 
+-        // Clear input fields after successful submission
+-        getChlorineController(index).clear();
+-        getLiquidAlumController(index).clear();
+-        getSolidAlumController(index).clear();
+-        getWaterProducedController(index).clear();
+-        getcalculatedWaterControllers(index).clear();
+-        getmeasuredWaterControllers(index).clear();
++        // Do not recreate a removed draft or erase edits made after submission.
++        for (final drafts in _draftMaps) {
++          final field = drafts[id];
++          if (field != null && submittedDrafts[field] == field.text) {
++            field.clear();
++          }
++        }
+       } else {
+         loading.value = false;
+         final errorBody = jsonDecode(res.body);
+@@ -303,11 +322,12 @@ class Techbills extends GetxController {
+         showCustomErrorDialog(errorMessage: errorMessage);
+       }
+     } catch (e) {
++      if (!request.isCurrent) return;
+       showCustomErrorDialog(errorMessage: e.toString());
+       loading.value = false;
+       print("Error during bill submission: $e");
+     } finally {
+-      loadingIndex.value = null;
++      if (request.isCurrent) loadingBillId.value = null;
+     }
+   }
+ }
+\ No newline at end of file
+diff --git a/lib/features/tech_bills/view/screens/tech_bills.dart b/lib/features/tech_bills/view/screens/tech_bills.dart
+index 366304e..e6c210b 100644
+--- a/lib/features/tech_bills/view/screens/tech_bills.dart
++++ b/lib/features/tech_bills/view/screens/tech_bills.dart
+@@ -161,10 +161,11 @@ class TechBills extends StatelessWidget {
+               delegate: SliverChildBuilderDelegate(
+                 (context, index) {
+                   final techBill = controller.filteredTechBills[index];
+-                  final originalIndex = controller.techBills.indexOf(techBill);
++                  final billId = techBill.techBillId;
+                   return _TechBillCard(
++                    key: ValueKey(billId),
+                     techBill: techBill,
+-                    originalIndex: originalIndex,
++                    billId: billId,
+                     controller: controller,
+                   );
+                 },
+@@ -479,12 +480,13 @@ class TechBills extends StatelessWidget {
+ // Separate widget for tech bill card
+ class _TechBillCard extends StatelessWidget {
+   final dynamic techBill;
+-  final int originalIndex;
++  final int billId;
+   final Techbills controller;
+ 
+   const _TechBillCard({
++    super.key,
+     required this.techBill,
+-    required this.originalIndex,
++    required this.billId,
+     required this.controller,
+   });
+ 
+@@ -605,7 +607,7 @@ class _TechBillCard extends StatelessWidget {
+         ),
+       ),
+       child: Obx(() {
+-        if (controller.loadingIndex.value == originalIndex) {
++        if (controller.loadingBillId.value == billId) {
+           return const Center(
+             child: SizedBox(
+               height: 24,
+@@ -618,32 +620,31 @@ class _TechBillCard extends StatelessWidget {
+           width: double.infinity,
+           child: ElevatedButton.icon(
+             onPressed: () {
+-              if (controller.getFormKey(originalIndex).currentState!
++              if (controller.getFormKey(billId).currentState!
+                   .validate()) {
+                 controller.addTechBills(
+                   calculatedWater: double.tryParse(
+-                        controller.getcalculatedWaterControllers(originalIndex).text) ??
++                        controller.getcalculatedWaterControllers(billId).text) ??
+                       0,
+                       measuredWater: double.tryParse(
+-                        controller.getmeasuredWaterControllers(originalIndex).text) ??
++                        controller.getmeasuredWaterControllers(billId).text) ??
+                       0,
+-                  index: originalIndex,
+                   id: techBill.techBillId,
+                   chlorine: double.tryParse(
+-                        controller.getChlorineController(originalIndex).text,
++                        controller.getChlorineController(billId).text,
+                       ) ??
+                       0,
+                   liquid: double.tryParse(
+-                        controller.getLiquidAlumController(originalIndex).text,
++                        controller.getLiquidAlumController(billId).text,
+                       ) ??
+                       0,
+                   solid: double.tryParse(
+-                        controller.getSolidAlumController(originalIndex).text,
++                        controller.getSolidAlumController(billId).text,
+                       ) ??
+                       0,
+                   water: double.tryParse(
+                         controller
+-                            .getWaterProducedController(originalIndex)
++                            .getWaterProducedController(billId)
+                             .text,
+                       ) ??
+                       0,
+@@ -684,7 +685,7 @@ class _TechBillCard extends StatelessWidget {
+         border: Border.all(color: Colors.indigo.withOpacity(0.2)),
+       ),
+       child: Form(
+-        key: controller.getFormKey(originalIndex),
++        key: controller.getFormKey(billId),
+         child: Column(
+           crossAxisAlignment: CrossAxisAlignment.start,
+           children: [
+@@ -708,36 +709,36 @@ class _TechBillCard extends StatelessWidget {
+             _buildRangeItem(
+               'كمية المياه المقاسة',
+               Icons.water,
+-              controller.getmeasuredWaterControllers(originalIndex),
++              controller.getmeasuredWaterControllers(billId),
+             ),
+             const SizedBox(height: 8),
+             _buildRangeItem(
+               'كمية المياه المحسوبة',
+               Icons.water,
+-              controller.getcalculatedWaterControllers(originalIndex),
++              controller.getcalculatedWaterControllers(billId),
+             ),
+             _buildRangeItem(
+               'كمية المياه المنتجة',
+               Icons.water,
+-              controller.getWaterProducedController(originalIndex),
++              controller.getWaterProducedController(billId),
+             ),
+             const SizedBox(height: 8),
+             _buildRangeItem(
+               'الكلور',
+               Icons.science,
+-              controller.getChlorineController(originalIndex),
++              controller.getChlorineController(billId),
+             ),
+             const SizedBox(height: 8),
+             _buildRangeItem(
+               'الشبة السائلة',
+               Icons.opacity,
+-              controller.getLiquidAlumController(originalIndex),
++              controller.getLiquidAlumController(billId),
+             ),
+             const SizedBox(height: 8),
+             _buildRangeItem(
+               'الشبة الصلبة',
+               Icons.ac_unit,
+-              controller.getSolidAlumController(originalIndex),
++              controller.getSolidAlumController(billId),
+             ),
+           ],
+         ),
+diff --git a/lib/network/network.dart b/lib/network/network.dart
+index 2ed8e99..d92c66a 100644
+--- a/lib/network/network.dart
++++ b/lib/network/network.dart
+@@ -13,7 +13,7 @@ class ApiException implements Exception {
+   String toString() => message;
+ }
+ 
+-Future<http.Response> fetchData(String url) async {
++Future<http.Response> fetchData(String url, {bool Function()? isCurrent}) async {
+   String? token = Cache.getdata(key: "token") ?? "";
+   final headers = {
+     "Content-Type": "application/json",
+@@ -27,8 +27,11 @@ Future<http.Response> fetchData(String url) async {
+   if (res.statusCode >= 200 && res.statusCode < 300) {
+     return res;
+   } else if (res.statusCode == 401 || res.statusCode == 403) {
+-    Cache.sharedPreferences.remove('token');
+-    Get.offAll(() => const Login());
++    // A superseded caller must not invalidate a newer session or navigate.
++    if (isCurrent == null || isCurrent()) {
++      Cache.sharedPreferences.remove('token');
++      Get.offAll(() => const Login());
++    }
+     throw ApiException(statusCode: res.statusCode, message: 'انتهت صلاحية الجلسة');
+   } else {
+     String errorMessage = 'حدث خطأ غير متوقع أثناء تحميل البيانات';
+@@ -40,7 +43,7 @@ Future<http.Response> fetchData(String url) async {
+   }
+ }
+ 
+-Future<http.Response> postData(String url, Map<String, dynamic> body) async {
++Future<http.Response> postData(String url, Map<String, dynamic> body, {bool Function()? isCurrent}) async {
+   String token = Cache.getdata(key: "token") ?? "";
+   final headers = {
+     "Content-Type": "application/json",
+@@ -54,8 +57,11 @@ Future<http.Response> postData(String url, Map<String, dynamic> body) async {
+   if (res.statusCode >= 200 && res.statusCode < 300) {
+     return res;
+   } else if (res.statusCode == 401 || res.statusCode == 403) {
+-    Cache.sharedPreferences.remove('token');
+-    Get.offAll(() => const Login());
++    // A superseded caller must not invalidate a newer session or navigate.
++    if (isCurrent == null || isCurrent()) {
++      Cache.sharedPreferences.remove('token');
++      Get.offAll(() => const Login());
++    }
+     throw ApiException(statusCode: res.statusCode, message: 'انتهت صلاحية الجلسة');
+   } else {
+     String errorMessage = 'حدث خطأ غير متوقع';

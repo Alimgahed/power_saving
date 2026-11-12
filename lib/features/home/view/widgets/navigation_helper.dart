@@ -1,3 +1,4 @@
+import 'package:power_saving/core/auth/session_manager.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/global/data.dart';
 import 'package:power_saving/my_widget/sharable.dart';
@@ -8,7 +9,7 @@ import 'package:power_saving/my_widget/sharable.dart';
 class NavigationHelper {
   /// Navigate to a route with authentication check
   void navigateWithAuth(String route) {
-    if (user != null) {
+    if (SessionManager.isAuthenticated) {
       Get.toNamed(route);
     } else {
       showCustomErrorDialog(errorMessage: "برجاء تسجيل دخول");
@@ -17,7 +18,7 @@ class NavigationHelper {
 
   /// Navigate to a route with arguments and authentication check
   void navigateWithAuthAndArgs(String route, dynamic arguments) {
-    if (user != null) {
+    if (SessionManager.isAuthenticated) {
       Get.toNamed(route, arguments: arguments);
     } else {
       showCustomErrorDialog(errorMessage: "برجاء تسجيل دخول");
@@ -31,7 +32,7 @@ class NavigationHelper {
   }
 
   /// Check if user is authenticated
-  bool get isAuthenticated => user != null;
+  bool get isAuthenticated => SessionManager.isAuthenticated;
 
   /// Get current user group ID
   int? get currentUserGroup => user?.groupId;

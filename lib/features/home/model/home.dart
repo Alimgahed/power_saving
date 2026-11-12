@@ -17,7 +17,7 @@ class TopStationEntry {
   factory TopStationEntry.fromJson(Map<String, dynamic> json, String valueKey, {double divider = 1}) {
     double p = (json['percent'] as num?)?.toDouble() ?? 0.0;
     if (p.isNaN || p.isInfinite) p = 0.0;
-    
+
     return TopStationEntry(
       stationId: json['station_id'] ?? 0,
       stationName: json['station_name'] ?? '',
@@ -101,14 +101,6 @@ class ConsumptionModel {
   final List<dynamic>? _rawWaterForMissingPower;
   final List<dynamic>? _rawOverPowerFor0Water;
 
-  // Cached parsed lists
-  List<OverConsump>? _overChlorineConsump;
-  List<OverConsump>? _overLiquidAlumConsump;
-  List<OverConsump>? _overPowerConsump;
-  List<OverConsump>? _overSolidAlumConsump;
-  List<OverConsump>? _waterformissingpower;
-  List<OverConsump>? _overpowerfor0water;
-
   ConsumptionModel({
     required this.sanitaion,
     required this.chlorine,
@@ -143,38 +135,32 @@ class ConsumptionModel {
   // Lazy parsed getters
   List<OverConsump> get overChlorineConsump {
     if (_rawOverChlorineConsump == null) return [];
-    _overChlorineConsump ??= _rawOverChlorineConsump.map((e) => OverConsump.fromJson(e)).toList();
-    return _overChlorineConsump!;
+    return _rawOverChlorineConsump.map((e) => OverConsump.fromJson(e)).toList();
   }
 
   List<OverConsump> get overLiquidAlumConsump {
     if (_rawOverLiquidAlumConsump == null) return [];
-    _overLiquidAlumConsump ??= _rawOverLiquidAlumConsump.map((e) => OverConsump.fromJson(e)).toList();
-    return _overLiquidAlumConsump!;
+    return _rawOverLiquidAlumConsump.map((e) => OverConsump.fromJson(e)).toList();
   }
 
   List<OverConsump> get overPowerConsump {
     if (_rawOverPowerConsump == null) return [];
-    _overPowerConsump ??= _rawOverPowerConsump.map((e) => OverConsump.fromJson(e)).toList();
-    return _overPowerConsump!;
+    return _rawOverPowerConsump.map((e) => OverConsump.fromJson(e)).toList();
   }
 
   List<OverConsump> get overSolidAlumConsump {
     if (_rawOverSolidAlumConsump == null) return [];
-    _overSolidAlumConsump ??= _rawOverSolidAlumConsump.map((e) => OverConsump.fromJson(e)).toList();
-    return _overSolidAlumConsump!;
+    return _rawOverSolidAlumConsump.map((e) => OverConsump.fromJson(e)).toList();
   }
 
   List<OverConsump> get Waterformissingpower {
     if (_rawWaterForMissingPower == null) return [];
-    _waterformissingpower ??= _rawWaterForMissingPower.map((e) => OverConsump.fromJson(e)).toList();
-    return _waterformissingpower!;
+    return _rawWaterForMissingPower.map((e) => OverConsump.fromJson(e)).toList();
   }
 
   List<OverConsump> get overpowerfor0water {
     if (_rawOverPowerFor0Water == null) return [];
-    _overpowerfor0water ??= _rawOverPowerFor0Water.map((e) => OverConsump.fromJson(e)).toList();
-    return _overpowerfor0water!;
+    return _rawOverPowerFor0Water.map((e) => OverConsump.fromJson(e)).toList();
   }
 
   factory ConsumptionModel.fromJson(Map<String, dynamic> json) {

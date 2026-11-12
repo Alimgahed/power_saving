@@ -161,10 +161,11 @@ class TechBills extends StatelessWidget {
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   final techBill = controller.filteredTechBills[index];
-                  final originalIndex = controller.techBills.indexOf(techBill);
+                  final billId = techBill.techBillId;
                   return _TechBillCard(
+                    key: ValueKey(billId),
                     techBill: techBill,
-                    originalIndex: originalIndex,
+                    billId: billId,
                     controller: controller,
                   );
                 },
@@ -479,12 +480,13 @@ class TechBills extends StatelessWidget {
 // Separate widget for tech bill card
 class _TechBillCard extends StatelessWidget {
   final dynamic techBill;
-  final int originalIndex;
+  final int billId;
   final Techbills controller;
 
   const _TechBillCard({
+    super.key,
     required this.techBill,
-    required this.originalIndex,
+    required this.billId,
     required this.controller,
   });
 
@@ -605,7 +607,7 @@ class _TechBillCard extends StatelessWidget {
         ),
       ),
       child: Obx(() {
-        if (controller.loadingIndex.value == originalIndex) {
+        if (controller.loadingBillId.value == billId) {
           return const Center(
             child: SizedBox(
               height: 24,
@@ -618,32 +620,31 @@ class _TechBillCard extends StatelessWidget {
           width: double.infinity,
           child: ElevatedButton.icon(
             onPressed: () {
-              if (controller.getFormKey(originalIndex).currentState!
+              if (controller.getFormKey(billId).currentState!
                   .validate()) {
                 controller.addTechBills(
                   calculatedWater: double.tryParse(
-                        controller.getcalculatedWaterControllers(originalIndex).text) ??
+                        controller.getcalculatedWaterControllers(billId).text) ??
                       0,
                       measuredWater: double.tryParse(
-                        controller.getmeasuredWaterControllers(originalIndex).text) ??
+                        controller.getmeasuredWaterControllers(billId).text) ??
                       0,
-                  index: originalIndex,
                   id: techBill.techBillId,
                   chlorine: double.tryParse(
-                        controller.getChlorineController(originalIndex).text,
+                        controller.getChlorineController(billId).text,
                       ) ??
                       0,
                   liquid: double.tryParse(
-                        controller.getLiquidAlumController(originalIndex).text,
+                        controller.getLiquidAlumController(billId).text,
                       ) ??
                       0,
                   solid: double.tryParse(
-                        controller.getSolidAlumController(originalIndex).text,
+                        controller.getSolidAlumController(billId).text,
                       ) ??
                       0,
                   water: double.tryParse(
                         controller
-                            .getWaterProducedController(originalIndex)
+                            .getWaterProducedController(billId)
                             .text,
                       ) ??
                       0,
@@ -684,7 +685,7 @@ class _TechBillCard extends StatelessWidget {
         border: Border.all(color: Colors.indigo.withOpacity(0.2)),
       ),
       child: Form(
-        key: controller.getFormKey(originalIndex),
+        key: controller.getFormKey(billId),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -708,36 +709,36 @@ class _TechBillCard extends StatelessWidget {
             _buildRangeItem(
               'كمية المياه المقاسة',
               Icons.water,
-              controller.getmeasuredWaterControllers(originalIndex),
+              controller.getmeasuredWaterControllers(billId),
             ),
             const SizedBox(height: 8),
             _buildRangeItem(
               'كمية المياه المحسوبة',
               Icons.water,
-              controller.getcalculatedWaterControllers(originalIndex),
+              controller.getcalculatedWaterControllers(billId),
             ),
             _buildRangeItem(
               'كمية المياه المنتجة',
               Icons.water,
-              controller.getWaterProducedController(originalIndex),
+              controller.getWaterProducedController(billId),
             ),
             const SizedBox(height: 8),
             _buildRangeItem(
               'الكلور',
               Icons.science,
-              controller.getChlorineController(originalIndex),
+              controller.getChlorineController(billId),
             ),
             const SizedBox(height: 8),
             _buildRangeItem(
               'الشبة السائلة',
               Icons.opacity,
-              controller.getLiquidAlumController(originalIndex),
+              controller.getLiquidAlumController(billId),
             ),
             const SizedBox(height: 8),
             _buildRangeItem(
               'الشبة الصلبة',
               Icons.ac_unit,
-              controller.getSolidAlumController(originalIndex),
+              controller.getSolidAlumController(billId),
             ),
           ],
         ),

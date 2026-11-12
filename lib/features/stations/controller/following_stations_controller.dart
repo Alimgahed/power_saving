@@ -1,3 +1,4 @@
+import 'package:power_saving/core/utils/request_guard.dart';
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:power_saving/features/technology/model/tech_model.dart';
@@ -42,7 +43,18 @@ class Station {
 }
 
 class FollowingStationsController extends GetxController {
-  static List<dynamic>? sessionCache;
+  final _reads = RequestGuard();
+  bool isLoading = false;
+  bool hasLoaded = false;
+  String loadError = '';
+
+  @override
+  void onClose() {
+    _reads.close();
+    super.onClose();
+  }
+
+
   RxList<Station> stations = <Station>[].obs;
 
   Station? selectedStation;
@@ -58,24 +70,29 @@ class FollowingStationsController extends GetxController {
   }
 
   Future<void> stationsTechs({bool isBackground = false}) async {
-    if (!isBackground && sessionCache != null) {
-      stations.value = sessionCache!.map((e) => Station.fromJson(e)).toList();
-      update();
-      _fetchLatestBackground();
-      return;
+    final request = _reads.begin();
+    if (!request.isCurrent) return;
+    isLoading = true;
+    loadError = '';
+    update();
+    try {
+      final res = await fetchData("${ApiConfig.baseUrl}/station-techs",
+          isCurrent: () => request.isCurrent);
+      if (!request.isCurrent) return;
+      if (res.statusCode == 200) {
+        final List data = json.decode(res.body);
+        stations.value = data.map((e) => Station.fromJson(e)).toList();
+        hasLoaded = true;
+      }
+    } catch (e) {
+      if (!request.isCurrent) return;
+      loadError = 'تعذر تحميل بيانات المحطات. يرجى إعادة المحاولة.';
+    } finally {
+      if (request.isCurrent) {
+        isLoading = false;
+        update();
+      }
     }
-    final res = await fetchData("${ApiConfig.baseUrl}/station-techs");
-
-    if (res.statusCode == 200) {
-      final List data = json.decode(res.body);
-      sessionCache = data;
-      stations.value = data.map((e) => Station.fromJson(e)).toList();
-      update();
-    }
-  }
-  
-  Future<void> _fetchLatestBackground() async {
-    stationsTechs(isBackground: true);
   }
 
   void onStationChanged(Station? station) {

@@ -43,8 +43,9 @@ class NewUsercontroller extends GetxController{
   // ignore: non_constant_identifier_names
   Future<void> new_user({required String name,required String password,
   required String username,required String code,} ) async {
+    if (isLoading.value) return;
+    isLoading.value = true;
     try {
-      isLoading.value==true;
 
       final res = await postData(
         "${ApiConfig.baseUrl}/register",
@@ -58,7 +59,7 @@ class NewUsercontroller extends GetxController{
         });
       
       if (res.statusCode == 200) {
-           isLoading.value==false;
+           isLoading.value = false;
 showSuccessToast("تم تسجيل المستخدم بنجاح");
       }else{
  final errorBody = jsonDecode(res.body);
@@ -71,8 +72,9 @@ showSuccessToast("تم تسجيل المستخدم بنجاح");
       }
     } catch (e) {
       showCustomErrorDialog(errorMessage: e.toString());
-        isLoading.value==false;
 
+    } finally {
+      isLoading.value = false;
     }
   }
 

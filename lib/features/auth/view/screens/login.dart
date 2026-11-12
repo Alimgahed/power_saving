@@ -1,3 +1,4 @@
+import 'package:power_saving/core/auth/session_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/core/constant/colors.dart';
@@ -48,6 +49,8 @@ class Login extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                  Obx(() => SessionManager.notice.value == null ? const SizedBox.shrink() :
+                    Text(SessionManager.notice.value!, textAlign: TextAlign.center)),
                       // Header for Mobile (Hidden on Desktop split view)
                       if (!isDesktop)
                         Container(

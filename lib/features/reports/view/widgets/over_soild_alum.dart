@@ -1,3 +1,4 @@
+import 'package:power_saving/core/utils/html_encoding.dart';
 
 import 'package:flutter/material.dart';
 import 'package:power_saving/features/reports/model/report.dart';
@@ -60,9 +61,9 @@ class OverSolidAlumReportPrinter extends BaseReportPrinter {
 
   @override
   List<String> rowCells(ReportBranch b, String type) => [
-        '<td class="highlight-cell">${b.branchName}</td>',
-        '<td class="highlight-cell">${b.stationname ?? ""}</td>',
-        '<td>${b.techname ?? ""}</td>',
+        '<td class="highlight-cell">${htmlText(b.branchName)}</td>',
+        '<td class="highlight-cell">${htmlText(b.stationname ?? "")}</td>',
+        '<td>${htmlText(b.techname ?? "")}</td>',
         '<td>${formatNum(b.wateramount)}</td>',
         '<td>${formatNum(b.soildalum)}</td>',
         '<td>${b.month}</td>',
@@ -70,6 +71,6 @@ class OverSolidAlumReportPrinter extends BaseReportPrinter {
       '<td>${b.maxratio?.toStringAsFixed(1)} جرام / م³</td>',
       '<td>${b.minratio?.toStringAsFixed(1)} جرام / م³</td>',
       '<td>${b.actialratio?.toStringAsFixed(1)}%</td>',
-      '<td>${b.statues ?? ""}</td>'
+      '<td>${htmlText(b.statues ?? "")}</td>'
       ];
 }

@@ -1,0 +1,9 @@
+{
+  "batch1_count": 62,
+  "batch2_count": 60,
+  "new_diagnostics": [],
+  "removed_diagnostics": [
+    "warning \u2022 Unused import: 'package:power_saving/core/constant/colors.dart'. Try removing the import directive \u2022 lib/features/analysis/view/screen/analysis.dart:LINE:COL \u2022 unused_import",
+    "warning \u2022 Unused import: 'package:power_saving/my_widget/sharable.dart'. Try removing the import directive \u2022 lib/features/analysis/view/screen/analysis.dart:LINE:COL \u2022 unused_import"
+  ]
+}

@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:power_saving/shared_pref/cache.dart';
-import 'package:get/get.dart';
-import 'package:power_saving/features/auth/view/screens/login.dart';
+import 'package:power_saving/core/utils/request_guard.dart';
+import 'package:power_saving/core/auth/session_manager.dart';
 class ApiException implements Exception {
   final int statusCode;
   final String message;
@@ -13,7 +13,8 @@ class ApiException implements Exception {
   String toString() => message;
 }
 
-Future<http.Response> fetchData(String url) async {
+Future<http.Response> fetchData(String url, {bool Function()? isCurrent}) async {
+  final sessionRequest = RequestGuard().begin();
   String? token = Cache.getdata(key: "token") ?? "";
   final headers = {
     "Content-Type": "application/json",
@@ -24,11 +25,14 @@ Future<http.Response> fetchData(String url) async {
     headers: headers,
   );
 
+  if (!sessionRequest.isCurrent) throw ApiException(statusCode: 0, message: 'Obsolete session response');
   if (res.statusCode >= 200 && res.statusCode < 300) {
     return res;
   } else if (res.statusCode == 401 || res.statusCode == 403) {
-    Cache.sharedPreferences.remove('token');
-    Get.offAll(() => const Login());
+    // A superseded caller must not invalidate a newer session or navigate.
+    if (isCurrent == null || isCurrent()) {
+      await SessionManager.logout(message: SessionManager.invalidMessage);
+    }
     throw ApiException(statusCode: res.statusCode, message: 'انتهت صلاحية الجلسة');
   } else {
     String errorMessage = 'حدث خطأ غير متوقع أثناء تحميل البيانات';
@@ -40,7 +44,8 @@ Future<http.Response> fetchData(String url) async {
   }
 }
 
-Future<http.Response> postData(String url, Map<String, dynamic> body) async {
+Future<http.Response> postData(String url, Map<String, dynamic> body, {bool Function()? isCurrent}) async {
+  final sessionRequest = RequestGuard().begin();
   String token = Cache.getdata(key: "token") ?? "";
   final headers = {
     "Content-Type": "application/json",
@@ -51,11 +56,14 @@ Future<http.Response> postData(String url, Map<String, dynamic> body) async {
     headers: headers,
     body: jsonEncode(body),
   );
+  if (!sessionRequest.isCurrent) throw ApiException(statusCode: 0, message: 'Obsolete session response');
   if (res.statusCode >= 200 && res.statusCode < 300) {
     return res;
   } else if (res.statusCode == 401 || res.statusCode == 403) {
-    Cache.sharedPreferences.remove('token');
-    Get.offAll(() => const Login());
+    // A superseded caller must not invalidate a newer session or navigate.
+    if (isCurrent == null || isCurrent()) {
+      await SessionManager.logout(message: SessionManager.invalidMessage);
+    }
     throw ApiException(statusCode: res.statusCode, message: 'انتهت صلاحية الجلسة');
   } else {
     String errorMessage = 'حدث خطأ غير متوقع';

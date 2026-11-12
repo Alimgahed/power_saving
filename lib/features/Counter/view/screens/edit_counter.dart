@@ -23,8 +23,10 @@ class EditCounterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     if (meter == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!context.mounted || ModalRoute.of(context)?.isCurrent != true) return;
         Get.offAllNamed('/Countrts');
       });
+      return const SizedBox();
     }
 
     const appBarWidget = CustomAppBar(

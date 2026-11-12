@@ -1,3 +1,4 @@
+import 'package:power_saving/core/widgets/request_error_view.dart';
 // lib/features/stations/view/add_station_screen.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -38,6 +39,17 @@ class AddStationScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    if (controller.branchesLoading)
+                      const LinearProgressIndicator(),
+                    if (controller.branchLoadError.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: RequestErrorView(message: controller.branchLoadError,
+                          onRetry: () => controller.allBranches()),
+                      )
+                    else if (controller.branchesLoaded && controller.branchList.isEmpty && controller.waterSourceList.isEmpty && !controller.branchesLoading)
+                      const Padding(padding: EdgeInsets.only(bottom: 16),
+                        child: Text('لا توجد فروع أو مصادر مياه متاحة.')),
                     // Station Information Section
                     const SectionHeader(
                       title: 'معلومات المحطة',

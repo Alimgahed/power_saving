@@ -4,24 +4,23 @@ import 'package:power_saving/my_widget/sharable.dart';
 import '../errors/exceptions.dart';
 import '../errors/failures.dart';
 import '../utils/result.dart';
-import 'package:get/get.dart';
-import 'package:power_saving/features/auth/view/screens/login.dart';
-import 'package:power_saving/shared_pref/cache.dart';
+import 'package:power_saving/core/auth/session_manager.dart';
 /// Base Repository class providing safe remote operations and unified exception to failure mappings
 abstract class BaseRepository {
   /// Safely executes remote block mapping any caught AppExceptions into failures
-  Future<Result<T>> safeRemoteCall<T>(Future<T> Function() call) async {
+  Future<Result<T>> safeRemoteCall<T>(Future<T> Function() call, {bool Function()? isCurrent}) async {
     try {
       final result = await call();
       return Result.success(result);
     } on NetworkException catch (e) {
+      if (isCurrent != null && !isCurrent()) return Result.failure(Failure('Obsolete request'));
       showCustomErrorDialog(errorMessage: e.toString());
       return Result.failure(
         NetworkFailure(e.message, statusCode: e.statusCode, exception: e),
       );
     } on AuthenticationException catch (e) {
-      Cache.sharedPreferences.remove('token');
-      Get.offAll(() => const Login());
+      if (isCurrent != null && !isCurrent()) return Result.failure(Failure('Obsolete request'));
+      await SessionManager.logout(message: SessionManager.invalidMessage);
       return Result.failure(
         AuthenticationFailure(
           e.message,
@@ -30,19 +29,23 @@ abstract class BaseRepository {
         ),
       );
     } on ValidationException catch (e) {
+      if (isCurrent != null && !isCurrent()) return Result.failure(Failure('Obsolete request'));
       showCustomErrorDialog(errorMessage: e.toString());
       return Result.failure(
         ValidationFailure(e.message, statusCode: e.statusCode, exception: e),
       );
     } on ServerException catch (e) {
+      if (isCurrent != null && !isCurrent()) return Result.failure(Failure('Obsolete request'));
       showCustomErrorDialog(errorMessage: e.toString());
       return Result.failure(
         ServerFailure(e.message, statusCode: e.statusCode, exception: e),
       );
     } on ParsingException catch (e) {
+      if (isCurrent != null && !isCurrent()) return Result.failure(Failure('Obsolete request'));
       showCustomErrorDialog(errorMessage: e.toString());
       return Result.failure(ParsingFailure(e.message, exception: e));
     } catch (e) {
+      if (isCurrent != null && !isCurrent()) return Result.failure(Failure('Obsolete request'));
       showCustomErrorDialog(errorMessage: e.toString());
       return Result.failure(Failure('حدث خطأ غير متوقع: ${e.toString()}'));
     }

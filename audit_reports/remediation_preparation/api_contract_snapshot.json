@@ -1,0 +1,1257 @@
+[
+  {
+    "id": "API-01",
+    "path": "lib/controller/voltage/financial.dart",
+    "line": 24,
+    "symbol": "financialAnalysis",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/financial-analysis",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\"${ApiConfig.baseUrl}/financial-analysis\")",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final jsonData = jsonDecode(res.body);",
+      "waterChartHtml = jsonData[\"water_chart\"] as String?;"
+    ],
+    "cache": [],
+    "method_source": "\n  void financialAnalysis() async {\n    try {\n      loading.value = true;\n\n      final res = await fetchData(\"${ApiConfig.baseUrl}/financial-analysis\");\n      if (res.statusCode == 200) {\n        final jsonData = jsonDecode(res.body);\n        waterChartHtml = jsonData[\"water_chart\"] as String?;\n\n        // Register iframe view for web compilation dynamically\n        if (waterChartHtml != null && kIsWeb) {\n          registerIframe('sunburst-chart', waterChartHtml!);\n        }\n\n        loading.value = false;\n        update();\n      }\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n      loading.value = false;\n      debugPrint(\"Error fetching financial analysis: $e\");\n    }\n  }"
+  },
+  {
+    "id": "API-02",
+    "path": "lib/controller/voltage/voltage.dart",
+    "line": 42,
+    "symbol": "allVoltage",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/voltage-costs",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\n        \"${ApiConfig.baseUrl}/voltage-costs\",\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final jsonData = json.decode(res.body);",
+      "VoltagePlan vlotag = VoltagePlan.fromJson(i);"
+    ],
+    "cache": [],
+    "method_source": "\n  Future<void> allVoltage() async {\n    try {\n      vlotages = [];\n      final res = await fetchData(\n        \"${ApiConfig.baseUrl}/voltage-costs\",\n      );\n\n      if (res.statusCode == 200) {\n        final jsonData = json.decode(res.body);\n        List<dynamic> responseData = jsonData;\n\n        for (var i in responseData) {\n          VoltagePlan vlotag = VoltagePlan.fromJson(i);\n          vlotages.add(vlotag);\n          update();\n        }\n        for (var i in vlotages) {\n          if (i.voltageId == 2) {\n            avaargefixed = TextEditingController(text: i.fixedFee.toString());\n            avaragecost = TextEditingController(text: i.voltageCost.toString());\n          } else {\n            lowfixed = TextEditingController(text: i.fixedFee.toString());\n            lowcost = TextEditingController(text: i.voltageCost.toString());\n          }\n        }\n\n        // Debug prints\n      }\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n      print(\"Error fetching branches: $e\");\n    }\n  }"
+  },
+  {
+    "id": "API-03",
+    "path": "lib/controller/voltage/voltage.dart",
+    "line": 78,
+    "symbol": "editVoltage",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/edit-v-cost/$voltid",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\n       \"${ApiConfig.baseUrl}/edit-v-cost/$voltid\",\n         (volt.toJson()),\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [],
+    "cache": [],
+    "method_source": "\n  Future<void> editVoltage({\n    required VoltagePlan volt,\n    required int voltid,\n  }) async {\n    try {\n      final res = await postData(\n       \"${ApiConfig.baseUrl}/edit-v-cost/$voltid\",\n         (volt.toJson()),\n      );\n\n      if (res.statusCode == 200) {\n        showSuccessToast(\"تم الحفظ بنجاح\");\n        // Debug prints\n      }\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n      print(\"Error fetching branches: $e\");\n    }\n  }"
+  },
+  {
+    "id": "API-04",
+    "path": "lib/features/Counter/controller/add_counter_controller.dart",
+    "line": 48,
+    "symbol": "addCounter",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/new-gauge",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\n        \"${ApiConfig.baseUrl}/new-gauge\",\n        (counter.toJson()),\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final errorBody = jsonDecode(res.body);"
+    ],
+    "cache": [
+      "CounterController.sessionCache = null;"
+    ],
+    "method_source": "\n  Future<void> addCounter({required ElectricMeter counter}) async {\n    try {\n      looading.value = true;\n      final res = await postData(\n        \"${ApiConfig.baseUrl}/new-gauge\",\n        (counter.toJson()),\n      );\n\n      if (res.statusCode == 200) {\n        looading.value = false;\n        showSuccessToast(\"تم اضافة العداد بنجاح\");\n        // Refresh the main counter list\n        CounterController.sessionCache = null;\n      } else {\n        looading.value = false;\n        final errorBody = jsonDecode(res.body);\n        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? res.body;\n        showCustomErrorDialog(errorMessage: errorMessage.toString());\n      }\n    } catch (e) {\n      looading.value = false;\n      showCustomErrorDialog(errorMessage: e.toString());\n    }\n  }"
+  },
+  {
+    "id": "API-05",
+    "path": "lib/features/Counter/controller/add_counter_controller.dart",
+    "line": 72,
+    "symbol": "allVoltige",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/new-gauge",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\n       \"${ApiConfig.baseUrl}/new-gauge\",\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final jsonData = json.decode(res.body);",
+      "VoltageType voltage = VoltageType.fromJson(i);"
+    ],
+    "cache": [],
+    "method_source": "\n  Future<void> allVoltige() async {\n    try {\n      final res = await fetchData(\n       \"${ApiConfig.baseUrl}/new-gauge\",\n      );\n\n      if (res.statusCode == 200) {\n        final jsonData = json.decode(res.body);\n\n        for (var i in jsonData) {\n          VoltageType voltage = VoltageType.fromJson(i);\n          allVoltage.add(voltage);\n          update();\n        }\n      }\n    // ignore: empty_catches\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n      \n    }\n  }"
+  },
+  {
+    "id": "API-06",
+    "path": "lib/features/Counter/controller/counter.dart",
+    "line": 152,
+    "symbol": "fetchAllCounters",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/gauges",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\"${ApiConfig.baseUrl}/gauges\")",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "_allCounters.addAll(sessionCache!.map((json) => ElectricMeter.fromJson(json)));",
+      "final List<dynamic> jsonData = jsonDecode(response.body);",
+      "final List<ElectricMeter> parsed = jsonData.map((json) => ElectricMeter.fromJson(json)).toList();"
+    ],
+    "cache": [
+      "_fetchLatestBackground();",
+      "sessionCache = jsonData;"
+    ],
+    "method_source": "\n  // Fetch all counters from API\n  Future<void> fetchAllCounters({bool isBackground = false}) async {\n    if (!isBackground) {\n      if (sessionCache != null) {\n        _allCounters.clear();\n        _allCounters.addAll(sessionCache!.map((json) => ElectricMeter.fromJson(json)));\n        allcounter.value = List.from(_allCounters);\n        conters = _allCounters;\n        \n        // Background fetch\n        _fetchLatestBackground();\n        return;\n      } else {\n        looading.value = true;\n      }\n    }\n\n    try {\n      if (!isBackground) {\n        _allCounters.clear();\n        allcounter.clear();\n      }\n\n      final response = await fetchData(\"${ApiConfig.baseUrl}/gauges\");\n\n      if (response.statusCode == 200) {\n        final List<dynamic> jsonData = jsonDecode(response.body);\n        \n        sessionCache = jsonData;\n\n        final List<ElectricMeter> parsed = jsonData.map((json) => ElectricMeter.fromJson(json)).toList();\n\n        _allCounters.clear();\n        _allCounters.addAll(parsed);\n        \n        allcounter.value = List.from(_allCounters);\n        conters = _allCounters; // Update global variable\n        \n        // Apply search filter again to keep current UI state consistent\n        _performSearch(_searchQuery.value);\n      } else if (!isBackground) {\n        Get.snackbar(\n          'خطأ',\n          'فشل تحميل العدادات: ${response.statusCode}',\n          snackPosition: SnackPosition.BOTTOM,\n        );\n      }\n    } catch (e) {\n      if (!isBackground) {\n        showCustomErrorDialog(errorMessage: e.toString());\n        debugPrint(\"Error fetching counters: $e\");\n      }\n    } finally {\n      if (!isBackground) {\n        looading.value = false;\n      }\n    }\n  }"
+  },
+  {
+    "id": "API-07",
+    "path": "lib/features/Counter/controller/counter.dart",
+    "line": 195,
+    "symbol": "addCounter",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/new-station",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\n        \"${ApiConfig.baseUrl}/new-station\",\n        counter.toJson(),\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final error = jsonDecode(response.body)['error'] ?? 'خطأ غير متوقع';"
+    ],
+    "cache": [
+      "await fetchAllCounters();"
+    ],
+    "method_source": "\n  // Add new counter\n  Future<void> addCounter(ElectricMeter counter) async {\n    try {\n      final response = await postData(\n        \"${ApiConfig.baseUrl}/new-station\",\n        counter.toJson(),\n      );\n\n      if (response.statusCode == 200) {\n        showSuccessToast(\"تم إضافة العداد بنجاح\");\n        await fetchAllCounters();\n        Get.back();\n      } else {\n        final error = jsonDecode(response.body)['error'] ?? 'خطأ غير متوقع';\n        showCustomErrorDialog(errorMessage: error);\n      }\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n      debugPrint(\"Error adding counter: $e\");\n    }\n  }"
+  },
+  {
+    "id": "API-08",
+    "path": "lib/features/Counter/controller/edit_counter_controller.dart",
+    "line": 50,
+    "symbol": "editCounter",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/edit-gauge",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\n        \"${ApiConfig.baseUrl}/edit-gauge\",\n        (counter.toJson()),\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [],
+    "cache": [
+      "CounterController.sessionCache = null;"
+    ],
+    "method_source": "\n  Future<void> editCounter({\n    required ElectricMeter counter,\n    required String serial,\n  }) async {\n    try {\n      looadig.value = true;\n      final res = await postData(\n        \"${ApiConfig.baseUrl}/edit-gauge\",\n        (counter.toJson()),\n      );\n\n      if (res.statusCode == 200) {\n        looadig.value = false;\n        showSuccessToast(\"تم تعديل العداد بنجاح\");\n        // Refresh the main counter list\n        CounterController.sessionCache = null;\n      } else {\n        looadig.value = false;\n        Get.snackbar(\n          \"خطأ\",\n          \"فشل في تعديل المحطة: ${res.body}\",\n          backgroundColor: Colors.red.shade100,\n          colorText: Colors.black87,\n        );\n      }\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n      looadig.value = false;\n      \n    }\n  }"
+  },
+  {
+    "id": "API-09",
+    "path": "lib/features/Counter/controller/edit_counter_controller.dart",
+    "line": 78,
+    "symbol": "allVoltige",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/new-gauge",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\n        \"${ApiConfig.baseUrl}/new-gauge\",\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final jsonData = json.decode(res.body);",
+      "VoltageType voltage = VoltageType.fromJson(i);"
+    ],
+    "cache": [],
+    "method_source": "\n  Future<void> allVoltige() async {\n    try {\n      final res = await fetchData(\n        \"${ApiConfig.baseUrl}/new-gauge\",\n      );\n\n      if (res.statusCode == 200) {\n        final jsonData = json.decode(res.body);\n\n        for (var i in jsonData) {\n          VoltageType voltage = VoltageType.fromJson(i);\n          allVoltage.add(voltage);\n          update();\n        }\n      } else {\n        Get.snackbar(\n          \"خطأ\",\n          \"فشل في تحميل أنواع الجهد: ${res.body}\",\n          backgroundColor: Colors.red.shade100,\n          colorText: Colors.black87,\n        );\n      }\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n    }\n  }"
+  },
+  {
+    "id": "API-10",
+    "path": "lib/features/analysis/controller/analysis.dart",
+    "line": 15,
+    "symbol": "getAnalysis",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/analysis-single/$station/$tech",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\n        \"${ApiConfig.baseUrl}/analysis-single/$station/$tech\"\n    \n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final jsonData = json.decode(res.body);",
+      "anl=AnalysisModel.fromJson(jsonData);"
+    ],
+    "cache": [],
+    "method_source": "  \n  Future<void> getAnalysis({required int station,required int tech}) async {\n    try {\n      anl=null;\n      final res = await fetchData(\n        \"${ApiConfig.baseUrl}/analysis-single/$station/$tech\"\n    \n      );\n\n      if (res.statusCode == 200) {\n        final jsonData = json.decode(res.body);\n        anl=AnalysisModel.fromJson(jsonData);\n        update(); // returns a String\n      \n      } \n    // ignore: empty_catches\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n  \n    }\n  }"
+  },
+  {
+    "id": "API-11",
+    "path": "lib/features/auth/controller/all_user.dart",
+    "line": 36,
+    "symbol": "loadUsers",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/all-users",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\"${ApiConfig.baseUrl}/all-users\")",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "users.value = sessionCache!.map((user) => User.fromJson(user)).toList();",
+      "final jsonData = json.decode(res.body);",
+      "} else if (jsonData['users'] != null) {",
+      "data = jsonData['users'] as List;",
+      "users.value = data.map((user) => User.fromJson(user)).toList();"
+    ],
+    "cache": [
+      "_fetchLatestBackground();",
+      "sessionCache = data;"
+    ],
+    "method_source": "\n  /// Load all users from API\n  Future<void> loadUsers({bool isBackground = false}) async {\n    if (!isBackground && sessionCache != null) {\n      users.value = sessionCache!.map((user) => User.fromJson(user)).toList();\n      _fetchLatestBackground();\n      return;\n    }\n    try {\n      if (!isBackground) {\n        isLoading.value = true;\n        errorMessage.value = '';\n      }\n      \n      final res = await fetchData(\"${ApiConfig.baseUrl}/all-users\");\n\n      if (res.statusCode == 200) {\n        final jsonData = json.decode(res.body);\n        List<dynamic> data = [];\n        \n        if (jsonData is List) {\n          data = jsonData;\n        } else if (jsonData['users'] != null) {\n          data = jsonData['users'] as List;\n        } else {\n          data = [jsonData];\n        }\n        \n        sessionCache = data;\n        users.value = data.map((user) => User.fromJson(user)).toList();\n      } \n    } catch (e) {\n      if (!isBackground) {\n        showCustomErrorDialog(errorMessage: e.toString());\n        errorMessage.value = 'خطأ في الاتصال: ${e.toString()}';\n      }\n    } finally {\n      if (!isBackground) isLoading.value = false;\n    }\n  }"
+  },
+  {
+    "id": "API-12",
+    "path": "lib/features/auth/controller/all_user.dart",
+    "line": 128,
+    "symbol": "editUser",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/edit-user/${editedUser.empCode}",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\n  \"${ApiConfig.baseUrl}/edit-user/${editedUser.empCode}\",\n  \n    editedUser.toJson()\n   \n  )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final errorBody = jsonDecode(res.body);"
+    ],
+    "cache": [
+      "sessionCache = null;",
+      "loadUsers(isBackground: true);"
+    ],
+    "method_source": "\n\n  /// Edit user information\n  Future<void> editUser(int index, User editedUser) async {\n    if (index < 0 || index >= users.length) return;\n\n      try {\n    isLoading.value = true;\n\n   final res = await postData(\n  \"${ApiConfig.baseUrl}/edit-user/${editedUser.empCode}\",\n  \n    editedUser.toJson()\n   \n  );\n      users.refresh();\n\n      // Send update to API\n      // final res = await fetchData(\n      //   \"http://$ip/update-user\",\n      //   method: 'PUT',\n      //   body: json.encode({\n      //     'empCode': editedUser.empCode,\n      //     'empName': editedUser.empName,\n      //     'username': editedUser.username,\n      //     'groupId': editedUser.groupId,\n      //     'isActive': editedUser.isActive,\n      //   }),\n      // );\n\n      if (res.statusCode == 200) {\n        isLoading.value=false;\n        showSuccessToast('تم تحديث بيانات المستخدم بنجاح');\n        sessionCache = null;\n        loadUsers(isBackground: true);\n      } else {\n                isLoading.value=false;\n        final errorBody = jsonDecode(res.body);\n        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();\n        showCustomErrorDialog(errorMessage: errorMessage.toString());   \n      }\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());   \n\n      // Revert on error\n    } finally {\n      isLoading.value = false;\n    }\n  }"
+  },
+  {
+    "id": "API-13",
+    "path": "lib/features/auth/controller/new_user.dart",
+    "line": 49,
+    "symbol": "new_user",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/register",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\n        \"${ApiConfig.baseUrl}/register\",\n\n        {\n          \"username\": username,\n          \"password\": password,\n          \"emp_code\":code,\n          \"emp_name\":name,\n\n        })",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final errorBody = jsonDecode(res.body);"
+    ],
+    "cache": [],
+    "method_source": "\n  // ignore: non_constant_identifier_names\n  Future<void> new_user({required String name,required String password,\n  required String username,required String code,} ) async {\n    try {\n      isLoading.value==true;\n\n      final res = await postData(\n        \"${ApiConfig.baseUrl}/register\",\n\n        {\n          \"username\": username,\n          \"password\": password,\n          \"emp_code\":code,\n          \"emp_name\":name,\n\n        });\n      \n      if (res.statusCode == 200) {\n           isLoading.value==false;\nshowSuccessToast(\"تم تسجيل المستخدم بنجاح\");\n      }else{\n final errorBody = jsonDecode(res.body);\n\n        // Extract Arabic error message\n        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();\n\n        // Show custom dialog or toast with Arabic error\n        showCustomErrorDialog(errorMessage: errorMessage);\n      }\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n        isLoading.value==false;\n\n    }\n  }"
+  },
+  {
+    "id": "API-14",
+    "path": "lib/features/auth/data/repositories/auth_repository_impl.dart",
+    "line": 19,
+    "symbol": "login",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/login",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "_apiClient.post(\n        \"${ApiConfig.baseUrl}/login\",\n        {\n          \"username\": username,\n          \"password\": password,\n        },\n      )",
+    "success_codes": [],
+    "response": [
+      "final jsonResponse = jsonDecode(response.body);",
+      "final userMap = jsonResponse['current_user'];",
+      "final token = jsonResponse['token'];",
+      "return User.fromJson(userMap);"
+    ],
+    "cache": [
+      "await Cache.saveData(key: \"user\", value: jsonEncode(userMap));",
+      "await Cache.saveData(key: \"token\", value: token);"
+    ],
+    "method_source": "  Future<Result<User>> login(String username, String password) async {\n    return safeRemoteCall(() async {\n      final response = await _apiClient.post(\n        \"${ApiConfig.baseUrl}/login\",\n        {\n          \"username\": username,\n          \"password\": password,\n        },\n      );\n\n      final jsonResponse = jsonDecode(response.body);\n\n      // Extract user info and token\n      final userMap = jsonResponse['current_user'];\n      final token = jsonResponse['token'];\n\n      // Save to cache\n      await Cache.saveData(key: \"user\", value: jsonEncode(userMap));\n      await Cache.saveData(key: \"token\", value: token);\n\n      return User.fromJson(userMap);\n    });\n  }"
+  },
+  {
+    "id": "API-15",
+    "path": "lib/features/auth/data/repositories/auth_repository_impl.dart",
+    "line": 44,
+    "symbol": "changePassword",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/change-password",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "_apiClient.post(\n        \"${ApiConfig.baseUrl}/change-password\",\n        {\n          \"old_password\": currentPassword,\n          \"new_password\": newPassword,\n        },\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [],
+    "cache": [],
+    "method_source": "  Future<Result<bool>> changePassword(String currentPassword, String newPassword) async {\n    return safeRemoteCall(() async {\n      final response = await _apiClient.post(\n        \"${ApiConfig.baseUrl}/change-password\",\n        {\n          \"old_password\": currentPassword,\n          \"new_password\": newPassword,\n        },\n      );\n\n      return response.statusCode == 200;\n    });\n  }"
+  },
+  {
+    "id": "API-16",
+    "path": "lib/features/bill/controller/all_bills.dart",
+    "line": 153,
+    "symbol": "allbills",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/view-bills",
+    "query": "page/per_page; optional search, bill_year, bill_month, is_paid, account_number",
+    "call": "fetchData(uri.toString())",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "List<dynamic> responseData = jsonData['data'];",
+      "_allBills.addAll(responseData.map((bill) => GuageBill.fromJson(bill)).toList());",
+      "final meta = jsonData['meta'];",
+      "currentPage.value = meta['page'] ?? 1;",
+      "perPage.value = meta['per_page'] ?? 20;",
+      "totalItems.value = meta['total'] ?? 0;",
+      "totalPages.value = meta['total_pages'] ?? 1;",
+      "hasNext.value = meta['has_next'] ?? false;",
+      "hasPrev.value = meta['has_prev'] ?? false;",
+      "final jsonData = json.decode(res.body);",
+      "List<dynamic> responseData = jsonData['data'];",
+      "_allBills.addAll(responseData.map((bill) => GuageBill.fromJson(bill)).toList());",
+      "final meta = jsonData['meta'];",
+      "currentPage.value = meta['page'] ?? 1;",
+      "perPage.value = meta['per_page'] ?? 20;",
+      "totalItems.value = meta['total'] ?? 0;",
+      "totalPages.value = meta['total_pages'] ?? 1;",
+      "hasNext.value = meta['has_next'] ?? false;",
+      "hasPrev.value = meta['has_prev'] ?? false;",
+      "_allBills.addAll(jsonData.map((bill) => GuageBill.fromJson(bill)).toList());"
+    ],
+    "cache": [
+      "_fetchLatestBackground();",
+      "sessionCache = jsonData;"
+    ],
+    "method_source": "\n  Future<void> allbills({bool isBackground = false}) async {\n    final bool isDefaultState = currentPage.value == 1 &&\n        _searchQuery.value.trim().isEmpty &&\n        selectedYear == 'all' &&\n        selectedMonth == 'all' &&\n        selectedFilter == 'all' &&\n        (selectedAccountNumber == 'all' || selectedAccountNumber.isEmpty);\n\n    if (!isBackground && isDefaultState && sessionCache != null) {\n      // Restore from cache instantly\n      final jsonData = sessionCache!;\n      _allBills.clear();\n      bills.clear();\n\n      if (jsonData.containsKey('data')) {\n        List<dynamic> responseData = jsonData['data'];\n        _allBills.addAll(responseData.map((bill) => GuageBill.fromJson(bill)).toList());\n        \n        if (jsonData.containsKey('meta')) {\n          final meta = jsonData['meta'];\n          currentPage.value = meta['page'] ?? 1;\n          perPage.value = meta['per_page'] ?? 20;\n          totalItems.value = meta['total'] ?? 0;\n          totalPages.value = meta['total_pages'] ?? 1;\n          hasNext.value = meta['has_next'] ?? false;\n          hasPrev.value = meta['has_prev'] ?? false;\n        }\n      }\n\n      bills.value = List.from(_allBills);\n      searchError.value = '';\n\n      // Trigger silent background refresh\n      _fetchLatestBackground();\n      return;\n    }\n\n    try {\n      if (!isBackground) {\n        isLoading.value = true;\n      }\n      errorMessage.value = '';\n\n      Map<String, String> queryParams = {\n        'page': currentPage.value.toString(),\n        'per_page': perPage.value.toString(),\n      };\n\n      if (_searchQuery.value.isNotEmpty) {\n        queryParams['search'] = _searchQuery.value.trim();\n      }\n\n      if (selectedYear != 'all') {\n        queryParams['bill_year'] = selectedYear;\n      }\n      \n      if (selectedMonth != 'all') {\n        queryParams['bill_month'] = selectedMonth;\n      }\n      \n      if (selectedFilter != 'all') {\n        queryParams['is_paid'] = selectedFilter == 'paid' ? 'true' : 'false';\n      }\n\n      if (selectedAccountNumber != 'all' && selectedAccountNumber.isNotEmpty) {\n        queryParams['account_number'] = selectedAccountNumber;\n      }\n\n      Uri uri = Uri.parse(\"${ApiConfig.baseUrl}/view-bills\").replace(queryParameters: queryParams);\n      final res = await fetchData(uri.toString());\n\n      if (res.statusCode == 200) {\n        final jsonData = json.decode(res.body);\n        \n        if (isDefaultState) {\n          sessionCache = jsonData;\n        }\n\n        _allBills.clear();\n        bills.clear();\n\n        if (jsonData is Map<String, dynamic> && jsonData.containsKey('data')) {\n          List<dynamic> responseData = jsonData['data'];\n          _allBills.addAll(responseData.map((bill) => GuageBill.fromJson(bill)).toList());\n          \n          if (jsonData.containsKey('meta')) {\n            final meta = jsonData['meta'];\n            currentPage.value = meta['page'] ?? 1;\n            perPage.value = meta['per_page'] ?? 20;\n            totalItems.value = meta['total'] ?? 0;\n            totalPages.value = meta['total_pages'] ?? 1;\n            hasNext.value = meta['has_next'] ?? false;\n            hasPrev.value = meta['has_prev'] ?? false;\n          }\n        } else if (jsonData is List) {\n          _allBills.addAll(jsonData.map((bill) => GuageBill.fromJson(bill)).toList());\n          totalItems.value = _allBills.length;\n          totalPages.value = 1;\n          hasNext.value = false;\n          hasPrev.value = false;\n        }\n\n        bills.value = List.from(_allBills);\n        \n        if (bills.isEmpty && _searchQuery.value.isNotEmpty) {\n           searchError.value = 'لا توجد نتائج تطابق \"${_searchQuery.value}\"';\n        } else {\n           searchError.value = '';\n        }\n      } else if (!isBackground) {\n        errorMessage.value = 'فشل تحميل الفواتير: ${res.statusCode}';\n      }\n    } catch (e) {\n      if (!isBackground) {\n        showCustomErrorDialog(errorMessage: e.toString());\n        errorMessage.value = 'خطأ في الاتصال: ${e.toString()}';\n      }\n    } finally {\n      if (!isBackground) {\n        isLoading.value = false;\n      }\n    }\n  }"
+  },
+  {
+    "id": "API-17",
+    "path": "lib/features/bill/controller/bills.dart",
+    "line": 262,
+    "symbol": "newbill",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/new-bill/$accountNumber",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\"${ApiConfig.baseUrl}/new-bill/$accountNumber\")",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final jsonData = json.decode(res.body);",
+      "(jsonData['gauge_sgt_list'] as List)",
+      ".map((item) => StationGaugeTechnologyRelation.fromJson(item))",
+      "showPercent = jsonData['show_percent'];"
+    ],
+    "cache": [],
+    "method_source": "\n  Future<void> newbill(String number) async {\n    try {\n      gauges = [];\n      final accountNumber = Uri.encodeComponent(number);\n\n      final res = await fetchData(\"${ApiConfig.baseUrl}/new-bill/$accountNumber\");\n\n      if (res.statusCode == 200) {\n        final jsonData = json.decode(res.body);\n\n        // Parse gauge_sgt_list into List<StationGaugeTechnologyRelation>\n        gauges =\n            (jsonData['gauge_sgt_list'] as List)\n                .map((item) => StationGaugeTechnologyRelation.fromJson(item))\n                .toList();\n\n        // Extract show_percent\n        showPercent = jsonData['show_percent'];\n\n        if (showPercent == true) {\n          // Clear existing controllers and create new ones\n          powerControllers.clear();\n          moneyControllers.clear();\n          for (int i = 0; i < gauges.length; i++) {\n            powerControllers.add(TextEditingController());\n            moneyControllers.add(TextEditingController());\n          }\n        }\n        // Call update() to notify GetBuilder widgets\n        update();\n\n       \n      }\n    // ignore: empty_catches\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n      \n    }\n  }"
+  },
+  {
+    "id": "API-18",
+    "path": "lib/features/bill/controller/bills.dart",
+    "line": 303,
+    "symbol": "addnewbill",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/new-bill/$number",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\n        \"${ApiConfig.baseUrl}/new-bill/$number\",\n      (bill.toJson()),\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final errorBody = jsonDecode(res.body);"
+    ],
+    "cache": [
+      "AllBills.sessionCache = null;"
+    ],
+    "method_source": "\n  Future<void> addnewbill({\n    required String number,\n    required GuageBill bill,\n  }) async {\n    try {\n      isLoading.value = true;\n      final res = await postData(\n        \"${ApiConfig.baseUrl}/new-bill/$number\",\n      (bill.toJson()),\n      );\n\n      if (res.statusCode == 200) {\n        AllBills.sessionCache = null;\n        showSuccessToast(\"تم تسجيل الفاتورة بنجاح\");\n        isLoading.value = false;\n\n        // Optional: clear or populate text fields here if needed\n      } else {\n        isLoading.value = false;\n\n        final errorBody = jsonDecode(res.body);\n\n        // Extract Arabic error message\n        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();\n\n        // Show custom dialog or toast with Arabic error\n        showCustomErrorDialog(errorMessage: errorMessage);\n      }\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n      print(e.toString());\n      isLoading.value = false;\n\n    }\n  }"
+  },
+  {
+    "id": "API-19",
+    "path": "lib/features/bill/controller/tech_bills.dart",
+    "line": 84,
+    "symbol": "allbills",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/view-tech-bills",
+    "query": "page/per_page; optional bill_year, bill_month, search",
+    "call": "fetchData(uri.toString())",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "bills = (jsonData['data'] as List).map((bill) => TechnologyBill.fromJson(bill)).toList();",
+      "final meta = jsonData['meta'];",
+      "currentPage = meta['page'] ?? 1;",
+      "totalPages = meta['total_pages'] ?? 1;",
+      "totalItems = meta['total'] ?? bills.length;",
+      "hasNext = meta['has_next'] ?? false;",
+      "hasPrev = meta['has_prev'] ?? false;",
+      "final jsonData = json.decode(res.body);",
+      "bills = (jsonData['data'] as List).map((bill) => TechnologyBill.fromJson(bill)).toList();",
+      "final meta = jsonData['meta'];",
+      "currentPage = meta['page'] ?? 1;",
+      "totalPages = meta['total_pages'] ?? 1;",
+      "totalItems = meta['total'] ?? bills.length;",
+      "hasNext = meta['has_next'] ?? false;",
+      "hasPrev = meta['has_prev'] ?? false;"
+    ],
+    "cache": [
+      "_fetchLatestBackground();",
+      "sessionCache = jsonData;"
+    ],
+    "method_source": "\n  Future<void> allbills({bool isBackground = false}) async {\n    final bool isDefaultState = currentPage == 1 &&\n        searchQuery.value.trim().isEmpty &&\n        selectedYear == 'all' &&\n        selectedMonth == 'all';\n\n    if (!isBackground && isDefaultState && sessionCache != null) {\n      final jsonData = sessionCache!;\n      bills = [];\n      if (jsonData is Map && jsonData.containsKey('data')) {\n        bills = (jsonData['data'] as List).map((bill) => TechnologyBill.fromJson(bill)).toList();\n        if (jsonData.containsKey('meta')) {\n          final meta = jsonData['meta'];\n          currentPage = meta['page'] ?? 1;\n          totalPages = meta['total_pages'] ?? 1;\n          totalItems = meta['total'] ?? bills.length;\n          hasNext = meta['has_next'] ?? false;\n          hasPrev = meta['has_prev'] ?? false;\n        }\n      }\n      update();\n      _fetchLatestBackground();\n      return;\n    }\n\n    try {\n      if (!isBackground) {\n        isLoading.value = true;\n      }\n      errorMessage.value = '';\n      if (!isBackground) {\n        bills = [];\n      }\n\n      Map<String, String> queryParams = {\n        'page': currentPage.toString(),\n        'per_page': perPage.toString(),\n      };\n\n      if (selectedYear != 'all') queryParams['bill_year'] = selectedYear;\n      if (selectedMonth != 'all') queryParams['bill_month'] = selectedMonth;\n      if (searchQuery.value.isNotEmpty) queryParams['search'] = searchQuery.value;\n\n      final uri = Uri.parse(\"${ApiConfig.baseUrl}/view-tech-bills\").replace(queryParameters: queryParams);\n      final res = await fetchData(uri.toString());\n\n      if (res.statusCode == 200) {\n        final jsonData = json.decode(res.body);\n        if (isDefaultState) {\n          sessionCache = jsonData;\n        }\n        \n        if (jsonData is Map && jsonData.containsKey('data')) {\n          bills = (jsonData['data'] as List).map((bill) => TechnologyBill.fromJson(bill)).toList();\n          \n          if (jsonData.containsKey('meta')) {\n            final meta = jsonData['meta'];\n            currentPage = meta['page'] ?? 1;\n            totalPages = meta['total_pages'] ?? 1;\n            totalItems = meta['total'] ?? bills.length;\n            hasNext = meta['has_next'] ?? false;\n            hasPrev = meta['has_prev'] ?? false;\n          }\n        }\n        update();\n      }\n    } catch (e) {\n      if (!isBackground) {\n        showCustomErrorDialog(errorMessage: e.toString());\n        errorMessage.value = 'خطأ في الاتصال: ${e.toString()}';\n      }\n    } finally {\n      if (!isBackground) {\n        isLoading.value = false;\n      }\n    }\n  }"
+  },
+  {
+    "id": "API-20",
+    "path": "lib/features/chemcails/controller/add_chemacial.dart",
+    "line": 56,
+    "symbol": "addchemicals",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/new-chemical",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\n        \"${ApiConfig.baseUrl}/new-chemical\",\n        (reference.toJson()),\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final errorBody = jsonDecode(res.body);"
+    ],
+    "cache": [
+      "Chemacialcontroller.sessionCache = null;"
+    ],
+    "method_source": "\n  Future<void> addchemicals({required AlumChlorineReference reference}) async {\n    try {\n      loading.value = true;\n      final res = await postData(\n        \"${ApiConfig.baseUrl}/new-chemical\",\n        (reference.toJson()),\n      );\n\n      if (res.statusCode == 200) {\n        loading.value = false;\n        Chemacialcontroller.sessionCache = null;\n        showSuccessToast(\"تم الاضافة  بنجاح\");\n        Get.offNamed('/Chemicals');\n\n      } else {\n        final errorBody = jsonDecode(res.body);\n\n        // Extract Arabic error message\n        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();\n\n        // Show custom dialog or toast with Arabic error\n        showCustomErrorDialog(errorMessage: errorMessage);\n        loading.value = false;\n      }\n    // ignore: empty_catches\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n      loading.value = false;\n     \n    }\n  }"
+  },
+  {
+    "id": "API-21",
+    "path": "lib/features/chemcails/controller/add_chemacial.dart",
+    "line": 90,
+    "symbol": "editchemicals",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/edit-chemical/$id",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\n        \"${ApiConfig.baseUrl}/edit-chemical/$id\",\n         (reference.toJson()),\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final errorBody = jsonDecode(res.body);"
+    ],
+    "cache": [
+      "Chemacialcontroller.sessionCache = null;"
+    ],
+    "method_source": "\n  Future<void> editchemicals({\n    required AlumChlorineReference reference,\n    required int id,\n  }) async {\n    try {\n      final res = await postData(\n        \"${ApiConfig.baseUrl}/edit-chemical/$id\",\n         (reference.toJson()),\n      );\n\n      if (res.statusCode == 200) {\n        Chemacialcontroller.sessionCache = null;\n        showSuccessToast(\"تم التعديل  بنجاح\");\n        Get.offNamed('/Chemicals');\n      } else {\n        final errorBody = jsonDecode(res.body);\n\n        // Extract Arabic error message\n        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();\n\n        // Show custom dialog or toast with Arabic error\n        showCustomErrorDialog(errorMessage: errorMessage);\n      }\n    // ignore: empty_catches\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n    \n     \n    }\n  }"
+  },
+  {
+    "id": "API-22",
+    "path": "lib/features/chemcails/controller/add_chemacial.dart",
+    "line": 118,
+    "symbol": "getchemicals",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/new-chemical",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\n       \"${ApiConfig.baseUrl}/new-chemical\"\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final jsonData = json.decode(res.body);",
+      "jsonData[\"water_sources\"].forEach((source) {",
+      "waterSourceList.add(WaterSource.fromJson(source));",
+      "jsonData[\"techs\"].forEach((tech) {",
+      "this.tech.add(TechnologyModel.fromJson(tech));"
+    ],
+    "cache": [],
+    "method_source": "\n  void getchemicals() async {\n    try {\n      final res = await fetchData(\n       \"${ApiConfig.baseUrl}/new-chemical\"\n      );\n      if (res.statusCode == 200) {\n        final jsonData = json.decode(res.body);\n\n        jsonData[\"water_sources\"].forEach((source) {\n          waterSourceList.add(WaterSource.fromJson(source));\n        });\n        jsonData[\"techs\"].forEach((tech) {\n          this.tech.add(TechnologyModel.fromJson(tech));\n        });\n     \n     \n\n        update(); // Notify listeners\n      }\n    // ignore: empty_catches\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n    }\n  }"
+  },
+  {
+    "id": "API-23",
+    "path": "lib/features/chemcails/controller/chemacial.dart",
+    "line": 78,
+    "symbol": "getchemicals",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/chemicals",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\"${ApiConfig.baseUrl}/chemicals\")",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "allChemicals.addAll(sessionCache!.map((e) => AlumChlorineReference.fromJson(e)));",
+      "final List<dynamic> responseData = json.decode(res.body);",
+      "final List<AlumChlorineReference> parsed = responseData.map((e) => AlumChlorineReference.fromJson(e)).toList();"
+    ],
+    "cache": [
+      "_fetchLatestBackground();",
+      "sessionCache = responseData;"
+    ],
+    "method_source": "\n  // -------------------------------\n  // API Call - Get Chemicals\n  // -------------------------------\n  void getchemicals({bool isBackground = false}) async {\n    if (!isBackground) {\n      if (sessionCache != null) {\n        allChemicals.clear();\n        allChemicals.addAll(sessionCache!.map((e) => AlumChlorineReference.fromJson(e)));\n        chemicals.value = List.from(allChemicals);\n        \n        // Background fetch\n        _fetchLatestBackground();\n        return;\n      } else {\n        loading.value = true;\n      }\n    }\n\n    try {\n      if (!isBackground) {\n        allChemicals.clear();\n        chemicals.clear();\n      }\n\n      final res = await fetchData(\"${ApiConfig.baseUrl}/chemicals\");\n      \n      if (res.statusCode == 200) {\n        final List<dynamic> responseData = json.decode(res.body);\n        \n        sessionCache = responseData;\n        \n        final List<AlumChlorineReference> parsed = responseData.map((e) => AlumChlorineReference.fromJson(e)).toList();\n        \n        allChemicals.clear();\n        allChemicals.addAll(parsed);\n        \n        // Re-apply current search filter instead of unconditionally clearing search\n        _performSearch(_searchQuery.value);\n      }\n    } catch (e) {\n      if (!isBackground) {\n        showCustomErrorDialog(errorMessage: e.toString());\n      }\n    } finally {\n      if (!isBackground) {\n        loading.value = false;\n      }\n    }\n  }"
+  },
+  {
+    "id": "API-24",
+    "path": "lib/features/home/controller/home.dart",
+    "line": 38,
+    "symbol": "home",
+    "method": "GET",
+    "endpoint": "ApiConfig.baseUrl (root)",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(ApiConfig.baseUrl)",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final jsonData = jsonDecode(res.body);",
+      "consumptionModel = ConsumptionModel.fromJson(jsonData);"
+    ],
+    "cache": [],
+    "method_source": "\n  Future<void> home() async {\n    try {\n      loading.value = true;\n\n      // ✅ Use new ApiConfig\n      final res = await fetchData(ApiConfig.baseUrl);\n\n      if (res.statusCode == 200) {\n        final jsonData = jsonDecode(res.body);\n\n        consumptionModel = ConsumptionModel.fromJson(jsonData);\n\n\n        animateAll();\n      }\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n      debugPrint(\"❌ Error fetching home: $e\");\n    } finally {\n      loading.value = false;\n      update();\n    }\n  }"
+  },
+  {
+    "id": "API-25",
+    "path": "lib/features/planning/controller/blance_chart/blance_chart.dart",
+    "line": 107,
+    "symbol": "allareas",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/all-areas",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\"${ApiConfig.baseUrl}/all-areas\")",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "areas.addAll(areasCache!.map((json) => AreaOfService.fromJson(json)));",
+      "final jsonData = jsonDecode(response.body) as List<dynamic>;",
+      "areas.addAll(jsonData.map((json) => AreaOfService.fromJson(json)));"
+    ],
+    "cache": [
+      "areasCache = jsonData;"
+    ],
+    "method_source": "  Future<void> allareas({bool isBackground = false}) async {\n    if (!isBackground && areasCache != null) {\n      areas.clear();\n      areas.addAll(areasCache!.map((json) => AreaOfService.fromJson(json)));\n      areas.value = List.from(areas);\n      update();\n      _fetchLatestBackgroundAreas();\n      return;\n    }\n    try {\n      final response = await fetchData(\"${ApiConfig.baseUrl}/all-areas\");\n      if (response.statusCode == 200) {\n        final jsonData = jsonDecode(response.body) as List<dynamic>;\n        areasCache = jsonData;\n        areas.clear();\n        areas.addAll(jsonData.map((json) => AreaOfService.fromJson(json)));\n        areas.value = List.from(areas);\n        update();\n      }\n    } catch (e) {\n      if (!isBackground) {\n        showCustomErrorDialog(errorMessage: e.toString());\n      }\n    }\n  }"
+  },
+  {
+    "id": "API-26",
+    "path": "lib/features/planning/controller/blance_chart/blance_chart.dart",
+    "line": 140,
+    "symbol": "allvalues",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/place-types",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\"${ApiConfig.baseUrl}/place-types\")",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final type = PlaceType.fromJson(json);",
+      "final List<dynamic> jsonData = jsonDecode(response.body);",
+      "final type = PlaceType.fromJson(json);"
+    ],
+    "cache": [
+      "valuesCache = jsonData;"
+    ],
+    "method_source": "\n  Future<void> allvalues({bool isBackground = false}) async {\n    if (!isBackground && valuesCache != null) {\n      allTypes.clear();\n      textControllers.clear();\n      for (var json in valuesCache!) {\n        final type = PlaceType.fromJson(json);\n        allTypes.add(type);\n        textControllers[type.placeTypeId] = TextEditingController();\n      }\n      _fetchLatestBackgroundValues();\n      return;\n    }\n    try {\n      final response = await fetchData(\"${ApiConfig.baseUrl}/place-types\");\n      if (response.statusCode == 200) {\n        final List<dynamic> jsonData = jsonDecode(response.body);\n        valuesCache = jsonData;\n        allTypes.clear();\n        textControllers.clear();\n        for (var json in jsonData) {\n          final type = PlaceType.fromJson(json);\n          allTypes.add(type);\n          textControllers[type.placeTypeId] = TextEditingController();\n        }\n      }\n    } catch (e) {\n      if (!isBackground) {\n        showCustomErrorDialog(errorMessage: e.toString());\n      }\n    }\n  }"
+  },
+  {
+    "id": "API-27",
+    "path": "lib/features/planning/controller/blance_chart/blance_chart.dart",
+    "line": 201,
+    "symbol": "submitData",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/balance-plot-calc/$id",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\n      \"${ApiConfig.baseUrl}/balance-plot-calc/$id\",\n      body,\n    )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final responseJson = jsonDecode(response.body);",
+      "if (responseJson['best_model'] != null) {",
+      "final mlResponse = MLForecastResponse.fromJson(responseJson);",
+      "} else if (responseJson['table'] is List) {",
+      "balanceData.value = WaterDataResponse.fromJson(responseJson);"
+    ],
+    "cache": [],
+    "method_source": "Future<void> submitData(int id) async {\n  isloading.value = true;\n  final body = buildRequestBody();\n\n  try {\n    final response = await postData(\n      \"${ApiConfig.baseUrl}/balance-plot-calc/$id\",\n      body,\n    );\n\n    if (response.statusCode == 200) {\n      // Parse response\n      final responseJson = jsonDecode(response.body);\n      \n      // If Machine Learning response\n      if (responseJson['best_model'] != null) {\n        final mlResponse = MLForecastResponse.fromJson(responseJson);\n        isloading.value = false;\n        Get.to(\n          () => MLForecastResultScreen(result: mlResponse),\n          transition: Transition.rightToLeft,\n          duration: const Duration(milliseconds: 100),\n        );\n      } else if (responseJson['table'] is List) {\n        // Validate and store equation/ministry data\n        balanceData.value = WaterDataResponse.fromJson(responseJson);\n        \n        isloading.value = false;\n        \n        Future.delayed(const Duration(milliseconds: 100), () {\n          Get.to(\n            () => BalanceChartPrintScreen(),\n            transition: Transition.rightToLeft,\n            duration: const Duration(milliseconds: 100),\n          );\n        });\n      } else {\n        isloading.value = false;\n        showCustomErrorDialog(errorMessage: \"تنسيق البيانات المستلمة غير متوقع\");\n      }\n    } else {\n      isloading.value = false;\n    }\n  } catch (e) {\n    showCustomErrorDialog(errorMessage: e.toString());\n    isloading.value = false;\n    debugPrint(\"Error: $e\");\n  }\n}"
+  },
+  {
+    "id": "API-28",
+    "path": "lib/features/planning/controller/place/add_places_controller.dart",
+    "line": 48,
+    "symbol": "addplace",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/new-place",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\n        \"${ApiConfig.baseUrl}/new-place\",\n          (place.toJson()),\n       \n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final errorBody = jsonDecode(res.body);"
+    ],
+    "cache": [
+      "PlacesController.sessionCache = null;"
+    ],
+    "method_source": "\n  Future<void> addplace({\nrequired   Place  place,\n  }) async {\n    looading.value = true;\n    try {\n      final res = await postData(\n        \"${ApiConfig.baseUrl}/new-place\",\n          (place.toJson()),\n       \n      );\n\n      if (res.statusCode == 200) {\n        looading.value = false;\n        PlacesController.sessionCache = null;\n        showSuccessToast(\"تم اضافة المكان بنجاح\");\n      } else {\n        looading.value = false;\n        final errorBody = jsonDecode(res.body);\n        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();\n        showCustomErrorDialog(errorMessage: errorMessage);\n      }\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n      looading.value = false;\n    }\n  }"
+  },
+  {
+    "id": "API-29",
+    "path": "lib/features/planning/controller/place/add_places_controller.dart",
+    "line": 73,
+    "symbol": "allNewData",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/new-place",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\n        \"${ApiConfig.baseUrl}/new-place\",\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final jsonData = json.decode(res.body);",
+      "branchList = (jsonData['branches'] as List)",
+      ".map((branch) => Branch.fromJson(branch))",
+      "areaList = (jsonData['areas'] as List)",
+      ".map((area) => AreaOfService.fromJson(area))",
+      "placeTypeList = (jsonData['place_types'] as List)",
+      ".map((placeType) => PlaceType.fromJson(placeType))"
+    ],
+    "cache": [],
+    "method_source": "\n\n  Future<void> allNewData() async {\n    try {\n      final res = await fetchData(\n        \"${ApiConfig.baseUrl}/new-place\",\n      );\n\n      if (res.statusCode == 200) {\n        final jsonData = json.decode(res.body);\n        branchList = (jsonData['branches'] as List)\n            .map((branch) => Branch.fromJson(branch))\n            .toList();\n             areaList = (jsonData['areas'] as List)\n            .map((area) => AreaOfService.fromJson(area))\n            .toList();\n             placeTypeList = (jsonData['place_types'] as List)\n            .map((placeType) => PlaceType.fromJson(placeType))\n            .toList();\nupdate();\n      \n\n      }\n    // ignore: empty_catches\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n    }\n  }"
+  },
+  {
+    "id": "API-30",
+    "path": "lib/features/planning/controller/place/edit_place_type_controller.dart",
+    "line": 44,
+    "symbol": "fetchPlaceTypes",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/place-types",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\"${ApiConfig.baseUrl}/place-types\")",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "placeTypes.add(PlaceType.fromJson(json));",
+      "final List<dynamic> jsonData = jsonDecode(response.body);",
+      "placeTypes.add(PlaceType.fromJson(json));"
+    ],
+    "cache": [
+      "BalanceChartController.valuesCache = jsonData;"
+    ],
+    "method_source": "\n  Future<void> fetchPlaceTypes({bool forceRefresh = false}) async {\n    if (!forceRefresh && BalanceChartController.valuesCache != null) {\n      placeTypes.clear();\n      for (var json in BalanceChartController.valuesCache!) {\n        placeTypes.add(PlaceType.fromJson(json));\n      }\n      return;\n    }\n\n    isLoading.value = true;\n    try {\n      final response = await fetchData(\"${ApiConfig.baseUrl}/place-types\");\n      if (response.statusCode == 200) {\n        final List<dynamic> jsonData = jsonDecode(response.body);\n        BalanceChartController.valuesCache = jsonData;\n        placeTypes.clear();\n        for (var json in jsonData) {\n          placeTypes.add(PlaceType.fromJson(json));\n        }\n      }\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n    } finally {\n      isLoading.value = false;\n    }\n  }"
+  },
+  {
+    "id": "API-31",
+    "path": "lib/features/planning/controller/place/edit_place_type_controller.dart",
+    "line": 75,
+    "symbol": "updatePlaceType",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/edit-place-type/$placeTypeId",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\n        \"${ApiConfig.baseUrl}/edit-place-type/$placeTypeId\",\n        body,\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final resBody = jsonDecode(response.body);"
+    ],
+    "cache": [
+      "BalanceChartController.valuesCache = null;"
+    ],
+    "method_source": "\n  Future<bool> updatePlaceType(int placeTypeId) async {\n    isSubmitting.value = true;\n    try {\n      final body = {\n        \"place_type_name\": nameController.text.trim(),\n        \"person_portion_from\": int.tryParse(fromController.text.trim()) ?? 0,\n        \"person_portion_to\": int.tryParse(toController.text.trim()) ?? 0,\n      };\n\n      final response = await postData(\n        \"${ApiConfig.baseUrl}/edit-place-type/$placeTypeId\",\n        body,\n      );\n\n      if (response.statusCode == 200) {\n        // Clear caches so the balance chart and other screens reload the updated ranges from route\n        BalanceChartController.valuesCache = null;\n\n        // Refresh our local list\n        await fetchPlaceTypes(forceRefresh: true);\n\n        // If BalanceChartController is already registered in memory, refresh it\n        if (Get.isRegistered<BalanceChartController>()) {\n          Get.find<BalanceChartController>().allvalues(isBackground: false);\n        }\n\n        showSuccessToast(\"تم تعديل نوع المكان ونطاق الاستهلاك بنجاح\");\n        return true;\n      } else {\n        final resBody = jsonDecode(response.body);\n        final msg = resBody[\"error\"] ?? \"فشل حفظ التعديلات\";\n        showCustomErrorDialog(errorMessage: msg);\n        return false;\n      }\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n      return false;\n    } finally {\n      isSubmitting.value = false;\n    }\n  }"
+  },
+  {
+    "id": "API-32",
+    "path": "lib/features/planning/controller/place/edit_places_controller.dart",
+    "line": 48,
+    "symbol": "editplace",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/edit-place/${place.placeId}",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\n        \"${ApiConfig.baseUrl}/edit-place/${place.placeId}\",\n          (place.toJson()),\n       \n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final errorBody = jsonDecode(res.body);"
+    ],
+    "cache": [
+      "PlacesController.sessionCache = null;"
+    ],
+    "method_source": "\n  Future<void> editplace({\nrequired   Place  place,\n  }) async {\n    looading.value = true;\n    try {\n      final res = await postData(\n        \"${ApiConfig.baseUrl}/edit-place/${place.placeId}\",\n          (place.toJson()),\n       \n      );\n\n      if (res.statusCode == 200) {\n        looading.value = false;\n        PlacesController.sessionCache = null;\n        showSuccessToast(\"تم تعديل المكان بنجاح\");\n      } else {\n        looading.value = false;\n        final errorBody = jsonDecode(res.body);\n        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();\n        showCustomErrorDialog(errorMessage: errorMessage);\n      }\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n      looading.value = false;\n    }\n  }"
+  },
+  {
+    "id": "API-33",
+    "path": "lib/features/planning/controller/place/edit_places_controller.dart",
+    "line": 73,
+    "symbol": "allNewData",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/new-place",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\n        \"${ApiConfig.baseUrl}/new-place\",\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final jsonData = json.decode(res.body);",
+      "branchList = (jsonData['branches'] as List)",
+      ".map((branch) => Branch.fromJson(branch))",
+      "areaList = (jsonData['areas'] as List)",
+      ".map((area) => AreaOfService.fromJson(area))",
+      "placeTypeList = (jsonData['place_types'] as List)",
+      ".map((placeType) => PlaceType.fromJson(placeType))"
+    ],
+    "cache": [],
+    "method_source": "\n\n  Future<void> allNewData() async {\n    try {\n      final res = await fetchData(\n        \"${ApiConfig.baseUrl}/new-place\",\n      );\n\n      if (res.statusCode == 200) {\n        final jsonData = json.decode(res.body);\n        branchList = (jsonData['branches'] as List)\n            .map((branch) => Branch.fromJson(branch))\n            .toList();\n             areaList = (jsonData['areas'] as List)\n            .map((area) => AreaOfService.fromJson(area))\n            .toList();\n             placeTypeList = (jsonData['place_types'] as List)\n            .map((placeType) => PlaceType.fromJson(placeType))\n            .toList();\nupdate();\n      \n\n      }\n    // ignore: empty_catches\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n    }\n  }"
+  },
+  {
+    "id": "API-34",
+    "path": "lib/features/planning/controller/place/places_controller.dart",
+    "line": 81,
+    "symbol": "allPlaces",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/places",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\"${ApiConfig.baseUrl}/places\")",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "_allPlaces.addAll(sessionCache!.map((json) => Place.fromJson(json)));",
+      "final List<dynamic> jsonData = jsonDecode(response.body) as List<dynamic>;",
+      "final List<Place> parsed = jsonData.map((json) => Place.fromJson(json)).toList();"
+    ],
+    "cache": [
+      "_fetchLatestBackground();",
+      "sessionCache = jsonData;"
+    ],
+    "method_source": "\n  // Fetch all places from API\n  Future<void> allPlaces({bool isBackground = false}) async {\n    if (!isBackground) {\n      if (sessionCache != null) {\n        _allPlaces.clear();\n        _allPlaces.addAll(sessionCache!.map((json) => Place.fromJson(json)));\n        places.value = List.from(_allPlaces);\n        \n        // Background fetch\n        _fetchLatestBackground();\n        return;\n      } else {\n        loading.value = true;\n      }\n    }\n\n    try {\n      if (!isBackground) {\n        _allPlaces.clear();\n        places.clear();\n      }\n\n      final response = await fetchData(\"${ApiConfig.baseUrl}/places\");\n\n      if (response.statusCode == 200) {\n        final List<dynamic> jsonData = jsonDecode(response.body) as List<dynamic>;\n        \n        sessionCache = jsonData;\n\n        final List<Place> parsed = jsonData.map((json) => Place.fromJson(json)).toList();\n\n        _allPlaces.clear();\n        _allPlaces.addAll(parsed);\n        \n        // Apply search filter again to keep current UI state consistent\n        _performSearch(_searchQuery.value);\n      }\n    } catch (e) {\n      if (!isBackground) {\n        showCustomErrorDialog(errorMessage: e.toString());\n        debugPrint(\"Error fetching places: $e\");\n      }\n    } finally {\n      if (!isBackground) {\n        loading.value = false;\n      }\n    }\n  }"
+  },
+  {
+    "id": "API-35",
+    "path": "lib/features/predaction/controller/prediaction.dart",
+    "line": 17,
+    "symbol": "prediactions",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/prediction/$stationId",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\"${ApiConfig.baseUrl}/prediction/$stationId\", {})",
+    "success_codes": [],
+    "response": [
+      "final jsonData = json.decode(res.body);",
+      "predictionModel = PredictionModel.fromJson(jsonData);"
+    ],
+    "cache": [],
+    "method_source": "\n  Future<void> prediactions(int stationId) async {\n    try {\n      isLoading.value = true;\n      update();\n\n      final res = await postData(\"${ApiConfig.baseUrl}/prediction/$stationId\", {});\n      final jsonData = json.decode(res.body);\n      predictionModel = PredictionModel.fromJson(jsonData);\n      \n    } catch (e) {\n      if (e is ApiException) {\n        if (e.statusCode != 401 && e.statusCode != 403) {\n          showCustomErrorDialog(errorMessage: e.message);\n        }\n      } else {\n        showCustomErrorDialog(errorMessage: \"تعذر الاتصال بالخادم. الرجاء المحاولة لاحقاً.\\nالخطأ: $e\");\n      }\n    } finally {\n      isLoading.value = false;\n      update();\n    }\n  }"
+  },
+  {
+    "id": "API-36",
+    "path": "lib/features/relations/controller/add_relations_controller.dart",
+    "line": 40,
+    "symbol": "new_relations",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/new-relation",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\n        \"${ApiConfig.baseUrl}/new-relation\",\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final jsonData = json.decode(res.body);",
+      "if (jsonData['gauges'] != null) {",
+      "for (var gauge in jsonData['gauges']) {",
+      "electricMeterList.add(ElectricMeter.fromJson(gauge));",
+      "if (jsonData['stations'] != null) {",
+      "for (var station in jsonData['stations']) {",
+      "stationlist.add(allstations.fromJson(station));",
+      "if (jsonData['techs'] != null) {",
+      "for (var tech in jsonData['techs']) {",
+      "technologylist.add(TechnologyModel.fromJson(tech));"
+    ],
+    "cache": [],
+    "method_source": "\n  Future<void> new_relations() async {\n    try {\n      final res = await fetchData(\n        \"${ApiConfig.baseUrl}/new-relation\",\n      );\n\n      if (res.statusCode == 200) {\n        final jsonData = json.decode(res.body);\n        if (jsonData['gauges'] != null) {\n          for (var gauge in jsonData['gauges']) {\n            electricMeterList.add(ElectricMeter.fromJson(gauge));\n          }\n        }\n\n        // Parse stations into Branch list\n        if (jsonData['stations'] != null) {\n          for (var station in jsonData['stations']) {\n            stationlist.add(allstations.fromJson(station));\n          }\n        }\n\n        // Parse techs into TechnologyModel list\n        if (jsonData['techs'] != null) {\n          for (var tech in jsonData['techs']) {\n            technologylist.add(TechnologyModel.fromJson(tech));\n          }\n        }\n\n        update(); // Assuming you're using GetX or similar for state management\n\n      } \n    // ignore: empty_catches\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n    }\n  }"
+  },
+  {
+    "id": "API-37",
+    "path": "lib/features/relations/controller/add_relations_controller.dart",
+    "line": 79,
+    "symbol": "addRelations",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/new-relation",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\n        \"${ApiConfig.baseUrl}/new-relation\",\n        (relation.toJson()),\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final errorBody = jsonDecode(res.body);"
+    ],
+    "cache": [
+      "RelationsController.sessionCache = null;"
+    ],
+    "method_source": "\n  Future<void> addRelations(StationGaugeTechnologyRelation relation) async {\n    try {\n            looading.value=true;\n\n      final res = await postData(\n        \"${ApiConfig.baseUrl}/new-relation\",\n        (relation.toJson()),\n      );\n\n      if (res.statusCode == 200) {\n              looading.value=false;\n\n        RelationsController.sessionCache = null;\n        showSuccessToast('تمت الاضافة بنجاح');\n        // Parse with the existing model\n        // Assign to local lists\n\n        // Debug prints\n      } else {\n                      looading.value=false;\n\n        final errorBody = jsonDecode(res.body);\n\n        // Extract Arabic error message\n        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? res.body;\n\n        // Show custom dialog or toast with Arabic error\n        showCustomErrorDialog(errorMessage: errorMessage.toString());\n      }\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n                    looading.value=false;\n\n      print(\"Error fetching branches: $e\");\n    }\n  }"
+  },
+  {
+    "id": "API-38",
+    "path": "lib/features/relations/controller/relations/relation.dart",
+    "line": 80,
+    "symbol": "getRelations",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/stg-relations",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\"${ApiConfig.baseUrl}/stg-relations\")",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "allRelations.addAll(sessionCache!.map((e) => StationGaugeTechnologyRelation.fromJson(e)));",
+      "final List<dynamic> jsonData = jsonDecode(response.body);",
+      "final List<StationGaugeTechnologyRelation> parsed = jsonData.map((e) => StationGaugeTechnologyRelation.fromJson(e)).toList();"
+    ],
+    "cache": [
+      "_fetchLatestBackground();",
+      "sessionCache = jsonData;"
+    ],
+    "method_source": "\n  // -------------------------------\n  // API Call - Get Relations\n  // -------------------------------\n  Future<void> getRelations({bool isBackground = false}) async {\n    if (!isBackground) {\n      if (sessionCache != null) {\n        allRelations.clear();\n        allRelations.addAll(sessionCache!.map((e) => StationGaugeTechnologyRelation.fromJson(e)));\n        relations.value = List.from(allRelations);\n        \n        // Background fetch\n        _fetchLatestBackground();\n        return;\n      } else {\n        loading.value = true;\n      }\n    }\n\n    try {\n      if (!isBackground) {\n        allRelations.clear();\n        relations.clear();\n      }\n\n      final response = await fetchData(\"${ApiConfig.baseUrl}/stg-relations\");\n\n      if (response.statusCode == 200) {\n        final List<dynamic> jsonData = jsonDecode(response.body);\n        \n        sessionCache = jsonData;\n\n        final List<StationGaugeTechnologyRelation> parsed = jsonData.map((e) => StationGaugeTechnologyRelation.fromJson(e)).toList();\n\n        allRelations.clear();\n        allRelations.addAll(parsed);\n        \n        // Apply search filter again to keep current UI state consistent\n        _performSearch(_searchQuery.value);\n      }\n    } catch (e) {\n      if (!isBackground) {\n        showCustomErrorDialog(errorMessage: e.toString());\n        debugPrint('Relations error: $e');\n      }\n    } finally {\n      if (!isBackground) {\n        loading.value = false;\n      }\n    }\n  }"
+  },
+  {
+    "id": "API-39",
+    "path": "lib/features/relations/controller/relations/relation.dart",
+    "line": 123,
+    "symbol": "editRelation",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/edit-relation/$id",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\"${ApiConfig.baseUrl}/edit-relation/$id\")",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final errorBody = jsonDecode(response.body);"
+    ],
+    "cache": [
+      "sessionCache = null;",
+      "await _fetchLatestBackground();"
+    ],
+    "method_source": "\n  // -------------------------------\n  // API Call - Edit Relation\n  // -------------------------------\n  Future<void> editRelation(int id, String successMessage) async {\n    try {\n      isProcessing.value = true;\n\n      final response = await fetchData(\"${ApiConfig.baseUrl}/edit-relation/$id\");\n\n      if (response.statusCode == 200) {\n        // Cache invalidation and silent refresh\n        sessionCache = null;\n        await _fetchLatestBackground();\n        \n        showSuccessToast(successMessage);\n      } else {\n        final errorBody = jsonDecode(response.body);\n        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();\n        showCustomErrorDialog(errorMessage: errorMessage);\n      }\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n      debugPrint('Edit relation error: $e');\n    } finally {\n      isProcessing.value = false;\n    }\n  }"
+  },
+  {
+    "id": "API-40",
+    "path": "lib/features/reports/controller/reports_controller.dart",
+    "line": 201,
+    "symbol": "getReports",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/reports",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\n        \"${ApiConfig.baseUrl}/reports\",\n        {\n          \"report_name\": name,\n          \"from_date\": start,\n          \"to_date\": end,\n        },\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final jsonData = json.decode(res.body);",
+      "responseData = jsonData['data'] ?? [];",
+      "branchs.add(ReportBranch.fromJson(i));"
+    ],
+    "cache": [],
+    "method_source": "\n  // ================== API CALL ====================\n  Future<void> getReports({\n    required String start,\n    required String end,\n    required String name,\n  }) async {\n    try {\n      isLoading.value = true;\n      update();\n\n      branchs.clear();\n      filteredBranchs.clear();\n      _index.clear();\n      clearSearch(); // Clear any existing search\n\n      final res = await postData(\n        \"${ApiConfig.baseUrl}/reports\",\n        {\n          \"report_name\": name,\n          \"from_date\": start,\n          \"to_date\": end,\n        },\n      );\n\n      if (res.statusCode == 200) {\n        final jsonData = json.decode(res.body);\n\n        List<dynamic> responseData;\n        if (jsonData is List) {\n          responseData = jsonData;\n        } else if (jsonData is Map && jsonData.containsKey('data')) {\n          responseData = jsonData['data'] ?? [];\n        } else {\n          responseData = [];\n        }\n\n        for (var i in responseData) {\n          try {\n            branchs.add(ReportBranch.fromJson(i));\n          } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n            debugPrint(\"Parsing error: $e\");\n          }\n        }\n\n        // Set filtered data\n        filteredBranchs.value = List.from(branchs);\n\n        // Build optimized search index\n        _buildSearchIndex();\n\n        sumvalueofreport(filteredBranchs);\n      }\n\n      isLoading.value = false;\n      update();\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n      isLoading.value = false;\n      update();\n      debugPrint(\"Error fetching reports: $e\");\n    }\n  }"
+  },
+  {
+    "id": "API-41",
+    "path": "lib/features/stations/controller/add_stations_controller.dart",
+    "line": 55,
+    "symbol": "addStation",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/new-station",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\n        \"${ApiConfig.baseUrl}/new-station\",\n        {\n          \"name\": name,\n          \"branch_id\": branchId,\n          \"water_source_id\": sourceId,\n          \"station_type\": typeId,\n          \"station_water_capacity\": capacity,\n          \"area_id\": areaId\n        },\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final errorBody = jsonDecode(res.body);"
+    ],
+    "cache": [
+      "StationsController.sessionCache = null;"
+    ],
+    "method_source": "\n  Future<void> addStation({\n    required String name,\n    required int branchId,\n    required int sourceId,\n    required String typeId,\n    required int capacity,\n     int? areaId,\n  }) async {\n    looading.value = true;\n    try {\n      final res = await postData(\n        \"${ApiConfig.baseUrl}/new-station\",\n        {\n          \"name\": name,\n          \"branch_id\": branchId,\n          \"water_source_id\": sourceId,\n          \"station_type\": typeId,\n          \"station_water_capacity\": capacity,\n          \"area_id\": areaId\n        },\n      );\n\n      if (res.statusCode == 200) {\n        looading.value = false;\n        StationsController.sessionCache = null;\n        showSuccessToast(\"تم اضافة المحطة بنجاح\");\n      } else {\n        looading.value = false;\n        final errorBody = jsonDecode(res.body);\n        final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';\n        showCustomErrorDialog(errorMessage: errorMessage);\n      }\n    } catch (e) {\n      looading.value = false;\n      showCustomErrorDialog(errorMessage: e.toString());\n    }\n  }"
+  },
+  {
+    "id": "API-42",
+    "path": "lib/features/stations/controller/add_stations_controller.dart",
+    "line": 88,
+    "symbol": "allareas",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/all-areas",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\"${ApiConfig.baseUrl}/all-areas\")",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final jsonData = jsonDecode(response.body) as List<dynamic>;",
+      "jsonData.map((json) => AreaOfService.fromJson(json))"
+    ],
+    "cache": [],
+    "method_source": "\n  Future<void> allareas() async {\n    try {\n      final response = await fetchData(\"${ApiConfig.baseUrl}/all-areas\");\n      \n      if (response.statusCode == 200) {\n        final jsonData = jsonDecode(response.body) as List<dynamic>;\n        areas.clear();\n        areas.addAll(\n          jsonData.map((json) => AreaOfService.fromJson(json))\n        );\n        update();\n      }\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n    }\n  }"
+  },
+  {
+    "id": "API-43",
+    "path": "lib/features/stations/controller/add_stations_controller.dart",
+    "line": 105,
+    "symbol": "allBranches",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/new-station",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\n        \"${ApiConfig.baseUrl}/new-station\",\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final jsonData = json.decode(res.body);",
+      "final parsedData = AddStationData.fromJson(jsonData);"
+    ],
+    "cache": [],
+    "method_source": "\n  Future<void> allBranches() async {\n    try {\n      final res = await fetchData(\n        \"${ApiConfig.baseUrl}/new-station\",\n      );\n\n      if (res.statusCode == 200) {\n        final jsonData = json.decode(res.body);\n        final parsedData = AddStationData.fromJson(jsonData);\n        branchList = parsedData.branches;\n        waterSourceList = parsedData.waterSources;\n        update();\n      }\n    // ignore: empty_catches\n    } catch (e) {\n    }\n  }"
+  },
+  {
+    "id": "API-44",
+    "path": "lib/features/stations/controller/all_stations_controller.dart",
+    "line": 78,
+    "symbol": "getStations",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/stations",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\"${ApiConfig.baseUrl}/stations\")",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final List<Station> parsedCache = sessionCache!.map((e) => Station.fromJson(e)).toList();",
+      "final List<dynamic> jsonData = jsonDecode(response.body);",
+      "..addAll(jsonData.map((e) => Station.fromJson(e)));"
+    ],
+    "cache": [
+      "_fetchLatestBackground();",
+      "sessionCache = jsonData;"
+    ],
+    "method_source": "\n  // -------------------------------\n  // API Call\n  // -------------------------------\n  Future<void> getStations({bool isBackground = false}) async {\n    try {\n      if (!isBackground) {\n        if (sessionCache != null) {\n          // 1. Display cached data instantly\n          final List<Station> parsedCache = sessionCache!.map((e) => Station.fromJson(e)).toList();\n          allStations.clear();\n          allStations.addAll(parsedCache);\n          stations.value = List.from(allStations);\n          \n          // 2. Fetch in background silently\n          _fetchLatestBackground();\n          return;\n        } else {\n          loading.value = true;\n        }\n      }\n\n      final response = await fetchData(\"${ApiConfig.baseUrl}/stations\");\n\n      if (response.statusCode == 200) {\n        final List<dynamic> jsonData = jsonDecode(response.body);\n        \n        // Update Static Cache\n        sessionCache = jsonData;\n\n        allStations\n          ..clear()\n          ..addAll(jsonData.map((e) => Station.fromJson(e)));\n\n        // If a search is active, we should re-apply it instead of just copying allStations.\n        if (isSearching.value && searchController.text.isNotEmpty) {\n           _performSearch(searchController.text);\n        } else {\n           stations.value = List.from(allStations);\n        }\n      }\n    } catch (e) {\n      if (!isBackground) {\n        showCustomErrorDialog(errorMessage: e.toString());\n      }\n      debugPrint('Stations error: $e');\n    } finally {\n      if (!isBackground) {\n        loading.value = false;\n      }\n    }\n  }"
+  },
+  {
+    "id": "API-45",
+    "path": "lib/features/stations/controller/edit_stations_controller.dart",
+    "line": 51,
+    "symbol": "allBranches",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/new-station",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\n        \"${ApiConfig.baseUrl}/new-station\",\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final jsonData = json.decode(res.body);",
+      "final parsedData = AddStationData.fromJson(jsonData);"
+    ],
+    "cache": [],
+    "method_source": "    Future<void> allBranches() async {\n    try {\n      final res = await fetchData(\n        \"${ApiConfig.baseUrl}/new-station\",\n      );\n\n      if (res.statusCode == 200) {\n        final jsonData = json.decode(res.body);\n        final parsedData = AddStationData.fromJson(jsonData);\n        branchList = parsedData.branches;\n        waterSourceList = parsedData.waterSources;\n        update();\n      }\n    // ignore: empty_catches\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n    }\n  }"
+  },
+  {
+    "id": "API-46",
+    "path": "lib/features/stations/controller/edit_stations_controller.dart",
+    "line": 70,
+    "symbol": "allareas",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/all-areas",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\"${ApiConfig.baseUrl}/all-areas\")",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final jsonData = jsonDecode(response.body) as List<dynamic>;",
+      "jsonData.map((json) => AreaOfService.fromJson(json))"
+    ],
+    "cache": [],
+    "method_source": "\n  Future<void> allareas() async {\n    try {\n      final response = await fetchData(\"${ApiConfig.baseUrl}/all-areas\");\n      \n      if (response.statusCode == 200) {\n        final jsonData = jsonDecode(response.body) as List<dynamic>;\n        areas.clear();\n        areas.addAll(\n          jsonData.map((json) => AreaOfService.fromJson(json))\n        );\n        update();\n      }\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n    }\n  }"
+  },
+  {
+    "id": "API-47",
+    "path": "lib/features/stations/controller/edit_stations_controller.dart",
+    "line": 97,
+    "symbol": "edit_Stations",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/edit-station/$Stations_id",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\n        \"${ApiConfig.baseUrl}/edit-station/$Stations_id\",\n        {\n          \"name\": name,\n          \"branch_id\": branchId,\n          \"water_source_id\": sourceId,\n          \"station_type\": typeId,\n          \"station_water_capacity\": capacity,\n          \"area_id\": areaId,\n        },\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final errorBody = jsonDecode(res.body);"
+    ],
+    "cache": [
+      "StationsController.sessionCache = null;"
+    ],
+    "method_source": "\n  Future<void> edit_Stations({\n    // ignore: non_constant_identifier_names\n    required int Stations_id,\n    required String name,\n    required int branchId,\n    required int sourceId,\n    required String typeId,\n    int? areaId,\n    required int capacity,\n  }) async {\n    try {\n      looading.value = true;\n      final res = await postData(\n        \"${ApiConfig.baseUrl}/edit-station/$Stations_id\",\n        {\n          \"name\": name,\n          \"branch_id\": branchId,\n          \"water_source_id\": sourceId,\n          \"station_type\": typeId,\n          \"station_water_capacity\": capacity,\n          \"area_id\": areaId,\n        },\n      );\n\n      if (res.statusCode == 200) {\n        looading.value = false;\n        StationsController.sessionCache = null;\n        showSuccessToast(\"تم تعديل المحطة بنجاح\");\n        Get.offAllNamed('/Stations');\n      } else {\n        final errorBody = jsonDecode(res.body);\n        looading.value = false;\n        final errorMessage = errorBody['error'] ?? 'حدث خطأ غير متوقع';\n        showCustomErrorDialog(errorMessage: errorMessage);\n      }\n    } catch (e) {\n      looading.value = false;\n      showCustomErrorDialog(errorMessage: e.toString());\n    }\n  }"
+  },
+  {
+    "id": "API-48",
+    "path": "lib/features/stations/controller/following_stations_controller.dart",
+    "line": 67,
+    "symbol": "stationsTechs",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/station-techs",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\"${ApiConfig.baseUrl}/station-techs\")",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "stations.value = sessionCache!.map((e) => Station.fromJson(e)).toList();",
+      "final List data = json.decode(res.body);",
+      "stations.value = data.map((e) => Station.fromJson(e)).toList();"
+    ],
+    "cache": [
+      "_fetchLatestBackground();",
+      "sessionCache = data;"
+    ],
+    "method_source": "\n  Future<void> stationsTechs({bool isBackground = false}) async {\n    if (!isBackground && sessionCache != null) {\n      stations.value = sessionCache!.map((e) => Station.fromJson(e)).toList();\n      update();\n      _fetchLatestBackground();\n      return;\n    }\n    final res = await fetchData(\"${ApiConfig.baseUrl}/station-techs\");\n\n    if (res.statusCode == 200) {\n      final List data = json.decode(res.body);\n      sessionCache = data;\n      stations.value = data.map((e) => Station.fromJson(e)).toList();\n      update();\n    }\n  }"
+  },
+  {
+    "id": "API-49",
+    "path": "lib/features/tech_bills/controller/new_tech_bills.dart",
+    "line": 121,
+    "symbol": "stationsTechs",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/station-techs",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\"${ApiConfig.baseUrl}/station-techs\")",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      ".map((e) => Station.fromJson(e))",
+      "final decoded = json.decode(res.body);",
+      "if (decoded.containsKey('stations') && decoded['stations'] is List) {",
+      "data = decoded['stations'] as List<dynamic>;",
+      "} else if (decoded.containsKey('data') && decoded['data'] is List) {",
+      "data = decoded['data'] as List<dynamic>;",
+      ".map((e) => Station.fromJson(e))"
+    ],
+    "cache": [
+      "_fetchLatestBackground();",
+      "sessionCache = data;"
+    ],
+    "method_source": "\n  Future<void> stationsTechs({bool isBackground = false}) async {\n    if (!isBackground && sessionCache != null) {\n      stations.value = sessionCache!\n          .whereType<Map<String, dynamic>>()\n          .map((e) => Station.fromJson(e))\n          .toList();\n      update();\n      _fetchLatestBackground();\n      return;\n    }\n    if (!isBackground) loading.value = true;\n    try {\n      final res = await fetchData(\"${ApiConfig.baseUrl}/station-techs\");\n      if (res.statusCode == 200) {\n        final decoded = json.decode(res.body);\n        List<dynamic> data = [];\n\n        if (decoded is List) {\n          data = decoded;\n        } else if (decoded is Map<String, dynamic>) {\n          if (decoded.containsKey('stations') && decoded['stations'] is List) {\n            data = decoded['stations'] as List<dynamic>;\n          } else if (decoded.containsKey('data') && decoded['data'] is List) {\n            data = decoded['data'] as List<dynamic>;\n          }\n        }\n        \n        sessionCache = data;\n\n        stations.value =\n            data\n                .whereType<Map<String, dynamic>>()\n                .map((e) => Station.fromJson(e))\n                .toList();\n\n        if (selectedBranch.value != null &&\n            !getBranches().contains(selectedBranch.value)) {\n          selectedBranch.value = null;\n          selectedStation = null;\n          selectedTech = null;\n        }\n      } else {\n        if (!isBackground) showCustomErrorDialog(errorMessage: 'فشل في جلب بيانات المحطات. حاول مرة أخرى.');\n      }\n    } catch (e) {\n      print('Error fetching station techs: $e');\n      if (!isBackground) showCustomErrorDialog(errorMessage: e.toString());\n    } finally {\n      if (!isBackground) loading.value = false;\n      update();\n    }\n  }"
+  },
+  {
+    "id": "API-50",
+    "path": "lib/features/tech_bills/controller/new_tech_bills.dart",
+    "line": 181,
+    "symbol": "addTechBills",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/insert-or-edit-tech-bill",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\"${ApiConfig.baseUrl}/insert-or-edit-tech-bill\", {\n            \"technology_chlorine_consump\": chlorine,\n            \"technology_liquid_alum_consump\": liquid,\n            \"technology_solid_alum_consump\": solid,\n            \"technology_water_amount\": water,\n            \"measured_water\": measuredWater,\n            \"calculated_water\": calculatedWater,\n            \n            \"station_id\": staionid,\n            \"technology_id\": techid,\n            \"bill_month\": int.tryParse(monthController.text) ?? 0,\n            \"bill_year\": int.tryParse(yearController.text) ?? 0,\n          })",
+    "success_codes": [
+      "200",
+      "201"
+    ],
+    "response": [
+      "final errorBody = jsonDecode(res.body);"
+    ],
+    "cache": [
+      "TechBillscontroller.sessionCache = null;"
+    ],
+    "method_source": "\n  void addTechBills({\n    required int staionid,\n    required int techid,\n    required double chlorine,\n    required double liquid,\n    required double solid,\n    required double water,\n    required int index,\n    required double measuredWater,\n    required double calculatedWater,\n  }) async {\n    try {\n      loading.value = true;\n\n      final res =\n          await postData(\"${ApiConfig.baseUrl}/insert-or-edit-tech-bill\", {\n            \"technology_chlorine_consump\": chlorine,\n            \"technology_liquid_alum_consump\": liquid,\n            \"technology_solid_alum_consump\": solid,\n            \"technology_water_amount\": water,\n            \"measured_water\": measuredWater,\n            \"calculated_water\": calculatedWater,\n            \n            \"station_id\": staionid,\n            \"technology_id\": techid,\n            \"bill_month\": int.tryParse(monthController.text) ?? 0,\n            \"bill_year\": int.tryParse(yearController.text) ?? 0,\n          });\n\n      if (res.statusCode == 200 || res.statusCode == 201) {\n        loading.value = false;\n        TechBillscontroller.sessionCache = null;\n        showSuccessToast(\"تمت الإضافة بنجاح\");\n\n        // Clear input fields after successful submission\n      } else {\n        loading.value = false;\n        try {\n          final errorBody = jsonDecode(res.body);\n          final errorMessage = errorBody['message'] ?? errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();\n          showCustomErrorDialog(errorMessage: errorMessage.toString());\n        } catch (e) {\n          showCustomErrorDialog(errorMessage: e.toString());\n        }\n      }\n    } catch (e) {\n      loading.value = false;\n      print(\"Error during bill submission: $e\");\n      showCustomErrorDialog(errorMessage: \"حدث خطأ: ${e.toString()}\");\n    }\n  }"
+  },
+  {
+    "id": "API-51",
+    "path": "lib/features/tech_bills/controller/tech_bills/edit_techbills.dart",
+    "line": 73,
+    "symbol": "editTechBills",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/edit-old-tech-bills/$id",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\n        \"${ApiConfig.baseUrl}/edit-old-tech-bills/$id\",\n        {\n          \"calculated_water\": calculatedWater,\n          \"measured_water\": measuredWater,\n          \"technology_chlorine_consump\": chlorine,\n          \"technology_liquid_alum_consump\": liquid,\n          \"technology_solid_alum_consump\": solid,\n          \"technology_water_amount\": water,\n        },\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final errorBody = jsonDecode(res.body);"
+    ],
+    "cache": [
+      "TechBillscontroller.sessionCache = null;"
+    ],
+    "method_source": "  void editTechBills({\n    required int id,\n    required double chlorine,\n    required double liquid,\n    required double solid,\n    required double water,\n    required double calculatedWater,\n    required double measuredWater,\n  }) async {\n    try {\n      looading.value = true;\n\n      final res = await postData(\n        \"${ApiConfig.baseUrl}/edit-old-tech-bills/$id\",\n        {\n          \"calculated_water\": calculatedWater,\n          \"measured_water\": measuredWater,\n          \"technology_chlorine_consump\": chlorine,\n          \"technology_liquid_alum_consump\": liquid,\n          \"technology_solid_alum_consump\": solid,\n          \"technology_water_amount\": water,\n        },\n      );\n\n      if (res.statusCode == 200) {\n        looading.value = false;\n        TechBillscontroller.sessionCache = null;\n        showSuccessToast(\"تم التعديل بنجاح\");\n      } else {\n        looading.value = false;\n        String errorMessage = 'حدث خطأ غير متوقع';\n        try {\n          final errorBody = jsonDecode(res.body);\n          if (errorBody is Map) {\n            errorMessage = errorBody['error'] ?? errorBody['message'] ?? 'حدث خطأ غير متوقع';\n          }\n        } catch (_) {\n          // If the backend returns HTML or plain text (e.g., 500 Server Error)\n          errorMessage = 'حدث خطأ في الخادم (${res.statusCode})';\n        }\n        showCustomErrorDialog(errorMessage: errorMessage);\n      }\n    } catch (e) {\n      looading.value = false;\n      showCustomErrorDialog(errorMessage: e.toString());\n      print(\"Error during bill submission: $e\");\n    } \n  }"
+  },
+  {
+    "id": "API-52",
+    "path": "lib/features/tech_bills/controller/tech_bills/techbills.dart",
+    "line": 133,
+    "symbol": "fetchTechBills",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/tech-bills",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\"${ApiConfig.baseUrl}/tech-bills\")",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final jsonData = json.decode(res.body);",
+      "TechnologyBill technologyBill = TechnologyBill.fromJson(i);"
+    ],
+    "cache": [],
+    "method_source": "\n  // Example method to fetch tech bills data\n  void fetchTechBills() async {\n    try {\n      looading.value = true;\n      techBills.clear();\n      final res = await fetchData(\"${ApiConfig.baseUrl}/tech-bills\");\n\n      if (res.statusCode == 200) {\n        looading.value = false;\n        final jsonData = json.decode(res.body);\n        List<dynamic> responseData = jsonData;\n        for (var i in responseData) {\n          TechnologyBill technologyBill = TechnologyBill.fromJson(i);\n          techBills.add(technologyBill);\n        }\n        applyFilters(); // Apply filters after fetching data\n        update();\n      }\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n      looading.value = false;\n      print(\"Error fetching tech bills: $e\");\n    }\n  }"
+  },
+  {
+    "id": "API-53",
+    "path": "lib/features/tech_bills/controller/tech_bills/techbills.dart",
+    "line": 165,
+    "symbol": "addTechBills",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/edit-tech-bill/$id",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\n        \"${ApiConfig.baseUrl}/edit-tech-bill/$id\",\n        {\n          \"technology_chlorine_consump\": chlorine,\n          \"technology_liquid_alum_consump\": liquid,\n          \"technology_solid_alum_consump\": solid,\n          \"technology_water_amount\": water,\n        },\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final errorBody = jsonDecode(res.body);"
+    ],
+    "cache": [
+      "fetchTechBills();"
+    ],
+    "method_source": "\n  void addTechBills({\n    required int id,\n    required double chlorine,\n    required double liquid,\n    required double solid,\n    required double water,\n    required int index,\n  }) async {\n    try {\n      looading.value = true;\n      loadingIndex.value = index;\n\n      final res = await postData(\n        \"${ApiConfig.baseUrl}/edit-tech-bill/$id\",\n        {\n          \"technology_chlorine_consump\": chlorine,\n          \"technology_liquid_alum_consump\": liquid,\n          \"technology_solid_alum_consump\": solid,\n          \"technology_water_amount\": water,\n        },\n      );\n\n      if (res.statusCode == 200) {\n        looading.value = false;\n        fetchTechBills();\n        showSuccessToast(\"تمت الإضافة بنجاح\");\n\n        /// ✅ Clear input fields after successful submission\n        getChlorineController(index).clear();\n        getLiquidAlumController(index).clear();\n        getSolidAlumController(index).clear();\n        getWaterProducedController(index).clear();\n      } else {\n        looading.value = false;\n        final errorBody = jsonDecode(res.body);\n        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();\n        showCustomErrorDialog(errorMessage: errorMessage);\n      }\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n      looading.value = false;\n      print(\"Error during bill submission: $e\");\n    } finally {\n      loadingIndex.value = null;\n    }\n  }"
+  },
+  {
+    "id": "API-54",
+    "path": "lib/features/tech_bills/controller/techbills.dart",
+    "line": 223,
+    "symbol": "fetchTechBills",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/tech-bills",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\"${ApiConfig.baseUrl}/tech-bills\")",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "techBills.add(TechnologyBill.fromJson(i));",
+      "final jsonData = json.decode(res.body);",
+      "techBills.add(TechnologyBill.fromJson(i));"
+    ],
+    "cache": [
+      "_fetchLatestBackground();",
+      "sessionCache = jsonData;"
+    ],
+    "method_source": "\n  Future<void> fetchTechBills({bool isBackground = false}) async {\n    if (!isBackground && sessionCache != null) {\n      techBills.clear();\n      for (var i in sessionCache!) {\n        techBills.add(TechnologyBill.fromJson(i));\n      }\n      applyFilters();\n      _fetchLatestBackground();\n      return;\n    }\n\n    try {\n      if (!isBackground) {\n        loading.value = true;\n      }\n      \n      final res = await fetchData(\"${ApiConfig.baseUrl}/tech-bills\");\n\n      if (res.statusCode == 200) {\n        final jsonData = json.decode(res.body);\n        sessionCache = jsonData;\n        \n        techBills.clear();\n        for (var i in jsonData) {\n          techBills.add(TechnologyBill.fromJson(i));\n        }\n        applyFilters();\n      }\n    } catch (e) {\n      if (!isBackground) {\n        showCustomErrorDialog(errorMessage: e.toString());\n      }\n      print(\"Error fetching tech bills: $e\");\n    } finally {\n      if (!isBackground) {\n        loading.value = false;\n      }\n    }\n  }"
+  },
+  {
+    "id": "API-55",
+    "path": "lib/features/tech_bills/controller/techbills.dart",
+    "line": 274,
+    "symbol": "addTechBills",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/edit-tech-bill/$id",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\n        \"${ApiConfig.baseUrl}/edit-tech-bill/$id\",\n        {\n          \"technology_chlorine_consump\": chlorine,\n          \"technology_liquid_alum_consump\": liquid,\n          \"technology_solid_alum_consump\": solid,\n          \"technology_water_amount\": water,\n          \"measured_water\": measuredWater,\n          \"calculated_water\": calculatedWater,\n        },\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final errorBody = jsonDecode(res.body);"
+    ],
+    "cache": [
+      "sessionCache = null;",
+      "fetchTechBills(isBackground: true);"
+    ],
+    "method_source": "\n  void addTechBills({\n    required int id,\n    required double chlorine,\n    required double liquid,\n    required double solid,\n    required double water,\n    required double calculatedWater,\n    required double measuredWater,\n    required int index,\n  }) async {\n    try {\n      loading.value = true;\n      loadingIndex.value = index;\n\n      final res = await postData(\n        \"${ApiConfig.baseUrl}/edit-tech-bill/$id\",\n        {\n          \"technology_chlorine_consump\": chlorine,\n          \"technology_liquid_alum_consump\": liquid,\n          \"technology_solid_alum_consump\": solid,\n          \"technology_water_amount\": water,\n          \"measured_water\": measuredWater,\n          \"calculated_water\": calculatedWater,\n        },\n      );\n\n      if (res.statusCode == 200) {\n        loading.value = false;\n        sessionCache = null;\n        fetchTechBills(isBackground: true);\n        showSuccessToast(\"تمت الإضافة بنجاح\");\n\n        // Clear input fields after successful submission\n        getChlorineController(index).clear();\n        getLiquidAlumController(index).clear();\n        getSolidAlumController(index).clear();\n        getWaterProducedController(index).clear();\n        getcalculatedWaterControllers(index).clear();\n        getmeasuredWaterControllers(index).clear();\n      } else {\n        loading.value = false;\n        final errorBody = jsonDecode(res.body);\n        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();\n        showCustomErrorDialog(errorMessage: errorMessage);\n      }\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n      loading.value = false;\n      print(\"Error during bill submission: $e\");\n    } finally {\n      loadingIndex.value = null;\n    }\n  }"
+  },
+  {
+    "id": "API-56",
+    "path": "lib/features/technology/controller/add_tech_controller.dart",
+    "line": 53,
+    "symbol": "addtech",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/new-tech",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\n        \"${ApiConfig.baseUrl}/new-tech\",\n        (tech.toJson()), // ✅ Proper JSON encoding\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final errorBody = jsonDecode(res.body);"
+    ],
+    "cache": [
+      "TechnlogyController.sessionCache = null;"
+    ],
+    "method_source": "\n  // Filter function\n  \n\n  Future<void> addtech({required TechnologyModel tech}) async {\n    try {\n      looading.value = true;\n      final res = await postData(\n        \"${ApiConfig.baseUrl}/new-tech\",\n        (tech.toJson()), // ✅ Proper JSON encoding\n      );\n\n      if (res.statusCode == 200) {\n        looading.value = false;\n        TechnlogyController.sessionCache = null;\n        showSuccessToast(\"تم اضافة التقنية بنجاح\");\n      } else {\n        looading.value = false;\n        final errorBody = jsonDecode(res.body);\n\n        // Extract Arabic error message\n        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();\n\n        // Show custom dialog or toast with Arabic error\n        showCustomErrorDialog(errorMessage: errorMessage);\n      }\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n      looading.value = false;\n      print(\"Error adding station: $e\");\n    }\n  }"
+  },
+  {
+    "id": "API-57",
+    "path": "lib/features/technology/controller/edit_tech_controller.dart",
+    "line": 41,
+    "symbol": "edittech",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/edit-tech/$id",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\n        \"${ApiConfig.baseUrl}/edit-tech/$id\",\n        (tech.toJson()), // ✅ Proper JSON encoding\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final errorBody = jsonDecode(res.body);"
+    ],
+    "cache": [
+      "TechnlogyController.sessionCache = null;"
+    ],
+    "method_source": "\n  Future<void> edittech({\n    required TechnologyModel tech,\n    required int id,\n  }) async {\n    try {\n      looading.value = true;\n      final res = await postData(\n        \"${ApiConfig.baseUrl}/edit-tech/$id\",\n        (tech.toJson()), // ✅ Proper JSON encoding\n      );\n\n      if (res.statusCode == 200) {\n        looading.value = false;\n        TechnlogyController.sessionCache = null;\n        showSuccessToast(\"تم تعديل التقنية بنجاح\");\n      } else {\n        looading.value = false;\n        final errorBody = jsonDecode(res.body);\n\n        // Extract Arabic error message\n        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();\n\n        // Show custom dialog or toast with Arabic error\n        showCustomErrorDialog(errorMessage: errorMessage);\n      }\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n      looading.value = false;\n    }\n  }"
+  },
+  {
+    "id": "API-58",
+    "path": "lib/features/technology/controller/technlogy.dart",
+    "line": 132,
+    "symbol": "alltechnology",
+    "method": "GET",
+    "endpoint": "${ApiConfig.baseUrl}/technologies",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "fetchData(\"${ApiConfig.baseUrl}/technologies\")",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "TechnologyModel tech = TechnologyModel.fromJson(i);",
+      "final jsonData = json.decode(res.body);",
+      "TechnologyModel tech = TechnologyModel.fromJson(i);"
+    ],
+    "cache": [
+      "_fetchLatestBackground();",
+      "sessionCache = responseData;"
+    ],
+    "method_source": "\n  // --- API Calls ---\n\n  Future<void> alltechnology({bool isBackground = false}) async {\n    if (!isBackground) {\n      if (sessionCache != null) {\n        // 1. Display cached data instantly\n        all_technology.clear();\n        for (var i in sessionCache!) {\n          TechnologyModel tech = TechnologyModel.fromJson(i);\n          all_technology.add(tech);\n        }\n        technologies = all_technology;\n        _applyFilters();\n        \n        // 2. Fetch silently in background\n        _fetchLatestBackground();\n        return;\n      } else {\n        isLoading.value = true;\n        update();\n      }\n    }\n    \n    try {\n      final res = await fetchData(\"${ApiConfig.baseUrl}/technologies\");\n\n      if (res.statusCode == 200) {\n        final jsonData = json.decode(res.body);\n        List<dynamic> responseData = jsonData;\n\n        // Update static cache\n        sessionCache = responseData;\n\n        all_technology.clear();\n        for (var i in responseData) {\n          TechnologyModel tech = TechnologyModel.fromJson(i);\n          all_technology.add(tech);\n        }\n        \n        technologies = all_technology; // Update global\n        _applyFilters(); // Initialize filtered list\n        \n        if (!isBackground) {\n          isLoading.value = false;\n          update();\n        }\n      } else {\n        if (!isBackground) {\n          isLoading.value = false;\n          update();\n          debugPrint(\"Failed to fetch technologies: ${res.body}\");\n        }\n      }\n    } catch (e) {\n      if (!isBackground) {\n        showCustomErrorDialog(errorMessage: e.toString());\n        isLoading.value = false;\n        update();\n        debugPrint(\"Error fetching technologies: $e\");\n      }\n    }\n  }"
+  },
+  {
+    "id": "API-59",
+    "path": "lib/features/technology/controller/technlogy.dart",
+    "line": 184,
+    "symbol": "addtech",
+    "method": "POST",
+    "endpoint": "${ApiConfig.baseUrl}/new-tech",
+    "query": "No query map added at this call; path interpolation retained.",
+    "call": "postData(\n        \"${ApiConfig.baseUrl}/new-tech\",\n        (tech.toJson()),\n      )",
+    "success_codes": [
+      "200"
+    ],
+    "response": [
+      "final errorBody = jsonDecode(res.body);"
+    ],
+    "cache": [],
+    "method_source": "\n  Future<void> addtech({required TechnologyModel tech}) async {\n    try {\n      looading.value = true;\n      final res = await postData(\n        \"${ApiConfig.baseUrl}/new-tech\",\n        (tech.toJson()),\n      );\n\n      if (res.statusCode == 200) {\n        looading.value = false;\n        showSuccessToast(\"تم اضافة التقنية بنجاح\");\n      } else {\n        looading.value = false;\n        final errorBody = jsonDecode(res.body);\n        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();\n        showCustomErrorDialog(errorMessage: errorMessage);\n      }\n    } catch (e) {\n      showCustomErrorDialog(errorMessage: e.toString());\n      looading.value = false;\n      debugPrint(\"Error adding tech: $e\");\n    }\n  }"
+  }
+]

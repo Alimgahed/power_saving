@@ -1,3 +1,5 @@
+import 'package:power_saving/core/utils/owned_debounce.dart';
+import 'package:power_saving/core/utils/request_guard.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,13 +9,16 @@ import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class RelationsController extends GetxController {
+  final _requests = RequestGuard();
+  final loadError = ''.obs;
+  final isRefreshing = false.obs;
+
   // Observable states
   final loading = false.obs;
   final isSearching = false.obs;
   final searchError = ''.obs;
   final isProcessing = false.obs;
 
-  static List<dynamic>? sessionCache;
   // Master & display data
   final List<StationGaugeTechnologyRelation> allRelations = [];  // non-observable
   final relations = <StationGaugeTechnologyRelation>[].obs;       // observable for UI
@@ -32,6 +37,7 @@ class RelationsController extends GetxController {
 
   @override
   void onClose() {
+    _requests.close();
     _searchWorker?.dispose();
     searchController.dispose();
     super.onClose();
@@ -41,7 +47,7 @@ class RelationsController extends GetxController {
   // Search Worker (Debounce)
   // -------------------------------
   void _setupSearchWorker() {
-    _searchWorker = debounce(
+    _searchWorker = ownedDebounce(
       _searchQuery,
       (query) => _performSearch(query),
       time: const Duration(milliseconds: 300),
@@ -56,61 +62,43 @@ class RelationsController extends GetxController {
   // -------------------------------
   // API Call - Get Relations
   // -------------------------------
-  Future<void> getRelations({bool isBackground = false}) async {
-    if (!isBackground) {
-      if (sessionCache != null) {
-        allRelations.clear();
-        allRelations.addAll(sessionCache!.map((e) => StationGaugeTechnologyRelation.fromJson(e)));
-        relations.value = List.from(allRelations);
-        
-        // Background fetch
-        _fetchLatestBackground();
-        return;
-      } else {
-        loading.value = true;
-      }
-    }
-
+  Future<void> getRelations({bool isBackground = false, bool force = false}) async {
+    final request = _requests.begin();
+    if (!request.isCurrent) return;
+    loadError.value = '';
+    loading.value = !isBackground;
+    isRefreshing.value = !loading.value;
+    update();
     try {
-      if (!isBackground) {
-        allRelations.clear();
-        relations.clear();
-      }
 
-      final response = await fetchData("${ApiConfig.baseUrl}/stg-relations");
+      final res = await fetchData("${ApiConfig.baseUrl}/stg-relations",
+          isCurrent: () => request.isCurrent);
+      if (!request.isCurrent) return;
+      if (res.statusCode != 200) throw StateError('تعذر تحميل البيانات');
+      final List<dynamic> responseData = jsonDecode(res.body);
+      final parsed = responseData.map((e) => StationGaugeTechnologyRelation.fromJson(e)).toList();
 
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonData = jsonDecode(response.body);
-        
-        sessionCache = jsonData;
-
-        final List<StationGaugeTechnologyRelation> parsed = jsonData.map((e) => StationGaugeTechnologyRelation.fromJson(e)).toList();
-
-        allRelations.clear();
-        allRelations.addAll(parsed);
-        
-        // Apply search filter again to keep current UI state consistent
-        _performSearch(_searchQuery.value);
-      }
+      allRelations.clear();
+      allRelations.addAll(parsed);
+      _performSearch(_searchQuery.value);
     } catch (e) {
-      if (!isBackground) {
-        showCustomErrorDialog(errorMessage: e.toString());
-        debugPrint('Relations error: $e');
-      }
+      if (!request.isCurrent) return;
+      loadError.value = 'تعذر تحديث البيانات. يرجى إعادة المحاولة.';
     } finally {
-      if (!isBackground) {
+      if (request.isCurrent) {
         loading.value = false;
+        isRefreshing.value = false;
+        update();
       }
     }
   }
 
   Future<void> _fetchLatestBackground() async {
-    getRelations(isBackground: true);
+    await getRelations(isBackground: true);
   }
 
   Future<void> forceRefresh() async {
-    loading.value = true;
-    getRelations(isBackground: false);
+    await getRelations(force: true);
   }
 
   // -------------------------------
@@ -123,10 +111,10 @@ class RelationsController extends GetxController {
       final response = await fetchData("${ApiConfig.baseUrl}/edit-relation/$id");
 
       if (response.statusCode == 200) {
-        // Cache invalidation and silent refresh
-        sessionCache = null;
+        // Refresh the active screen after the existing mutation
+
         await _fetchLatestBackground();
-        
+
         showSuccessToast(successMessage);
       } else {
         final errorBody = jsonDecode(response.body);
@@ -199,7 +187,7 @@ class RelationsController extends GetxController {
   // Get statistics
   int get activeCount => 
       relations.where((r) => r.relationStatus == true).length;
-  
+
   int get inactiveCount => 
       relations.where((r) => r.relationStatus == false).length;
 }

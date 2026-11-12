@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:power_saving/core/utils/request_guard.dart';
 import 'package:power_saving/features/reports/model/report.dart';
 import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
@@ -20,9 +21,6 @@ class ReportsController extends GetxController {
   /// FILTERED DATA (USED BY TABLE)
   RxList<ReportBranch> filteredBranchs = <ReportBranch>[].obs;
 
-  /// Precomputed lowercase index for fast, smooth search
-  List<_BranchIndex> _index = [];
-
   RxBool isLoading = false.obs;
   RxBool isSearching = false.obs;
 
@@ -33,6 +31,9 @@ class ReportsController extends GetxController {
   final TextEditingController searchController = TextEditingController();
   final RxString searchQuery = ''.obs;
   Worker? _searchWorker;
+  Worker? _filterWorker;
+  Timer? _searchTimer;
+  final _requests = RequestGuard();
 
   /// DROPDOWN FILTERS
   RxnString selectedFilterBranch = RxnString(null);
@@ -73,16 +74,15 @@ class ReportsController extends GetxController {
     startdate = TextEditingController();
     enddate = TextEditingController();
 
-    _searchWorker = debounce(
-      searchQuery,
-      (_) {
+    _searchWorker = ever(searchQuery, (_) {
+      _searchTimer?.cancel();
+      _searchTimer = Timer(const Duration(milliseconds: 300), () {
         applyFilters();
         isSearching.value = false;
-      },
-      time: const Duration(milliseconds: 300),
-    );
+      });
+    });
 
-    everAll([
+    _filterWorker = everAll([
       selectedFilterBranch,
       selectedFilterStation,
       selectedFilterMonth,
@@ -99,6 +99,10 @@ class ReportsController extends GetxController {
 
   @override
   void onClose() {
+    _requests.close();
+    _searchTimer?.cancel();
+    _filterWorker?.dispose();
+    searchController.removeListener(_onSearchChanged);
     startdate.dispose();
     enddate.dispose();
     searchController.dispose();
@@ -189,13 +193,14 @@ class ReportsController extends GetxController {
     required String end,
     required String name,
   }) async {
+    final request = _requests.begin();
+    if (!request.isCurrent) return;
     try {
       isLoading.value = true;
       update();
 
       branchs.clear();
       filteredBranchs.clear();
-      _index.clear();
       clearSearch(); // Clear any existing search
 
       final res = await postData(
@@ -205,8 +210,10 @@ class ReportsController extends GetxController {
           "from_date": start,
           "to_date": end,
         },
+        isCurrent: () => request.isCurrent,
       );
 
+      if (!request.isCurrent) return;
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
 
@@ -231,15 +238,13 @@ class ReportsController extends GetxController {
         // Set filtered data
         filteredBranchs.value = List.from(branchs);
 
-        // Build optimized search index
-        _buildSearchIndex();
-
         sumvalueofreport(filteredBranchs);
       }
 
       isLoading.value = false;
       update();
     } catch (e) {
+      if (!request.isCurrent) return;
       showCustomErrorDialog(errorMessage: e.toString());
       isLoading.value = false;
       update();
@@ -247,33 +252,4 @@ class ReportsController extends GetxController {
     }
   }
 
-  // ================== BUILD SEARCH INDEX ==================
-  void _buildSearchIndex() {
-    _index = branchs.map((b) {
-      return _BranchIndex(
-        branch: b,
-        branchLower: b.branchName.toLowerCase(),
-        stationLower: (b.stationname ?? '').toLowerCase(),
-        monthStr: b.month.toString(),
-        yearStr: b.year.toString(),
-      );
-    }).toList();
-  }
-}
-
-// ================== SEARCH INDEX CLASS ==================
-class _BranchIndex {
-  final ReportBranch branch;
-  final String branchLower;
-  final String stationLower;
-  final String monthStr;
-  final String yearStr;
-
-  _BranchIndex({
-    required this.branch,
-    required this.branchLower,
-    required this.stationLower,
-    required this.monthStr,
-    required this.yearStr,
-  });
 }

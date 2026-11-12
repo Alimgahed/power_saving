@@ -22,8 +22,10 @@ class EditPlacesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     if (place == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!context.mounted || ModalRoute.of(context)?.isCurrent != true) return;
         Get.offAllNamed('/Places');
       });
+      return const SizedBox();
     }
 
     return RTLScaffold(
@@ -38,6 +40,7 @@ class EditPlacesScreen extends StatelessWidget {
           builder: (controller) {
             /// Init values once
             WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (!context.mounted || controller.isClosed) return;
               if (controller.name.text.isEmpty && place != null) {
                 controller.name.text = place!.placeName;
                 controller.placeTypeId = place!.placeTypeId;

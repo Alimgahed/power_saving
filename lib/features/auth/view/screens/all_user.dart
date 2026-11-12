@@ -139,15 +139,16 @@ class AllUserScreen extends StatelessWidget {
                                     const SizedBox(width: 10),
                                     
                                     // User Info
-                                    Text(
-                                      user.empName,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF1E293B),
+                                    Expanded(
+                                      child: Text(
+                                        user.empName,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF1E293B),
+                                        ),
                                       ),
                                     ),
-                                    Spacer(),
                                     // Status Toggle
                                     Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -297,12 +298,14 @@ class AllUserScreen extends StatelessWidget {
             children: [
               Icon(icon, size: 18, color: color),
               const SizedBox(width: 8),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey.shade600,
-                  fontWeight: FontWeight.w600,
+              Expanded(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey.shade600,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ],
@@ -322,15 +325,15 @@ class AllUserScreen extends StatelessWidget {
   }
 
   void _showEditDialog(BuildContext context, AllUserController controller, int index, User user) {
-    final nameController = TextEditingController(text: user.empName);
-    final usernameController = TextEditingController(text: user.username);
-    final empCodeController = TextEditingController(text: user.empCode);
-    int groupIdController =  user.groupId!;
-    final isActiveNotifier = ValueNotifier<bool>(user.isActive);
-
     showDialog(
       context: context,
-      builder: (_) {
+      builder: (_) => _UserEditResources(
+        user: user,
+        builder: (resources) {
+          final nameController = resources.name;
+          final usernameController = resources.username;
+          final empCodeController = resources.empCode;
+          final isActiveNotifier = resources.isActive;
         return Directionality(
           textDirection: TextDirection.rtl,
           child: Dialog(
@@ -366,12 +369,14 @@ class AllUserScreen extends StatelessWidget {
                         children: [
                           Icon(Icons.edit, color: Colors.white, size: 28),
                           SizedBox(width: 12),
-                          Text(
-                            'تعديل بيانات المستخدم',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                          Expanded(
+                            child: Text(
+                              'تعديل بيانات المستخدم',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ],
@@ -445,7 +450,7 @@ class AllUserScreen extends StatelessWidget {
                                     ),
                                   ],
                                   onChanged: (val) {
-                                  groupIdController=val!;
+                                  resources.groupId=val!;
                                   },
                                   labelText: 'الترشيد والطاقة',
                                   hintText: 'الادارة',
@@ -473,7 +478,10 @@ class AllUserScreen extends StatelessWidget {
                             child: ValueListenableBuilder<bool>(
                               valueListenable: isActiveNotifier,
                               builder: (context, isActive, _) {
-                                return Row(
+                                return Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  spacing: 8,
+                                  runSpacing: 8,
                                   children: [
                                     Icon(
                                       Icons.toggle_on_outlined,
@@ -489,7 +497,6 @@ class AllUserScreen extends StatelessWidget {
                                         color: Color(0xFF334155),
                                       ),
                                     ),
-                                    const Spacer(),
                                     Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                       decoration: BoxDecoration(
@@ -526,6 +533,7 @@ class AllUserScreen extends StatelessWidget {
                                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                     ),
                                  Obx(() => Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Checkbox(
                   checkColor: Colors.white,
@@ -536,7 +544,7 @@ class AllUserScreen extends StatelessWidget {
                     controller.resetPassword.value = value!;
                   },
                 ),
-                const Text('إعادة تعيين كلمة المرور'),
+                const Flexible(child: Text('إعادة تعيين كلمة المرور')),
               ],
             )),
       
@@ -608,7 +616,7 @@ class AllUserScreen extends StatelessWidget {
                                         final editedUser = User(
                                           empCode: empCodeController.text,
                                           empName: nameController.text,
-                                          groupId: groupIdController,
+                                          groupId: resources.groupId,
                                           isActive: isActiveNotifier.value,
                                           username: usernameController.text,
                                           reset:controller.resetPassword.value
@@ -646,7 +654,8 @@ class AllUserScreen extends StatelessWidget {
             ),
           ),
         );
-      },
+        },
+      ),
     );
   }
 
@@ -692,4 +701,34 @@ class AllUserScreen extends StatelessWidget {
       ],
     );
   }
+}
+
+/// Owns resources for the lifetime of the dialog subtree, including its exit animation.
+class _UserEditResources extends StatefulWidget {
+  const _UserEditResources({required this.user, required this.builder});
+  final User user;
+  final Widget Function(_UserEditResourcesState) builder;
+
+  @override
+  State<_UserEditResources> createState() => _UserEditResourcesState();
+}
+
+class _UserEditResourcesState extends State<_UserEditResources> {
+  late final name = TextEditingController(text: widget.user.empName);
+  late final username = TextEditingController(text: widget.user.username);
+  late final empCode = TextEditingController(text: widget.user.empCode);
+  late final isActive = ValueNotifier<bool>(widget.user.isActive);
+  late int groupId = widget.user.groupId!;
+
+  @override
+  void dispose() {
+    name.dispose();
+    username.dispose();
+    empCode.dispose();
+    isActive.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.builder(this);
 }

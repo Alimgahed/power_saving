@@ -32,10 +32,12 @@ class SectionHeader extends StatelessWidget {
             child: Icon(icon, color: headerColor, size: AppDimensions.iconM),
           ),
           const SizedBox(width: AppDimensions.paddingM),
-          Text(
-            title,
-            style: AppTextStyles.h3.copyWith(
-              color: headerColor.withOpacity(0.8),
+          Flexible(
+            child: Text(
+              title,
+              style: AppTextStyles.h3.copyWith(
+                color: headerColor.withOpacity(0.8),
+              ),
             ),
           ),
           const SizedBox(width: AppDimensions.paddingM),

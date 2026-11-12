@@ -1,0 +1,13 @@
+{
+  "changed_existing_files": [
+    "lib/features/reports/controller/reports_controller.dart",
+    "lib/features/reports/view/screens/report.dart",
+    "lib/features/tech_bills/controller/new_tech_bills.dart",
+    "lib/features/technology/controller/edit_tech_controller.dart",
+    "lib/features/technology/view/screens/edittech.dart"
+  ],
+  "all_other_baseline_files_unchanged": true,
+  "report_table_and_printer_strategies_byte_identical": true,
+  "report_filter_and_totals_methods_byte_identical": true,
+  "dependency_manifests_unchanged": true
+}

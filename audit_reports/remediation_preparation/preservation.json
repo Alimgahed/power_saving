@@ -1,0 +1,26 @@
+{
+  "baseline_files_checked": 610,
+  "changed_existing_files": [],
+  "missing_existing_files": [],
+  "new_files_outside_preparation_directory": [],
+  "all_existing_regular_files_preserved": true,
+  "original_findings": 30,
+  "statuses": {
+    "BLOCKED": 9,
+    "READY": 14,
+    "REQUIRES INVESTIGATION": 7
+  },
+  "business_api_call_sites": 59,
+  "required_documents": 7,
+  "broken_document_links": [],
+  "current_git_status": " M pubspec.lock\n?? audit_reports/\n",
+  "checks_not_executed": [
+    "Flutter tests",
+    "analyzer",
+    "builds",
+    "runtime security checks",
+    "visual verification",
+    "live API requests"
+  ],
+  "actual_version_check": "cached Dart SDK --version: 3.12.2; Flutter 3.44.2 read from existing SDK cache metadata"
+}

@@ -1,14 +1,15 @@
+import 'package:power_saving/core/utils/request_guard.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 
 import 'package:get/get.dart';
-import 'package:power_saving/features/Counter/controller/counter.dart';
 import 'package:power_saving/features/Counter/model/Counter_model.dart';
 import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class EditCounter extends GetxController {
+  final _lookupRequests0 = RequestGuard();
   RxBool looadig = false.obs;
   List<VoltageType> allVoltage = [];
   int? voltage;
@@ -33,6 +34,7 @@ class EditCounter extends GetxController {
 
   @override
   void onClose() {
+    _lookupRequests0.close();
     Counter_number.dispose();
     meterId.dispose();
     meterFactor.dispose();
@@ -56,7 +58,7 @@ class EditCounter extends GetxController {
         looadig.value = false;
         showSuccessToast("تم تعديل العداد بنجاح");
         // Refresh the main counter list
-        CounterController.sessionCache = null;
+
       } else {
         looadig.value = false;
         Get.snackbar(
@@ -69,15 +71,19 @@ class EditCounter extends GetxController {
     } catch (e) {
       showCustomErrorDialog(errorMessage: e.toString());
       looadig.value = false;
-      
+
     }
   }
 
   Future<void> allVoltige() async {
+    final request = _lookupRequests0.begin();
+    if (!request.isCurrent) return;
     try {
       final res = await fetchData(
         "${ApiConfig.baseUrl}/new-gauge",
+        isCurrent: () => request.isCurrent,
       );
+      if (!request.isCurrent) return;
 
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
@@ -96,6 +102,7 @@ class EditCounter extends GetxController {
         );
       }
     } catch (e) {
+      if (!request.isCurrent) return;
       showCustomErrorDialog(errorMessage: e.toString());
     }
   }

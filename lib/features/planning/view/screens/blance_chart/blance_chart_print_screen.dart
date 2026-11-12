@@ -1,3 +1,4 @@
+import 'package:power_saving/core/utils/html_encoding.dart';
 import 'package:power_saving/global/html_platform.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -487,7 +488,7 @@ String generateEnhancedPrintHtml(BalanceChartController controller) {
         <div class="area-info">
           <div class="area-info-item">
             <div class="label">اسم المنطقة</div>
-            <div class="value">${areaData.areaName}</div>
+            <div class="value">${htmlText(areaData.areaName)}</div>
           </div>
           <div class="area-info-item">
             <div class="label">عدد الأماكن</div>
@@ -539,7 +540,7 @@ String generateEnhancedPrintHtml(BalanceChartController controller) {
         <h3><span class="icon">📊</span>منحنى الاتزان المائي</h3>
         <div class="chart-container">
           ${chartBase64.isNotEmpty 
-            ? '<img src="data:image/png;base64,$chartBase64" alt="منحنى الاتزان المائي" />'
+            ? '<img src="data:image/png;base64,${htmlText(chartBase64)}" alt="منحنى الاتزان المائي" />'
             : '<div class="no-chart">لا يوجد رسم بياني</div>'
           }
         </div>
@@ -598,8 +599,8 @@ String generateEnhancedPrintHtml(BalanceChartController controller) {
     
     String rows = stations.map((station) => '''
       <tr>
-        <td>${station.stationName}</td>
-        <td>${station.stationType}</td>
+        <td>${htmlText(station.stationName)}</td>
+        <td>${htmlText(station.stationType)}</td>
         <td>${formatNumber((station.stationWaterCapacity ?? 0).toDouble())}</td>
       </tr>
     ''').join('');
@@ -635,10 +636,10 @@ String generateEnhancedPrintHtml(BalanceChartController controller) {
       
       return '''
         <tr>
-          <td>${place.areaName}</td>
-          <td>${place.branchName}</td>
-          <td>${place.placeName}</td>
-          <td>${place.placeTypeName}</td>
+          <td>${htmlText(place.areaName)}</td>
+          <td>${htmlText(place.branchName)}</td>
+          <td>${htmlText(place.placeName)}</td>
+          <td>${htmlText(place.placeTypeName)}</td>
      
         </tr>
       ''';

@@ -1,15 +1,16 @@
+import 'package:power_saving/core/utils/request_guard.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart'; // kIsWeb
 import 'package:get/get.dart';
 
 import 'package:power_saving/global/ip_config.dart';
-import 'package:power_saving/global/iframe_platform.dart';
 import 'package:power_saving/features/home/model/home.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class HomeController extends GetxController {
+  final _reads = RequestGuard();
   RxBool loading = false.obs;
   ConsumptionModel? consumptionModel;
 
@@ -30,12 +31,21 @@ class HomeController extends GetxController {
     home();
   }
 
+  @override
+  void onClose() {
+    _reads.close();
+    super.onClose();
+  }
+
   Future<void> home() async {
+    final request = _reads.begin();
+    if (!request.isCurrent) return;
     try {
       loading.value = true;
 
       // ✅ Use new ApiConfig
-      final res = await fetchData(ApiConfig.baseUrl);
+      final res = await fetchData(ApiConfig.baseUrl, isCurrent: () => request.isCurrent);
+      if (!request.isCurrent) return;
 
       if (res.statusCode == 200) {
         final jsonData = jsonDecode(res.body);
@@ -46,11 +56,14 @@ class HomeController extends GetxController {
         animateAll();
       }
     } catch (e) {
+      if (!request.isCurrent) return;
       showCustomErrorDialog(errorMessage: e.toString());
       debugPrint("❌ Error fetching home: $e");
     } finally {
-      loading.value = false;
-      update();
+      if (request.isCurrent) {
+        loading.value = false;
+        update();
+      }
     }
   }
 

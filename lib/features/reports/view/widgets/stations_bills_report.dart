@@ -1,3 +1,4 @@
+import 'package:power_saving/core/utils/html_encoding.dart';
 import 'package:flutter/material.dart';
 import 'package:power_saving/features/reports/model/report.dart';
 import 'package:power_saving/features/reports/view/screens/report.dart';
@@ -33,7 +34,7 @@ class StationBillsReportPrinter extends BaseReportPrinter {
 
   @override
   List<String> rowCells(ReportBranch b, String type) => [
-        '<td class="highlight-cell">${b.stationname}</td>',
+        '<td class="highlight-cell">${htmlText(b.stationname)}</td>',
         '<td class="highlight-cell">${formatNum(b.totalBill)}</td>',
         '<td>${b.month}</td>',
         '<td>${b.year}</td>',

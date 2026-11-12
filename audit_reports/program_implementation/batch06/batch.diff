@@ -1,0 +1,10 @@
+--- before/lib/my_widget/sharable.dart
++++ after/lib/my_widget/sharable.dart
+@@ -465,6 +465,7 @@
+   @override
+   Widget build(BuildContext context) {
+     return DropdownButtonFormField<T>(
++      isExpanded: true,
+       value: initialValue, // ✅ use it here
+       decoration: InputDecoration(
+         labelText: labelText,

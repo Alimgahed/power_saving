@@ -23,6 +23,7 @@ class EditChemcials extends StatelessWidget {
   Widget build(BuildContext context) {
     if (chemicals == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!context.mounted || ModalRoute.of(context)?.isCurrent != true) return;
         Get.offAllNamed('/Chemicals');
       });
       return const SizedBox();

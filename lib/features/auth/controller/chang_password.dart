@@ -1,3 +1,4 @@
+import 'package:power_saving/core/utils/request_guard.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/auth/domain/repositories/auth_repository.dart';
@@ -5,6 +6,7 @@ import 'package:power_saving/features/auth/data/repositories/auth_repository_imp
 import 'package:power_saving/my_widget/sharable.dart';
 
 class ChangePasswordController extends GetxController {
+  final _requests = RequestGuard();
   final currentPassword = TextEditingController();
   final newPassword = TextEditingController();
   final confirmPassword = TextEditingController();
@@ -16,6 +18,7 @@ class ChangePasswordController extends GetxController {
 
   @override
   void onClose() {
+    _requests.close();
     currentPassword.dispose();
     newPassword.dispose();
     confirmPassword.dispose();
@@ -24,10 +27,13 @@ class ChangePasswordController extends GetxController {
 
   /// Triggers safe password updates via the repository
   Future<void> changePassword(String old, String newpassword) async {
+    if (isLoading.value) return;
+    final request = _requests.begin();
     try {
       isLoading.value = true;
 
       final result = await _authRepository.changePassword(old, newpassword);
+      if (!request.isCurrent) return;
 
       isLoading.value = false;
 
@@ -35,7 +41,7 @@ class ChangePasswordController extends GetxController {
         (success) {
           if (success) {
             showSuccessToast("تم تغيير كلمة المرور بنجاح");
-            Get.offAllNamed('/Login');
+
           } else {
             showCustomErrorDialog(errorMessage: "فشل تغيير كلمة المرور.");
           }
@@ -45,6 +51,7 @@ class ChangePasswordController extends GetxController {
         },
       );
     } catch (e) {
+      if (!request.isCurrent) return;
       isLoading.value = false;
       showCustomErrorDialog(errorMessage: 'حدث خطأ غير متوقع: ${e.toString()}');
     }

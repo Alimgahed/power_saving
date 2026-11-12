@@ -1,3 +1,4 @@
+import 'package:power_saving/core/auth/session_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/global/data.dart';
@@ -10,7 +11,7 @@ class LoginController extends GetxController {
   late TextEditingController password;
   final RxBool isLoading = false.obs;
   final RxBool obscurePassword = true.obs;
-  
+
   // Dependency injection via GetX
   final AuthRepository _authRepository = Get.put<AuthRepository>(AuthRepositoryImpl());
 
@@ -30,18 +31,25 @@ class LoginController extends GetxController {
 
   /// Performs user authentication using robust Repository Pattern
   Future<void> login(String name, String password) async {
+    if (isLoading.value) return;
     try {
       isLoading.value = true;
-
-      final result = await _authRepository.login(name, password);
+      final pending = _authRepository.login(name, password);
+      final generation = SessionManager.session.generation;
+      final result = await pending;
+      if (isClosed || SessionManager.session.generation != generation) {
+        if (!isClosed) isLoading.value = false;
+        return;
+      }
 
       isLoading.value = false;
 
       result.fold(
         (userData) {
           // Success pathway: store User instance dynamically in session
-          user = userData;
-          Get.offNamed('/home');
+          if (SessionManager.isAuthenticated && identical(user, userData)) {
+            Get.offNamed('/home');
+          }
         },
         (failure) {
           // Failure pathway: map failure message securely to custom user dialogs

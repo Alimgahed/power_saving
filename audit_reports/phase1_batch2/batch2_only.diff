@@ -1,0 +1,812 @@
+--- before/lib/features/Ploitly.dart
++++ after/lib/features/Ploitly.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/widgets/request_error_view.dart';
+ import 'package:flutter/material.dart';
+ import 'package:get/get.dart';
+ import 'package:power_saving/controller/voltage/financial.dart';
+@@ -34,14 +35,20 @@
+       ),
+       body: GetBuilder<FinancialController>(
+         builder: (c) {
+-          if (c.loading.value || c.waterChartHtml == null) {
++          if (c.loading.value) {
+             return const Center(child: CircularProgressIndicator());
+           }
+ 
++          if (c.errorMessage.isNotEmpty) {
++            return RequestErrorView(message: c.errorMessage, onRetry: c.financialAnalysis);
++          }
++          if (c.waterChartHtml == null || c.waterChartHtml!.isEmpty) {
++            return RequestErrorView(message: 'لا توجد رسوم بيانية متاحة', onRetry: c.financialAnalysis);
++          }
+           return SizedBox(
+             height: MediaQuery.of(context).size.height - kToolbarHeight - 20,
+             width: double.infinity,
+-            child: buildIframeWidget('sunburst-chart'),
++            child: buildIframeWidget(c.chartViewId),
+           );
+         },
+       ),
+--- before/lib/controller/voltage/financial.dart
++++ after/lib/controller/voltage/financial.dart
+@@ -3,13 +3,24 @@
+ import 'package:get/get.dart';
+ import 'package:power_saving/global/ip_config.dart';
+ import 'package:power_saving/global/iframe_platform.dart';
+-import 'package:power_saving/my_widget/sharable.dart';
++import 'package:power_saving/core/utils/request_guard.dart';
+ import 'package:power_saving/network/network.dart';
+ 
+ class FinancialController extends GetxController {
++  final _requests = RequestGuard();
++  String errorMessage = '';
++
++  @override
++  void onClose() {
++    _requests.close();
++    super.onClose();
++  }
++
+   RxBool loading = false.obs;
+ 
+   String? waterChartHtml;
++  static int _nextChartId = 0;
++  String chartViewId = 'sunburst-chart';
+ 
+   @override
+   void onInit() {
+@@ -17,27 +28,40 @@
+     financialAnalysis();
+   }
+ 
+-  void financialAnalysis() async {
++  Future<void> financialAnalysis() async {
++    final request = _requests.begin();
++    if (!request.isCurrent) return;
++    loading.value = true;
++    errorMessage = '';
++    waterChartHtml = null;
++    update();
+     try {
+-      loading.value = true;
+ 
+-      final res = await fetchData("${ApiConfig.baseUrl}/financial-analysis");
++      final res = await fetchData("${ApiConfig.baseUrl}/financial-analysis",
++          isCurrent: () => request.isCurrent);
++      if (!request.isCurrent) return;
++      if (res.statusCode != 200) throw StateError('تعذر تحميل التحليل');
+       if (res.statusCode == 200) {
+         final jsonData = jsonDecode(res.body);
+         waterChartHtml = jsonData["water_chart"] as String?;
+ 
+         // Register iframe view for web compilation dynamically
+         if (waterChartHtml != null && kIsWeb) {
+-          registerIframe('sunburst-chart', waterChartHtml!);
++          chartViewId = 'sunburst-chart-${++_nextChartId}';
++          registerIframe(chartViewId, waterChartHtml!);
+         }
+ 
+         loading.value = false;
+         update();
+       }
+     } catch (e) {
+-      showCustomErrorDialog(errorMessage: e.toString());
+-      loading.value = false;
+-      debugPrint("Error fetching financial analysis: $e");
++      if (!request.isCurrent) return;
++      errorMessage = 'تعذر تحميل التحليل. يرجى إعادة المحاولة.';
++    } finally {
++      if (request.isCurrent) {
++        loading.value = false;
++        update();
++      }
+     }
+   }
+ }
+--- before/lib/features/tech_bills/controller/techbills.dart
++++ after/lib/features/tech_bills/controller/techbills.dart
+@@ -46,7 +46,6 @@
+   RxBool isSearching = false.obs;
+   final searchController = TextEditingController();
+   RxString searchError = ''.obs;
+-  Worker? _searchWorker;
+   Timer? _debounceTimer;
+   
+   // Filter properties
+@@ -125,7 +124,7 @@
+     _reads.close();
+     _saves.close();
+     // Dispose all controllers
+-    _searchWorker?.dispose();
++    searchController.removeListener(_onSearchEdited);
+     _debounceTimer?.cancel();
+     searchController.dispose();
+     stationFilterController.dispose();
+@@ -153,15 +152,19 @@
+ 
+   // Setup search worker with debounce
+   void _setupSearchWorker() {
+-    _searchWorker = ever(searchController.obs, (_) {
+-      _debounceTimer?.cancel();
+-      _debounceTimer = Timer(const Duration(milliseconds: 300), () {
+-        applyFilters();
+-      });
+-    });
+-  }
+-
+-  // Search functionality
++    searchController.addListener(_onSearchEdited);
++  }
++
++  void _onSearchEdited() {
++    _debounceTimer?.cancel();
++    _debounceTimer = Timer(const Duration(milliseconds: 300), applyFilters);
++  }
++
++  // The text controller already contains the user's edit; do not reset selection.
++  void onSearchChanged(String value) {
++    _onSearchEdited();
++  }
++
+   void toggleSearch() {
+     isSearching.value = !isSearching.value;
+     if (!isSearching.value) {
+@@ -169,11 +172,6 @@
+       searchError.value = '';
+       applyFilters();
+     }
+-  }
+-
+-  void onSearchChanged(String value) {
+-    // This will trigger the worker
+-    searchController.text = value;
+   }
+ 
+   // Filter methods
+--- before/lib/features/auth/controller/new_user.dart
++++ after/lib/features/auth/controller/new_user.dart
+@@ -43,8 +43,9 @@
+   // ignore: non_constant_identifier_names
+   Future<void> new_user({required String name,required String password,
+   required String username,required String code,} ) async {
++    if (isLoading.value) return;
++    isLoading.value = true;
+     try {
+-      isLoading.value==true;
+ 
+       final res = await postData(
+         "${ApiConfig.baseUrl}/register",
+@@ -58,7 +59,7 @@
+         });
+       
+       if (res.statusCode == 200) {
+-           isLoading.value==false;
++           isLoading.value = false;
+ showSuccessToast("تم تسجيل المستخدم بنجاح");
+       }else{
+  final errorBody = jsonDecode(res.body);
+@@ -71,8 +72,9 @@
+       }
+     } catch (e) {
+       showCustomErrorDialog(errorMessage: e.toString());
+-        isLoading.value==false;
+ 
++    } finally {
++      isLoading.value = false;
+     }
+   }
+ 
+--- before/lib/features/auth/view/screens/new_user.dart
++++ after/lib/features/auth/view/screens/new_user.dart
+@@ -188,9 +188,9 @@
+                                   ),
+                                   child: Material(
+                                     color: Colors.transparent,
+-                                    child: InkWell(
++                                    child: Obx(() => InkWell(
+                                       borderRadius: BorderRadius.circular(12),
+-                                      onTap: () {
++                                      onTap: controller.isLoading.value ? null : () {
+                                         if (_globalKey.currentState!.validate()) {
+                                           if (controller.password.text != controller.confirmpassword.text) {
+                                             showCustomErrorDialog(errorMessage: "كلمة المرور غير متطابقة");
+@@ -240,7 +240,7 @@
+                                           );
+                                         }),
+                                       ),
+-                                    ),
++                                    )),
+                                   ),
+                                 ),
+ 
+--- before/lib/features/technology/controller/technlogy.dart
++++ after/lib/features/technology/controller/technlogy.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/utils/request_guard.dart';
+ import 'dart:async';
+ import 'dart:convert';
+ import 'package:flutter/material.dart';
+@@ -9,6 +10,10 @@
+ import 'package:power_saving/network/network.dart';
+ 
+ class TechnlogyController extends GetxController {
++  final _requests = RequestGuard();
++  final loadError = ''.obs;
++  final isRefreshing = false.obs;
++
+   RxBool looading = false.obs;
+   RxBool isLoading = false.obs;
+   
+@@ -55,6 +60,7 @@
+ 
+   @override
+   void onClose() {
++    _requests.close();
+     _searchWorker?.dispose();
+     searchController.dispose();
+     // Do not dispose other controllers here to prevent issues with Edittech
+@@ -107,75 +113,46 @@
+ 
+   // --- API Calls ---
+ 
+-  Future<void> alltechnology({bool isBackground = false}) async {
+-    if (!isBackground) {
+-      if (sessionCache != null) {
+-        // 1. Display cached data instantly
++  Future<void> alltechnology({bool isBackground = false, bool force = false}) async {
++    final request = _requests.begin();
++    if (!request.isCurrent) return;
++    loadError.value = '';
++    isLoading.value = !isBackground && (force || sessionCache == null);
++    isRefreshing.value = !isLoading.value;
++    update();
++    try {
++      if (!isBackground && !force && sessionCache != null) {
++        final cached = sessionCache!.map((e) => TechnologyModel.fromJson(e)).toList();
+         all_technology.clear();
+-        for (var i in sessionCache!) {
+-          TechnologyModel tech = TechnologyModel.fromJson(i);
+-          all_technology.add(tech);
+-        }
++        all_technology.addAll(cached);
+         technologies = all_technology;
+-        _applyFilters();
+-        
+-        // 2. Fetch silently in background
+-        _fetchLatestBackground();
+-        return;
+-      } else {
+-        isLoading.value = true;
++      _applyFilters();
++      }
++      final res = await fetchData("${ApiConfig.baseUrl}/technologies",
++          isCurrent: () => request.isCurrent);
++      if (!request.isCurrent) return;
++      if (res.statusCode != 200) throw StateError('تعذر تحميل البيانات');
++      final List<dynamic> responseData = jsonDecode(res.body);
++      final parsed = responseData.map((e) => TechnologyModel.fromJson(e)).toList();
++      sessionCache = responseData;
++      all_technology.clear();
++      all_technology.addAll(parsed);
++      technologies = all_technology;
++      _applyFilters();
++    } catch (e) {
++      if (!request.isCurrent) return;
++      loadError.value = 'تعذر تحديث البيانات. يرجى إعادة المحاولة.';
++    } finally {
++      if (request.isCurrent) {
++        isLoading.value = false;
++        isRefreshing.value = false;
+         update();
+-      }
+-    }
+-    
+-    try {
+-      final res = await fetchData("${ApiConfig.baseUrl}/technologies");
+-
+-      if (res.statusCode == 200) {
+-        final jsonData = json.decode(res.body);
+-        List<dynamic> responseData = jsonData;
+-
+-        // Update static cache
+-        sessionCache = responseData;
+-
+-        all_technology.clear();
+-        for (var i in responseData) {
+-          TechnologyModel tech = TechnologyModel.fromJson(i);
+-          all_technology.add(tech);
+-        }
+-        
+-        technologies = all_technology; // Update global
+-        _applyFilters(); // Initialize filtered list
+-        
+-        if (!isBackground) {
+-          isLoading.value = false;
+-          update();
+-        }
+-      } else {
+-        if (!isBackground) {
+-          isLoading.value = false;
+-          update();
+-          debugPrint("Failed to fetch technologies: ${res.body}");
+-        }
+-      }
+-    } catch (e) {
+-      if (!isBackground) {
+-        showCustomErrorDialog(errorMessage: e.toString());
+-        isLoading.value = false;
+-        update();
+-        debugPrint("Error fetching technologies: $e");
+       }
+     }
+   }
+ 
+-  Future<void> _fetchLatestBackground() async {
+-    await alltechnology(isBackground: true);
+-  }
+-
+   Future<void> forceRefresh() async {
+-    isLoading.value = true;
+-    update();
+-    await alltechnology(isBackground: false);
++    await alltechnology(force: true);
+   }
+ 
+   Future<void> addtech({required TechnologyModel tech}) async {
+--- before/lib/features/technology/view/widgets/technology_body.dart
++++ after/lib/features/technology/view/widgets/technology_body.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/widgets/request_error_view.dart';
+ import 'package:flutter/material.dart';
+ import 'package:get/get.dart';
+ import 'package:power_saving/core/constant/AppDimensions.dart';
+@@ -39,7 +40,12 @@
+         }
+ 
+         // Empty State (All data is empty)
+-        if (controller.all_technology.isEmpty) {
++        if (controller.loadError.value.isNotEmpty) {
++        return RequestErrorView(message: controller.loadError.value,
++          onRetry: controller.forceRefresh);
++      }
++      if (controller.all_technology.isEmpty) {
++        if (controller.isRefreshing.value) return const Center(child: CircularProgressIndicator());
+           return const ReusableEmptyView(
+             message: 'لا توجد تقنيات متاحة حالياً. الرجاء إضافة تقنية جديدة.',
+             style: AppTextStyles.bodyMedium,
+@@ -94,6 +100,10 @@
+           },
+           child: CustomScrollView(
+           slivers: [
++            if (controller.isRefreshing.value)
++              const SliverToBoxAdapter(child: Column(children: [
++                LinearProgressIndicator(), Text('جاري تحديث البيانات المعروضة...'),
++              ])),
+             SliverPadding(
+               padding: const EdgeInsets.all(AppDimensions.paddingXL),
+               sliver: SliverList(
+--- before/lib/features/relations/view/widgets/body.dart
++++ after/lib/features/relations/view/widgets/body.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/widgets/request_error_view.dart';
+ import 'package:flutter/material.dart';
+ import 'package:get/get.dart';
+ import 'package:power_saving/core/constant/AppDimensions.dart';
+@@ -59,7 +60,12 @@
+         return const Center(child: CircularProgressIndicator());
+       }
+ 
++      if (controller.loadError.value.isNotEmpty) {
++        return RequestErrorView(message: controller.loadError.value,
++          onRetry: controller.forceRefresh);
++      }
+       if (controller.allRelations.isEmpty) {
++        if (controller.isRefreshing.value) return const Center(child: CircularProgressIndicator());
+         return const ReusableEmptyView(message: 'لا توجد بيانات للعرض');
+       }
+ 
+@@ -69,6 +75,10 @@
+         },
+         child: CustomScrollView(
+         slivers: [
++            if (controller.isRefreshing.value)
++              const SliverToBoxAdapter(child: Column(children: [
++                LinearProgressIndicator(), Text('جاري تحديث البيانات المعروضة...'),
++              ])),
+           // Header & Filters Section
+           SliverPadding(
+             padding: const EdgeInsets.all(AppDimensions.paddingL),
+--- before/lib/features/relations/controller/relations/relation.dart
++++ after/lib/features/relations/controller/relations/relation.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/utils/request_guard.dart';
+ import 'dart:convert';
+ import 'package:flutter/material.dart';
+ import 'package:get/get.dart';
+@@ -7,6 +8,10 @@
+ import 'package:power_saving/network/network.dart';
+ 
+ class RelationsController extends GetxController {
++  final _requests = RequestGuard();
++  final loadError = ''.obs;
++  final isRefreshing = false.obs;
++
+   // Observable states
+   final loading = false.obs;
+   final isSearching = false.obs;
+@@ -32,6 +37,7 @@
+ 
+   @override
+   void onClose() {
++    _requests.close();
+     _searchWorker?.dispose();
+     searchController.dispose();
+     super.onClose();
+@@ -56,61 +62,48 @@
+   // -------------------------------
+   // API Call - Get Relations
+   // -------------------------------
+-  Future<void> getRelations({bool isBackground = false}) async {
+-    if (!isBackground) {
+-      if (sessionCache != null) {
++  Future<void> getRelations({bool isBackground = false, bool force = false}) async {
++    final request = _requests.begin();
++    if (!request.isCurrent) return;
++    loadError.value = '';
++    loading.value = !isBackground && (force || sessionCache == null);
++    isRefreshing.value = !loading.value;
++    update();
++    try {
++      if (!isBackground && !force && sessionCache != null) {
++        final cached = sessionCache!.map((e) => StationGaugeTechnologyRelation.fromJson(e)).toList();
+         allRelations.clear();
+-        allRelations.addAll(sessionCache!.map((e) => StationGaugeTechnologyRelation.fromJson(e)));
+-        relations.value = List.from(allRelations);
+-        
+-        // Background fetch
+-        _fetchLatestBackground();
+-        return;
+-      } else {
+-        loading.value = true;
+-      }
+-    }
+-
+-    try {
+-      if (!isBackground) {
+-        allRelations.clear();
+-        relations.clear();
+-      }
+-
+-      final response = await fetchData("${ApiConfig.baseUrl}/stg-relations");
+-
+-      if (response.statusCode == 200) {
+-        final List<dynamic> jsonData = jsonDecode(response.body);
+-        
+-        sessionCache = jsonData;
+-
+-        final List<StationGaugeTechnologyRelation> parsed = jsonData.map((e) => StationGaugeTechnologyRelation.fromJson(e)).toList();
+-
+-        allRelations.clear();
+-        allRelations.addAll(parsed);
+-        
+-        // Apply search filter again to keep current UI state consistent
++        allRelations.addAll(cached);
+         _performSearch(_searchQuery.value);
+       }
++      final res = await fetchData("${ApiConfig.baseUrl}/stg-relations",
++          isCurrent: () => request.isCurrent);
++      if (!request.isCurrent) return;
++      if (res.statusCode != 200) throw StateError('تعذر تحميل البيانات');
++      final List<dynamic> responseData = jsonDecode(res.body);
++      final parsed = responseData.map((e) => StationGaugeTechnologyRelation.fromJson(e)).toList();
++      sessionCache = responseData;
++      allRelations.clear();
++      allRelations.addAll(parsed);
++      _performSearch(_searchQuery.value);
+     } catch (e) {
+-      if (!isBackground) {
+-        showCustomErrorDialog(errorMessage: e.toString());
+-        debugPrint('Relations error: $e');
+-      }
++      if (!request.isCurrent) return;
++      loadError.value = 'تعذر تحديث البيانات. يرجى إعادة المحاولة.';
+     } finally {
+-      if (!isBackground) {
++      if (request.isCurrent) {
+         loading.value = false;
++        isRefreshing.value = false;
++        update();
+       }
+     }
+   }
+ 
+   Future<void> _fetchLatestBackground() async {
+-    getRelations(isBackground: true);
++    await getRelations(isBackground: true);
+   }
+ 
+   Future<void> forceRefresh() async {
+-    loading.value = true;
+-    getRelations(isBackground: false);
++    await getRelations(force: true);
+   }
+ 
+   // -------------------------------
+--- before/lib/features/analysis/controller/analysis.dart
++++ after/lib/features/analysis/controller/analysis.dart
+@@ -1,32 +1,45 @@
+ import 'dart:convert';
+-
+ import 'package:get/get.dart';
++import 'package:power_saving/core/utils/request_guard.dart';
+ import 'package:power_saving/features/analysis/model/analysis.dart';
+ import 'package:power_saving/global/ip_config.dart';
+-import 'package:power_saving/my_widget/sharable.dart';
+ import 'package:power_saving/network/network.dart';
+ 
+-class Analysis extends GetxController{
+-  AnalysisModel?anl;
+-  
+-  Future<void> getAnalysis({required int station,required int tech}) async {
++class Analysis extends GetxController {
++  final _requests = RequestGuard();
++  AnalysisModel? anl;
++  bool isLoading = false;
++  String errorMessage = '';
++
++  @override
++  void onClose() {
++    _requests.close();
++    super.onClose();
++  }
++
++  Future<void> getAnalysis({required int station, required int tech}) async {
++    final request = _requests.begin();
++    if (!request.isCurrent) return;
++    isLoading = true;
++    errorMessage = '';
++    anl = null;
++    update();
+     try {
+-      anl=null;
+       final res = await fetchData(
+-        "${ApiConfig.baseUrl}/analysis-single/$station/$tech"
+-    
++        "${ApiConfig.baseUrl}/analysis-single/$station/$tech",
++        isCurrent: () => request.isCurrent,
+       );
+-
+-      if (res.statusCode == 200) {
+-        final jsonData = json.decode(res.body);
+-        anl=AnalysisModel.fromJson(jsonData);
+-        update(); // returns a String
+-      
+-      } 
+-    // ignore: empty_catches
++      if (!request.isCurrent) return;
++      if (res.statusCode != 200) throw StateError('تعذر تحميل التحليل');
++      anl = AnalysisModel.fromJson(json.decode(res.body));
+     } catch (e) {
+-      showCustomErrorDialog(errorMessage: e.toString());
+-  
++      if (!request.isCurrent) return;
++      errorMessage = 'تعذر تحميل التحليل. يرجى إعادة المحاولة.';
++    } finally {
++      if (request.isCurrent) {
++        isLoading = false;
++        update();
++      }
+     }
+   }
+-}+}
+--- before/lib/features/analysis/view/screen/analysis.dart
++++ after/lib/features/analysis/view/screen/analysis.dart
+@@ -1,22 +1,33 @@
+ import 'dart:convert';
+ import 'package:flutter/material.dart';
+ import 'package:get/get.dart';
+-import 'package:power_saving/core/constant/colors.dart';
++import 'package:power_saving/core/widgets/request_error_view.dart';
+ import 'package:power_saving/core/widgets/app_scaffold.dart';
+ import 'package:power_saving/core/widgets/custom_app_bar.dart';
+ import 'package:power_saving/features/analysis/controller/analysis.dart';
+ import 'package:power_saving/features/analysis/model/analysis.dart';
+ import 'package:power_saving/features/home/model/home.dart';
+-import 'package:power_saving/my_widget/sharable.dart';
+-
+-class AnalysisView extends StatelessWidget {
++
++class AnalysisView extends StatefulWidget {
++  const AnalysisView({super.key});
++  @override
++  State<AnalysisView> createState() => _AnalysisViewState();
++}
++
++class _AnalysisViewState extends State<AnalysisView> {
+   final int? station = Get.arguments != null ? Get.arguments['station'] : null;
+   final int? tech = Get.arguments != null ? Get.arguments['tech'] : null;
+   final OverConsump? data = Get.arguments != null ? Get.arguments['data'] : null;
+ 
+   final Analysis controller = Get.put(Analysis());
+ 
+-  AnalysisView({super.key});
++  @override
++  void initState() {
++    super.initState();
++    if (station != null && tech != null) {
++      controller.getAnalysis(station: station!, tech: tech!);
++    }
++  }
+ 
+   @override
+   Widget build(BuildContext context) {
+@@ -32,8 +43,6 @@
+       );
+     }
+ 
+-    controller.getAnalysis(station: station!, tech: tech!);
+-
+     return PopScope(
+       canPop: true,
+       child: AppScaffold(
+@@ -47,7 +56,11 @@
+         ),
+         body: GetBuilder<Analysis>(
+           builder: (controller) {
+-            if (controller.anl == null) {
++            if (controller.errorMessage.isNotEmpty) {
++              return RequestErrorView(message: controller.errorMessage,
++                onRetry: () => controller.getAnalysis(station: station!, tech: tech!));
++            }
++            if (controller.isLoading || controller.anl == null) {
+               return Center(
+                 child: Container(
+                   padding: const EdgeInsets.all(32),
+--- before/lib/features/chemcails/controller/chemacial.dart
++++ after/lib/features/chemcails/controller/chemacial.dart
+@@ -1,12 +1,16 @@
++import 'package:power_saving/core/utils/request_guard.dart';
+ import 'dart:convert';
+ import 'package:flutter/material.dart';
+ import 'package:get/get.dart';
+ import 'package:power_saving/features/chemcails/model/chemacial.dart';
+ import 'package:power_saving/global/ip_config.dart';
+-import 'package:power_saving/my_widget/sharable.dart';
+ import 'package:power_saving/network/network.dart';
+ 
+ class Chemacialcontroller extends GetxController {
++  final _requests = RequestGuard();
++  final loadError = ''.obs;
++  final isRefreshing = false.obs;
++
+   // Observable states
+   final loading = false.obs;
+   final isSearching = false.obs;
+@@ -31,6 +35,7 @@
+ 
+   @override
+   void onClose() {
++    _requests.close();
+     _searchWorker?.dispose();
+     searchController.dispose();
+     super.onClose();
+@@ -54,60 +59,44 @@
+   // -------------------------------
+   // API Call - Get Chemicals
+   // -------------------------------
+-  void getchemicals({bool isBackground = false}) async {
+-    if (!isBackground) {
+-      if (sessionCache != null) {
++  Future<void> getchemicals({bool isBackground = false, bool force = false}) async {
++    final request = _requests.begin();
++    if (!request.isCurrent) return;
++    loadError.value = '';
++    loading.value = !isBackground && (force || sessionCache == null);
++    isRefreshing.value = !loading.value;
++    update();
++    try {
++      if (!isBackground && !force && sessionCache != null) {
++        final cached = sessionCache!.map((e) => AlumChlorineReference.fromJson(e)).toList();
+         allChemicals.clear();
+-        allChemicals.addAll(sessionCache!.map((e) => AlumChlorineReference.fromJson(e)));
+-        chemicals.value = List.from(allChemicals);
+-        
+-        // Background fetch
+-        _fetchLatestBackground();
+-        return;
+-      } else {
+-        loading.value = true;
+-      }
+-    }
+-
+-    try {
+-      if (!isBackground) {
+-        allChemicals.clear();
+-        chemicals.clear();
+-      }
+-
+-      final res = await fetchData("${ApiConfig.baseUrl}/chemicals");
+-      
+-      if (res.statusCode == 200) {
+-        final List<dynamic> responseData = json.decode(res.body);
+-        
+-        sessionCache = responseData;
+-        
+-        final List<AlumChlorineReference> parsed = responseData.map((e) => AlumChlorineReference.fromJson(e)).toList();
+-        
+-        allChemicals.clear();
+-        allChemicals.addAll(parsed);
+-        
+-        // Re-apply current search filter instead of unconditionally clearing search
++        allChemicals.addAll(cached);
+         _performSearch(_searchQuery.value);
+       }
++      final res = await fetchData("${ApiConfig.baseUrl}/chemicals",
++          isCurrent: () => request.isCurrent);
++      if (!request.isCurrent) return;
++      if (res.statusCode != 200) throw StateError('تعذر تحميل البيانات');
++      final List<dynamic> responseData = jsonDecode(res.body);
++      final parsed = responseData.map((e) => AlumChlorineReference.fromJson(e)).toList();
++      sessionCache = responseData;
++      allChemicals.clear();
++      allChemicals.addAll(parsed);
++      _performSearch(_searchQuery.value);
+     } catch (e) {
+-      if (!isBackground) {
+-        showCustomErrorDialog(errorMessage: e.toString());
+-      }
++      if (!request.isCurrent) return;
++      loadError.value = 'تعذر تحديث البيانات. يرجى إعادة المحاولة.';
+     } finally {
+-      if (!isBackground) {
++      if (request.isCurrent) {
+         loading.value = false;
++        isRefreshing.value = false;
++        update();
+       }
+     }
+   }
+ 
+-  Future<void> _fetchLatestBackground() async {
+-    getchemicals(isBackground: true);
+-  }
+-
+   Future<void> forceRefresh() async {
+-    loading.value = true;
+-    getchemicals(isBackground: false);
++    await getchemicals(force: true);
+   }
+ 
+   // -------------------------------
+--- before/lib/features/chemcails/view/widgets/chemical_body.dart
++++ after/lib/features/chemcails/view/widgets/chemical_body.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/widgets/request_error_view.dart';
+ import 'package:flutter/material.dart';
+ import 'package:get/get.dart';
+ import 'package:power_saving/core/constant/AppDimensions.dart';
+@@ -59,7 +60,12 @@
+         return const Center(child: CircularProgressIndicator());
+       }
+ 
++      if (controller.loadError.value.isNotEmpty) {
++        return RequestErrorView(message: controller.loadError.value,
++          onRetry: controller.forceRefresh);
++      }
+       if (controller.allChemicals.isEmpty) {
++        if (controller.isRefreshing.value) return const Center(child: CircularProgressIndicator());
+         return const ReusableEmptyView(message: 'لا توجد بيانات للعرض');
+       }
+ 
+@@ -69,6 +75,10 @@
+         },
+         child: CustomScrollView(
+           slivers: [
++            if (controller.isRefreshing.value)
++              const SliverToBoxAdapter(child: Column(children: [
++                LinearProgressIndicator(), Text('جاري تحديث البيانات المعروضة...'),
++              ])),
+             // Header Section
+             SliverPadding(
+               padding: const EdgeInsets.all(AppDimensions.paddingL),

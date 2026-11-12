@@ -1,0 +1,38 @@
+--- lib/features/chemcails/controller/add_chemacial.dart
++++ lib/features/chemcails/controller/add_chemacial.dart
+@@ -58,7 +58,9 @@
+       final res = await postData(
+         "${ApiConfig.baseUrl}/new-chemical",
+         (reference.toJson()),
++        isCurrent: () => !isClosed,
+       );
++      if (isClosed) return;
+ 
+       if (res.statusCode == 200) {
+         loading.value = false;
+@@ -78,6 +80,7 @@
+       }
+     // ignore: empty_catches
+     } catch (e) {
++      if (isClosed) return;
+       showCustomErrorDialog(errorMessage: e.toString());
+       loading.value = false;
+ 
+@@ -92,7 +95,9 @@
+       final res = await postData(
+         "${ApiConfig.baseUrl}/edit-chemical/$id",
+          (reference.toJson()),
++        isCurrent: () => !isClosed,
+       );
++      if (isClosed) return;
+ 
+       if (res.statusCode == 200) {
+ 
+@@ -109,6 +114,7 @@
+       }
+     // ignore: empty_catches
+     } catch (e) {
++      if (isClosed) return;
+       showCustomErrorDialog(errorMessage: e.toString());
+ 
+ 

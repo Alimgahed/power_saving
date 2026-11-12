@@ -1,3 +1,4 @@
+import 'package:power_saving/core/widgets/request_error_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/core/constant/AppDimensions.dart';
@@ -39,7 +40,12 @@ class TechnologyBody extends StatelessWidget {
         }
 
         // Empty State (All data is empty)
-        if (controller.all_technology.isEmpty) {
+        if (controller.loadError.value.isNotEmpty) {
+        return RequestErrorView(message: controller.loadError.value,
+          onRetry: controller.forceRefresh);
+      }
+      if (controller.all_technology.isEmpty) {
+        if (controller.isRefreshing.value) return const Center(child: CircularProgressIndicator());
           return const ReusableEmptyView(
             message: 'لا توجد تقنيات متاحة حالياً. الرجاء إضافة تقنية جديدة.',
             style: AppTextStyles.bodyMedium,
@@ -94,6 +100,10 @@ class TechnologyBody extends StatelessWidget {
           },
           child: CustomScrollView(
           slivers: [
+            if (controller.isRefreshing.value)
+              const SliverToBoxAdapter(child: Column(children: [
+                LinearProgressIndicator(), Text('جاري تحديث البيانات المعروضة...'),
+              ])),
             SliverPadding(
               padding: const EdgeInsets.all(AppDimensions.paddingXL),
               sliver: SliverList(

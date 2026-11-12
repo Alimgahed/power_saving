@@ -1,28 +1,40 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:power_saving/core/constant/colors.dart';
+import 'package:power_saving/core/widgets/request_error_view.dart';
 import 'package:power_saving/core/widgets/app_scaffold.dart';
 import 'package:power_saving/core/widgets/custom_app_bar.dart';
 import 'package:power_saving/features/analysis/controller/analysis.dart';
 import 'package:power_saving/features/analysis/model/analysis.dart';
 import 'package:power_saving/features/home/model/home.dart';
-import 'package:power_saving/my_widget/sharable.dart';
 
-class AnalysisView extends StatelessWidget {
+class AnalysisView extends StatefulWidget {
+  const AnalysisView({super.key});
+  @override
+  State<AnalysisView> createState() => _AnalysisViewState();
+}
+
+class _AnalysisViewState extends State<AnalysisView> {
   final int? station = Get.arguments != null ? Get.arguments['station'] : null;
   final int? tech = Get.arguments != null ? Get.arguments['tech'] : null;
   final OverConsump? data = Get.arguments != null ? Get.arguments['data'] : null;
 
   final Analysis controller = Get.put(Analysis());
 
-  AnalysisView({super.key});
+  @override
+  void initState() {
+    super.initState();
+    if (station != null && tech != null) {
+      controller.getAnalysis(station: station!, tech: tech!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     // If navigated without arguments, return back safely
     if (station == null || tech == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted || ModalRoute.of(context)?.isCurrent != true) return;
         Get.back();
       });
       return const Scaffold(
@@ -31,8 +43,6 @@ class AnalysisView extends StatelessWidget {
         ),
       );
     }
-
-    controller.getAnalysis(station: station!, tech: tech!);
 
     return PopScope(
       canPop: true,
@@ -47,7 +57,11 @@ class AnalysisView extends StatelessWidget {
         ),
         body: GetBuilder<Analysis>(
           builder: (controller) {
-            if (controller.anl == null) {
+            if (controller.errorMessage.isNotEmpty) {
+              return RequestErrorView(message: controller.errorMessage,
+                onRetry: () => controller.getAnalysis(station: station!, tech: tech!));
+            }
+            if (controller.isLoading || controller.anl == null) {
               return Center(
                 child: Container(
                   padding: const EdgeInsets.all(32),

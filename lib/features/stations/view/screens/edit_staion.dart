@@ -22,8 +22,10 @@ class EditStationsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     if (station == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!context.mounted || ModalRoute.of(context)?.isCurrent != true) return;
         Get.offAllNamed('/Stations');
       });
+      return const SizedBox();
     }
 
     const appBarWidget = CustomAppBar(
@@ -42,6 +44,7 @@ class EditStationsScreen extends StatelessWidget {
           builder: (controller) {
             /// Initialize once
             WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (!context.mounted || controller.isClosed) return;
               if (controller.name.text.isEmpty && station != null) {
                 controller.name.text = station!.stationName;
                 controller.capacity.text =

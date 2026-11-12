@@ -1,0 +1,385 @@
+--- before/lib/features/reports/controller/reports_controller.dart
++++ after/lib/features/reports/controller/reports_controller.dart
+@@ -2,6 +2,7 @@
+ import 'dart:convert';
+ import 'package:flutter/material.dart';
+ import 'package:get/get.dart';
++import 'package:power_saving/core/utils/request_guard.dart';
+ import 'package:power_saving/features/reports/model/report.dart';
+ import 'package:power_saving/global/ip_config.dart';
+ import 'package:power_saving/my_widget/sharable.dart';
+@@ -33,6 +34,9 @@
+   final TextEditingController searchController = TextEditingController();
+   final RxString searchQuery = ''.obs;
+   Worker? _searchWorker;
++  Worker? _filterWorker;
++  Timer? _searchTimer;
++  final _requests = RequestGuard();
+ 
+   /// DROPDOWN FILTERS
+   RxnString selectedFilterBranch = RxnString(null);
+@@ -73,16 +77,15 @@
+     startdate = TextEditingController();
+     enddate = TextEditingController();
+ 
+-    _searchWorker = debounce(
+-      searchQuery,
+-      (_) {
++    _searchWorker = ever(searchQuery, (_) {
++      _searchTimer?.cancel();
++      _searchTimer = Timer(const Duration(milliseconds: 300), () {
+         applyFilters();
+         isSearching.value = false;
+-      },
+-      time: const Duration(milliseconds: 300),
+-    );
+-
+-    everAll([
++      });
++    });
++
++    _filterWorker = everAll([
+       selectedFilterBranch,
+       selectedFilterStation,
+       selectedFilterMonth,
+@@ -99,6 +102,10 @@
+ 
+   @override
+   void onClose() {
++    _requests.close();
++    _searchTimer?.cancel();
++    _filterWorker?.dispose();
++    searchController.removeListener(_onSearchChanged);
+     startdate.dispose();
+     enddate.dispose();
+     searchController.dispose();
+@@ -189,6 +196,8 @@
+     required String end,
+     required String name,
+   }) async {
++    final request = _requests.begin();
++    if (!request.isCurrent) return;
+     try {
+       isLoading.value = true;
+       update();
+@@ -205,8 +214,10 @@
+           "from_date": start,
+           "to_date": end,
+         },
++        isCurrent: () => request.isCurrent,
+       );
+ 
++      if (!request.isCurrent) return;
+       if (res.statusCode == 200) {
+         final jsonData = json.decode(res.body);
+ 
+@@ -240,6 +251,7 @@
+       isLoading.value = false;
+       update();
+     } catch (e) {
++      if (!request.isCurrent) return;
+       showCustomErrorDialog(errorMessage: e.toString());
+       isLoading.value = false;
+       update();
+--- before/lib/features/reports/view/screens/report.dart
++++ after/lib/features/reports/view/screens/report.dart
+@@ -18,8 +18,24 @@
+ import 'package:power_saving/global/html_platform.dart';
+ import 'package:power_saving/core/widgets/app_scaffold.dart';
+ 
+-class Reports extends StatelessWidget {
+-  Reports({super.key});
++class Reports extends StatefulWidget {
++  const Reports({super.key});
++
++  @override
++  State<Reports> createState() => _ReportsState();
++}
++
++class _ReportsState extends State<Reports> {
++  final ScrollController verticalController = ScrollController();
++  final ScrollController horizontalController = ScrollController();
++
++  @override
++  void dispose() {
++    verticalController.dispose();
++    horizontalController.dispose();
++    super.dispose();
++  }
++
+   final GlobalKey<FormState> globalKey = GlobalKey<FormState>();
+ 
+   // ─── Design tokens (page-local) ───
+@@ -627,8 +643,6 @@
+   //  LEVEL 4: TABLE
+   // ═══════════════════════════════════════════════════
+   Widget _buildReportTable(ReportsController controller) {
+-    final ScrollController verticalController = ScrollController();
+-    final ScrollController horizontalController = ScrollController();
+     final reportType = controller.reportname ?? '';
+ 
+     Widget table = ReportTableFactory.forType(reportType, controller);
+--- before/lib/features/tech_bills/controller/new_tech_bills.dart
++++ after/lib/features/tech_bills/controller/new_tech_bills.dart
+@@ -1,6 +1,7 @@
+ import 'dart:convert';
+ import 'package:flutter/material.dart';
+ import 'package:get/get.dart';
++import 'package:power_saving/core/utils/request_guard.dart';
+ import 'package:power_saving/features/technology/model/tech_model.dart';
+ import 'package:power_saving/my_widget/sharable.dart';
+ import 'package:power_saving/network/network.dart';
+@@ -43,6 +44,8 @@
+ }
+ 
+ class NewTechBillsController extends GetxController {
++  final _reads = RequestGuard();
++  final _saves = RequestGuard();
+ 
+   RxList<Station> stations = <Station>[].obs;
+   Station? selectedStation;
+@@ -82,20 +85,26 @@
+     calculatedWaterController = TextEditingController();
+     measuredWaterController = TextEditingController();
+ 
+-    void updateProducedWater() {
+-      double measured = double.tryParse(measuredWaterController.text) ?? 0.0;
+-      double calculated = double.tryParse(calculatedWaterController.text) ?? 0.0;
+-      waterProducedController.text = (measured + calculated).toString();
+-    }
+-
+     measuredWaterController.addListener(updateProducedWater);
+     calculatedWaterController.addListener(updateProducedWater);
+ 
+     stationsTechs();
+   }
+ 
++  void updateProducedWater() {
++    double measured = double.tryParse(measuredWaterController.text) ?? 0.0;
++    double calculated = double.tryParse(calculatedWaterController.text) ?? 0.0;
++    waterProducedController.text = (measured + calculated).toString();
++  }
++
+   @override
+   void onClose() {
++    _reads.close();
++    _saves.close();
++    measuredWaterController.removeListener(updateProducedWater);
++    calculatedWaterController.removeListener(updateProducedWater);
++    measuredWaterController.dispose();
++    calculatedWaterController.dispose();
+     chlorineController.dispose();
+     liquidAlumController.dispose();
+     solidAlumController.dispose();
+@@ -106,10 +115,15 @@
+   }
+ 
+   Future<void> stationsTechs({bool isBackground = false}) async {
+-
++    final request = _reads.begin();
++    if (!request.isCurrent) return;
+     if (!isBackground) loading.value = true;
+     try {
+-      final res = await fetchData("${ApiConfig.baseUrl}/station-techs");
++      final res = await fetchData(
++        "${ApiConfig.baseUrl}/station-techs",
++        isCurrent: () => request.isCurrent,
++      );
++      if (!request.isCurrent) return;
+       if (res.statusCode == 200) {
+         final decoded = json.decode(res.body);
+         List<dynamic> data = [];
+@@ -124,7 +138,6 @@
+           }
+         }
+ 
+-
+         stations.value =
+             data
+                 .whereType<Map<String, dynamic>>()
+@@ -138,20 +151,25 @@
+           selectedTech = null;
+         }
+       } else {
+-        if (!isBackground) showCustomErrorDialog(errorMessage: 'فشل في جلب بيانات المحطات. حاول مرة أخرى.');
++        if (!isBackground) {
++          showCustomErrorDialog(
++            errorMessage: 'فشل في جلب بيانات المحطات. حاول مرة أخرى.',
++          );
++        }
+       }
+     } catch (e) {
++      if (!request.isCurrent) return;
+       print('Error fetching station techs: $e');
+       if (!isBackground) showCustomErrorDialog(errorMessage: e.toString());
+     } finally {
+-      if (!isBackground) loading.value = false;
+-      update();
+-    }
+-  }
+-
+-
+-
+-  void addTechBills({
++      if (request.isCurrent) {
++        if (!isBackground) loading.value = false;
++        update();
++      }
++    }
++  }
++
++  Future<void> addTechBills({
+     required int staionid,
+     required int techid,
+     required double chlorine,
+@@ -162,24 +180,30 @@
+     required double measuredWater,
+     required double calculatedWater,
+   }) async {
++    final request = _saves.begin();
++    if (!request.isCurrent) return;
+     try {
+       loading.value = true;
+ 
+-      final res =
+-          await postData("${ApiConfig.baseUrl}/insert-or-edit-tech-bill", {
+-            "technology_chlorine_consump": chlorine,
+-            "technology_liquid_alum_consump": liquid,
+-            "technology_solid_alum_consump": solid,
+-            "technology_water_amount": water,
+-            "measured_water": measuredWater,
+-            "calculated_water": calculatedWater,
+-
+-            "station_id": staionid,
+-            "technology_id": techid,
+-            "bill_month": int.tryParse(monthController.text) ?? 0,
+-            "bill_year": int.tryParse(yearController.text) ?? 0,
+-          });
+-
++      final res = await postData(
++        "${ApiConfig.baseUrl}/insert-or-edit-tech-bill",
++        {
++          "technology_chlorine_consump": chlorine,
++          "technology_liquid_alum_consump": liquid,
++          "technology_solid_alum_consump": solid,
++          "technology_water_amount": water,
++          "measured_water": measuredWater,
++          "calculated_water": calculatedWater,
++
++          "station_id": staionid,
++          "technology_id": techid,
++          "bill_month": int.tryParse(monthController.text) ?? 0,
++          "bill_year": int.tryParse(yearController.text) ?? 0,
++        },
++        isCurrent: () => request.isCurrent,
++      );
++
++      if (!request.isCurrent) return;
+       if (res.statusCode == 200 || res.statusCode == 201) {
+         loading.value = false;
+ 
+@@ -190,13 +214,18 @@
+         loading.value = false;
+         try {
+           final errorBody = jsonDecode(res.body);
+-          final errorMessage = errorBody['message'] ?? errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();
++          final errorMessage =
++              errorBody['message'] ??
++              errorBody['message'] ??
++              errorBody['error'] ??
++              errorBody.toString();
+           showCustomErrorDialog(errorMessage: errorMessage.toString());
+         } catch (e) {
+           showCustomErrorDialog(errorMessage: e.toString());
+         }
+       }
+     } catch (e) {
++      if (!request.isCurrent) return;
+       loading.value = false;
+       print("Error during bill submission: $e");
+       showCustomErrorDialog(errorMessage: "حدث خطأ: ${e.toString()}");
+--- before/lib/features/technology/controller/edit_tech_controller.dart
++++ after/lib/features/technology/controller/edit_tech_controller.dart
+@@ -2,11 +2,14 @@
+ 
+ import 'package:flutter/material.dart';
+ import 'package:get/get.dart';
++import 'package:power_saving/core/utils/request_guard.dart';
+ import 'package:power_saving/features/technology/model/tech_model.dart';
+ import 'package:power_saving/global/ip_config.dart';
+ import 'package:power_saving/my_widget/sharable.dart';
+ import 'package:power_saving/network/network.dart';
++
+ class EditTechController extends GetxController {
++  final _requests = RequestGuard();
+   RxBool looading = false.obs;
+   String? main_type;
+   late TextEditingController name;
+@@ -27,7 +30,12 @@
+ 
+   @override
+   void onClose() {
+-    // Do not dispose here to prevent issues with controllers in Edittech
++    _requests.close();
++    name.dispose();
++    chlorine.dispose();
++    liquid.dispose();
++    solid.dispose();
++    power.dispose();
+     super.onClose();
+   }
+ 
+@@ -35,13 +43,17 @@
+     required TechnologyModel tech,
+     required int id,
+   }) async {
++    final request = _requests.begin();
++    if (!request.isCurrent) return;
+     try {
+       looading.value = true;
+       final res = await postData(
+         "${ApiConfig.baseUrl}/edit-tech/$id",
+         (tech.toJson()), // ✅ Proper JSON encoding
++        isCurrent: () => request.isCurrent,
+       );
+ 
++      if (!request.isCurrent) return;
+       if (res.statusCode == 200) {
+         looading.value = false;
+ 
+@@ -51,14 +63,16 @@
+         final errorBody = jsonDecode(res.body);
+ 
+         // Extract Arabic error message
+-        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();
++        final errorMessage =
++            errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();
+ 
+         // Show custom dialog or toast with Arabic error
+         showCustomErrorDialog(errorMessage: errorMessage);
+       }
+     } catch (e) {
++      if (!request.isCurrent) return;
+       showCustomErrorDialog(errorMessage: e.toString());
+       looading.value = false;
+     }
+   }
+-}+}
+--- before/lib/features/technology/view/screens/edittech.dart
++++ after/lib/features/technology/view/screens/edittech.dart
+@@ -23,6 +23,7 @@
+   Widget build(BuildContext context) {
+     if (tech == null) {
+       WidgetsBinding.instance.addPostFrameCallback((_) {
++        if (!context.mounted) return;
+         Get.offAllNamed('/Technology');
+       });
+     }
+@@ -43,6 +44,7 @@
+           builder: (controller) {
+             /// Init values once
+             WidgetsBinding.instance.addPostFrameCallback((_) {
++              if (!context.mounted || controller.isClosed) return;
+               if (controller.name.text.isEmpty && tech != null) {
+                 controller.name.text = tech!.technologyName;
+                 controller.power.text =

@@ -218,6 +218,7 @@ class SearchableDropdown extends StatelessWidget {
     final controller = Get.put(SearchableDropdownController(), tag: tag);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!context.mounted || controller.isClosed) return;
       controller.initializeItems(items, initialValue);
     });
 
@@ -464,6 +465,7 @@ class CustomDropdownFormField<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<T>(
+      isExpanded: true,
       value: initialValue, // ✅ use it here
       decoration: InputDecoration(
         labelText: labelText,

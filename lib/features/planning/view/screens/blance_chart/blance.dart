@@ -53,12 +53,22 @@ class BlanceCart extends StatelessWidget {
                 // Area Dropdown
                 Expanded(
                   child: CustomDropdownFormField<int>(
-                    items: controller.areas.map((area) {
+                    initialValue: controller.selectedArea?.areaId,
+                    items: [
+                      ...controller.areas.map((area) {
                       return DropdownMenuItem<int>(
                         value: area.areaId,
                         child: Text(area.areaName),
                       );
-                    }).toList(),
+                    }),
+                      if (controller.selectedArea != null &&
+                          !controller.areas.any((a) => a.areaId == controller.areaid))
+                        DropdownMenuItem<int>(
+                          value: controller.selectedArea!.areaId,
+                          enabled: false,
+                          child: Text(controller.selectedArea!.areaName),
+                        ),
+                    ],
                     onChanged: (value) {
                       controller.onAreaChanged(value);
                     },

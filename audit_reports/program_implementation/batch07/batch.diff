@@ -1,0 +1,64 @@
+--- before/lib/features/reports/controller/reports_controller.dart
++++ after/lib/features/reports/controller/reports_controller.dart
+@@ -20,9 +20,6 @@
+ 
+   /// FILTERED DATA (USED BY TABLE)
+   RxList<ReportBranch> filteredBranchs = <ReportBranch>[].obs;
+-
+-  /// Precomputed lowercase index for fast, smooth search
+-  List<_BranchIndex> _index = [];
+ 
+   RxBool isLoading = false.obs;
+   RxBool isSearching = false.obs;
+@@ -204,7 +201,6 @@
+ 
+       branchs.clear();
+       filteredBranchs.clear();
+-      _index.clear();
+       clearSearch(); // Clear any existing search
+ 
+       final res = await postData(
+@@ -242,9 +238,6 @@
+         // Set filtered data
+         filteredBranchs.value = List.from(branchs);
+ 
+-        // Build optimized search index
+-        _buildSearchIndex();
+-
+         sumvalueofreport(filteredBranchs);
+       }
+ 
+@@ -259,33 +252,4 @@
+     }
+   }
+ 
+-  // ================== BUILD SEARCH INDEX ==================
+-  void _buildSearchIndex() {
+-    _index = branchs.map((b) {
+-      return _BranchIndex(
+-        branch: b,
+-        branchLower: b.branchName.toLowerCase(),
+-        stationLower: (b.stationname ?? '').toLowerCase(),
+-        monthStr: b.month.toString(),
+-        yearStr: b.year.toString(),
+-      );
+-    }).toList();
+-  }
+ }
+-
+-// ================== SEARCH INDEX CLASS ==================
+-class _BranchIndex {
+-  final ReportBranch branch;
+-  final String branchLower;
+-  final String stationLower;
+-  final String monthStr;
+-  final String yearStr;
+-
+-  _BranchIndex({
+-    required this.branch,
+-    required this.branchLower,
+-    required this.stationLower,
+-    required this.monthStr,
+-    required this.yearStr,
+-  });
+-}

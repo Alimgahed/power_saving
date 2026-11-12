@@ -1,0 +1,109 @@
+--- lib/features/auth/view/screens/all_user.dart
++++ lib/features/auth/view/screens/all_user.dart
+@@ -297,12 +297,14 @@
+             children: [
+               Icon(icon, size: 18, color: color),
+               const SizedBox(width: 8),
+-              Text(
+-                label,
+-                style: TextStyle(
+-                  fontSize: 12,
+-                  color: Colors.grey.shade600,
+-                  fontWeight: FontWeight.w600,
++              Expanded(
++                child: Text(
++                  label,
++                  style: TextStyle(
++                    fontSize: 12,
++                    color: Colors.grey.shade600,
++                    fontWeight: FontWeight.w600,
++                  ),
+                 ),
+               ),
+             ],
+@@ -366,12 +368,14 @@
+                         children: [
+                           Icon(Icons.edit, color: Colors.white, size: 28),
+                           SizedBox(width: 12),
+-                          Text(
+-                            'تعديل بيانات المستخدم',
+-                            style: TextStyle(
+-                              fontSize: 20,
+-                              fontWeight: FontWeight.bold,
+-                              color: Colors.white,
++                          Expanded(
++                            child: Text(
++                              'تعديل بيانات المستخدم',
++                              style: TextStyle(
++                                fontSize: 20,
++                                fontWeight: FontWeight.bold,
++                                color: Colors.white,
++                              ),
+                             ),
+                           ),
+                         ],
+@@ -473,7 +477,10 @@
+                             child: ValueListenableBuilder<bool>(
+                               valueListenable: isActiveNotifier,
+                               builder: (context, isActive, _) {
+-                                return Row(
++                                return Wrap(
++                                  crossAxisAlignment: WrapCrossAlignment.center,
++                                  spacing: 8,
++                                  runSpacing: 8,
+                                   children: [
+                                     Icon(
+                                       Icons.toggle_on_outlined,
+@@ -489,7 +496,6 @@
+                                         color: Color(0xFF334155),
+                                       ),
+                                     ),
+-                                    const Spacer(),
+                                     Container(
+                                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                       decoration: BoxDecoration(
+@@ -526,6 +532,7 @@
+                                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                     ),
+                                  Obx(() => Row(
++              mainAxisSize: MainAxisSize.min,
+               children: [
+                 Checkbox(
+                   checkColor: Colors.white,
+@@ -536,7 +543,7 @@
+                     controller.resetPassword.value = value!;
+                   },
+                 ),
+-                const Text('إعادة تعيين كلمة المرور'),
++                const Flexible(child: Text('إعادة تعيين كلمة المرور')),
+               ],
+             )),
+       
+--- lib/features/auth/view/screens/all_user.dart
++++ lib/features/auth/view/screens/all_user.dart
+@@ -139,15 +139,16 @@
+                                     const SizedBox(width: 10),
+                                     
+                                     // User Info
+-                                    Text(
+-                                      user.empName,
+-                                      style: const TextStyle(
+-                                        fontSize: 16,
+-                                        fontWeight: FontWeight.bold,
+-                                        color: Color(0xFF1E293B),
+-                                      ),
+-                                    ),
+-                                    Spacer(),
++                                    Expanded(
++                                      child: Text(
++                                        user.empName,
++                                        style: const TextStyle(
++                                          fontSize: 16,
++                                          fontWeight: FontWeight.bold,
++                                          color: Color(0xFF1E293B),
++                                        ),
++                                      ),
++                                    ),
+                                     // Status Toggle
+                                     Container(
+                                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

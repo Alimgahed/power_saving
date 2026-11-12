@@ -1,3 +1,4 @@
+import 'package:power_saving/core/widgets/request_error_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -33,6 +34,17 @@ class FollowingStationsScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      if (controller.isLoading)
+                        const LinearProgressIndicator(),
+                      if (controller.loadError.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: RequestErrorView(message: controller.loadError,
+                            onRetry: () => controller.stationsTechs()),
+                        )
+                      else if (controller.hasLoaded && controller.stations.isEmpty && !controller.isLoading)
+                        const Padding(padding: EdgeInsets.only(bottom: 16),
+                          child: Text('لا توجد محطات متاحة.')),
                       // ─── Selection Card ───
                       _buildSelectionCard(controller),
 

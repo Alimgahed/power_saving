@@ -21,7 +21,7 @@ class User {
     return User(
       empCode: json['emp_code'] as String,
       empName: json['emp_name'] as String,
-      groupId: json['group_id']??1,
+      groupId: json['group_id'] is int ? json['group_id'] : null,
       reset: json["reset"]??false,
       groupName: json['group_name']??"",
       isActive: json['is_active'] as bool,

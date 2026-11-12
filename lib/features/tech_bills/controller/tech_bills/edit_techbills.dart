@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
-import 'package:power_saving/features/bill/controller/tech_bills.dart';
 
 class EditTechbillsController extends GetxController {
     RxBool looading = false.obs;
@@ -45,7 +44,7 @@ class EditTechbillsController extends GetxController {
 
     super.onInit();
   }
-  
+
   @override
   void onClose() {
     _debounce?.cancel();
@@ -84,7 +83,7 @@ class EditTechbillsController extends GetxController {
 
       if (res.statusCode == 200) {
         looading.value = false;
-        TechBillscontroller.sessionCache = null;
+
         showSuccessToast("تم التعديل بنجاح");
       } else {
         looading.value = false;

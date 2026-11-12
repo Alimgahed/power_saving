@@ -1,3 +1,4 @@
+import 'package:power_saving/core/utils/html_encoding.dart';
 
 import 'package:flutter/material.dart';
 import 'package:power_saving/features/reports/model/report.dart';
@@ -59,7 +60,7 @@ class TechnologyReportPrinter extends BaseReportPrinter {
 
   @override
   List<String> rowCells(ReportBranch b, String type) => [
-        '<td class="highlight-cell">${b.techname}</td>',
+        '<td class="highlight-cell">${htmlText(b.techname)}</td>',
         '<td class="highlight-cell">${formatNum(b.totalBill)}</td>',
         '<td>${formatNum(b.totalWater)}</td>',
         '<td>${formatNum(b.totalChlorine)}</td>',

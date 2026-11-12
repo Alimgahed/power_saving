@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:power_saving/core/constant/colors.dart';
-import 'package:power_saving/features/home/home_constant/constant.dart';
 import 'package:power_saving/features/home/view/widgets/navigation_helper.dart';
 import 'package:power_saving/features/home/view/widgets/voltaige.dart';
 import 'package:power_saving/global/data.dart';
-import 'package:power_saving/shared_pref/cache.dart';
+import 'package:power_saving/core/auth/session_manager.dart';
 
 // --- Theme Colors for Drawer ---
 const Color _drawerBg = Color(0xFF091C31);
@@ -44,7 +42,7 @@ class HomeDrawer extends StatelessWidget {
                     isActive: true,
                   ),
                   const SizedBox(height: 10),
-                  
+
                   _buildSectionHeader("الإعدادات الأساسية"),
                   if (_hasAccess([1, 2, 6, 7]))
                     _buildMenuItem(
@@ -178,7 +176,7 @@ class HomeDrawer extends StatelessWidget {
                       text: "تسجيل خروج",
                       onTap: () => _handleLogout(),
                     ),
-                    
+
                   const SizedBox(height: 20),
                 ],
               ),
@@ -321,8 +319,6 @@ class HomeDrawer extends StatelessWidget {
   }
 
   Future<void> _handleLogout() async {
-    await Cache.sharedPreferences.clear();
-    SessionService.to.clear();
-    Get.offAllNamed("/Login");
+    await SessionManager.logout();
   }
 }

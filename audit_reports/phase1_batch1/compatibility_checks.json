@@ -1,0 +1,23 @@
+{
+  "changed_baseline_source_files": [
+    "lib/network/network.dart",
+    "lib/features/bill/controller/tech_bills.dart",
+    "lib/features/bill/controller/all_bills.dart",
+    "lib/features/planning/controller/blance_chart/blance_chart.dart",
+    "lib/features/planning/view/screens/blance_chart/blance.dart",
+    "lib/features/tech_bills/controller/techbills.dart",
+    "lib/features/tech_bills/view/screens/tech_bills.dart"
+  ],
+  "pubspec_lock_preserved": true,
+  "pubspec_yaml_preserved": true,
+  "all_models_preserved": true,
+  "other_baseline_changes": [
+    "build/unit_test_assets/NOTICES.Z",
+    "build/unit_test_assets/AssetManifest.bin",
+    "build/unit_test_assets/shaders/ink_sparkle.frag",
+    "build/unit_test_assets/shaders/stretch_effect.frag"
+  ],
+  "planning_payload_builder_exactly_unchanged": true,
+  "analyzer_issues_count": 62,
+  "all_analyzer_flagged_lines_present_before": true
+}

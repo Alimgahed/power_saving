@@ -1,0 +1,6389 @@
+{
+  "all": {
+    "order": [
+      "A0",
+      "A1",
+      "A2",
+      "A3",
+      "A4",
+      "A5"
+    ],
+    "totals": [
+      76.5,
+      33.0,
+      7422.402
+    ],
+    "reports": {
+      "branch_per_month": {
+        "title": "بيانات الفروع الشهرية",
+        "headers": [
+          "اسم الفرع",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>15.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "branch_total": {
+        "title": "إجمالي بيانات الفروع",
+        "headers": [
+          "اسم الفرع",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>15.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "technology_per_month": {
+        "title": "بيانات التكنولوجيا الشهرية",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>15.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "technology_total": {
+        "title": "إجمالي بيانات التكنولوجيا",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>15.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "station-bills": {
+        "title": "فواتير المحطات",
+        "headers": [
+          "اسم المحطة",
+          "قيمة المطالبة",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>6</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "bills": {
+        "title": "تقرير الفواتير (المالي) ",
+        "headers": [
+          "رقم الاشتراك",
+          "قيمة المطالبة",
+          "الشهر",
+          "السنة",
+          "المحطات",
+          "مسدد",
+          "شهر الترحيل",
+          "سنة الترحيل"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">A0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>Station 0, Shared</td>",
+            "<td class=\"paid-yes\">نعم</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">A1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>Station 1, Shared</td>",
+            "<td class=\"paid-no\">لا</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">A2</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>Station 2, Shared</td>",
+            "<td class=\"paid-yes\">نعم</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">A3</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>Station 3, Shared</td>",
+            "<td class=\"paid-no\">لا</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">A4</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>Station 4, Shared</td>",
+            "<td class=\"paid-yes\">نعم</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">A5</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>6</td>",
+            "<td>2026</td>",
+            "<td>Station 5, Shared</td>",
+            "<td class=\"paid-no\">لا</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "water-techs-3-month": {
+        "title": "تقرير المياه",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "كمية الكهرباء",
+          "النسبة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>15.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ]
+        ],
+        "summary": "<tr class=\"summary-row\">\n  <td>جملة تشغيل الكهرباء</td>\n  <td>7,422.40</td>\n  <td>76.50</td>\n  <td>33.00</td>\n  <td>224.92</td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الإنارة</td><td></td><td></td><td></td><td></td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الكهرباء</td><td></td><td></td><td></td><td></td>\n</tr>\n"
+      },
+      "sanity-techs-3-month": {
+        "title": "تقرير الصرف",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "كمية الكهرباء",
+          "النسبة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>15.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ]
+        ],
+        "summary": "<tr class=\"summary-row\">\n  <td>جملة تشغيل الكهرباء</td>\n  <td>7,422.40</td>\n  <td>76.50</td>\n  <td>33.00</td>\n  <td>224.92</td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الإنارة</td><td></td><td></td><td></td><td></td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الكهرباء</td><td></td><td></td><td></td><td></td>\n</tr>\n"
+      },
+      "station_total": {
+        "title": "إجمالي المحطات",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>15.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "station_per_month": {
+        "title": " إجمالي المحطات شهرياً",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>15.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_power_consumption": {
+        "title": "الأسنهلاك الزائد(كهرباء)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الكهرباء",
+          "الشهر",
+          "السنة",
+          "الرقم المرجعي القياسي",
+          "الرقم المرجعي الفعلي",
+          "نسبة التجاوز"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_chlorine_consumption": {
+        "title": "الاستهلاك الزائد (كلور)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الكهرباء",
+          "الشهر",
+          "السنة",
+          "القيمة العظمى القياسية",
+          "القيمة الصغرى القياسية",
+          " القيمة الفعلية",
+          "الحالة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_solid_alum_consumption": {
+        "title": "الاستهلاك الزائد (الشبة الصلبة)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الشبة الصلبة",
+          "الشهر",
+          "السنة",
+          "القيمة العظمى القياسية",
+          "القيمة الصغرى القياسية",
+          " القيمة الفعلية",
+          "الحالة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_liquid_alum_consumption": {
+        "title": "الاستهلاك الزائد (الشبة السائلة)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الشبة السائلة",
+          "الشهر",
+          "السنة",
+          "القيمة العظمى القياسية",
+          "القيمة الصغرى القياسية",
+          " القيمة الفعلية",
+          "الحالة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "power_for_zero_water": {
+        "title": "استهلاك كهرباء مع عدم وجود مياه",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      }
+    }
+  },
+  "branch": {
+    "order": [
+      "A0",
+      "A2",
+      "A4"
+    ],
+    "totals": [
+      36.75,
+      16.5,
+      3709.701
+    ],
+    "reports": {
+      "branch_per_month": {
+        "title": "بيانات الفروع الشهرية",
+        "headers": [
+          "اسم الفرع",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "branch_total": {
+        "title": "إجمالي بيانات الفروع",
+        "headers": [
+          "اسم الفرع",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "technology_per_month": {
+        "title": "بيانات التكنولوجيا الشهرية",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "technology_total": {
+        "title": "إجمالي بيانات التكنولوجيا",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "station-bills": {
+        "title": "فواتير المحطات",
+        "headers": [
+          "اسم المحطة",
+          "قيمة المطالبة",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "bills": {
+        "title": "تقرير الفواتير (المالي) ",
+        "headers": [
+          "رقم الاشتراك",
+          "قيمة المطالبة",
+          "الشهر",
+          "السنة",
+          "المحطات",
+          "مسدد",
+          "شهر الترحيل",
+          "سنة الترحيل"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">A0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>Station 0, Shared</td>",
+            "<td class=\"paid-yes\">نعم</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">A2</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>Station 2, Shared</td>",
+            "<td class=\"paid-yes\">نعم</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">A4</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>Station 4, Shared</td>",
+            "<td class=\"paid-yes\">نعم</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "water-techs-3-month": {
+        "title": "تقرير المياه",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "كمية الكهرباء",
+          "النسبة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ]
+        ],
+        "summary": "<tr class=\"summary-row\">\n  <td>جملة تشغيل الكهرباء</td>\n  <td>7,422.40</td>\n  <td>76.50</td>\n  <td>33.00</td>\n  <td>224.92</td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الإنارة</td><td></td><td></td><td></td><td></td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الكهرباء</td><td></td><td></td><td></td><td></td>\n</tr>\n"
+      },
+      "sanity-techs-3-month": {
+        "title": "تقرير الصرف",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "كمية الكهرباء",
+          "النسبة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ]
+        ],
+        "summary": "<tr class=\"summary-row\">\n  <td>جملة تشغيل الكهرباء</td>\n  <td>7,422.40</td>\n  <td>76.50</td>\n  <td>33.00</td>\n  <td>224.92</td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الإنارة</td><td></td><td></td><td></td><td></td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الكهرباء</td><td></td><td></td><td></td><td></td>\n</tr>\n"
+      },
+      "station_total": {
+        "title": "إجمالي المحطات",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "station_per_month": {
+        "title": " إجمالي المحطات شهرياً",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_power_consumption": {
+        "title": "الأسنهلاك الزائد(كهرباء)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الكهرباء",
+          "الشهر",
+          "السنة",
+          "الرقم المرجعي القياسي",
+          "الرقم المرجعي الفعلي",
+          "نسبة التجاوز"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_chlorine_consumption": {
+        "title": "الاستهلاك الزائد (كلور)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الكهرباء",
+          "الشهر",
+          "السنة",
+          "القيمة العظمى القياسية",
+          "القيمة الصغرى القياسية",
+          " القيمة الفعلية",
+          "الحالة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_solid_alum_consumption": {
+        "title": "الاستهلاك الزائد (الشبة الصلبة)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الشبة الصلبة",
+          "الشهر",
+          "السنة",
+          "القيمة العظمى القياسية",
+          "القيمة الصغرى القياسية",
+          " القيمة الفعلية",
+          "الحالة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_liquid_alum_consumption": {
+        "title": "الاستهلاك الزائد (الشبة السائلة)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الشبة السائلة",
+          "الشهر",
+          "السنة",
+          "القيمة العظمى القياسية",
+          "القيمة الصغرى القياسية",
+          " القيمة الفعلية",
+          "الحالة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "power_for_zero_water": {
+        "title": "استهلاك كهرباء مع عدم وجود مياه",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      }
+    }
+  },
+  "station": {
+    "order": [
+      "A0",
+      "A1",
+      "A2",
+      "A3",
+      "A4",
+      "A5"
+    ],
+    "totals": [
+      76.5,
+      33.0,
+      7422.402
+    ],
+    "reports": {
+      "branch_per_month": {
+        "title": "بيانات الفروع الشهرية",
+        "headers": [
+          "اسم الفرع",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>15.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "branch_total": {
+        "title": "إجمالي بيانات الفروع",
+        "headers": [
+          "اسم الفرع",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>15.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "technology_per_month": {
+        "title": "بيانات التكنولوجيا الشهرية",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>15.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "technology_total": {
+        "title": "إجمالي بيانات التكنولوجيا",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>15.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "station-bills": {
+        "title": "فواتير المحطات",
+        "headers": [
+          "اسم المحطة",
+          "قيمة المطالبة",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>6</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "bills": {
+        "title": "تقرير الفواتير (المالي) ",
+        "headers": [
+          "رقم الاشتراك",
+          "قيمة المطالبة",
+          "الشهر",
+          "السنة",
+          "المحطات",
+          "مسدد",
+          "شهر الترحيل",
+          "سنة الترحيل"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">A0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>Station 0, Shared</td>",
+            "<td class=\"paid-yes\">نعم</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">A1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>Station 1, Shared</td>",
+            "<td class=\"paid-no\">لا</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">A2</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>Station 2, Shared</td>",
+            "<td class=\"paid-yes\">نعم</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">A3</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>Station 3, Shared</td>",
+            "<td class=\"paid-no\">لا</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">A4</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>Station 4, Shared</td>",
+            "<td class=\"paid-yes\">نعم</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">A5</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>6</td>",
+            "<td>2026</td>",
+            "<td>Station 5, Shared</td>",
+            "<td class=\"paid-no\">لا</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "water-techs-3-month": {
+        "title": "تقرير المياه",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "كمية الكهرباء",
+          "النسبة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>15.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ]
+        ],
+        "summary": "<tr class=\"summary-row\">\n  <td>جملة تشغيل الكهرباء</td>\n  <td>7,422.40</td>\n  <td>76.50</td>\n  <td>33.00</td>\n  <td>224.92</td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الإنارة</td><td></td><td></td><td></td><td></td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الكهرباء</td><td></td><td></td><td></td><td></td>\n</tr>\n"
+      },
+      "sanity-techs-3-month": {
+        "title": "تقرير الصرف",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "كمية الكهرباء",
+          "النسبة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>15.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ]
+        ],
+        "summary": "<tr class=\"summary-row\">\n  <td>جملة تشغيل الكهرباء</td>\n  <td>7,422.40</td>\n  <td>76.50</td>\n  <td>33.00</td>\n  <td>224.92</td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الإنارة</td><td></td><td></td><td></td><td></td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الكهرباء</td><td></td><td></td><td></td><td></td>\n</tr>\n"
+      },
+      "station_total": {
+        "title": "إجمالي المحطات",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>15.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "station_per_month": {
+        "title": " إجمالي المحطات شهرياً",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>15.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_power_consumption": {
+        "title": "الأسنهلاك الزائد(كهرباء)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الكهرباء",
+          "الشهر",
+          "السنة",
+          "الرقم المرجعي القياسي",
+          "الرقم المرجعي الفعلي",
+          "نسبة التجاوز"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_chlorine_consumption": {
+        "title": "الاستهلاك الزائد (كلور)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الكهرباء",
+          "الشهر",
+          "السنة",
+          "القيمة العظمى القياسية",
+          "القيمة الصغرى القياسية",
+          " القيمة الفعلية",
+          "الحالة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_solid_alum_consumption": {
+        "title": "الاستهلاك الزائد (الشبة الصلبة)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الشبة الصلبة",
+          "الشهر",
+          "السنة",
+          "القيمة العظمى القياسية",
+          "القيمة الصغرى القياسية",
+          " القيمة الفعلية",
+          "الحالة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_liquid_alum_consumption": {
+        "title": "الاستهلاك الزائد (الشبة السائلة)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الشبة السائلة",
+          "الشهر",
+          "السنة",
+          "القيمة العظمى القياسية",
+          "القيمة الصغرى القياسية",
+          " القيمة الفعلية",
+          "الحالة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "power_for_zero_water": {
+        "title": "استهلاك كهرباء مع عدم وجود مياه",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      }
+    }
+  },
+  "month": {
+    "order": [
+      "A1"
+    ],
+    "totals": [
+      11.25,
+      5.5,
+      1235.567
+    ],
+    "reports": {
+      "branch_per_month": {
+        "title": "بيانات الفروع الشهرية",
+        "headers": [
+          "اسم الفرع",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "branch_total": {
+        "title": "إجمالي بيانات الفروع",
+        "headers": [
+          "اسم الفرع",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "technology_per_month": {
+        "title": "بيانات التكنولوجيا الشهرية",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "technology_total": {
+        "title": "إجمالي بيانات التكنولوجيا",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "station-bills": {
+        "title": "فواتير المحطات",
+        "headers": [
+          "اسم المحطة",
+          "قيمة المطالبة",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "bills": {
+        "title": "تقرير الفواتير (المالي) ",
+        "headers": [
+          "رقم الاشتراك",
+          "قيمة المطالبة",
+          "الشهر",
+          "السنة",
+          "المحطات",
+          "مسدد",
+          "شهر الترحيل",
+          "سنة الترحيل"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">A1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>Station 1, Shared</td>",
+            "<td class=\"paid-no\">لا</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "water-techs-3-month": {
+        "title": "تقرير المياه",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "كمية الكهرباء",
+          "النسبة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ]
+        ],
+        "summary": "<tr class=\"summary-row\">\n  <td>جملة تشغيل الكهرباء</td>\n  <td>7,422.40</td>\n  <td>76.50</td>\n  <td>33.00</td>\n  <td>224.92</td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الإنارة</td><td></td><td></td><td></td><td></td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الكهرباء</td><td></td><td></td><td></td><td></td>\n</tr>\n"
+      },
+      "sanity-techs-3-month": {
+        "title": "تقرير الصرف",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "كمية الكهرباء",
+          "النسبة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ]
+        ],
+        "summary": "<tr class=\"summary-row\">\n  <td>جملة تشغيل الكهرباء</td>\n  <td>7,422.40</td>\n  <td>76.50</td>\n  <td>33.00</td>\n  <td>224.92</td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الإنارة</td><td></td><td></td><td></td><td></td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الكهرباء</td><td></td><td></td><td></td><td></td>\n</tr>\n"
+      },
+      "station_total": {
+        "title": "إجمالي المحطات",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "station_per_month": {
+        "title": " إجمالي المحطات شهرياً",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_power_consumption": {
+        "title": "الأسنهلاك الزائد(كهرباء)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الكهرباء",
+          "الشهر",
+          "السنة",
+          "الرقم المرجعي القياسي",
+          "الرقم المرجعي الفعلي",
+          "نسبة التجاوز"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_chlorine_consumption": {
+        "title": "الاستهلاك الزائد (كلور)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الكهرباء",
+          "الشهر",
+          "السنة",
+          "القيمة العظمى القياسية",
+          "القيمة الصغرى القياسية",
+          " القيمة الفعلية",
+          "الحالة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_solid_alum_consumption": {
+        "title": "الاستهلاك الزائد (الشبة الصلبة)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الشبة الصلبة",
+          "الشهر",
+          "السنة",
+          "القيمة العظمى القياسية",
+          "القيمة الصغرى القياسية",
+          " القيمة الفعلية",
+          "الحالة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_liquid_alum_consumption": {
+        "title": "الاستهلاك الزائد (الشبة السائلة)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الشبة السائلة",
+          "الشهر",
+          "السنة",
+          "القيمة العظمى القياسية",
+          "القيمة الصغرى القياسية",
+          " القيمة الفعلية",
+          "الحالة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "power_for_zero_water": {
+        "title": "استهلاك كهرباء مع عدم وجود مياه",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      }
+    }
+  },
+  "year": {
+    "order": [
+      "A0",
+      "A1",
+      "A2",
+      "A3",
+      "A4",
+      "A5"
+    ],
+    "totals": [
+      76.5,
+      33.0,
+      7422.402
+    ],
+    "reports": {
+      "branch_per_month": {
+        "title": "بيانات الفروع الشهرية",
+        "headers": [
+          "اسم الفرع",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>15.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "branch_total": {
+        "title": "إجمالي بيانات الفروع",
+        "headers": [
+          "اسم الفرع",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>15.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "technology_per_month": {
+        "title": "بيانات التكنولوجيا الشهرية",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>15.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "technology_total": {
+        "title": "إجمالي بيانات التكنولوجيا",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>15.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "station-bills": {
+        "title": "فواتير المحطات",
+        "headers": [
+          "اسم المحطة",
+          "قيمة المطالبة",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>6</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "bills": {
+        "title": "تقرير الفواتير (المالي) ",
+        "headers": [
+          "رقم الاشتراك",
+          "قيمة المطالبة",
+          "الشهر",
+          "السنة",
+          "المحطات",
+          "مسدد",
+          "شهر الترحيل",
+          "سنة الترحيل"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">A0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>Station 0, Shared</td>",
+            "<td class=\"paid-yes\">نعم</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">A1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>Station 1, Shared</td>",
+            "<td class=\"paid-no\">لا</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">A2</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>Station 2, Shared</td>",
+            "<td class=\"paid-yes\">نعم</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">A3</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>Station 3, Shared</td>",
+            "<td class=\"paid-no\">لا</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">A4</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>Station 4, Shared</td>",
+            "<td class=\"paid-yes\">نعم</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">A5</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>6</td>",
+            "<td>2026</td>",
+            "<td>Station 5, Shared</td>",
+            "<td class=\"paid-no\">لا</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "water-techs-3-month": {
+        "title": "تقرير المياه",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "كمية الكهرباء",
+          "النسبة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>15.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ]
+        ],
+        "summary": "<tr class=\"summary-row\">\n  <td>جملة تشغيل الكهرباء</td>\n  <td>7,422.40</td>\n  <td>76.50</td>\n  <td>33.00</td>\n  <td>224.92</td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الإنارة</td><td></td><td></td><td></td><td></td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الكهرباء</td><td></td><td></td><td></td><td></td>\n</tr>\n"
+      },
+      "sanity-techs-3-month": {
+        "title": "تقرير الصرف",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "كمية الكهرباء",
+          "النسبة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>15.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ]
+        ],
+        "summary": "<tr class=\"summary-row\">\n  <td>جملة تشغيل الكهرباء</td>\n  <td>7,422.40</td>\n  <td>76.50</td>\n  <td>33.00</td>\n  <td>224.92</td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الإنارة</td><td></td><td></td><td></td><td></td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الكهرباء</td><td></td><td></td><td></td><td></td>\n</tr>\n"
+      },
+      "station_total": {
+        "title": "إجمالي المحطات",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>15.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "station_per_month": {
+        "title": " إجمالي المحطات شهرياً",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>15.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_power_consumption": {
+        "title": "الأسنهلاك الزائد(كهرباء)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الكهرباء",
+          "الشهر",
+          "السنة",
+          "الرقم المرجعي القياسي",
+          "الرقم المرجعي الفعلي",
+          "نسبة التجاوز"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_chlorine_consumption": {
+        "title": "الاستهلاك الزائد (كلور)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الكهرباء",
+          "الشهر",
+          "السنة",
+          "القيمة العظمى القياسية",
+          "القيمة الصغرى القياسية",
+          " القيمة الفعلية",
+          "الحالة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_solid_alum_consumption": {
+        "title": "الاستهلاك الزائد (الشبة الصلبة)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الشبة الصلبة",
+          "الشهر",
+          "السنة",
+          "القيمة العظمى القياسية",
+          "القيمة الصغرى القياسية",
+          " القيمة الفعلية",
+          "الحالة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_liquid_alum_consumption": {
+        "title": "الاستهلاك الزائد (الشبة السائلة)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الشبة السائلة",
+          "الشهر",
+          "السنة",
+          "القيمة العظمى القياسية",
+          "القيمة الصغرى القياسية",
+          " القيمة الفعلية",
+          "الحالة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "power_for_zero_water": {
+        "title": "استهلاك كهرباء مع عدم وجود مياه",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      }
+    }
+  },
+  "tech": {
+    "order": [
+      "A1",
+      "A3",
+      "A5"
+    ],
+    "totals": [
+      39.75,
+      16.5,
+      3712.701
+    ],
+    "reports": {
+      "branch_per_month": {
+        "title": "بيانات الفروع الشهرية",
+        "headers": [
+          "اسم الفرع",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>15.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "branch_total": {
+        "title": "إجمالي بيانات الفروع",
+        "headers": [
+          "اسم الفرع",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>15.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "technology_per_month": {
+        "title": "بيانات التكنولوجيا الشهرية",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>15.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "technology_total": {
+        "title": "إجمالي بيانات التكنولوجيا",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>15.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "station-bills": {
+        "title": "فواتير المحطات",
+        "headers": [
+          "اسم المحطة",
+          "قيمة المطالبة",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>6</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "bills": {
+        "title": "تقرير الفواتير (المالي) ",
+        "headers": [
+          "رقم الاشتراك",
+          "قيمة المطالبة",
+          "الشهر",
+          "السنة",
+          "المحطات",
+          "مسدد",
+          "شهر الترحيل",
+          "سنة الترحيل"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">A1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>Station 1, Shared</td>",
+            "<td class=\"paid-no\">لا</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">A3</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>Station 3, Shared</td>",
+            "<td class=\"paid-no\">لا</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">A5</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>6</td>",
+            "<td>2026</td>",
+            "<td>Station 5, Shared</td>",
+            "<td class=\"paid-no\">لا</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "water-techs-3-month": {
+        "title": "تقرير المياه",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "كمية الكهرباء",
+          "النسبة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>15.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ]
+        ],
+        "summary": "<tr class=\"summary-row\">\n  <td>جملة تشغيل الكهرباء</td>\n  <td>7,422.40</td>\n  <td>76.50</td>\n  <td>33.00</td>\n  <td>224.92</td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الإنارة</td><td></td><td></td><td></td><td></td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الكهرباء</td><td></td><td></td><td></td><td></td>\n</tr>\n"
+      },
+      "sanity-techs-3-month": {
+        "title": "تقرير الصرف",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "كمية الكهرباء",
+          "النسبة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,235.57</td>",
+            "<td>11.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,239.57</td>",
+            "<td>15.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ]
+        ],
+        "summary": "<tr class=\"summary-row\">\n  <td>جملة تشغيل الكهرباء</td>\n  <td>7,422.40</td>\n  <td>76.50</td>\n  <td>33.00</td>\n  <td>224.92</td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الإنارة</td><td></td><td></td><td></td><td></td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الكهرباء</td><td></td><td></td><td></td><td></td>\n</tr>\n"
+      },
+      "station_total": {
+        "title": "إجمالي المحطات",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>15.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "station_per_month": {
+        "title": " إجمالي المحطات شهرياً",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>11.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>15.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_power_consumption": {
+        "title": "الأسنهلاك الزائد(كهرباء)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الكهرباء",
+          "الشهر",
+          "السنة",
+          "الرقم المرجعي القياسي",
+          "الرقم المرجعي الفعلي",
+          "نسبة التجاوز"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_chlorine_consumption": {
+        "title": "الاستهلاك الزائد (كلور)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الكهرباء",
+          "الشهر",
+          "السنة",
+          "القيمة العظمى القياسية",
+          "القيمة الصغرى القياسية",
+          " القيمة الفعلية",
+          "الحالة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_solid_alum_consumption": {
+        "title": "الاستهلاك الزائد (الشبة الصلبة)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الشبة الصلبة",
+          "الشهر",
+          "السنة",
+          "القيمة العظمى القياسية",
+          "القيمة الصغرى القياسية",
+          " القيمة الفعلية",
+          "الحالة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_liquid_alum_consumption": {
+        "title": "الاستهلاك الزائد (الشبة السائلة)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الشبة السائلة",
+          "الشهر",
+          "السنة",
+          "القيمة العظمى القياسية",
+          "القيمة الصغرى القياسية",
+          " القيمة الفعلية",
+          "الحالة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "power_for_zero_water": {
+        "title": "استهلاك كهرباء مع عدم وجود مياه",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 1</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>2</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 5</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>6</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      }
+    }
+  },
+  "paid": {
+    "order": [
+      "A0",
+      "A2",
+      "A4"
+    ],
+    "totals": [
+      36.75,
+      16.5,
+      3709.701
+    ],
+    "reports": {
+      "branch_per_month": {
+        "title": "بيانات الفروع الشهرية",
+        "headers": [
+          "اسم الفرع",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "branch_total": {
+        "title": "إجمالي بيانات الفروع",
+        "headers": [
+          "اسم الفرع",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "technology_per_month": {
+        "title": "بيانات التكنولوجيا الشهرية",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "technology_total": {
+        "title": "إجمالي بيانات التكنولوجيا",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "station-bills": {
+        "title": "فواتير المحطات",
+        "headers": [
+          "اسم المحطة",
+          "قيمة المطالبة",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "bills": {
+        "title": "تقرير الفواتير (المالي) ",
+        "headers": [
+          "رقم الاشتراك",
+          "قيمة المطالبة",
+          "الشهر",
+          "السنة",
+          "المحطات",
+          "مسدد",
+          "شهر الترحيل",
+          "سنة الترحيل"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">A0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>Station 0, Shared</td>",
+            "<td class=\"paid-yes\">نعم</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">A2</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>Station 2, Shared</td>",
+            "<td class=\"paid-yes\">نعم</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">A4</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>Station 4, Shared</td>",
+            "<td class=\"paid-yes\">نعم</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "water-techs-3-month": {
+        "title": "تقرير المياه",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "كمية الكهرباء",
+          "النسبة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ]
+        ],
+        "summary": "<tr class=\"summary-row\">\n  <td>جملة تشغيل الكهرباء</td>\n  <td>7,422.40</td>\n  <td>76.50</td>\n  <td>33.00</td>\n  <td>224.92</td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الإنارة</td><td></td><td></td><td></td><td></td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الكهرباء</td><td></td><td></td><td></td><td></td>\n</tr>\n"
+      },
+      "sanity-techs-3-month": {
+        "title": "تقرير الصرف",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "كمية الكهرباء",
+          "النسبة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,234.57</td>",
+            "<td>10.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,236.57</td>",
+            "<td>12.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">Tech 0</td>",
+            "<td class=\"highlight-cell\">1,238.57</td>",
+            "<td>14.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ]
+        ],
+        "summary": "<tr class=\"summary-row\">\n  <td>جملة تشغيل الكهرباء</td>\n  <td>7,422.40</td>\n  <td>76.50</td>\n  <td>33.00</td>\n  <td>224.92</td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الإنارة</td><td></td><td></td><td></td><td></td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الكهرباء</td><td></td><td></td><td></td><td></td>\n</tr>\n"
+      },
+      "station_total": {
+        "title": "إجمالي المحطات",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "station_per_month": {
+        "title": " إجمالي المحطات شهرياً",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>10.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>12.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>14.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_power_consumption": {
+        "title": "الأسنهلاك الزائد(كهرباء)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الكهرباء",
+          "الشهر",
+          "السنة",
+          "الرقم المرجعي القياسي",
+          "الرقم المرجعي الفعلي",
+          "نسبة التجاوز"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_chlorine_consumption": {
+        "title": "الاستهلاك الزائد (كلور)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الكهرباء",
+          "الشهر",
+          "السنة",
+          "القيمة العظمى القياسية",
+          "القيمة الصغرى القياسية",
+          " القيمة الفعلية",
+          "الحالة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_solid_alum_consumption": {
+        "title": "الاستهلاك الزائد (الشبة الصلبة)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الشبة الصلبة",
+          "الشهر",
+          "السنة",
+          "القيمة العظمى القياسية",
+          "القيمة الصغرى القياسية",
+          " القيمة الفعلية",
+          "الحالة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_liquid_alum_consumption": {
+        "title": "الاستهلاك الزائد (الشبة السائلة)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الشبة السائلة",
+          "الشهر",
+          "السنة",
+          "القيمة العظمى القياسية",
+          "القيمة الصغرى القياسية",
+          " القيمة الفعلية",
+          "الحالة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "power_for_zero_water": {
+        "title": "استهلاك كهرباء مع عدم وجود مياه",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 0</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>1</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 2</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>3</td>",
+            "<td>2026</td>"
+          ],
+          [
+            "<td class=\"highlight-cell\">الفرع أ</td>",
+            "<td class=\"highlight-cell\">Station 4</td>",
+            "<td>Tech 0</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>5</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      }
+    }
+  },
+  "search": {
+    "order": [
+      "A3"
+    ],
+    "totals": [
+      13.25,
+      5.5,
+      1237.567
+    ],
+    "reports": {
+      "branch_per_month": {
+        "title": "بيانات الفروع الشهرية",
+        "headers": [
+          "اسم الفرع",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "branch_total": {
+        "title": "إجمالي بيانات الفروع",
+        "headers": [
+          "اسم الفرع",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "technology_per_month": {
+        "title": "بيانات التكنولوجيا الشهرية",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "technology_total": {
+        "title": "إجمالي بيانات التكنولوجيا",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "station-bills": {
+        "title": "فواتير المحطات",
+        "headers": [
+          "اسم المحطة",
+          "قيمة المطالبة",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "bills": {
+        "title": "تقرير الفواتير (المالي) ",
+        "headers": [
+          "رقم الاشتراك",
+          "قيمة المطالبة",
+          "الشهر",
+          "السنة",
+          "المحطات",
+          "مسدد",
+          "شهر الترحيل",
+          "سنة الترحيل"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">A3</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>Station 3, Shared</td>",
+            "<td class=\"paid-no\">لا</td>",
+            "<td>2</td>",
+            "<td>2025</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "water-techs-3-month": {
+        "title": "تقرير المياه",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "كمية الكهرباء",
+          "النسبة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ]
+        ],
+        "summary": "<tr class=\"summary-row\">\n  <td>جملة تشغيل الكهرباء</td>\n  <td>7,422.40</td>\n  <td>76.50</td>\n  <td>33.00</td>\n  <td>224.92</td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الإنارة</td><td></td><td></td><td></td><td></td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الكهرباء</td><td></td><td></td><td></td><td></td>\n</tr>\n"
+      },
+      "sanity-techs-3-month": {
+        "title": "تقرير الصرف",
+        "headers": [
+          "التكنولوجيا",
+          "قيمة المطالبة",
+          "كمية المياه",
+          "كمية الكهرباء",
+          "النسبة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Tech 1</td>",
+            "<td class=\"highlight-cell\">1,237.57</td>",
+            "<td>13.25</td>",
+            "<td>5.50</td>",
+            "<td>25</td>"
+          ]
+        ],
+        "summary": "<tr class=\"summary-row\">\n  <td>جملة تشغيل الكهرباء</td>\n  <td>7,422.40</td>\n  <td>76.50</td>\n  <td>33.00</td>\n  <td>224.92</td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الإنارة</td><td></td><td></td><td></td><td></td>\n</tr>\n<tr class=\"summary-row\">\n  <td>جملة الكهرباء</td><td></td><td></td><td></td><td></td>\n</tr>\n"
+      },
+      "station_total": {
+        "title": "إجمالي المحطات",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "station_per_month": {
+        "title": " إجمالي المحطات شهرياً",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "كمية المياه",
+          "الكلور",
+          "الشبة الصلبة",
+          "الشبة السائلة",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>13.25</td>",
+            "<td>1.25</td>",
+            "<td>3.13</td>",
+            "<td>2.75</td>",
+            "<td>5.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_power_consumption": {
+        "title": "الأسنهلاك الزائد(كهرباء)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الكهرباء",
+          "الشهر",
+          "السنة",
+          "الرقم المرجعي القياسي",
+          "الرقم المرجعي الفعلي",
+          "نسبة التجاوز"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>2.0 ك واط/م³</td>",
+            "<td>2.5 ك واط/م³</td>",
+            "<td>25.0%</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_chlorine_consumption": {
+        "title": "الاستهلاك الزائد (كلور)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الكهرباء",
+          "الشهر",
+          "السنة",
+          "القيمة العظمى القياسية",
+          "القيمة الصغرى القياسية",
+          " القيمة الفعلية",
+          "الحالة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>1.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_solid_alum_consumption": {
+        "title": "الاستهلاك الزائد (الشبة الصلبة)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الشبة الصلبة",
+          "الشهر",
+          "السنة",
+          "القيمة العظمى القياسية",
+          "القيمة الصغرى القياسية",
+          " القيمة الفعلية",
+          "الحالة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>3.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "over_liquid_alum_consumption": {
+        "title": "الاستهلاك الزائد (الشبة السائلة)",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الشبة السائلة",
+          "الشهر",
+          "السنة",
+          "القيمة العظمى القياسية",
+          "القيمة الصغرى القياسية",
+          " القيمة الفعلية",
+          "الحالة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>2.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>",
+            "<td>3.0 جرام / م³</td>",
+            "<td>1.0 جرام / م³</td>",
+            "<td>2.5%</td>",
+            "<td>fixture</td>"
+          ]
+        ],
+        "summary": null
+      },
+      "power_for_zero_water": {
+        "title": "استهلاك كهرباء مع عدم وجود مياه",
+        "headers": [
+          "اسم الفرع",
+          "اسم المحطة",
+          "اسم التكونولوجيا",
+          "كمية المياه",
+          "الكهرباء",
+          "الشهر",
+          "السنة"
+        ],
+        "rows": [
+          [
+            "<td class=\"highlight-cell\">Branch B</td>",
+            "<td class=\"highlight-cell\">Station 3</td>",
+            "<td>Tech 1</td>",
+            "<td>4.25</td>",
+            "<td>8.50</td>",
+            "<td>4</td>",
+            "<td>2026</td>"
+          ]
+        ],
+        "summary": null
+      }
+    }
+  }
+}

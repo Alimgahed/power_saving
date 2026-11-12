@@ -1,0 +1,31 @@
+{
+  "changed_preexisting_files": [
+    "lib/features/Ploitly.dart",
+    "lib/controller/voltage/financial.dart",
+    "lib/features/tech_bills/controller/techbills.dart",
+    "lib/features/auth/controller/new_user.dart",
+    "lib/features/auth/view/screens/new_user.dart",
+    "lib/features/technology/controller/technlogy.dart",
+    "lib/features/technology/view/widgets/technology_body.dart",
+    "lib/features/relations/view/widgets/body.dart",
+    "lib/features/relations/controller/relations/relation.dart",
+    "lib/features/analysis/controller/analysis.dart",
+    "lib/features/analysis/view/screen/analysis.dart",
+    "lib/features/chemcails/controller/chemacial.dart",
+    "lib/features/chemcails/view/widgets/chemical_body.dart"
+  ],
+  "batch1_guard_transport_planning_and_history_preserved": true,
+  "all_models_preserved": true,
+  "routes_bindings_preserved": true,
+  "dependencies_preserved": true,
+  "batch1_tests_preserved": true,
+  "api_literal_sequence_preserved": {
+    "lib/controller/voltage/financial.dart": true,
+    "lib/features/tech_bills/controller/techbills.dart": true,
+    "lib/features/auth/controller/new_user.dart": true,
+    "lib/features/technology/controller/technlogy.dart": true,
+    "lib/features/relations/controller/relations/relation.dart": true,
+    "lib/features/analysis/controller/analysis.dart": true,
+    "lib/features/chemcails/controller/chemacial.dart": true
+  }
+}

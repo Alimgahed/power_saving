@@ -1,4 +1,6 @@
+import 'package:power_saving/core/utils/owned_debounce.dart';
 import 'dart:convert';
+import 'package:power_saving/core/utils/request_guard.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/tech_bills/model/tech_bill.dart';
 import 'package:power_saving/global/ip_config.dart';
@@ -6,11 +8,21 @@ import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class TechBillscontroller extends GetxController {
-  static Map<String, dynamic>? sessionCache;
+  final _requests = RequestGuard();
+  String get _queryKey => jsonEncode([currentPage, perPage, searchQuery.value, selectedYear, selectedMonth]);
+  Worker? _searchWorker;
+
+  @override
+  void onClose() {
+    _requests.close();
+    _searchWorker?.dispose();
+    super.onClose();
+  }
+
   List<TechnologyBill> bills = [];
   var isLoading = false.obs;
   var errorMessage = ''.obs;
-  
+
   // Pagination
   int currentPage = 1;
   int totalPages = 1;
@@ -27,9 +39,9 @@ class TechBillscontroller extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    
+
     // Setup debounce worker for smooth searching
-    debounce(searchQuery, (_) {
+    _searchWorker = ownedDebounce(searchQuery, (_) {
       currentPage = 1;
       allbills();
     }, time: const Duration(milliseconds: 500));
@@ -38,30 +50,13 @@ class TechBillscontroller extends GetxController {
   }
 
   Future<void> allbills({bool isBackground = false}) async {
-    final bool isDefaultState = currentPage == 1 &&
-        searchQuery.value.trim().isEmpty &&
-        selectedYear == 'all' &&
-        selectedMonth == 'all';
+    final request = _requests.begin();
+    if (!request.isCurrent) return;
 
-    if (!isBackground && isDefaultState && sessionCache != null) {
-      final jsonData = sessionCache!;
-      bills = [];
-      if (jsonData is Map && jsonData.containsKey('data')) {
-        bills = (jsonData['data'] as List).map((bill) => TechnologyBill.fromJson(bill)).toList();
-        if (jsonData.containsKey('meta')) {
-          final meta = jsonData['meta'];
-          currentPage = meta['page'] ?? 1;
-          totalPages = meta['total_pages'] ?? 1;
-          totalItems = meta['total'] ?? bills.length;
-          hasNext = meta['has_next'] ?? false;
-          hasPrev = meta['has_prev'] ?? false;
-        }
-      }
-      update();
-      _fetchLatestBackground();
-      return;
-    }
 
+
+    final queryKey = _queryKey;
+    bool canApply() => request.isCurrent && queryKey == _queryKey;
     try {
       if (!isBackground) {
         isLoading.value = true;
@@ -81,17 +76,15 @@ class TechBillscontroller extends GetxController {
       if (searchQuery.value.isNotEmpty) queryParams['search'] = searchQuery.value;
 
       final uri = Uri.parse("${ApiConfig.baseUrl}/view-tech-bills").replace(queryParameters: queryParams);
-      final res = await fetchData(uri.toString());
+      final res = await fetchData(uri.toString(), isCurrent: canApply);
+      if (!canApply()) return;
 
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
-        if (isDefaultState) {
-          sessionCache = jsonData;
-        }
-        
+
         if (jsonData is Map && jsonData.containsKey('data')) {
           bills = (jsonData['data'] as List).map((bill) => TechnologyBill.fromJson(bill)).toList();
-          
+
           if (jsonData.containsKey('meta')) {
             final meta = jsonData['meta'];
             currentPage = meta['page'] ?? 1;
@@ -104,20 +97,19 @@ class TechBillscontroller extends GetxController {
         update();
       }
     } catch (e) {
+      if (!canApply()) return;
       if (!isBackground) {
         showCustomErrorDialog(errorMessage: e.toString());
         errorMessage.value = 'خطأ في الاتصال: ${e.toString()}';
       }
     } finally {
-      if (!isBackground) {
+      if (request.isCurrent) {
         isLoading.value = false;
       }
     }
   }
 
-  Future<void> _fetchLatestBackground() async {
-    allbills(isBackground: true);
-  }
+
 
   // Pagination methods
   void nextPage() {
@@ -189,7 +181,7 @@ class TechBillscontroller extends GetxController {
       'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
       'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
     ];
-    
+
     if (month >= 1 && month <= 12) {
       return months[month - 1];
     }
@@ -270,7 +262,7 @@ class TechBillscontroller extends GetxController {
 
   // Refresh bills data
   Future<void> refreshBills() async {
-    sessionCache = null;
+
     searchQuery.value = '';
     currentPage = 1;
     selectedYear = 'all';

@@ -1,0 +1,88 @@
+--- lib/features/auth/view/screens/all_user.dart
++++ lib/features/auth/view/screens/all_user.dart
+@@ -322,15 +322,15 @@
+   }
+ 
+   void _showEditDialog(BuildContext context, AllUserController controller, int index, User user) {
+-    final nameController = TextEditingController(text: user.empName);
+-    final usernameController = TextEditingController(text: user.username);
+-    final empCodeController = TextEditingController(text: user.empCode);
+-    int groupIdController =  user.groupId!;
+-    final isActiveNotifier = ValueNotifier<bool>(user.isActive);
+-
+     showDialog(
+       context: context,
+-      builder: (_) {
++      builder: (_) => _UserEditResources(
++        user: user,
++        builder: (resources) {
++          final nameController = resources.name;
++          final usernameController = resources.username;
++          final empCodeController = resources.empCode;
++          final isActiveNotifier = resources.isActive;
+         return Directionality(
+           textDirection: TextDirection.rtl,
+           child: Dialog(
+@@ -445,7 +445,7 @@
+                                     ),
+                                   ],
+                                   onChanged: (val) {
+-                                  groupIdController=val!;
++                                  resources.groupId=val!;
+                                   },
+                                   labelText: 'الترشيد والطاقة',
+                                   hintText: 'الادارة',
+@@ -608,7 +608,7 @@
+                                         final editedUser = User(
+                                           empCode: empCodeController.text,
+                                           empName: nameController.text,
+-                                          groupId: groupIdController,
++                                          groupId: resources.groupId,
+                                           isActive: isActiveNotifier.value,
+                                           username: usernameController.text,
+                                           reset:controller.resetPassword.value
+@@ -646,7 +646,8 @@
+             ),
+           ),
+         );
+-      },
++        },
++      ),
+     );
+   }
+ 
+@@ -692,4 +693,34 @@
+       ],
+     );
+   }
+-}+}
++
++/// Owns resources for the lifetime of the dialog subtree, including its exit animation.
++class _UserEditResources extends StatefulWidget {
++  const _UserEditResources({required this.user, required this.builder});
++  final User user;
++  final Widget Function(_UserEditResourcesState) builder;
++
++  @override
++  State<_UserEditResources> createState() => _UserEditResourcesState();
++}
++
++class _UserEditResourcesState extends State<_UserEditResources> {
++  late final name = TextEditingController(text: widget.user.empName);
++  late final username = TextEditingController(text: widget.user.username);
++  late final empCode = TextEditingController(text: widget.user.empCode);
++  late final isActive = ValueNotifier<bool>(widget.user.isActive);
++  late int groupId = widget.user.groupId!;
++
++  @override
++  void dispose() {
++    name.dispose();
++    username.dispose();
++    empCode.dispose();
++    isActive.dispose();
++    super.dispose();
++  }
++
++  @override
++  Widget build(BuildContext context) => widget.builder(this);
++}

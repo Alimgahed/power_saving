@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:power_saving/core/utils/request_guard.dart';
 import 'package:power_saving/features/technology/model/tech_model.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 import 'package:power_saving/global/ip_config.dart';
-import 'package:power_saving/features/bill/controller/tech_bills.dart';
 
 class Station {
   final int stationId;
@@ -44,7 +44,9 @@ class Station {
 }
 
 class NewTechBillsController extends GetxController {
-  static List<dynamic>? sessionCache;
+  final _reads = RequestGuard();
+  final _saves = RequestGuard();
+
   RxList<Station> stations = <Station>[].obs;
   Station? selectedStation;
   TechnologyModel? selectedTech;
@@ -83,20 +85,26 @@ class NewTechBillsController extends GetxController {
     calculatedWaterController = TextEditingController();
     measuredWaterController = TextEditingController();
 
-    void updateProducedWater() {
-      double measured = double.tryParse(measuredWaterController.text) ?? 0.0;
-      double calculated = double.tryParse(calculatedWaterController.text) ?? 0.0;
-      waterProducedController.text = (measured + calculated).toString();
-    }
-
     measuredWaterController.addListener(updateProducedWater);
     calculatedWaterController.addListener(updateProducedWater);
 
     stationsTechs();
   }
 
+  void updateProducedWater() {
+    double measured = double.tryParse(measuredWaterController.text) ?? 0.0;
+    double calculated = double.tryParse(calculatedWaterController.text) ?? 0.0;
+    waterProducedController.text = (measured + calculated).toString();
+  }
+
   @override
   void onClose() {
+    _reads.close();
+    _saves.close();
+    measuredWaterController.removeListener(updateProducedWater);
+    calculatedWaterController.removeListener(updateProducedWater);
+    measuredWaterController.dispose();
+    calculatedWaterController.dispose();
     chlorineController.dispose();
     liquidAlumController.dispose();
     solidAlumController.dispose();
@@ -107,18 +115,15 @@ class NewTechBillsController extends GetxController {
   }
 
   Future<void> stationsTechs({bool isBackground = false}) async {
-    if (!isBackground && sessionCache != null) {
-      stations.value = sessionCache!
-          .whereType<Map<String, dynamic>>()
-          .map((e) => Station.fromJson(e))
-          .toList();
-      update();
-      _fetchLatestBackground();
-      return;
-    }
+    final request = _reads.begin();
+    if (!request.isCurrent) return;
     if (!isBackground) loading.value = true;
     try {
-      final res = await fetchData("${ApiConfig.baseUrl}/station-techs");
+      final res = await fetchData(
+        "${ApiConfig.baseUrl}/station-techs",
+        isCurrent: () => request.isCurrent,
+      );
+      if (!request.isCurrent) return;
       if (res.statusCode == 200) {
         final decoded = json.decode(res.body);
         List<dynamic> data = [];
@@ -132,8 +137,6 @@ class NewTechBillsController extends GetxController {
             data = decoded['data'] as List<dynamic>;
           }
         }
-        
-        sessionCache = data;
 
         stations.value =
             data
@@ -148,22 +151,25 @@ class NewTechBillsController extends GetxController {
           selectedTech = null;
         }
       } else {
-        if (!isBackground) showCustomErrorDialog(errorMessage: 'فشل في جلب بيانات المحطات. حاول مرة أخرى.');
+        if (!isBackground) {
+          showCustomErrorDialog(
+            errorMessage: 'فشل في جلب بيانات المحطات. حاول مرة أخرى.',
+          );
+        }
       }
     } catch (e) {
+      if (!request.isCurrent) return;
       print('Error fetching station techs: $e');
       if (!isBackground) showCustomErrorDialog(errorMessage: e.toString());
     } finally {
-      if (!isBackground) loading.value = false;
-      update();
+      if (request.isCurrent) {
+        if (!isBackground) loading.value = false;
+        update();
+      }
     }
   }
-  
-  Future<void> _fetchLatestBackground() async {
-    stationsTechs(isBackground: true);
-  }
 
-  void addTechBills({
+  Future<void> addTechBills({
     required int staionid,
     required int techid,
     required double chlorine,
@@ -174,27 +180,33 @@ class NewTechBillsController extends GetxController {
     required double measuredWater,
     required double calculatedWater,
   }) async {
+    final request = _saves.begin();
+    if (!request.isCurrent) return;
     try {
       loading.value = true;
 
-      final res =
-          await postData("${ApiConfig.baseUrl}/insert-or-edit-tech-bill", {
-            "technology_chlorine_consump": chlorine,
-            "technology_liquid_alum_consump": liquid,
-            "technology_solid_alum_consump": solid,
-            "technology_water_amount": water,
-            "measured_water": measuredWater,
-            "calculated_water": calculatedWater,
-            
-            "station_id": staionid,
-            "technology_id": techid,
-            "bill_month": int.tryParse(monthController.text) ?? 0,
-            "bill_year": int.tryParse(yearController.text) ?? 0,
-          });
+      final res = await postData(
+        "${ApiConfig.baseUrl}/insert-or-edit-tech-bill",
+        {
+          "technology_chlorine_consump": chlorine,
+          "technology_liquid_alum_consump": liquid,
+          "technology_solid_alum_consump": solid,
+          "technology_water_amount": water,
+          "measured_water": measuredWater,
+          "calculated_water": calculatedWater,
 
+          "station_id": staionid,
+          "technology_id": techid,
+          "bill_month": int.tryParse(monthController.text) ?? 0,
+          "bill_year": int.tryParse(yearController.text) ?? 0,
+        },
+        isCurrent: () => request.isCurrent,
+      );
+
+      if (!request.isCurrent) return;
       if (res.statusCode == 200 || res.statusCode == 201) {
         loading.value = false;
-        TechBillscontroller.sessionCache = null;
+
         showSuccessToast("تمت الإضافة بنجاح");
 
         // Clear input fields after successful submission
@@ -202,13 +214,18 @@ class NewTechBillsController extends GetxController {
         loading.value = false;
         try {
           final errorBody = jsonDecode(res.body);
-          final errorMessage = errorBody['message'] ?? errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();
+          final errorMessage =
+              errorBody['message'] ??
+              errorBody['message'] ??
+              errorBody['error'] ??
+              errorBody.toString();
           showCustomErrorDialog(errorMessage: errorMessage.toString());
         } catch (e) {
           showCustomErrorDialog(errorMessage: e.toString());
         }
       }
     } catch (e) {
+      if (!request.isCurrent) return;
       loading.value = false;
       print("Error during bill submission: $e");
       showCustomErrorDialog(errorMessage: "حدث خطأ: ${e.toString()}");

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:power_saving/core/utils/request_guard.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,30 +10,48 @@ import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class Techbills extends GetxController {
-  static List<dynamic>? sessionCache;
-  RxBool loading = false.obs;
-  final Map<int, GlobalKey<FormState>> formKeys = {};
-  
-  GlobalKey<FormState> getFormKey(int index) {
-    return formKeys.putIfAbsent(index, () => GlobalKey<FormState>());
+  final _reads = RequestGuard();
+  final _saves = RequestGuard();
+
+  List<Map<int, TextEditingController>> get _draftMaps => [
+    chlorineControllers, liquidAlumControllers, solidAlumControllers,
+    waterProducedControllers, calculatedWaterControllers, measuredWaterControllers,
+  ];
+
+  void _applyBills(List<TechnologyBill> updated) {
+    final ids = updated.map((bill) => bill.techBillId).toSet();
+    for (final drafts in _draftMaps) {
+      for (final id in drafts.keys.where((id) => !ids.contains(id)).toList()) {
+        drafts.remove(id)!.dispose();
+      }
+    }
+    formKeys.removeWhere((id, _) => !ids.contains(id));
+    techBills.assignAll(updated);
+    applyFilters();
   }
 
-  RxnInt loadingIndex = RxnInt();
+  RxBool loading = false.obs;
+  final Map<int, GlobalKey<FormState>> formKeys = {};
+
+  GlobalKey<FormState> getFormKey(int billId) {
+    return formKeys.putIfAbsent(billId, () => GlobalKey<FormState>());
+  }
+
+  RxnInt loadingBillId = RxnInt();
   RxList<TechnologyBill> techBills = <TechnologyBill>[].obs;
   RxList<TechnologyBill> filteredTechBills = <TechnologyBill>[].obs;
-  
+
   // Search functionality
   RxBool isSearching = false.obs;
   final searchController = TextEditingController();
   RxString searchError = ''.obs;
-  Worker? _searchWorker;
   Timer? _debounceTimer;
-  
+
   // Filter properties
   RxnString selectedBranch = RxnString();
   RxnString selectedStation = RxnString();
   final stationFilterController = TextEditingController();
-  
+
   // Lists for filter dropdowns
   List<String> get branches {
     return techBills
@@ -42,7 +61,7 @@ class Techbills extends GetxController {
         .toList()
       ..sort();
   }
-  
+
   List<String> get stations {
     return techBills
         .map((bill) => bill.stationName)
@@ -51,7 +70,7 @@ class Techbills extends GetxController {
       ..sort();
   }
 
-  // Create maps of TextEditingControllers per bill (by index)
+  // Create maps of TextEditingControllers per bill (by stable techBillId)
   final chlorineControllers = <int, TextEditingController>{};
   final liquidAlumControllers = <int, TextEditingController>{};
   final solidAlumControllers = <int, TextEditingController>{};
@@ -59,55 +78,57 @@ class Techbills extends GetxController {
   final calculatedWaterControllers = <int, TextEditingController>{};
   final measuredWaterControllers = <int, TextEditingController>{};
 
-    TextEditingController getcalculatedWaterControllers(int index) {
+    TextEditingController getcalculatedWaterControllers(int billId) {
       return calculatedWaterControllers.putIfAbsent(
-        index,
+        billId,
         () => TextEditingController(),
       );
     } 
-     TextEditingController getmeasuredWaterControllers(int index) {
+     TextEditingController getmeasuredWaterControllers(int billId) {
       return measuredWaterControllers.putIfAbsent(
-        index,
+        billId,
         () => TextEditingController(),
       );
     } 
-  TextEditingController getChlorineController(int index) {
+  TextEditingController getChlorineController(int billId) {
     return chlorineControllers.putIfAbsent(
-      index,
+      billId,
       () => TextEditingController(),
     );
   }
 
-  TextEditingController getLiquidAlumController(int index) {
+  TextEditingController getLiquidAlumController(int billId) {
     return liquidAlumControllers.putIfAbsent(
-      index,
+      billId,
       () => TextEditingController(),
     );
   }
 
-  TextEditingController getSolidAlumController(int index) {
+  TextEditingController getSolidAlumController(int billId) {
     return solidAlumControllers.putIfAbsent(
-      index,
+      billId,
       () => TextEditingController(),
     );
   }
 
-  TextEditingController getWaterProducedController(int index) {
+  TextEditingController getWaterProducedController(int billId) {
     return waterProducedControllers.putIfAbsent(
-      index,
+      billId,
       () => TextEditingController(),
     );
   }
 
   @override
   void onClose() {
+    _reads.close();
+    _saves.close();
     // Dispose all controllers
-    _searchWorker?.dispose();
+    searchController.removeListener(_onSearchEdited);
     _debounceTimer?.cancel();
     searchController.dispose();
     stationFilterController.dispose();
 
-    
+
     for (var controller in [
       ...chlorineControllers.values,
       ...liquidAlumControllers.values,
@@ -130,15 +151,19 @@ class Techbills extends GetxController {
 
   // Setup search worker with debounce
   void _setupSearchWorker() {
-    _searchWorker = ever(searchController.obs, (_) {
-      _debounceTimer?.cancel();
-      _debounceTimer = Timer(const Duration(milliseconds: 300), () {
-        applyFilters();
-      });
-    });
+    searchController.addListener(_onSearchEdited);
   }
 
-  // Search functionality
+  void _onSearchEdited() {
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 300), applyFilters);
+  }
+
+  // The text controller already contains the user's edit; do not reset selection.
+  void onSearchChanged(String value) {
+    _onSearchEdited();
+  }
+
   void toggleSearch() {
     isSearching.value = !isSearching.value;
     if (!isSearching.value) {
@@ -146,11 +171,6 @@ class Techbills extends GetxController {
       searchError.value = '';
       applyFilters();
     }
-  }
-
-  void onSearchChanged(String value) {
-    // This will trigger the worker
-    searchController.text = value;
   }
 
   // Filter methods
@@ -175,7 +195,7 @@ class Techbills extends GetxController {
 
   void applyFilters() {
     final searchQuery = searchController.text.trim().toLowerCase();
-    
+
     filteredTechBills.value = techBills.where((bill) {
       // Text search filter
       bool matchesSearch = searchQuery.isEmpty ||
@@ -184,15 +204,15 @@ class Techbills extends GetxController {
           (bill.branch?.toLowerCase().contains(searchQuery) ?? false) ||
           bill.billYear.toString().contains(searchQuery) ||
           bill.billMonth.toString().contains(searchQuery);
-      
+
       // Branch filter
       bool matchesBranch = selectedBranch.value == null ||
           bill.branch == selectedBranch.value;
-      
+
       // Station filter - now searches within station name
       bool matchesStation = selectedStation.value == null ||
           bill.stationName.toLowerCase().contains(selectedStation.value!.toLowerCase());
-      
+
       return matchesSearch && matchesBranch && matchesStation;
     }).toList();
 
@@ -205,51 +225,34 @@ class Techbills extends GetxController {
   }
 
   Future<void> fetchTechBills({bool isBackground = false}) async {
-    if (!isBackground && sessionCache != null) {
-      techBills.clear();
-      for (var i in sessionCache!) {
-        techBills.add(TechnologyBill.fromJson(i));
-      }
-      applyFilters();
-      _fetchLatestBackground();
-      return;
-    }
+    final request = _reads.begin();
+    if (!request.isCurrent) return;
 
     try {
-      if (!isBackground) {
-        loading.value = true;
-      }
-      
-      final res = await fetchData("${ApiConfig.baseUrl}/tech-bills");
-
+      if (!isBackground) loading.value = true;
+      final res = await fetchData("${ApiConfig.baseUrl}/tech-bills",
+          isCurrent: () => request.isCurrent);
+      if (!request.isCurrent) return;
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
-        sessionCache = jsonData;
-        
-        techBills.clear();
+        final updated = <TechnologyBill>[];
         for (var i in jsonData) {
-          techBills.add(TechnologyBill.fromJson(i));
+          updated.add(TechnologyBill.fromJson(i));
         }
-        applyFilters();
+
+        _applyBills(updated);
       }
     } catch (e) {
-      if (!isBackground) {
-        showCustomErrorDialog(errorMessage: e.toString());
-      }
+      if (!request.isCurrent) return;
+      if (!isBackground) showCustomErrorDialog(errorMessage: e.toString());
       print("Error fetching tech bills: $e");
     } finally {
-      if (!isBackground) {
-        loading.value = false;
-      }
+      if (request.isCurrent) loading.value = false;
     }
   }
 
-  Future<void> _fetchLatestBackground() async {
-    fetchTechBills(isBackground: true);
-  }
-  
   Future<void> refreshData() async {
-    sessionCache = null;
+
     searchController.clear();
     stationFilterController.clear();
     selectedBranch.value = null;
@@ -257,7 +260,7 @@ class Techbills extends GetxController {
     await fetchTechBills(isBackground: false);
   }
 
-  void addTechBills({
+  Future<void> addTechBills({
     required int id,
     required double chlorine,
     required double liquid,
@@ -265,11 +268,17 @@ class Techbills extends GetxController {
     required double water,
     required double calculatedWater,
     required double measuredWater,
-    required int index,
   }) async {
+    final request = _saves.begin();
+    if (!request.isCurrent) return;
+    _reads.invalidate();
+    final submittedDrafts = {
+      for (final drafts in _draftMaps)
+        if (drafts[id] != null) drafts[id]!: drafts[id]!.text,
+    };
     try {
       loading.value = true;
-      loadingIndex.value = index;
+      loadingBillId.value = id;
 
       final res = await postData(
         "${ApiConfig.baseUrl}/edit-tech-bill/$id",
@@ -281,21 +290,23 @@ class Techbills extends GetxController {
           "measured_water": measuredWater,
           "calculated_water": calculatedWater,
         },
+        isCurrent: () => request.isCurrent,
       );
+      if (!request.isCurrent) return;
 
       if (res.statusCode == 200) {
         loading.value = false;
-        sessionCache = null;
+
         fetchTechBills(isBackground: true);
         showSuccessToast("تمت الإضافة بنجاح");
 
-        // Clear input fields after successful submission
-        getChlorineController(index).clear();
-        getLiquidAlumController(index).clear();
-        getSolidAlumController(index).clear();
-        getWaterProducedController(index).clear();
-        getcalculatedWaterControllers(index).clear();
-        getmeasuredWaterControllers(index).clear();
+        // Do not recreate a removed draft or erase edits made after submission.
+        for (final drafts in _draftMaps) {
+          final field = drafts[id];
+          if (field != null && submittedDrafts[field] == field.text) {
+            field.clear();
+          }
+        }
       } else {
         loading.value = false;
         final errorBody = jsonDecode(res.body);
@@ -303,11 +314,12 @@ class Techbills extends GetxController {
         showCustomErrorDialog(errorMessage: errorMessage);
       }
     } catch (e) {
+      if (!request.isCurrent) return;
       showCustomErrorDialog(errorMessage: e.toString());
       loading.value = false;
       print("Error during bill submission: $e");
     } finally {
-      loadingIndex.value = null;
+      if (request.isCurrent) loadingBillId.value = null;
     }
   }
 }

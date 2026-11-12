@@ -5,13 +5,13 @@ import 'package:power_saving/features/auth/binding/all_user_binding.dart';
 import 'package:power_saving/features/planning/binding/blance_binding.dart';
 import 'package:power_saving/features/planning/binding/place_types_binding.dart';
 import 'package:power_saving/features/planning/view/screens/places/place_types_list_screen.dart';
-import 'dart:convert';
+import 'package:power_saving/core/auth/session_manager.dart';
+import 'package:power_saving/core/auth/session_middleware.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
-import 'package:power_saving/features/auth/model/login.dart';
 import 'package:power_saving/features/planning/view/screens/blance_chart/blance.dart';
 import 'package:power_saving/features/planning/view/screens/blance_chart/blance_chart_print_screen.dart';
 import 'package:power_saving/features/planning/view/screens/places/add_places.dart';
@@ -25,7 +25,6 @@ import 'package:power_saving/features/stations/view/screens/following_stations.d
 import 'package:power_saving/features/stations/binding/following_stations_binding.dart';
 import 'package:power_saving/features/tech_bills/view/screens/new_tech_bills.dart';
 import 'package:power_saving/features/tech_bills/binding/new_tech_bills_binding.dart';
-import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/shared_pref/cache.dart';
 import 'package:power_saving/features/Counter/view/screens/Counter.dart';
 import 'package:power_saving/features/Counter/binding/counter_binding.dart';
@@ -75,20 +74,7 @@ void main() async {
   // ✅ Initialize reactive Session state container
   Get.put(SessionService(), permanent: true);
 
-  // ✅ Asynchronously parse and initialize cached user on startup
-  final jsuser = Cache.getdata(key: "user") ?? "{}";
-  if (jsuser.isNotEmpty && jsuser != "{}") {
-    try {
-      dynamic decoded = jsonDecode(jsuser);
-      while (decoded is String) {
-        decoded = jsonDecode(decoded);
-      }
-      user = User.fromJson(decoded as Map<String, dynamic>);
-    } catch (e) {
-      showCustomErrorDialog(errorMessage: e.toString());
-      debugPrint("Error parsing cached user: $e");
-    }
-  }
+  await SessionManager.restore();
 
   runApp(const MyApp());
 }
@@ -112,54 +98,61 @@ class MyApp extends StatelessWidget {
       ],
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      initialRoute: user != null ? '/home' : '/Login', 
+      initialRoute: SessionManager.isAuthenticated ? '/home' : '/Login',
+      routingCallback: (routing) {
+        if (routing == null || routing.isDialog == true || routing.isBottomSheet == true) return;
+        if (!SessionManager.publicRoutes.contains(routing.current) &&
+            !SessionManager.isAuthenticated) {
+          WidgetsBinding.instance.addPostFrameCallback((_) => SessionManager.toLogin());
+        }
+      },
       getPages: [
-                GetPage(name: '/Charts', page: () => SunburstPage(), binding: ChartsBinding()),
+                GetPage(name: '/Charts', middlewares: [SessionMiddleware()], page: () => SunburstPage(), binding: ChartsBinding()),
 
 
-        GetPage(name: '/home', page: () => HomeScreen(), binding: HomeBinding()),
+        GetPage(name: '/home', middlewares: [SessionMiddleware()], page: () => HomeScreen(), binding: HomeBinding()),
 
-                // GetPage(name: '/Populations', page: () => PopulationsScreen()),
+                // GetPage(name: '/Populations', middlewares: [SessionMiddleware()], page: () => PopulationsScreen()),
 
-                GetPage(name: '/change_password', page: () => ChangePassword()),
-                GetPage(name: '/editPlaces', page: () => EditPlacesScreen()),
+                GetPage(name: '/change_password', middlewares: [SessionMiddleware()], page: () => ChangePassword()),
+                GetPage(name: '/editPlaces', middlewares: [SessionMiddleware()], page: () => EditPlacesScreen()),
 
-        GetPage(name: '/Stations', page: () => StationsScreen(), binding: StationsBinding()),
+        GetPage(name: '/Stations', middlewares: [SessionMiddleware()], page: () => StationsScreen(), binding: StationsBinding()),
         GetPage(name: '/Login', page: () => const Login()),
-        GetPage(name: '/editMeter', page: () => EditCounterScreen()),
-        GetPage(name: '/editStations', page: () => EditStationsScreen()),
+        GetPage(name: '/editMeter', middlewares: [SessionMiddleware()], page: () => EditCounterScreen()),
+        GetPage(name: '/editStations', middlewares: [SessionMiddleware()], page: () => EditStationsScreen()),
         GetPage(name: '/NewUser', page: () => NewUser()),
-        GetPage(name: '/addstations', page: () => AddStationScreen()),
-        GetPage(name: '/Technology', page: () => Technology(), binding: TechnologyBinding()),
-                GetPage(name: '/all_users', page: () => AllUserScreen(), binding: AllUserBinding()),
-                GetPage(name: '/EditTechBills', page: () => EditTechBills()),
-        GetPage(name: '/Places', page: () => PlacesScreen(), binding: PlacesBinding()),
-        GetPage(name: '/placeTypes', page: () => const PlaceTypesListScreen(), binding: PlaceTypesBinding()),
-                GetPage(name: '/AddPlaces', page: () => AddPlacesScreen()),
-        GetPage(name: '/BlanceCart', page: () => BlanceCart(), binding: BalanceChartBinding()), //
-                
+        GetPage(name: '/addstations', middlewares: [SessionMiddleware()], page: () => AddStationScreen()),
+        GetPage(name: '/Technology', middlewares: [SessionMiddleware()], page: () => Technology(), binding: TechnologyBinding()),
+                GetPage(name: '/all_users', middlewares: [SessionMiddleware()], page: () => AllUserScreen(), binding: AllUserBinding()),
+                GetPage(name: '/EditTechBills', middlewares: [SessionMiddleware()], page: () => EditTechBills()),
+        GetPage(name: '/Places', middlewares: [SessionMiddleware()], page: () => PlacesScreen(), binding: PlacesBinding()),
+        GetPage(name: '/placeTypes', middlewares: [SessionMiddleware()], page: () => const PlaceTypesListScreen(), binding: PlaceTypesBinding()),
+                GetPage(name: '/AddPlaces', middlewares: [SessionMiddleware()], page: () => AddPlacesScreen()),
+        GetPage(name: '/BlanceCart', middlewares: [SessionMiddleware()], page: () => BlanceCart(), binding: BalanceChartBinding()), //
 
-        // GetPage(name: '/BalanceChart', page: () => BalanceChart()),
-                GetPage(name: '/BalanceChartPrintScreen', page: () => BalanceChartPrintScreen()),
 
-        GetPage(name: '/Edittech', page: () => EditTechScreen()),
-        GetPage(name: '/Reports', page: () => Reports(), binding: ReportsBinding()),
-        GetPage(name: '/Predictions', page: () => Predaction(), binding: PredictionBinding()),
-        GetPage(name: '/analysis', page: () => AnalysisView()),
-        GetPage(name: '/addTech', page: () => AddTechScreen()),
-        GetPage(name: '/bills', page: () => Bills(), binding: BillsBinding()),
-        GetPage(name: '/techBill', page: () => TechBill(), binding: TechBillsBinding()),
-        GetPage(name: '/Countrts', page: () => Counterscreen(), binding: CounterBinding()),
-        GetPage(name: '/addCounter', page: () => AddElectricMeterScreen()),
-        GetPage(name: '/NewTechBills', page: () => NewTechBillsScreen(), binding: NewTechBillsBinding()),
-        GetPage(name: '/FollowingStations', page: () => FollowingStationsScreen(), binding: FollowingStationsBinding()),
-        GetPage(name: '/Relations', page: () => RelationsScreen(), binding: RelationsBinding()),
-        GetPage(name: '/Addrelation', page: () => AddRelationScreen()),
-        GetPage(name: '/Chemicals', page: () => Chemicals(), binding: ChemicalsBinding()),
-        GetPage(name: '/AddChemicalScreen', page: () => AddChemicalScreen()),
-        GetPage(name: '/techbills', page: () => TechBills(), binding: TechbillsBinding()),
-        GetPage(name: '/EditChemcials', page: () => EditChemcials()),
-        GetPage(name: '/AnimatedGauge', page: () => AnimatedGauge()),
+        // GetPage(name: '/BalanceChart', middlewares: [SessionMiddleware()], page: () => BalanceChart()),
+                GetPage(name: '/BalanceChartPrintScreen', middlewares: [SessionMiddleware()], page: () => BalanceChartPrintScreen()),
+
+        GetPage(name: '/Edittech', middlewares: [SessionMiddleware()], page: () => EditTechScreen()),
+        GetPage(name: '/Reports', middlewares: [SessionMiddleware()], page: () => Reports(), binding: ReportsBinding()),
+        GetPage(name: '/Predictions', middlewares: [SessionMiddleware()], page: () => Predaction(), binding: PredictionBinding()),
+        GetPage(name: '/analysis', middlewares: [SessionMiddleware()], page: () => AnalysisView()),
+        GetPage(name: '/addTech', middlewares: [SessionMiddleware()], page: () => AddTechScreen()),
+        GetPage(name: '/bills', middlewares: [SessionMiddleware()], page: () => Bills(), binding: BillsBinding()),
+        GetPage(name: '/techBill', middlewares: [SessionMiddleware()], page: () => TechBill(), binding: TechBillsBinding()),
+        GetPage(name: '/Countrts', middlewares: [SessionMiddleware()], page: () => Counterscreen(), binding: CounterBinding()),
+        GetPage(name: '/addCounter', middlewares: [SessionMiddleware()], page: () => AddElectricMeterScreen()),
+        GetPage(name: '/NewTechBills', middlewares: [SessionMiddleware()], page: () => NewTechBillsScreen(), binding: NewTechBillsBinding()),
+        GetPage(name: '/FollowingStations', middlewares: [SessionMiddleware()], page: () => FollowingStationsScreen(), binding: FollowingStationsBinding()),
+        GetPage(name: '/Relations', middlewares: [SessionMiddleware()], page: () => RelationsScreen(), binding: RelationsBinding()),
+        GetPage(name: '/Addrelation', middlewares: [SessionMiddleware()], page: () => AddRelationScreen()),
+        GetPage(name: '/Chemicals', middlewares: [SessionMiddleware()], page: () => Chemicals(), binding: ChemicalsBinding()),
+        GetPage(name: '/AddChemicalScreen', middlewares: [SessionMiddleware()], page: () => AddChemicalScreen()),
+        GetPage(name: '/techbills', middlewares: [SessionMiddleware()], page: () => TechBills(), binding: TechbillsBinding()),
+        GetPage(name: '/EditChemcials', middlewares: [SessionMiddleware()], page: () => EditChemcials()),
+        GetPage(name: '/AnimatedGauge', middlewares: [SessionMiddleware()], page: () => AnimatedGauge()),
       ],
     );
   }
@@ -169,7 +162,7 @@ class ScreenUtils {
   static double get width => Get.width;
   static double get height => Get.height;
 
-  
+
 }
 
 class ScreenController extends GetxController {
@@ -185,6 +178,6 @@ class ScreenController extends GetxController {
   void updateDimensions() {
     screenWidth.value = Get.width;
     screenHeight.value = Get.height;
-    
+
   }
 }

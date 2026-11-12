@@ -1,3 +1,4 @@
+import 'package:power_saving/core/widgets/request_error_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/core/constant/AppDimensions.dart';
@@ -59,7 +60,12 @@ class RelationsBody extends StatelessWidget {
         return const Center(child: CircularProgressIndicator());
       }
 
+      if (controller.loadError.value.isNotEmpty) {
+        return RequestErrorView(message: controller.loadError.value,
+          onRetry: controller.forceRefresh);
+      }
       if (controller.allRelations.isEmpty) {
+        if (controller.isRefreshing.value) return const Center(child: CircularProgressIndicator());
         return const ReusableEmptyView(message: 'لا توجد بيانات للعرض');
       }
 
@@ -69,6 +75,10 @@ class RelationsBody extends StatelessWidget {
         },
         child: CustomScrollView(
         slivers: [
+            if (controller.isRefreshing.value)
+              const SliverToBoxAdapter(child: Column(children: [
+                LinearProgressIndicator(), Text('جاري تحديث البيانات المعروضة...'),
+              ])),
           // Header & Filters Section
           SliverPadding(
             padding: const EdgeInsets.all(AppDimensions.paddingL),

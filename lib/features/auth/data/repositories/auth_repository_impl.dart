@@ -4,7 +4,8 @@ import 'package:power_saving/core/repositories/base_repository.dart';
 import 'package:power_saving/core/utils/result.dart';
 import 'package:power_saving/features/auth/model/login.dart';
 import 'package:power_saving/global/ip_config.dart';
-import 'package:power_saving/shared_pref/cache.dart';
+import 'package:power_saving/core/auth/session_manager.dart';
+import 'package:power_saving/core/errors/failures.dart';
 import '../../domain/repositories/auth_repository.dart';
 
 /// Concrete implementation of AuthRepository
@@ -15,31 +16,43 @@ class AuthRepositoryImpl extends BaseRepository implements AuthRepository {
 
   @override
   Future<Result<User>> login(String username, String password) async {
-    return safeRemoteCall(() async {
+    final generation = SessionManager.beginLogin();
+    final owner = SessionManager.session;
+    bool current() => identical(owner, SessionManager.session) && owner.generation == generation;
+    final result = await safeRemoteCall(() async {
       final response = await _apiClient.post(
         "${ApiConfig.baseUrl}/login",
-        {
-          "username": username,
-          "password": password,
-        },
+        {"username": username, "password": password},
+        isCurrent: current,
       );
-
-      final jsonResponse = jsonDecode(response.body);
-
-      // Extract user info and token
-      final userMap = jsonResponse['current_user'];
-      final token = jsonResponse['token'];
-
-      // Save to cache
-      await Cache.saveData(key: "user", value: jsonEncode(userMap));
-      await Cache.saveData(key: "token", value: token);
-
-      return User.fromJson(userMap);
-    });
+      if (!current()) throw StateError('Obsolete authentication response');
+      dynamic jsonResponse;
+      try {
+        jsonResponse = jsonDecode(response.body);
+        if (jsonResponse is! Map<String, dynamic>) throw const FormatException();
+      } catch (_) {
+        await SessionManager.clear(message: SessionManager.invalidMessage);
+        throw const FormatException(SessionManager.invalidMessage);
+      }
+      final accepted = await SessionManager.establish(
+          jsonResponse['current_user'], jsonResponse['token'], generation);
+      if (!accepted) throw const FormatException(SessionManager.invalidMessage);
+      return SessionManager.session.user!;
+    }, isCurrent: current);
+    if (result.isFailure && current()) {
+      await SessionManager.clear(message: SessionManager.invalidMessage);
+    }
+    if (!current() && !SessionManager.isAuthenticated) {
+      return Result.failure(Failure(SessionManager.invalidMessage));
+    }
+    return result;
   }
 
   @override
   Future<Result<bool>> changePassword(String currentPassword, String newPassword) async {
+    final owner = SessionManager.session;
+    final generation = owner.generation;
+    bool current() => identical(owner, SessionManager.session) && owner.generation == generation;
     return safeRemoteCall(() async {
       final response = await _apiClient.post(
         "${ApiConfig.baseUrl}/change-password",
@@ -47,9 +60,10 @@ class AuthRepositoryImpl extends BaseRepository implements AuthRepository {
           "old_password": currentPassword,
           "new_password": newPassword,
         },
+        isCurrent: current,
       );
 
       return response.statusCode == 200;
-    });
+    }, isCurrent: current);
   }
 }

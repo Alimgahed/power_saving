@@ -1,0 +1,50 @@
+--- before/lib/features/technology/controller/technlogy.dart
++++ after/lib/features/technology/controller/technlogy.dart
+@@ -33,19 +33,14 @@
+   final _searchQuery = ''.obs;
+   Worker? _searchWorker;
+ 
+-  late TextEditingController name;
+-  late TextEditingController chlorine;
+-  late TextEditingController liquid;
+-  late TextEditingController solid;
+-  late TextEditingController power;
++  final TextEditingController name = TextEditingController();
++  final TextEditingController chlorine = TextEditingController();
++  final TextEditingController liquid = TextEditingController();
++  final TextEditingController solid = TextEditingController();
++  final TextEditingController power = TextEditingController();
+ 
+   @override
+   void onInit() {
+-    liquid = TextEditingController();
+-    solid = TextEditingController();
+-    power = TextEditingController();
+-    chlorine = TextEditingController();
+-    name = TextEditingController();
+     alltechnology();
+ 
+     // Setup search listener with debounce
+@@ -62,7 +57,11 @@
+     _requests.close();
+     _searchWorker?.dispose();
+     searchController.dispose();
+-    // Do not dispose other controllers here to prevent issues with Edittech
++    name.dispose();
++    chlorine.dispose();
++    liquid.dispose();
++    solid.dispose();
++    power.dispose();
+     super.onClose();
+   }
+ 
+--- before/lib/my_widget/sharable.dart
++++ after/lib/my_widget/sharable.dart
+@@ -218,6 +218,7 @@
+     final controller = Get.put(SearchableDropdownController(), tag: tag);
+ 
+     WidgetsBinding.instance.addPostFrameCallback((_) {
++      if (!context.mounted || controller.isClosed) return;
+       controller.initializeItems(items, initialValue);
+     });
+ 

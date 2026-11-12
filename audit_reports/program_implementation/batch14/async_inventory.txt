@@ -1,0 +1,185 @@
+lib/features/Counter/controller/counter.dart:149:      final response = await fetchData("${ApiConfig.baseUrl}/gauges", isCurrent: () => request.isCurrent);
+lib/features/Counter/controller/counter.dart:176:        showCustomErrorDialog(errorMessage: e.toString());
+lib/features/Counter/controller/counter.dart:192:      final response = await postData(
+lib/features/Counter/controller/counter.dart:198:        showSuccessToast("تم إضافة العداد بنجاح");
+lib/features/Counter/controller/counter.dart:199:        await fetchAllCounters();
+lib/features/Counter/controller/counter.dart:200:        Get.back();
+lib/features/Counter/controller/counter.dart:203:        showCustomErrorDialog(errorMessage: error);
+lib/features/Counter/controller/counter.dart:206:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/Counter/controller/counter.dart:220:    await fetchAllCounters(isBackground: false);
+lib/features/chemcails/controller/chemacial.dart:71:      final res = await fetchData("${ApiConfig.baseUrl}/chemicals",
+lib/features/chemcails/controller/chemacial.dart:94:    await getchemicals(force: true);
+lib/features/Counter/controller/edit_counter_controller.dart:52:      final res = await postData(
+lib/features/Counter/controller/edit_counter_controller.dart:59:        showSuccessToast("تم تعديل العداد بنجاح");
+lib/features/Counter/controller/edit_counter_controller.dart:72:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/Counter/controller/edit_counter_controller.dart:82:      final res = await fetchData(
+lib/features/Counter/controller/edit_counter_controller.dart:106:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/Counter/controller/add_counter_controller.dart:50:      final res = await postData(
+lib/features/Counter/controller/add_counter_controller.dart:57:        showSuccessToast("تم اضافة العداد بنجاح");
+lib/features/Counter/controller/add_counter_controller.dart:64:        showCustomErrorDialog(errorMessage: errorMessage.toString());
+lib/features/Counter/controller/add_counter_controller.dart:68:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/Counter/controller/add_counter_controller.dart:76:      final res = await fetchData(
+lib/features/Counter/controller/add_counter_controller.dart:94:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/home/controller/home.dart:47:      final res = await fetchData(ApiConfig.baseUrl, isCurrent: () => request.isCurrent);
+lib/features/home/controller/home.dart:60:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/chemcails/controller/add_chemacial.dart:58:      final res = await postData(
+lib/features/chemcails/controller/add_chemacial.dart:66:        showSuccessToast("تم الاضافة  بنجاح");
+lib/features/chemcails/controller/add_chemacial.dart:67:        Get.offNamed('/Chemicals');
+lib/features/chemcails/controller/add_chemacial.dart:76:        showCustomErrorDialog(errorMessage: errorMessage);
+lib/features/chemcails/controller/add_chemacial.dart:81:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/chemcails/controller/add_chemacial.dart:92:      final res = await postData(
+lib/features/chemcails/controller/add_chemacial.dart:99:        showSuccessToast("تم التعديل  بنجاح");
+lib/features/chemcails/controller/add_chemacial.dart:100:        Get.offNamed('/Chemicals');
+lib/features/chemcails/controller/add_chemacial.dart:108:        showCustomErrorDialog(errorMessage: errorMessage);
+lib/features/chemcails/controller/add_chemacial.dart:112:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/chemcails/controller/add_chemacial.dart:122:      final res = await fetchData(
+lib/features/chemcails/controller/add_chemacial.dart:144:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/analysis/controller/analysis.dart:28:      final res = await fetchData(
+lib/features/relations/controller/add_relations_controller.dart:44:      final res = await fetchData(
+lib/features/relations/controller/add_relations_controller.dart:78:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/relations/controller/add_relations_controller.dart:86:      final res = await postData(
+lib/features/relations/controller/add_relations_controller.dart:94:        showSuccessToast('تمت الاضافة بنجاح');
+lib/features/relations/controller/add_relations_controller.dart:108:        showCustomErrorDialog(errorMessage: errorMessage.toString());
+lib/features/relations/controller/add_relations_controller.dart:111:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/bill/controller/bills.dart:261:      final res = await fetchData("${ApiConfig.baseUrl}/new-bill/$accountNumber");
+lib/features/bill/controller/bills.dart:291:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/bill/controller/bills.dart:302:      final res = await postData(
+lib/features/bill/controller/bills.dart:309:        showSuccessToast("تم تسجيل الفاتورة بنجاح");
+lib/features/bill/controller/bills.dart:322:        showCustomErrorDialog(errorMessage: errorMessage);
+lib/features/bill/controller/bills.dart:325:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/relations/controller/relations/relation.dart:74:      final res = await fetchData("${ApiConfig.baseUrl}/stg-relations",
+lib/features/relations/controller/relations/relation.dart:97:    await getRelations(isBackground: true);
+lib/features/relations/controller/relations/relation.dart:101:    await getRelations(force: true);
+lib/features/relations/controller/relations/relation.dart:111:      final response = await fetchData("${ApiConfig.baseUrl}/edit-relation/$id");
+lib/features/relations/controller/relations/relation.dart:116:        await _fetchLatestBackground();
+lib/features/relations/controller/relations/relation.dart:118:        showSuccessToast(successMessage);
+lib/features/relations/controller/relations/relation.dart:122:        showCustomErrorDialog(errorMessage: errorMessage);
+lib/features/relations/controller/relations/relation.dart:125:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/technology/controller/add_tech_controller.dart:52:      final res = await postData(
+lib/features/technology/controller/add_tech_controller.dart:60:        showSuccessToast("تم اضافة التقنية بنجاح");
+lib/features/technology/controller/add_tech_controller.dart:69:        showCustomErrorDialog(errorMessage: errorMessage);
+lib/features/technology/controller/add_tech_controller.dart:72:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/planning/controller/place/places_controller.dart:80:      final response = await fetchData("${ApiConfig.baseUrl}/places", isCurrent: () => request.isCurrent);
+lib/features/planning/controller/place/places_controller.dart:98:        showCustomErrorDialog(errorMessage: e.toString());
+lib/features/planning/controller/place/places_controller.dart:173:    await allPlaces(isBackground: false);
+lib/features/reports/controller/reports_controller.dart:206:      final res = await postData(
+lib/features/reports/controller/reports_controller.dart:233:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/reports/controller/reports_controller.dart:248:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/technology/controller/technlogy.dart:123:      final res = await fetchData("${ApiConfig.baseUrl}/technologies",
+lib/features/technology/controller/technlogy.dart:147:    await alltechnology(force: true);
+lib/features/technology/controller/technlogy.dart:153:      final res = await postData(
+lib/features/technology/controller/technlogy.dart:160:        showSuccessToast("تم اضافة التقنية بنجاح");
+lib/features/technology/controller/technlogy.dart:165:        showCustomErrorDialog(errorMessage: errorMessage);
+lib/features/technology/controller/technlogy.dart:168:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/tech_bills/controller/new_tech_bills.dart:122:      final res = await fetchData(
+lib/features/tech_bills/controller/new_tech_bills.dart:155:          showCustomErrorDialog(
+lib/features/tech_bills/controller/new_tech_bills.dart:163:      if (!isBackground) showCustomErrorDialog(errorMessage: e.toString());
+lib/features/tech_bills/controller/new_tech_bills.dart:188:      final res = await postData(
+lib/features/tech_bills/controller/new_tech_bills.dart:210:        showSuccessToast("تمت الإضافة بنجاح");
+lib/features/tech_bills/controller/new_tech_bills.dart:222:          showCustomErrorDialog(errorMessage: errorMessage.toString());
+lib/features/tech_bills/controller/new_tech_bills.dart:224:          showCustomErrorDialog(errorMessage: e.toString());
+lib/features/tech_bills/controller/new_tech_bills.dart:231:      showCustomErrorDialog(errorMessage: "حدث خطأ: ${e.toString()}");
+lib/features/planning/controller/place/add_places_controller.dart:50:      final res = await postData(
+lib/features/planning/controller/place/add_places_controller.dart:59:        showSuccessToast("تم اضافة المكان بنجاح");
+lib/features/planning/controller/place/add_places_controller.dart:64:        showCustomErrorDialog(errorMessage: errorMessage);
+lib/features/planning/controller/place/add_places_controller.dart:67:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/planning/controller/place/add_places_controller.dart:77:      final res = await fetchData(
+lib/features/planning/controller/place/add_places_controller.dart:101:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/auth/controller/chang_password.dart:35:      final result = await _authRepository.changePassword(old, newpassword);
+lib/features/auth/controller/chang_password.dart:43:            showSuccessToast("تم تغيير كلمة المرور بنجاح");
+lib/features/auth/controller/chang_password.dart:46:            showCustomErrorDialog(errorMessage: "فشل تغيير كلمة المرور.");
+lib/features/auth/controller/chang_password.dart:50:          showCustomErrorDialog(errorMessage: failure.message);
+lib/features/auth/controller/chang_password.dart:56:      showCustomErrorDialog(errorMessage: 'حدث خطأ غير متوقع: ${e.toString()}');
+lib/features/technology/controller/edit_tech_controller.dart:50:      final res = await postData(
+lib/features/technology/controller/edit_tech_controller.dart:60:        showSuccessToast("تم تعديل التقنية بنجاح");
+lib/features/technology/controller/edit_tech_controller.dart:70:        showCustomErrorDialog(errorMessage: errorMessage);
+lib/features/technology/controller/edit_tech_controller.dart:74:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/auth/controller/new_user.dart:50:      final res = await postData(
+lib/features/auth/controller/new_user.dart:63:showSuccessToast("تم تسجيل المستخدم بنجاح");
+lib/features/auth/controller/new_user.dart:71:        showCustomErrorDialog(errorMessage: errorMessage);
+lib/features/auth/controller/new_user.dart:74:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/tech_bills/controller/tech_bills/edit_techbills.dart:72:      final res = await postData(
+lib/features/tech_bills/controller/tech_bills/edit_techbills.dart:87:        showSuccessToast("تم التعديل بنجاح");
+lib/features/tech_bills/controller/tech_bills/edit_techbills.dart:100:        showCustomErrorDialog(errorMessage: errorMessage);
+lib/features/tech_bills/controller/tech_bills/edit_techbills.dart:104:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/planning/controller/place/edit_places_controller.dart:50:      final res = await postData(
+lib/features/planning/controller/place/edit_places_controller.dart:59:        showSuccessToast("تم تعديل المكان بنجاح");
+lib/features/planning/controller/place/edit_places_controller.dart:64:        showCustomErrorDialog(errorMessage: errorMessage);
+lib/features/planning/controller/place/edit_places_controller.dart:67:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/planning/controller/place/edit_places_controller.dart:77:      final res = await fetchData(
+lib/features/planning/controller/place/edit_places_controller.dart:101:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/tech_bills/controller/techbills.dart:233:      final res = await fetchData("${ApiConfig.baseUrl}/tech-bills",
+lib/features/tech_bills/controller/techbills.dart:247:      if (!isBackground) showCustomErrorDialog(errorMessage: e.toString());
+lib/features/tech_bills/controller/techbills.dart:260:    await fetchTechBills(isBackground: false);
+lib/features/tech_bills/controller/techbills.dart:283:      final res = await postData(
+lib/features/tech_bills/controller/techbills.dart:301:        showSuccessToast("تمت الإضافة بنجاح");
+lib/features/tech_bills/controller/techbills.dart:314:        showCustomErrorDialog(errorMessage: errorMessage);
+lib/features/tech_bills/controller/techbills.dart:318:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/planning/controller/blance_chart/blance_chart.dart:124:      final response = await fetchData("${ApiConfig.baseUrl}/all-areas",
+lib/features/planning/controller/blance_chart/blance_chart.dart:135:        showCustomErrorDialog(errorMessage: e.toString());
+lib/features/planning/controller/blance_chart/blance_chart.dart:145:      final response = await fetchData("${ApiConfig.baseUrl}/place-types",
+lib/features/planning/controller/blance_chart/blance_chart.dart:156:        showCustomErrorDialog(errorMessage: e.toString());
+lib/features/planning/controller/blance_chart/blance_chart.dart:201:    final response = await postData(
+lib/features/planning/controller/blance_chart/blance_chart.dart:237:        showCustomErrorDialog(errorMessage: "تنسيق البيانات المستلمة غير متوقع");
+lib/features/planning/controller/blance_chart/blance_chart.dart:244:    showCustomErrorDialog(errorMessage: e.toString());
+lib/features/tech_bills/controller/tech_bills/techbills.dart:133:      final res = await fetchData("${ApiConfig.baseUrl}/tech-bills");
+lib/features/tech_bills/controller/tech_bills/techbills.dart:147:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/tech_bills/controller/tech_bills/techbills.dart:165:      final res = await postData(
+lib/features/tech_bills/controller/tech_bills/techbills.dart:178:        showSuccessToast("تمت الإضافة بنجاح");
+lib/features/tech_bills/controller/tech_bills/techbills.dart:189:        showCustomErrorDialog(errorMessage: errorMessage);
+lib/features/tech_bills/controller/tech_bills/techbills.dart:192:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/auth/controller/login.dart:39:      final result = await pending;
+lib/features/auth/controller/login.dart:51:            Get.offNamed('/home');
+lib/features/auth/controller/login.dart:56:          showCustomErrorDialog(errorMessage: failure.message);
+lib/features/auth/controller/login.dart:61:      showCustomErrorDialog(errorMessage: 'حدث خطأ غير متوقع: ${e.toString()}');
+lib/features/auth/controller/all_user.dart:44:      final res = await fetchData("${ApiConfig.baseUrl}/all-users", isCurrent: () => request.isCurrent);
+lib/features/auth/controller/all_user.dart:64:        showCustomErrorDialog(errorMessage: e.toString());
+lib/features/auth/controller/all_user.dart:79:    await loadUsers(isBackground: false);
+lib/features/auth/controller/all_user.dart:102:      // final res = await fetchData(
+lib/features/auth/controller/all_user.dart:123:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/auth/controller/all_user.dart:138:   final res = await postData(
+lib/features/auth/controller/all_user.dart:147:      // final res = await fetchData(
+lib/features/auth/controller/all_user.dart:161:        showSuccessToast('تم تحديث بيانات المستخدم بنجاح');
+lib/features/auth/controller/all_user.dart:168:        showCustomErrorDialog(errorMessage: errorMessage.toString());   
+lib/features/auth/controller/all_user.dart:171:      showCustomErrorDialog(errorMessage: e.toString());   
+lib/features/auth/controller/all_user.dart:187:      final confirm = await Get.dialog<bool>(
+lib/features/auth/controller/all_user.dart:207:                onPressed: () => Get.back(result: false),
+lib/features/auth/controller/all_user.dart:214:                onPressed: () => Get.back(result: true),
+lib/features/auth/controller/all_user.dart:237:      // final res = await fetchData(
+lib/features/auth/controller/all_user.dart:250:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/planning/controller/place/edit_place_type_controller.dart:43:      final response = await fetchData("${ApiConfig.baseUrl}/place-types",
+lib/features/planning/controller/place/edit_place_type_controller.dart:57:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/planning/controller/place/edit_place_type_controller.dart:78:      final response = await postData(
+lib/features/planning/controller/place/edit_place_type_controller.dart:88:        await fetchPlaceTypes(forceRefresh: true);
+lib/features/planning/controller/place/edit_place_type_controller.dart:95:        showSuccessToast("تم تعديل نوع المكان ونطاق الاستهلاك بنجاح");
+lib/features/planning/controller/place/edit_place_type_controller.dart:100:        showCustomErrorDialog(errorMessage: msg);
+lib/features/planning/controller/place/edit_place_type_controller.dart:104:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/bill/controller/tech_bills.dart:79:      final res = await fetchData(uri.toString(), isCurrent: canApply);
+lib/features/bill/controller/tech_bills.dart:102:        showCustomErrorDialog(errorMessage: e.toString());
+lib/features/bill/controller/tech_bills.dart:272:    await allbills(isBackground: false);
+lib/features/predaction/controller/prediaction.dart:27:      final res = await postData("${ApiConfig.baseUrl}/prediction/$stationId", {}, isCurrent: () => request.isCurrent);
+lib/features/predaction/controller/prediaction.dart:36:          showCustomErrorDialog(errorMessage: e.message);
+lib/features/predaction/controller/prediaction.dart:39:        showCustomErrorDialog(errorMessage: "تعذر الاتصال بالخادم. الرجاء المحاولة لاحقاً.\nالخطأ: $e");
+lib/features/bill/controller/all_bills.dart:129:      final res = await fetchData(uri.toString(), isCurrent: canApply);
+lib/features/bill/controller/all_bills.dart:172:        showCustomErrorDialog(errorMessage: e.toString());
+lib/features/bill/controller/all_bills.dart:283:    await allbills(isBackground: false);
+lib/features/stations/controller/following_stations_controller.dart:79:      final res = await fetchData("${ApiConfig.baseUrl}/station-techs",
+lib/features/stations/controller/all_stations_controller.dart:75:      final response = await fetchData("${ApiConfig.baseUrl}/stations", isCurrent: () => request.isCurrent);
+lib/features/stations/controller/all_stations_controller.dart:97:        showCustomErrorDialog(errorMessage: e.toString());
+lib/features/stations/controller/all_stations_controller.dart:112:    await getStations(isBackground: false);
+lib/features/stations/controller/edit_stations_controller.dart:57:      final res = await fetchData(
+lib/features/stations/controller/edit_stations_controller.dart:73:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/stations/controller/edit_stations_controller.dart:81:      final response = await fetchData("${ApiConfig.baseUrl}/all-areas",
+lib/features/stations/controller/edit_stations_controller.dart:96:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/stations/controller/edit_stations_controller.dart:112:      final res = await postData(
+lib/features/stations/controller/edit_stations_controller.dart:127:        showSuccessToast("تم تعديل المحطة بنجاح");
+lib/features/stations/controller/edit_stations_controller.dart:128:        Get.offAllNamed('/Stations');
+lib/features/stations/controller/edit_stations_controller.dart:133:        showCustomErrorDialog(errorMessage: errorMessage);
+lib/features/stations/controller/edit_stations_controller.dart:137:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/stations/controller/add_stations_controller.dart:63:      final res = await postData(
+lib/features/stations/controller/add_stations_controller.dart:78:        showSuccessToast("تم اضافة المحطة بنجاح");
+lib/features/stations/controller/add_stations_controller.dart:83:        showCustomErrorDialog(errorMessage: errorMessage);
+lib/features/stations/controller/add_stations_controller.dart:87:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/stations/controller/add_stations_controller.dart:98:      final response = await fetchData("${ApiConfig.baseUrl}/all-areas",
+lib/features/stations/controller/add_stations_controller.dart:113:      showCustomErrorDialog(errorMessage: e.toString());
+lib/features/stations/controller/add_stations_controller.dart:124:      final res = await fetchData(

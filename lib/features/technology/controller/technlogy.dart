@@ -1,26 +1,30 @@
+import 'package:power_saving/core/utils/owned_debounce.dart';
+import 'package:power_saving/core/utils/request_guard.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:power_saving/global/data.dart';
 import 'package:power_saving/features/technology/model/tech_model.dart';
 import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class TechnlogyController extends GetxController {
+  final _requests = RequestGuard();
+  final loadError = ''.obs;
+  final isRefreshing = false.obs;
+
   RxBool looading = false.obs;
   RxBool isLoading = false.obs;
-  
-  // Static Session Cache
-  static List<dynamic>? sessionCache;
-  
+
+
+
   // Master data
   List<TechnologyModel> all_technology = [];
-  
+
   // State for view
   List<TechnologyModel> filteredTechnologies = [];
-  
+
   // Search & Filter
   String main_type = "";
   String selectedFilter = 'all';
@@ -29,23 +33,18 @@ class TechnlogyController extends GetxController {
   final _searchQuery = ''.obs;
   Worker? _searchWorker;
 
-  late TextEditingController name;
-  late TextEditingController chlorine;
-  late TextEditingController liquid;
-  late TextEditingController solid;
-  late TextEditingController power;
+  final TextEditingController name = TextEditingController();
+  final TextEditingController chlorine = TextEditingController();
+  final TextEditingController liquid = TextEditingController();
+  final TextEditingController solid = TextEditingController();
+  final TextEditingController power = TextEditingController();
 
   @override
   void onInit() {
-    liquid = TextEditingController();
-    solid = TextEditingController();
-    power = TextEditingController();
-    chlorine = TextEditingController();
-    name = TextEditingController();
     alltechnology();
-    
+
     // Setup search listener with debounce
-    _searchWorker = debounce(
+    _searchWorker = ownedDebounce(
       _searchQuery,
       (query) => _applyFilters(),
       time: const Duration(milliseconds: 300),
@@ -55,9 +54,14 @@ class TechnlogyController extends GetxController {
 
   @override
   void onClose() {
+    _requests.close();
     _searchWorker?.dispose();
     searchController.dispose();
-    // Do not dispose other controllers here to prevent issues with Edittech
+    name.dispose();
+    chlorine.dispose();
+    liquid.dispose();
+    solid.dispose();
+    power.dispose();
     super.onClose();
   }
 
@@ -83,19 +87,19 @@ class TechnlogyController extends GetxController {
 
   void _applyFilters() {
     final query = _searchQuery.value.toLowerCase();
-    
+
     final results = all_technology.where((tech) {
       // Filter by type
       final matchType = selectedFilter == 'all' || tech.main_type == selectedFilter;
-      
+
       // Filter by text search
       final matchQuery = query.isEmpty ||
           tech.technologyName.toLowerCase().contains(query) ||
           tech.main_type.toLowerCase().contains(query);
-          
+
       return matchType && matchQuery;
     }).toList();
-    
+
     filteredTechnologies = results;
     update();
   }
@@ -107,75 +111,40 @@ class TechnlogyController extends GetxController {
 
   // --- API Calls ---
 
-  Future<void> alltechnology({bool isBackground = false}) async {
-    if (!isBackground) {
-      if (sessionCache != null) {
-        // 1. Display cached data instantly
-        all_technology.clear();
-        for (var i in sessionCache!) {
-          TechnologyModel tech = TechnologyModel.fromJson(i);
-          all_technology.add(tech);
-        }
-        technologies = all_technology;
-        _applyFilters();
-        
-        // 2. Fetch silently in background
-        _fetchLatestBackground();
-        return;
-      } else {
-        isLoading.value = true;
-        update();
-      }
-    }
-    
+  Future<void> alltechnology({bool isBackground = false, bool force = false}) async {
+    final request = _requests.begin();
+    if (!request.isCurrent) return;
+    loadError.value = '';
+    isLoading.value = !isBackground;
+    isRefreshing.value = !isLoading.value;
+    update();
     try {
-      final res = await fetchData("${ApiConfig.baseUrl}/technologies");
 
-      if (res.statusCode == 200) {
-        final jsonData = json.decode(res.body);
-        List<dynamic> responseData = jsonData;
+      final res = await fetchData("${ApiConfig.baseUrl}/technologies",
+          isCurrent: () => request.isCurrent);
+      if (!request.isCurrent) return;
+      if (res.statusCode != 200) throw StateError('تعذر تحميل البيانات');
+      final List<dynamic> responseData = jsonDecode(res.body);
+      final parsed = responseData.map((e) => TechnologyModel.fromJson(e)).toList();
 
-        // Update static cache
-        sessionCache = responseData;
+      all_technology.clear();
+      all_technology.addAll(parsed);
 
-        all_technology.clear();
-        for (var i in responseData) {
-          TechnologyModel tech = TechnologyModel.fromJson(i);
-          all_technology.add(tech);
-        }
-        
-        technologies = all_technology; // Update global
-        _applyFilters(); // Initialize filtered list
-        
-        if (!isBackground) {
-          isLoading.value = false;
-          update();
-        }
-      } else {
-        if (!isBackground) {
-          isLoading.value = false;
-          update();
-          debugPrint("Failed to fetch technologies: ${res.body}");
-        }
-      }
+      _applyFilters();
     } catch (e) {
-      if (!isBackground) {
-        showCustomErrorDialog(errorMessage: e.toString());
+      if (!request.isCurrent) return;
+      loadError.value = 'تعذر تحديث البيانات. يرجى إعادة المحاولة.';
+    } finally {
+      if (request.isCurrent) {
         isLoading.value = false;
+        isRefreshing.value = false;
         update();
-        debugPrint("Error fetching technologies: $e");
       }
     }
-  }
-
-  Future<void> _fetchLatestBackground() async {
-    await alltechnology(isBackground: true);
   }
 
   Future<void> forceRefresh() async {
-    isLoading.value = true;
-    update();
-    await alltechnology(isBackground: false);
+    await alltechnology(force: true);
   }
 
   Future<void> addtech({required TechnologyModel tech}) async {

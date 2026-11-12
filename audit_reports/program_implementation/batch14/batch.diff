@@ -1,0 +1,73 @@
+--- lib/features/planning/view/screens/places/edit_places.dart
++++ lib/features/planning/view/screens/places/edit_places.dart
+@@ -22,8 +22,10 @@
+   Widget build(BuildContext context) {
+     if (place == null) {
+       WidgetsBinding.instance.addPostFrameCallback((_) {
++        if (!context.mounted || ModalRoute.of(context)?.isCurrent != true) return;
+         Get.offAllNamed('/Places');
+       });
++      return const SizedBox();
+     }
+ 
+     return RTLScaffold(
+--- lib/features/stations/view/screens/edit_staion.dart
++++ lib/features/stations/view/screens/edit_staion.dart
+@@ -22,8 +22,10 @@
+   Widget build(BuildContext context) {
+     if (station == null) {
+       WidgetsBinding.instance.addPostFrameCallback((_) {
++        if (!context.mounted || ModalRoute.of(context)?.isCurrent != true) return;
+         Get.offAllNamed('/Stations');
+       });
++      return const SizedBox();
+     }
+ 
+     const appBarWidget = CustomAppBar(
+--- lib/features/Counter/view/screens/edit_counter.dart
++++ lib/features/Counter/view/screens/edit_counter.dart
+@@ -23,8 +23,10 @@
+   Widget build(BuildContext context) {
+     if (meter == null) {
+       WidgetsBinding.instance.addPostFrameCallback((_) {
++        if (!context.mounted || ModalRoute.of(context)?.isCurrent != true) return;
+         Get.offAllNamed('/Countrts');
+       });
++      return const SizedBox();
+     }
+ 
+     const appBarWidget = CustomAppBar(
+--- lib/features/chemcails/view/screens/edit_chemcials.dart
++++ lib/features/chemcails/view/screens/edit_chemcials.dart
+@@ -23,6 +23,7 @@
+   Widget build(BuildContext context) {
+     if (chemicals == null) {
+       WidgetsBinding.instance.addPostFrameCallback((_) {
++        if (!context.mounted || ModalRoute.of(context)?.isCurrent != true) return;
+         Get.offAllNamed('/Chemicals');
+       });
+       return const SizedBox();
+--- lib/features/technology/view/screens/edittech.dart
++++ lib/features/technology/view/screens/edittech.dart
+@@ -23,9 +23,10 @@
+   Widget build(BuildContext context) {
+     if (tech == null) {
+       WidgetsBinding.instance.addPostFrameCallback((_) {
+-        if (!context.mounted) return;
++        if (!context.mounted || ModalRoute.of(context)?.isCurrent != true) return;
+         Get.offAllNamed('/Technology');
+       });
++      return const SizedBox();
+     }
+ 
+     const appBarWidget = CustomAppBar(
+--- lib/features/analysis/view/screen/analysis.dart
++++ lib/features/analysis/view/screen/analysis.dart
+@@ -34,6 +34,7 @@
+     // If navigated without arguments, return back safely
+     if (station == null || tech == null) {
+       WidgetsBinding.instance.addPostFrameCallback((_) {
++        if (!mounted || ModalRoute.of(context)?.isCurrent != true) return;
+         Get.back();
+       });
+       return const Scaffold(

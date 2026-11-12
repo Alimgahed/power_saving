@@ -1,0 +1,436 @@
+--- before/lib/features/Counter/controller/add_counter_controller.dart
++++ after/lib/features/Counter/controller/add_counter_controller.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/utils/request_guard.dart';
+ // ignore: camel_case_types
+ import 'dart:convert';
+ 
+@@ -9,6 +10,7 @@
+ import 'package:power_saving/network/network.dart';
+ 
+ class addcounter extends GetxController {
++  final _lookupRequests0 = RequestGuard();
+   RxBool looading = false.obs;
+   List<VoltageType> allVoltage = [];
+   int? voltage;
+@@ -33,6 +35,7 @@
+ 
+   @override
+   void onClose() {
++    _lookupRequests0.close();
+     Counter_number.dispose();
+     meterId.dispose();
+     meterFactor.dispose();
+@@ -67,10 +70,14 @@
+   }
+ 
+   Future<void> allVoltige() async {
++    final request = _lookupRequests0.begin();
++    if (!request.isCurrent) return;
+     try {
+       final res = await fetchData(
+        "${ApiConfig.baseUrl}/new-gauge",
++        isCurrent: () => request.isCurrent,
+       );
++      if (!request.isCurrent) return;
+ 
+       if (res.statusCode == 200) {
+         final jsonData = json.decode(res.body);
+@@ -83,6 +90,7 @@
+       }
+     // ignore: empty_catches
+     } catch (e) {
++      if (!request.isCurrent) return;
+       showCustomErrorDialog(errorMessage: e.toString());
+ 
+     }
+--- before/lib/features/Counter/controller/edit_counter_controller.dart
++++ after/lib/features/Counter/controller/edit_counter_controller.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/utils/request_guard.dart';
+ import 'package:flutter/material.dart';
+ import 'dart:convert';
+ 
+@@ -8,6 +9,7 @@
+ import 'package:power_saving/network/network.dart';
+ 
+ class EditCounter extends GetxController {
++  final _lookupRequests0 = RequestGuard();
+   RxBool looadig = false.obs;
+   List<VoltageType> allVoltage = [];
+   int? voltage;
+@@ -32,6 +34,7 @@
+ 
+   @override
+   void onClose() {
++    _lookupRequests0.close();
+     Counter_number.dispose();
+     meterId.dispose();
+     meterFactor.dispose();
+@@ -73,10 +76,14 @@
+   }
+ 
+   Future<void> allVoltige() async {
++    final request = _lookupRequests0.begin();
++    if (!request.isCurrent) return;
+     try {
+       final res = await fetchData(
+         "${ApiConfig.baseUrl}/new-gauge",
++        isCurrent: () => request.isCurrent,
+       );
++      if (!request.isCurrent) return;
+ 
+       if (res.statusCode == 200) {
+         final jsonData = json.decode(res.body);
+@@ -95,6 +102,7 @@
+         );
+       }
+     } catch (e) {
++      if (!request.isCurrent) return;
+       showCustomErrorDialog(errorMessage: e.toString());
+     }
+   }
+--- before/lib/features/planning/controller/place/add_places_controller.dart
++++ after/lib/features/planning/controller/place/add_places_controller.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/utils/request_guard.dart';
+ import 'dart:convert';
+ 
+ import 'package:flutter/material.dart';
+@@ -10,6 +11,7 @@
+ import 'package:power_saving/network/network.dart';
+ 
+ class AddPlacesController extends GetxController {
++  final _lookupRequests0 = RequestGuard();
+   RxBool looading = false.obs;
+   late TextEditingController name;
+     List<Branch> branchList = [];
+@@ -35,6 +37,7 @@
+ 
+   @override
+   void onClose() {
++    _lookupRequests0.close();
+     name.dispose();
+     super.onClose();
+   }
+@@ -68,10 +71,14 @@
+ 
+ 
+   Future<void> allNewData() async {
++    final request = _lookupRequests0.begin();
++    if (!request.isCurrent) return;
+     try {
+       final res = await fetchData(
+         "${ApiConfig.baseUrl}/new-place",
++        isCurrent: () => request.isCurrent,
+       );
++      if (!request.isCurrent) return;
+ 
+       if (res.statusCode == 200) {
+         final jsonData = json.decode(res.body);
+@@ -90,6 +97,7 @@
+       }
+     // ignore: empty_catches
+     } catch (e) {
++      if (!request.isCurrent) return;
+       showCustomErrorDialog(errorMessage: e.toString());
+     }
+   }
+--- before/lib/features/planning/controller/place/edit_places_controller.dart
++++ after/lib/features/planning/controller/place/edit_places_controller.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/utils/request_guard.dart';
+ import 'dart:convert';
+ 
+ import 'package:flutter/material.dart';
+@@ -10,6 +11,7 @@
+ import 'package:power_saving/network/network.dart';
+ 
+ class EditPlacesController extends GetxController {
++  final _lookupRequests0 = RequestGuard();
+   RxBool looading = false.obs;
+   late TextEditingController name;
+     List<Branch> branchList = [];
+@@ -35,6 +37,7 @@
+ 
+   @override
+   void onClose() {
++    _lookupRequests0.close();
+     name.dispose();
+     super.onClose();
+   }
+@@ -68,10 +71,14 @@
+ 
+ 
+   Future<void> allNewData() async {
++    final request = _lookupRequests0.begin();
++    if (!request.isCurrent) return;
+     try {
+       final res = await fetchData(
+         "${ApiConfig.baseUrl}/new-place",
++        isCurrent: () => request.isCurrent,
+       );
++      if (!request.isCurrent) return;
+ 
+       if (res.statusCode == 200) {
+         final jsonData = json.decode(res.body);
+@@ -90,6 +97,7 @@
+       }
+     // ignore: empty_catches
+     } catch (e) {
++      if (!request.isCurrent) return;
+       showCustomErrorDialog(errorMessage: e.toString());
+     }
+   }
+--- before/lib/features/planning/controller/place/edit_place_type_controller.dart
++++ after/lib/features/planning/controller/place/edit_place_type_controller.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/utils/request_guard.dart';
+ import 'dart:convert';
+ import 'package:flutter/material.dart';
+ import 'package:get/get.dart';
+@@ -8,6 +9,7 @@
+ import 'package:power_saving/network/network.dart';
+ 
+ class EditPlaceTypeController extends GetxController {
++  final _lookupRequests0 = RequestGuard();
+   final placeTypes = <PlaceType>[].obs;
+   final isLoading = false.obs;
+   final isSubmitting = false.obs;
+@@ -24,6 +26,7 @@
+ 
+   @override
+   void onClose() {
++    _lookupRequests0.close();
+     nameController.dispose();
+     fromController.dispose();
+     toController.dispose();
+@@ -31,11 +34,16 @@
+   }
+ 
+   Future<void> fetchPlaceTypes({bool forceRefresh = false}) async {
++    final request = _lookupRequests0.begin();
++    if (!request.isCurrent) return;
+ 
+ 
+     isLoading.value = true;
+     try {
+-      final response = await fetchData("${ApiConfig.baseUrl}/place-types");
++      final response = await fetchData("${ApiConfig.baseUrl}/place-types",
++        isCurrent: () => request.isCurrent,
++      );
++      if (!request.isCurrent) return;
+       if (response.statusCode == 200) {
+         final List<dynamic> jsonData = jsonDecode(response.body);
+ 
+@@ -45,9 +53,10 @@
+         }
+       }
+     } catch (e) {
++      if (!request.isCurrent) return;
+       showCustomErrorDialog(errorMessage: e.toString());
+     } finally {
+-      isLoading.value = false;
++      if (request.isCurrent) isLoading.value = false;
+     }
+   }
+ 
+--- before/lib/features/relations/controller/add_relations_controller.dart
++++ after/lib/features/relations/controller/add_relations_controller.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/utils/request_guard.dart';
+ // ignore: camel_case_types
+ import 'dart:convert';
+ 
+@@ -12,6 +13,7 @@
+ import 'package:power_saving/network/network.dart';
+ 
+ class addrelationcontroller extends GetxController {
++  final _lookupRequests0 = RequestGuard();
+   RxBool looading=false.obs;
+   List<TechnologyModel> technologylist = [];
+   List<ElectricMeter> electricMeterList = [];
+@@ -30,15 +32,20 @@
+ 
+   @override
+   void onClose() {
++    _lookupRequests0.close();
+     // No need to dispose integers
+     super.onClose();
+   }
+ 
+   Future<void> new_relations() async {
++    final request = _lookupRequests0.begin();
++    if (!request.isCurrent) return;
+     try {
+       final res = await fetchData(
+         "${ApiConfig.baseUrl}/new-relation",
++        isCurrent: () => request.isCurrent,
+       );
++      if (!request.isCurrent) return;
+ 
+       if (res.statusCode == 200) {
+         final jsonData = json.decode(res.body);
+@@ -67,6 +74,7 @@
+       } 
+     // ignore: empty_catches
+     } catch (e) {
++      if (!request.isCurrent) return;
+       showCustomErrorDialog(errorMessage: e.toString());
+     }
+   }
+--- before/lib/features/chemcails/controller/add_chemacial.dart
++++ after/lib/features/chemcails/controller/add_chemacial.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/utils/request_guard.dart';
+ import 'dart:convert';
+ 
+ import 'package:flutter/widgets.dart';
+@@ -10,6 +11,7 @@
+ import 'package:power_saving/network/network.dart' show fetchData, postData;
+ 
+ class addchemical extends GetxController {
++  final _lookupRequests0 = RequestGuard();
+   RxBool loading = false.obs;
+   List<WaterSource> waterSourceList = [];
+   List<TechnologyModel> tech = [];
+@@ -38,6 +40,7 @@
+ 
+   @override
+   void onClose() {
++    _lookupRequests0.close();
+     // Dispose of all controllers
+     chlorineFromController.dispose();
+     chlorineToController.dispose();
+@@ -113,10 +116,14 @@
+   }
+ 
+   void getchemicals() async {
++    final request = _lookupRequests0.begin();
++    if (!request.isCurrent) return;
+     try {
+       final res = await fetchData(
+-       "${ApiConfig.baseUrl}/new-chemical"
++       "${ApiConfig.baseUrl}/new-chemical",
++        isCurrent: () => request.isCurrent,
+       );
++      if (!request.isCurrent) return;
+       if (res.statusCode == 200) {
+         final jsonData = json.decode(res.body);
+ 
+@@ -133,6 +140,7 @@
+       }
+     // ignore: empty_catches
+     } catch (e) {
++      if (!request.isCurrent) return;
+       showCustomErrorDialog(errorMessage: e.toString());
+     }
+   }
+--- before/lib/features/stations/controller/add_stations_controller.dart
++++ after/lib/features/stations/controller/add_stations_controller.dart
+@@ -10,6 +10,7 @@
+ import 'package:power_saving/network/network.dart';
+ 
+ class AddStationController extends GetxController {
++  final _lookupRequests0 = RequestGuard();
+   final _branchReads = RequestGuard();
+   bool branchesLoading = false;
+   bool branchesLoaded = false;
+@@ -42,6 +43,7 @@
+ 
+   @override
+   void onClose() {
++    _lookupRequests0.close();
+     _branchReads.close();
+     name.dispose();
+     capacity.dispose();
+@@ -90,8 +92,13 @@
+   List<AreaOfService> areas = [];
+ 
+   Future<void> allareas() async {
++    final request = _lookupRequests0.begin();
++    if (!request.isCurrent) return;
+     try {
+-      final response = await fetchData("${ApiConfig.baseUrl}/all-areas");
++      final response = await fetchData("${ApiConfig.baseUrl}/all-areas",
++        isCurrent: () => request.isCurrent,
++      );
++      if (!request.isCurrent) return;
+ 
+       if (response.statusCode == 200) {
+         final jsonData = jsonDecode(response.body) as List<dynamic>;
+@@ -102,6 +109,7 @@
+         update();
+       }
+     } catch (e) {
++      if (!request.isCurrent) return;
+       showCustomErrorDialog(errorMessage: e.toString());
+     }
+   }
+--- before/lib/features/stations/controller/edit_stations_controller.dart
++++ after/lib/features/stations/controller/edit_stations_controller.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/utils/request_guard.dart';
+ 
+ 
+ import 'dart:convert';
+@@ -11,6 +12,8 @@
+ import 'package:power_saving/network/network.dart';
+   RxBool looading = false.obs;
+ class EditStationsController extends GetxController {
++  final _lookupRequests0 = RequestGuard();
++  final _lookupRequests1 = RequestGuard();
+     List<Branch> branchList = [];
+   List<WaterSource> waterSourceList = [];
+   List<AreaOfService> areas = [];
+@@ -41,15 +44,21 @@
+ 
+   @override
+   void onClose() {
++    _lookupRequests0.close();
++    _lookupRequests1.close();
+     name.dispose();
+     capacity.dispose();
+     super.onClose();
+   }
+     Future<void> allBranches() async {
++    final request = _lookupRequests0.begin();
++    if (!request.isCurrent) return;
+     try {
+       final res = await fetchData(
+         "${ApiConfig.baseUrl}/new-station",
++        isCurrent: () => request.isCurrent,
+       );
++      if (!request.isCurrent) return;
+ 
+       if (res.statusCode == 200) {
+         final jsonData = json.decode(res.body);
+@@ -60,13 +69,19 @@
+       }
+     // ignore: empty_catches
+     } catch (e) {
++      if (!request.isCurrent) return;
+       showCustomErrorDialog(errorMessage: e.toString());
+     }
+   }
+ 
+   Future<void> allareas() async {
++    final request = _lookupRequests1.begin();
++    if (!request.isCurrent) return;
+     try {
+-      final response = await fetchData("${ApiConfig.baseUrl}/all-areas");
++      final response = await fetchData("${ApiConfig.baseUrl}/all-areas",
++        isCurrent: () => request.isCurrent,
++      );
++      if (!request.isCurrent) return;
+ 
+       if (response.statusCode == 200) {
+         final jsonData = jsonDecode(response.body) as List<dynamic>;
+@@ -77,6 +92,7 @@
+         update();
+       }
+     } catch (e) {
++      if (!request.isCurrent) return;
+       showCustomErrorDialog(errorMessage: e.toString());
+     }
+   }

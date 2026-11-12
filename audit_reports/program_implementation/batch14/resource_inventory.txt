@@ -1,0 +1,374 @@
+lib/my_widget/sharable.dart:110:  final TextEditingController searchController = TextEditingController();
+lib/my_widget/sharable.dart:111:  final FocusNode focusNode = FocusNode();
+lib/my_widget/sharable.dart:124:    searchController.addListener(() {
+lib/my_widget/sharable.dart:129:    focusNode.addListener(() {
+lib/my_widget/sharable.dart:186:  void onClose() {
+lib/my_widget/sharable.dart:187:    searchController.dispose();
+lib/my_widget/sharable.dart:188:    focusNode.dispose();
+lib/my_widget/sharable.dart:189:    super.onClose();
+lib/controller/voltage/financial.dart:14:  void onClose() {
+lib/controller/voltage/financial.dart:16:    super.onClose();
+lib/features/reports/view/screens/report.dart:30:  final ScrollController verticalController = ScrollController();
+lib/features/reports/view/screens/report.dart:31:  final ScrollController horizontalController = ScrollController();
+lib/features/reports/view/screens/report.dart:34:  void dispose() {
+lib/features/reports/view/screens/report.dart:35:    verticalController.dispose();
+lib/features/reports/view/screens/report.dart:36:    horizontalController.dispose();
+lib/features/reports/view/screens/report.dart:37:    super.dispose();
+lib/controller/voltage/voltage.dart:21:    lowcost = TextEditingController();
+lib/controller/voltage/voltage.dart:22:    lowfixed = TextEditingController();
+lib/controller/voltage/voltage.dart:23:    avaargefixed = TextEditingController();
+lib/controller/voltage/voltage.dart:24:    avaragecost = TextEditingController();
+lib/controller/voltage/voltage.dart:30:  void onClose() {
+lib/controller/voltage/voltage.dart:31:    lowcost.dispose();
+lib/controller/voltage/voltage.dart:32:    lowfixed.dispose();
+lib/controller/voltage/voltage.dart:33:    avaargefixed.dispose();
+lib/controller/voltage/voltage.dart:34:    avaragecost.dispose();
+lib/controller/voltage/voltage.dart:36:    super.onClose();
+lib/controller/voltage/voltage.dart:57:            avaargefixed = TextEditingController(text: i.fixedFee.toString());
+lib/controller/voltage/voltage.dart:58:            avaragecost = TextEditingController(text: i.voltageCost.toString());
+lib/controller/voltage/voltage.dart:60:            lowfixed = TextEditingController(text: i.fixedFee.toString());
+lib/controller/voltage/voltage.dart:61:            lowcost = TextEditingController(text: i.voltageCost.toString());
+lib/features/analysis/controller/analysis.dart:15:  void onClose() {
+lib/features/analysis/controller/analysis.dart:17:    super.onClose();
+lib/features/reports/controller/reports_controller.dart:31:  final TextEditingController searchController = TextEditingController();
+lib/features/reports/controller/reports_controller.dart:74:    startdate = TextEditingController();
+lib/features/reports/controller/reports_controller.dart:75:    enddate = TextEditingController();
+lib/features/reports/controller/reports_controller.dart:97:    searchController.addListener(_onSearchChanged);
+lib/features/reports/controller/reports_controller.dart:101:  void onClose() {
+lib/features/reports/controller/reports_controller.dart:104:    _filterWorker?.dispose();
+lib/features/reports/controller/reports_controller.dart:105:    searchController.removeListener(_onSearchChanged);
+lib/features/reports/controller/reports_controller.dart:106:    startdate.dispose();
+lib/features/reports/controller/reports_controller.dart:107:    enddate.dispose();
+lib/features/reports/controller/reports_controller.dart:108:    searchController.dispose();
+lib/features/reports/controller/reports_controller.dart:109:    _searchWorker?.dispose();
+lib/features/reports/controller/reports_controller.dart:110:    super.onClose();
+lib/features/Counter/view/screens/Counter.dart:391:                                                              TextEditingController(
+lib/features/Counter/view/screens/Counter.dart:410:                                                              TextEditingController(
+lib/features/Counter/view/screens/Counter.dart:1280:                                                  Get.find<Bills>().onClose();
+lib/features/bill/controller/all_bills.dart:36:  final searchController = TextEditingController();
+lib/features/bill/controller/all_bills.dart:54:  void onClose() {
+lib/features/bill/controller/all_bills.dart:56:    _searchWorker?.dispose();
+lib/features/bill/controller/all_bills.dart:57:    searchController.dispose();
+lib/features/bill/controller/all_bills.dart:58:    super.onClose();
+lib/features/bill/controller/tech_bills.dart:16:  void onClose() {
+lib/features/bill/controller/tech_bills.dart:18:    _searchWorker?.dispose();
+lib/features/bill/controller/tech_bills.dart:19:    super.onClose();
+lib/core/widgets/shimmer_loading.dart:27:    _controller = AnimationController(
+lib/core/widgets/shimmer_loading.dart:34:  void dispose() {
+lib/core/widgets/shimmer_loading.dart:35:    _controller.dispose();
+lib/core/widgets/shimmer_loading.dart:36:    super.dispose();
+lib/features/Counter/controller/counter.dart:26:  final searchController = TextEditingController();
+lib/features/Counter/controller/counter.dart:55:  void onClose() {
+lib/features/Counter/controller/counter.dart:57:    _searchWorker?.dispose();
+lib/features/Counter/controller/counter.dart:58:    searchController.dispose();
+lib/features/Counter/controller/counter.dart:59:    super.onClose();
+lib/features/predaction/controller/prediaction.dart:15:  void onClose() {
+lib/features/predaction/controller/prediaction.dart:17:    super.onClose();
+lib/features/chemcails/controller/chemacial.dart:25:  final searchController = TextEditingController();
+lib/features/chemcails/controller/chemacial.dart:37:  void onClose() {
+lib/features/chemcails/controller/chemacial.dart:39:    _searchWorker?.dispose();
+lib/features/chemcails/controller/chemacial.dart:40:    searchController.dispose();
+lib/features/chemcails/controller/chemacial.dart:41:    super.onClose();
+lib/features/technology/controller/add_tech_controller.dart:26:    liquid = TextEditingController();
+lib/features/technology/controller/add_tech_controller.dart:27:    solid = TextEditingController();
+lib/features/technology/controller/add_tech_controller.dart:28:    power = TextEditingController();
+lib/features/technology/controller/add_tech_controller.dart:29:    chlorine = TextEditingController();
+lib/features/technology/controller/add_tech_controller.dart:30:    name = TextEditingController();
+lib/features/technology/controller/add_tech_controller.dart:35:  void onClose() {
+lib/features/technology/controller/add_tech_controller.dart:36:    name.dispose(); 
+lib/features/technology/controller/add_tech_controller.dart:37:    chlorine.dispose();
+lib/features/technology/controller/add_tech_controller.dart:38:    liquid.dispose();
+lib/features/technology/controller/add_tech_controller.dart:39:    solid.dispose();
+lib/features/technology/controller/add_tech_controller.dart:40:    power.dispose();
+lib/features/technology/controller/add_tech_controller.dart:43:    super.onClose();
+lib/features/Counter/controller/edit_counter_controller.dart:27:    Counter_number = TextEditingController();
+lib/features/Counter/controller/edit_counter_controller.dart:28:    finalReading = TextEditingController();
+lib/features/Counter/controller/edit_counter_controller.dart:29:    meterFactor = TextEditingController();
+lib/features/Counter/controller/edit_counter_controller.dart:30:    meterId = TextEditingController();
+lib/features/Counter/controller/edit_counter_controller.dart:31:    voltageType = TextEditingController();
+lib/features/Counter/controller/edit_counter_controller.dart:36:  void onClose() {
+lib/features/Counter/controller/edit_counter_controller.dart:38:    Counter_number.dispose();
+lib/features/Counter/controller/edit_counter_controller.dart:39:    meterId.dispose();
+lib/features/Counter/controller/edit_counter_controller.dart:40:    meterFactor.dispose();
+lib/features/Counter/controller/edit_counter_controller.dart:41:    finalReading.dispose();
+lib/features/Counter/controller/edit_counter_controller.dart:42:    voltageType.dispose();
+lib/features/Counter/controller/edit_counter_controller.dart:43:    super.onClose();
+lib/features/bill/controller/bills.dart:64:    settlementsControllerratio = TextEditingController();
+lib/features/bill/controller/bills.dart:65:    notes = TextEditingController();
+lib/features/bill/controller/bills.dart:66:    delayMonthController = TextEditingController();
+lib/features/bill/controller/bills.dart:67:    delayYearController = TextEditingController();
+lib/features/bill/controller/bills.dart:69:    briefReadingController = TextEditingController();
+lib/features/bill/controller/bills.dart:70:    currentReadingController = TextEditingController();
+lib/features/bill/controller/bills.dart:71:    powerConsumpController = TextEditingController();
+lib/features/bill/controller/bills.dart:72:    readingFactorController = TextEditingController();
+lib/features/bill/controller/bills.dart:73:    voltageIdController = TextEditingController();
+lib/features/bill/controller/bills.dart:74:    voltageCostController = TextEditingController();
+lib/features/bill/controller/bills.dart:75:    billMonthController = TextEditingController();
+lib/features/bill/controller/bills.dart:76:    billyearController = TextEditingController();
+lib/features/bill/controller/bills.dart:78:    fixedInstallmentController = TextEditingController();
+lib/features/bill/controller/bills.dart:79:    settlementsController = TextEditingController();
+lib/features/bill/controller/bills.dart:80:    stampController = TextEditingController();
+lib/features/bill/controller/bills.dart:81:    prevPaymentsController = TextEditingController();
+lib/features/bill/controller/bills.dart:82:    roundingController = TextEditingController();
+lib/features/bill/controller/bills.dart:83:    billTotalController = TextEditingController();
+lib/features/bill/controller/bills.dart:89:    briefReadingController.addListener(_calculateFields);
+lib/features/bill/controller/bills.dart:90:    currentReadingController.addListener(_calculateFields);
+lib/features/bill/controller/bills.dart:91:    readingFactorController.addListener(_calculateFields);
+lib/features/bill/controller/bills.dart:92:    fixedInstallmentController.addListener(_calculateFields);
+lib/features/bill/controller/bills.dart:93:    stampController.addListener(_calculateFields);
+lib/features/bill/controller/bills.dart:94:    settlementsController.addListener(_calculateFields);
+lib/features/bill/controller/bills.dart:95:    settlementsControllerratio.addListener(_calculateFields);
+lib/features/bill/controller/bills.dart:96:    prevPaymentsController.addListener(_calculateFields);
+lib/features/bill/controller/bills.dart:226:  void onClose() {
+lib/features/bill/controller/bills.dart:228:    briefReadingController.removeListener(_calculateFields);
+lib/features/bill/controller/bills.dart:229:    currentReadingController.removeListener(_calculateFields);
+lib/features/bill/controller/bills.dart:230:    readingFactorController.removeListener(_calculateFields);
+lib/features/bill/controller/bills.dart:231:    fixedInstallmentController.removeListener(_calculateFields);
+lib/features/bill/controller/bills.dart:232:    settlementsController.removeListener(_calculateFields);
+lib/features/bill/controller/bills.dart:233:    settlementsControllerratio.removeListener(_calculateFields);
+lib/features/bill/controller/bills.dart:234:    prevPaymentsController.removeListener(_calculateFields);
+lib/features/bill/controller/bills.dart:236:    briefReadingController.dispose();
+lib/features/bill/controller/bills.dart:237:    currentReadingController.dispose();
+lib/features/bill/controller/bills.dart:238:    readingFactorController.dispose();
+lib/features/bill/controller/bills.dart:239:    powerConsumpController.dispose();
+lib/features/bill/controller/bills.dart:240:    fixedInstallmentController.dispose();
+lib/features/bill/controller/bills.dart:241:    settlementsController.dispose();
+lib/features/bill/controller/bills.dart:242:    settlementsControllerratio.dispose();
+lib/features/bill/controller/bills.dart:243:    stampController.dispose();
+lib/features/bill/controller/bills.dart:244:    roundingController.dispose();
+lib/features/bill/controller/bills.dart:245:    prevPaymentsController.dispose();
+lib/features/bill/controller/bills.dart:246:    billMonthController.dispose();
+lib/features/bill/controller/bills.dart:247:    billyearController.dispose();
+lib/features/bill/controller/bills.dart:248:    billTotalController.dispose();
+lib/features/bill/controller/bills.dart:249:    delayMonthController.dispose();
+lib/features/bill/controller/bills.dart:250:    delayYearController.dispose();
+lib/features/bill/controller/bills.dart:251:    notes.dispose();
+lib/features/bill/controller/bills.dart:253:    super.onClose();
+lib/features/bill/controller/bills.dart:280:            powerControllers.add(TextEditingController());
+lib/features/bill/controller/bills.dart:281:            moneyControllers.add(TextEditingController());
+lib/features/technology/controller/technlogy.dart:32:  final searchController = TextEditingController();
+lib/features/technology/controller/technlogy.dart:36:  final TextEditingController name = TextEditingController();
+lib/features/technology/controller/technlogy.dart:37:  final TextEditingController chlorine = TextEditingController();
+lib/features/technology/controller/technlogy.dart:38:  final TextEditingController liquid = TextEditingController();
+lib/features/technology/controller/technlogy.dart:39:  final TextEditingController solid = TextEditingController();
+lib/features/technology/controller/technlogy.dart:40:  final TextEditingController power = TextEditingController();
+lib/features/technology/controller/technlogy.dart:56:  void onClose() {
+lib/features/technology/controller/technlogy.dart:58:    _searchWorker?.dispose();
+lib/features/technology/controller/technlogy.dart:59:    searchController.dispose();
+lib/features/technology/controller/technlogy.dart:60:    name.dispose();
+lib/features/technology/controller/technlogy.dart:61:    chlorine.dispose();
+lib/features/technology/controller/technlogy.dart:62:    liquid.dispose();
+lib/features/technology/controller/technlogy.dart:63:    solid.dispose();
+lib/features/technology/controller/technlogy.dart:64:    power.dispose();
+lib/features/technology/controller/technlogy.dart:65:    super.onClose();
+lib/features/relations/controller/add_relations_controller.dart:34:  void onClose() {
+lib/features/relations/controller/add_relations_controller.dart:37:    super.onClose();
+lib/features/relations/controller/relations/relation.dart:27:  final searchController = TextEditingController();
+lib/features/relations/controller/relations/relation.dart:39:  void onClose() {
+lib/features/relations/controller/relations/relation.dart:41:    _searchWorker?.dispose();
+lib/features/relations/controller/relations/relation.dart:42:    searchController.dispose();
+lib/features/relations/controller/relations/relation.dart:43:    super.onClose();
+lib/features/home/view/widgets/over_consampation.dart:122:    final scrollController = ScrollController();
+lib/features/technology/controller/edit_tech_controller.dart:23:    liquid = TextEditingController();
+lib/features/technology/controller/edit_tech_controller.dart:24:    solid = TextEditingController();
+lib/features/technology/controller/edit_tech_controller.dart:25:    power = TextEditingController();
+lib/features/technology/controller/edit_tech_controller.dart:26:    chlorine = TextEditingController();
+lib/features/technology/controller/edit_tech_controller.dart:27:    name = TextEditingController();
+lib/features/technology/controller/edit_tech_controller.dart:32:  void onClose() {
+lib/features/technology/controller/edit_tech_controller.dart:34:    name.dispose();
+lib/features/technology/controller/edit_tech_controller.dart:35:    chlorine.dispose();
+lib/features/technology/controller/edit_tech_controller.dart:36:    liquid.dispose();
+lib/features/technology/controller/edit_tech_controller.dart:37:    solid.dispose();
+lib/features/technology/controller/edit_tech_controller.dart:38:    power.dispose();
+lib/features/technology/controller/edit_tech_controller.dart:39:    super.onClose();
+lib/features/Counter/controller/add_counter_controller.dart:28:    Counter_number = TextEditingController();
+lib/features/Counter/controller/add_counter_controller.dart:29:    finalReading = TextEditingController();
+lib/features/Counter/controller/add_counter_controller.dart:30:    meterFactor = TextEditingController();
+lib/features/Counter/controller/add_counter_controller.dart:31:    meterId = TextEditingController();
+lib/features/Counter/controller/add_counter_controller.dart:32:    voltageType = TextEditingController();
+lib/features/Counter/controller/add_counter_controller.dart:37:  void onClose() {
+lib/features/Counter/controller/add_counter_controller.dart:39:    Counter_number.dispose();
+lib/features/Counter/controller/add_counter_controller.dart:40:    meterId.dispose();
+lib/features/Counter/controller/add_counter_controller.dart:41:    meterFactor.dispose();
+lib/features/Counter/controller/add_counter_controller.dart:42:    finalReading.dispose();
+lib/features/Counter/controller/add_counter_controller.dart:43:    voltageType.dispose();
+lib/features/Counter/controller/add_counter_controller.dart:44:    super.onClose();
+lib/features/chemcails/controller/add_chemacial.dart:33:    chlorineFromController = TextEditingController();
+lib/features/chemcails/controller/add_chemacial.dart:34:    chlorineToController = TextEditingController();
+lib/features/chemcails/controller/add_chemacial.dart:35:    liquidAlumFromController = TextEditingController();
+lib/features/chemcails/controller/add_chemacial.dart:36:    liquidAlumToController = TextEditingController();
+lib/features/chemcails/controller/add_chemacial.dart:37:    solidAlumFromController = TextEditingController();
+lib/features/chemcails/controller/add_chemacial.dart:38:    solidAlumToController = TextEditingController();
+lib/features/chemcails/controller/add_chemacial.dart:42:  void onClose() {
+lib/features/chemcails/controller/add_chemacial.dart:45:    chlorineFromController.dispose();
+lib/features/chemcails/controller/add_chemacial.dart:46:    chlorineToController.dispose();
+lib/features/chemcails/controller/add_chemacial.dart:47:    liquidAlumFromController.dispose();
+lib/features/chemcails/controller/add_chemacial.dart:48:    liquidAlumToController.dispose();
+lib/features/chemcails/controller/add_chemacial.dart:49:    solidAlumFromController.dispose();
+lib/features/chemcails/controller/add_chemacial.dart:50:    solidAlumToController.dispose();
+lib/features/chemcails/controller/add_chemacial.dart:52:    super.onClose();
+lib/features/home/view/widgets/over_water_stations.dart:123:    final scrollController = ScrollController();
+lib/features/tech_bills/controller/new_tech_bills.dart:79:    chlorineController = TextEditingController();
+lib/features/tech_bills/controller/new_tech_bills.dart:80:    liquidAlumController = TextEditingController();
+lib/features/tech_bills/controller/new_tech_bills.dart:81:    solidAlumController = TextEditingController();
+lib/features/tech_bills/controller/new_tech_bills.dart:82:    waterProducedController = TextEditingController();
+lib/features/tech_bills/controller/new_tech_bills.dart:83:    yearController = TextEditingController();
+lib/features/tech_bills/controller/new_tech_bills.dart:84:    monthController = TextEditingController();
+lib/features/tech_bills/controller/new_tech_bills.dart:85:    calculatedWaterController = TextEditingController();
+lib/features/tech_bills/controller/new_tech_bills.dart:86:    measuredWaterController = TextEditingController();
+lib/features/tech_bills/controller/new_tech_bills.dart:88:    measuredWaterController.addListener(updateProducedWater);
+lib/features/tech_bills/controller/new_tech_bills.dart:89:    calculatedWaterController.addListener(updateProducedWater);
+lib/features/tech_bills/controller/new_tech_bills.dart:101:  void onClose() {
+lib/features/tech_bills/controller/new_tech_bills.dart:104:    measuredWaterController.removeListener(updateProducedWater);
+lib/features/tech_bills/controller/new_tech_bills.dart:105:    calculatedWaterController.removeListener(updateProducedWater);
+lib/features/tech_bills/controller/new_tech_bills.dart:106:    measuredWaterController.dispose();
+lib/features/tech_bills/controller/new_tech_bills.dart:107:    calculatedWaterController.dispose();
+lib/features/tech_bills/controller/new_tech_bills.dart:108:    chlorineController.dispose();
+lib/features/tech_bills/controller/new_tech_bills.dart:109:    liquidAlumController.dispose();
+lib/features/tech_bills/controller/new_tech_bills.dart:110:    solidAlumController.dispose();
+lib/features/tech_bills/controller/new_tech_bills.dart:111:    waterProducedController.dispose();
+lib/features/tech_bills/controller/new_tech_bills.dart:112:    yearController.dispose();
+lib/features/tech_bills/controller/new_tech_bills.dart:113:    monthController.dispose();
+lib/features/tech_bills/controller/new_tech_bills.dart:114:    super.onClose();
+lib/features/home/view/screens/home.dart:400:    return DefaultTabController(
+lib/features/home/view/screens/home.dart:1546:    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1200))..repeat(reverse: true);
+lib/features/home/view/screens/home.dart:1550:  void dispose() {
+lib/features/home/view/screens/home.dart:1551:    _controller.dispose();
+lib/features/home/view/screens/home.dart:1552:    super.dispose();
+lib/features/auth/view/screens/all_user.dart:717:  late final name = TextEditingController(text: widget.user.empName);
+lib/features/auth/view/screens/all_user.dart:718:  late final username = TextEditingController(text: widget.user.username);
+lib/features/auth/view/screens/all_user.dart:719:  late final empCode = TextEditingController(text: widget.user.empCode);
+lib/features/auth/view/screens/all_user.dart:720:  late final isActive = ValueNotifier<bool>(widget.user.isActive);
+lib/features/auth/view/screens/all_user.dart:724:  void dispose() {
+lib/features/auth/view/screens/all_user.dart:725:    name.dispose();
+lib/features/auth/view/screens/all_user.dart:726:    username.dispose();
+lib/features/auth/view/screens/all_user.dart:727:    empCode.dispose();
+lib/features/auth/view/screens/all_user.dart:728:    isActive.dispose();
+lib/features/auth/view/screens/all_user.dart:729:    super.dispose();
+lib/features/home/controller/home.dart:35:  void onClose() {
+lib/features/home/controller/home.dart:37:    super.onClose();
+lib/features/auth/controller/chang_password.dart:10:  final currentPassword = TextEditingController();
+lib/features/auth/controller/chang_password.dart:11:  final newPassword = TextEditingController();
+lib/features/auth/controller/chang_password.dart:12:  final confirmPassword = TextEditingController();
+lib/features/auth/controller/chang_password.dart:20:  void onClose() {
+lib/features/auth/controller/chang_password.dart:22:    currentPassword.dispose();
+lib/features/auth/controller/chang_password.dart:23:    newPassword.dispose();
+lib/features/auth/controller/chang_password.dart:24:    confirmPassword.dispose();
+lib/features/auth/controller/chang_password.dart:25:    super.onClose();
+lib/features/tech_bills/controller/tech_bills/edit_techbills.dart:25:    chlorineController = TextEditingController();
+lib/features/tech_bills/controller/tech_bills/edit_techbills.dart:26:    wateramount = TextEditingController();
+lib/features/tech_bills/controller/tech_bills/edit_techbills.dart:27:    liquidAlumController = TextEditingController();
+lib/features/tech_bills/controller/tech_bills/edit_techbills.dart:28:    calculatedWaterController = TextEditingController();
+lib/features/tech_bills/controller/tech_bills/edit_techbills.dart:29:    measuredWaterController = TextEditingController();
+lib/features/tech_bills/controller/tech_bills/edit_techbills.dart:30:    solidAlumController = TextEditingController();
+lib/features/tech_bills/controller/tech_bills/edit_techbills.dart:31:    waterProducedController = TextEditingController();
+lib/features/tech_bills/controller/tech_bills/edit_techbills.dart:42:    calculatedWaterController.addListener(updateWaterProduced);
+lib/features/tech_bills/controller/tech_bills/edit_techbills.dart:43:    measuredWaterController.addListener(updateWaterProduced);
+lib/features/tech_bills/controller/tech_bills/edit_techbills.dart:49:  void onClose() {
+lib/features/tech_bills/controller/tech_bills/edit_techbills.dart:51:    chlorineController.dispose();
+lib/features/tech_bills/controller/tech_bills/edit_techbills.dart:52:    liquidAlumController.dispose();
+lib/features/tech_bills/controller/tech_bills/edit_techbills.dart:53:    wateramount.dispose();
+lib/features/tech_bills/controller/tech_bills/edit_techbills.dart:54:    calculatedWaterController.dispose();
+lib/features/tech_bills/controller/tech_bills/edit_techbills.dart:55:    measuredWaterController.dispose();
+lib/features/tech_bills/controller/tech_bills/edit_techbills.dart:56:    solidAlumController.dispose();
+lib/features/tech_bills/controller/tech_bills/edit_techbills.dart:57:    waterProducedController.dispose();
+lib/features/tech_bills/controller/tech_bills/edit_techbills.dart:58:    super.onClose();
+lib/features/auth/controller/new_user.dart:22:    password = TextEditingController();
+lib/features/auth/controller/new_user.dart:23:    name = TextEditingController();
+lib/features/auth/controller/new_user.dart:24:      confirmpassword = TextEditingController();
+lib/features/auth/controller/new_user.dart:25:    username = TextEditingController();
+lib/features/auth/controller/new_user.dart:26:    code=TextEditingController();
+lib/features/auth/controller/new_user.dart:30:  // Override onClose to dispose of the controllers
+lib/features/auth/controller/new_user.dart:32:  void onClose() {
+lib/features/auth/controller/new_user.dart:34:    password.dispose();
+lib/features/auth/controller/new_user.dart:35:    name.dispose();
+lib/features/auth/controller/new_user.dart:36:    confirmpassword.dispose();
+lib/features/auth/controller/new_user.dart:37:    username.dispose();
+lib/features/auth/controller/new_user.dart:38:    code.dispose();
+lib/features/auth/controller/new_user.dart:40:    super.onClose();
+lib/features/auth/controller/all_user.dart:27:  void onClose() {
+lib/features/auth/controller/all_user.dart:29:    super.onClose();
+lib/features/auth/controller/login.dart:21:    password = TextEditingController();
+lib/features/auth/controller/login.dart:22:    name = TextEditingController();
+lib/features/auth/controller/login.dart:26:  void onClose() {
+lib/features/auth/controller/login.dart:27:    password.dispose();
+lib/features/auth/controller/login.dart:28:    name.dispose();
+lib/features/auth/controller/login.dart:29:    super.onClose();
+lib/features/tech_bills/controller/tech_bills/techbills.dart:56:      () => TextEditingController(),
+lib/features/tech_bills/controller/tech_bills/techbills.dart:63:      () => TextEditingController(),
+lib/features/tech_bills/controller/tech_bills/techbills.dart:70:      () => TextEditingController(),
+lib/features/tech_bills/controller/tech_bills/techbills.dart:77:      () => TextEditingController(),
+lib/features/tech_bills/controller/tech_bills/techbills.dart:82:  void onClose() {
+lib/features/tech_bills/controller/tech_bills/techbills.dart:90:      controller.dispose();
+lib/features/tech_bills/controller/tech_bills/techbills.dart:92:    super.onClose();
+lib/features/tech_bills/controller/techbills.dart:25:        drafts.remove(id)!.dispose();
+lib/features/tech_bills/controller/techbills.dart:46:  final searchController = TextEditingController();
+lib/features/tech_bills/controller/techbills.dart:53:  final stationFilterController = TextEditingController();
+lib/features/tech_bills/controller/techbills.dart:84:        () => TextEditingController(),
+lib/features/tech_bills/controller/techbills.dart:90:        () => TextEditingController(),
+lib/features/tech_bills/controller/techbills.dart:96:      () => TextEditingController(),
+lib/features/tech_bills/controller/techbills.dart:103:      () => TextEditingController(),
+lib/features/tech_bills/controller/techbills.dart:110:      () => TextEditingController(),
+lib/features/tech_bills/controller/techbills.dart:117:      () => TextEditingController(),
+lib/features/tech_bills/controller/techbills.dart:122:  void onClose() {
+lib/features/tech_bills/controller/techbills.dart:126:    searchController.removeListener(_onSearchEdited);
+lib/features/tech_bills/controller/techbills.dart:128:    searchController.dispose();
+lib/features/tech_bills/controller/techbills.dart:129:    stationFilterController.dispose();
+lib/features/tech_bills/controller/techbills.dart:140:      controller.dispose();
+lib/features/tech_bills/controller/techbills.dart:142:    super.onClose();
+lib/features/tech_bills/controller/techbills.dart:154:    searchController.addListener(_onSearchEdited);
+lib/features/planning/controller/blance_chart/blance_chart.dart:22:  })  : yearController = yearController ?? TextEditingController(),
+lib/features/planning/controller/blance_chart/blance_chart.dart:23:        productionController = productionController ?? TextEditingController();
+lib/features/planning/controller/blance_chart/blance_chart.dart:25:  void dispose() {
+lib/features/planning/controller/blance_chart/blance_chart.dart:26:    yearController.dispose();
+lib/features/planning/controller/blance_chart/blance_chart.dart:27:    productionController.dispose();
+lib/features/planning/controller/blance_chart/blance_chart.dart:48:      textControllers.putIfAbsent(type.placeTypeId, () => TextEditingController());
+lib/features/planning/controller/blance_chart/blance_chart.dart:58:  TextEditingController incresableController = TextEditingController();
+lib/features/planning/controller/blance_chart/blance_chart.dart:67:  final TextEditingController yearController = TextEditingController();
+lib/features/planning/controller/blance_chart/blance_chart.dart:104:      item.dispose();
+lib/features/planning/controller/blance_chart/blance_chart.dart:255:  void onClose() {
+lib/features/planning/controller/blance_chart/blance_chart.dart:259:    incresableController.dispose();
+lib/features/planning/controller/blance_chart/blance_chart.dart:260:    yearController.dispose();
+lib/features/planning/controller/blance_chart/blance_chart.dart:262:      item.dispose();
+lib/features/planning/controller/blance_chart/blance_chart.dart:265:      controller.dispose();
+lib/features/planning/controller/blance_chart/blance_chart.dart:267:    super.onClose();
+lib/features/planning/controller/place/add_places_controller.dart:28:    name = TextEditingController();
+lib/features/planning/controller/place/add_places_controller.dart:39:  void onClose() {
+lib/features/planning/controller/place/add_places_controller.dart:41:    name.dispose();
+lib/features/planning/controller/place/add_places_controller.dart:42:    super.onClose();
+lib/features/planning/controller/place/places_controller.dart:25:  final searchController = TextEditingController();
+lib/features/planning/controller/place/places_controller.dart:38:  void onClose() {
+lib/features/planning/controller/place/places_controller.dart:41:    _searchWorker?.dispose();
+lib/features/planning/controller/place/places_controller.dart:42:    searchController.dispose();
+lib/features/planning/controller/place/places_controller.dart:43:    super.onClose();
+lib/features/stations/controller/following_stations_controller.dart:52:  void onClose() {
+lib/features/stations/controller/following_stations_controller.dart:54:    super.onClose();
+lib/features/planning/controller/place/edit_place_type_controller.dart:17:  final TextEditingController nameController = TextEditingController();
+lib/features/planning/controller/place/edit_place_type_controller.dart:18:  final TextEditingController fromController = TextEditingController();
+lib/features/planning/controller/place/edit_place_type_controller.dart:19:  final TextEditingController toController = TextEditingController();
+lib/features/planning/controller/place/edit_place_type_controller.dart:28:  void onClose() {
+lib/features/planning/controller/place/edit_place_type_controller.dart:30:    nameController.dispose();
+lib/features/planning/controller/place/edit_place_type_controller.dart:31:    fromController.dispose();
+lib/features/planning/controller/place/edit_place_type_controller.dart:32:    toController.dispose();
+lib/features/planning/controller/place/edit_place_type_controller.dart:33:    super.onClose();
+lib/features/planning/controller/place/edit_places_controller.dart:28:    name = TextEditingController();
+lib/features/planning/controller/place/edit_places_controller.dart:39:  void onClose() {
+lib/features/planning/controller/place/edit_places_controller.dart:41:    name.dispose();
+lib/features/planning/controller/place/edit_places_controller.dart:42:    super.onClose();
+lib/features/stations/controller/add_stations_controller.dart:31:    name = TextEditingController();
+lib/features/stations/controller/add_stations_controller.dart:32:    capacity = TextEditingController();
+lib/features/stations/controller/add_stations_controller.dart:45:  void onClose() {
+lib/features/stations/controller/add_stations_controller.dart:48:    name.dispose();
+lib/features/stations/controller/add_stations_controller.dart:49:    capacity.dispose();
+lib/features/stations/controller/add_stations_controller.dart:50:    super.onClose();
+lib/features/stations/controller/edit_stations_controller.dart:32:    name = TextEditingController();
+lib/features/stations/controller/edit_stations_controller.dart:33:    capacity = TextEditingController();
+lib/features/stations/controller/edit_stations_controller.dart:46:  void onClose() {
+lib/features/stations/controller/edit_stations_controller.dart:49:    name.dispose();
+lib/features/stations/controller/edit_stations_controller.dart:50:    capacity.dispose();
+lib/features/stations/controller/edit_stations_controller.dart:51:    super.onClose();
+lib/features/stations/controller/all_stations_controller.dart:26:  final searchController = TextEditingController();
+lib/features/stations/controller/all_stations_controller.dart:38:  void onClose() {
+lib/features/stations/controller/all_stations_controller.dart:40:    _searchWorker?.dispose();
+lib/features/stations/controller/all_stations_controller.dart:41:    searchController.dispose();
+lib/features/stations/controller/all_stations_controller.dart:42:    super.onClose();

@@ -1,0 +1,11 @@
+{
+  "comparison": "SHA-256 of all baseline tracked files",
+  "tracked_files_checked": 343,
+  "changed_since_baseline": [],
+  "missing_since_baseline": [],
+  "all_tracked_contents_preserved": true,
+  "pre_existing_change": "pubspec.lock (11 insertions, 11 deletions)",
+  "final_git_status": " M pubspec.lock\n?? audit_reports/\n",
+  "writes_by_audit": "audit_reports/ only",
+  "scope_limit": "No claim of a full filesystem snapshot; generated/ignored caches were not executed or deliberately modified."
+}

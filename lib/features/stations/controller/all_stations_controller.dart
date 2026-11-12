@@ -1,3 +1,5 @@
+import 'package:power_saving/core/utils/request_guard.dart';
+import 'package:power_saving/core/utils/owned_debounce.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,13 +9,14 @@ import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class StationsController extends GetxController {
+  final _reads = RequestGuard();
+  bool _readShowsLoading = false;
   // Observable states
   final loading = false.obs;
   final isSearching = false.obs;
   final searchError = ''.obs;
 
-  // Static Session Cache
-  static List<dynamic>? sessionCache;
+
 
   // Master & display data
   final List<Station> allStations = [];      // non-observable
@@ -33,6 +36,7 @@ class StationsController extends GetxController {
 
   @override
   void onClose() {
+    _reads.close();
     _searchWorker?.dispose();
     searchController.dispose();
     super.onClose();
@@ -42,7 +46,7 @@ class StationsController extends GetxController {
   // Search Worker (Debounce)
   // -------------------------------
   void _setupSearchWorker() {
-    _searchWorker = debounce(
+    _searchWorker = ownedDebounce(
       _searchQuery,
       (query) => _performSearch(query),
       time: const Duration(milliseconds: 300),
@@ -58,30 +62,23 @@ class StationsController extends GetxController {
   // API Call
   // -------------------------------
   Future<void> getStations({bool isBackground = false}) async {
+    final request = _reads.begin();
+    if (!request.isCurrent) return;
+    _readShowsLoading = !isBackground || _readShowsLoading;
     try {
       if (!isBackground) {
-        if (sessionCache != null) {
-          // 1. Display cached data instantly
-          final List<Station> parsedCache = sessionCache!.map((e) => Station.fromJson(e)).toList();
-          allStations.clear();
-          allStations.addAll(parsedCache);
-          stations.value = List.from(allStations);
-          
-          // 2. Fetch in background silently
-          _fetchLatestBackground();
-          return;
-        } else {
+
           loading.value = true;
-        }
+
       }
 
-      final response = await fetchData("${ApiConfig.baseUrl}/stations");
+      final response = await fetchData("${ApiConfig.baseUrl}/stations", isCurrent: () => request.isCurrent);
+      if (!request.isCurrent) return;
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = jsonDecode(response.body);
-        
-        // Update Static Cache
-        sessionCache = jsonData;
+
+
 
         allStations
           ..clear()
@@ -95,20 +92,20 @@ class StationsController extends GetxController {
         }
       }
     } catch (e) {
+      if (!request.isCurrent) return;
       if (!isBackground) {
         showCustomErrorDialog(errorMessage: e.toString());
       }
       debugPrint('Stations error: $e');
     } finally {
-      if (!isBackground) {
-        loading.value = false;
+      if (request.isCurrent) {
+        if (_readShowsLoading) loading.value = false;
+        _readShowsLoading = false;
       }
     }
   }
 
-  Future<void> _fetchLatestBackground() async {
-    await getStations(isBackground: true);
-  }
+
 
   Future<void> forceRefresh() async {
     loading.value = true;
@@ -158,5 +155,5 @@ class StationsController extends GetxController {
     }
   }
 
- 
+
 }

@@ -1,20 +1,22 @@
+import 'package:power_saving/core/utils/request_guard.dart';
+import 'package:power_saving/core/utils/owned_debounce.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/Counter/model/Counter_model.dart';
-import 'package:power_saving/global/data.dart';
 import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class CounterController extends GetxController {
+  final _reads = RequestGuard();
+  bool _readShowsLoading = false;
   // Observable states
   final looading = false.obs;
   final isSearching = false.obs;
   final searchError = ''.obs;
 
-  static List<dynamic>? sessionCache;
   // Data storage - separated for performance
   final List<ElectricMeter> _allCounters = []; // Master data (non-observable)
   final allcounter = <ElectricMeter>[].obs; // Display data (observable)
@@ -51,6 +53,7 @@ class CounterController extends GetxController {
 
   @override
   void onClose() {
+    _reads.close();
     _searchWorker?.dispose();
     searchController.dispose();
     super.onClose();
@@ -58,7 +61,7 @@ class CounterController extends GetxController {
 
   // Setup search with debounce using Worker
   void _setupSearchListener() {
-    _searchWorker = debounce(
+    _searchWorker = ownedDebounce(
       _searchQuery,
       (query) => _performSearch(query),
       time: const Duration(milliseconds: 300),
@@ -85,7 +88,7 @@ class CounterController extends GetxController {
              meterId.contains(lowerQuery) ||
              accountNumber.contains(lowerQuery) ||
              branchLower.contains(lowerQuery);
-             
+
       final matchBranch = selectedBranch.value == null || branch == selectedBranch.value;
 
       return matchQuery && matchBranch;
@@ -128,19 +131,13 @@ class CounterController extends GetxController {
 
   // Fetch all counters from API
   Future<void> fetchAllCounters({bool isBackground = false}) async {
+    final request = _reads.begin();
+    if (!request.isCurrent) return;
+    _readShowsLoading = !isBackground || _readShowsLoading;
     if (!isBackground) {
-      if (sessionCache != null) {
-        _allCounters.clear();
-        _allCounters.addAll(sessionCache!.map((json) => ElectricMeter.fromJson(json)));
-        allcounter.value = List.from(_allCounters);
-        conters = _allCounters;
-        
-        // Background fetch
-        _fetchLatestBackground();
-        return;
-      } else {
+
         looading.value = true;
-      }
+
     }
 
     try {
@@ -149,21 +146,21 @@ class CounterController extends GetxController {
         allcounter.clear();
       }
 
-      final response = await fetchData("${ApiConfig.baseUrl}/gauges");
+      final response = await fetchData("${ApiConfig.baseUrl}/gauges", isCurrent: () => request.isCurrent);
+      if (!request.isCurrent) return;
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = jsonDecode(response.body);
-        
-        sessionCache = jsonData;
+
 
         final List<ElectricMeter> parsed = jsonData.map((json) => ElectricMeter.fromJson(json)).toList();
 
         _allCounters.clear();
         _allCounters.addAll(parsed);
-        
+
         allcounter.value = List.from(_allCounters);
-        conters = _allCounters; // Update global variable
-        
+
+
         // Apply search filter again to keep current UI state consistent
         _performSearch(_searchQuery.value);
       } else if (!isBackground) {
@@ -174,20 +171,20 @@ class CounterController extends GetxController {
         );
       }
     } catch (e) {
+      if (!request.isCurrent) return;
       if (!isBackground) {
         showCustomErrorDialog(errorMessage: e.toString());
         debugPrint("Error fetching counters: $e");
       }
     } finally {
-      if (!isBackground) {
-        looading.value = false;
+      if (request.isCurrent) {
+        if (_readShowsLoading) looading.value = false;
+        _readShowsLoading = false;
       }
     }
   }
 
-  Future<void> _fetchLatestBackground() async {
-    fetchAllCounters(isBackground: true);
-  }
+
 
   // Add new counter
   Future<void> addCounter(ElectricMeter counter) async {
@@ -214,7 +211,7 @@ class CounterController extends GetxController {
   // Refresh data
   @override
   Future<void> refresh() async {
-    sessionCache = null;
+
     searchController.clear();
     _searchQuery.value = '';
     searchError.value = '';

@@ -1,3 +1,4 @@
+import 'package:power_saving/core/utils/request_guard.dart';
 
 
 import 'dart:convert';
@@ -6,12 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/planning/model/area_model.dart';
 import 'package:power_saving/features/stations/model/station_model.dart';
-import 'package:power_saving/features/stations/controller/all_stations_controller.dart';
 import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
   RxBool looading = false.obs;
 class EditStationsController extends GetxController {
+  final _lookupRequests0 = RequestGuard();
+  final _lookupRequests1 = RequestGuard();
     List<Branch> branchList = [];
   List<WaterSource> waterSourceList = [];
   List<AreaOfService> areas = [];
@@ -42,15 +44,21 @@ class EditStationsController extends GetxController {
 
   @override
   void onClose() {
+    _lookupRequests0.close();
+    _lookupRequests1.close();
     name.dispose();
     capacity.dispose();
     super.onClose();
   }
     Future<void> allBranches() async {
+    final request = _lookupRequests0.begin();
+    if (!request.isCurrent) return;
     try {
       final res = await fetchData(
         "${ApiConfig.baseUrl}/new-station",
+        isCurrent: () => request.isCurrent,
       );
+      if (!request.isCurrent) return;
 
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
@@ -61,14 +69,20 @@ class EditStationsController extends GetxController {
       }
     // ignore: empty_catches
     } catch (e) {
+      if (!request.isCurrent) return;
       showCustomErrorDialog(errorMessage: e.toString());
     }
   }
 
   Future<void> allareas() async {
+    final request = _lookupRequests1.begin();
+    if (!request.isCurrent) return;
     try {
-      final response = await fetchData("${ApiConfig.baseUrl}/all-areas");
-      
+      final response = await fetchData("${ApiConfig.baseUrl}/all-areas",
+        isCurrent: () => request.isCurrent,
+      );
+      if (!request.isCurrent) return;
+
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body) as List<dynamic>;
         areas.clear();
@@ -78,6 +92,7 @@ class EditStationsController extends GetxController {
         update();
       }
     } catch (e) {
+      if (!request.isCurrent) return;
       showCustomErrorDialog(errorMessage: e.toString());
     }
   }
@@ -108,7 +123,7 @@ class EditStationsController extends GetxController {
 
       if (res.statusCode == 200) {
         looading.value = false;
-        StationsController.sessionCache = null;
+
         showSuccessToast("تم تعديل المحطة بنجاح");
         Get.offAllNamed('/Stations');
       } else {
@@ -127,7 +142,7 @@ class EditStationsController extends GetxController {
 
 
 
-  
+
 
 
 // ignore: camel_case_types

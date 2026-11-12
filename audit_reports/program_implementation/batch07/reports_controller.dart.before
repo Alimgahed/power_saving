@@ -1,0 +1,291 @@
+import 'dart:async';
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:power_saving/core/utils/request_guard.dart';
+import 'package:power_saving/features/reports/model/report.dart';
+import 'package:power_saving/global/ip_config.dart';
+import 'package:power_saving/my_widget/sharable.dart';
+import 'package:power_saving/network/network.dart';
+
+class ReportsController extends GetxController {
+  double watersum = 0;
+  double powersum = 0;
+  double moneysum = 0;
+
+  String? reportname;
+
+  /// ORIGINAL DATA
+  List<ReportBranch> branchs = [];
+
+  /// FILTERED DATA (USED BY TABLE)
+  RxList<ReportBranch> filteredBranchs = <ReportBranch>[].obs;
+
+  /// Precomputed lowercase index for fast, smooth search
+  List<_BranchIndex> _index = [];
+
+  RxBool isLoading = false.obs;
+  RxBool isSearching = false.obs;
+
+  late TextEditingController startdate;
+  late TextEditingController enddate;
+
+  /// SEARCH AND FILTERS
+  final TextEditingController searchController = TextEditingController();
+  final RxString searchQuery = ''.obs;
+  Worker? _searchWorker;
+  Worker? _filterWorker;
+  Timer? _searchTimer;
+  final _requests = RequestGuard();
+
+  /// DROPDOWN FILTERS
+  RxnString selectedFilterBranch = RxnString(null);
+  RxnString selectedFilterStation = RxnString(null);
+  RxnString selectedFilterMonth = RxnString(null);
+  RxnString selectedFilterYear = RxnString(null);
+  RxnString selectedFilterTech = RxnString(null);
+  RxnString selectedFilterIsPaid = RxnString(null);
+  
+  List<String> get availableBranches => ["الكل", ...branchs.map((e) => e.branchName).where((e) => e.isNotEmpty).toSet()];
+  List<String> get availableStations {
+    Set<String> stations = {"الكل"};
+    for (var b in branchs) {
+      String actual = b.stationnames?.isNotEmpty == true ? b.stationnames! : (b.stationname ?? "");
+      if (actual.isNotEmpty) {
+        var parts = actual.split(',');
+        for (var p in parts) {
+          if (p.trim().isNotEmpty) {
+            stations.add(p.trim());
+          }
+        }
+      }
+    }
+    return stations.toList();
+  }
+  List<String> get availableMonths => ["الكل", ...branchs.map((e) => e.month.toString()).toSet()];
+  List<String> get availableYears => ["الكل", ...branchs.map((e) => e.year.toString()).toSet()];
+  List<String> get availableTechs => ["الكل", ...branchs.map((e) => e.techname ?? "").where((e) => e.isNotEmpty).toSet()];
+  List<String> get availableIsPaid {
+    bool hasPaidData = branchs.any((e) => e.ispaid != null);
+    if (!hasPaidData) return ["الكل"];
+    return ["الكل", "نعم", "لا"];
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    startdate = TextEditingController();
+    enddate = TextEditingController();
+
+    _searchWorker = ever(searchQuery, (_) {
+      _searchTimer?.cancel();
+      _searchTimer = Timer(const Duration(milliseconds: 300), () {
+        applyFilters();
+        isSearching.value = false;
+      });
+    });
+
+    _filterWorker = everAll([
+      selectedFilterBranch,
+      selectedFilterStation,
+      selectedFilterMonth,
+      selectedFilterYear,
+      selectedFilterTech,
+      selectedFilterIsPaid,
+    ], (_) {
+      applyFilters();
+    });
+
+    // Listen to text changes
+    searchController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void onClose() {
+    _requests.close();
+    _searchTimer?.cancel();
+    _filterWorker?.dispose();
+    searchController.removeListener(_onSearchChanged);
+    startdate.dispose();
+    enddate.dispose();
+    searchController.dispose();
+    _searchWorker?.dispose();
+    super.onClose();
+  }
+
+  // ================== SEARCH DEBOUNCE ==================
+  void _onSearchChanged() {
+    if (searchController.text.isNotEmpty) {
+      isSearching.value = true;
+    }
+    searchQuery.value = searchController.text;
+  }
+
+  // ================== CLEAR SEARCH ==================
+  void clearSearch() {
+    searchController.clear();
+    searchQuery.value = '';
+    selectedFilterBranch.value = null;
+    selectedFilterStation.value = null;
+    selectedFilterMonth.value = null;
+    selectedFilterYear.value = null;
+    selectedFilterTech.value = null;
+    selectedFilterIsPaid.value = null;
+    filteredBranchs.value = List.from(branchs);
+    sumvalueofreport(filteredBranchs);
+  }
+
+  // ================== SUM VALUES ==================
+  void sumvalueofreport(List<ReportBranch> list) {
+    watersum = 0;
+    powersum = 0;
+    moneysum = 0;
+
+    for (var i in list) {
+      watersum += i.totalWater;
+      powersum += i.totalPower;
+      moneysum += i.totalBill;
+    }
+  }
+
+  // ================== OPTIMIZED SEARCH & FILTER ======================
+  void applyFilters() {
+    final q = searchQuery.value.trim().toLowerCase();
+
+    var result = branchs.where((b) {
+      String actualStation = b.stationnames?.isNotEmpty == true ? b.stationnames! : (b.stationname ?? "");
+      
+      bool matchesBranch = selectedFilterBranch.value == null || selectedFilterBranch.value == "الكل" || b.branchName == selectedFilterBranch.value;
+      
+      bool matchesStation = selectedFilterStation.value == null || selectedFilterStation.value == "الكل";
+      if (!matchesStation && actualStation.isNotEmpty) {
+        matchesStation = actualStation.split(',').map((e) => e.trim()).contains(selectedFilterStation.value);
+      }
+      bool matchesMonth = selectedFilterMonth.value == null || selectedFilterMonth.value == "الكل" || b.month.toString() == selectedFilterMonth.value;
+      bool matchesYear = selectedFilterYear.value == null || selectedFilterYear.value == "الكل" || b.year.toString() == selectedFilterYear.value;
+      bool matchesTech = selectedFilterTech.value == null || selectedFilterTech.value == "الكل" || b.techname == selectedFilterTech.value;
+      
+      bool matchesIsPaid = true;
+      if (selectedFilterIsPaid.value != null && selectedFilterIsPaid.value != "الكل") {
+        String paidVal = b.ispaid == true ? "نعم" : "لا";
+        matchesIsPaid = paidVal == selectedFilterIsPaid.value;
+      }
+
+      return matchesBranch && matchesStation && matchesMonth && matchesYear && matchesTech && matchesIsPaid;
+    }).toList();
+
+    if (q.isNotEmpty) {
+      result = result.where((b) {
+        String actualStation = b.stationnames?.isNotEmpty == true ? b.stationnames! : (b.stationname ?? "");
+        return b.branchName.toLowerCase().contains(q) ||
+               actualStation.toLowerCase().contains(q) ||
+               b.month.toString().contains(q) ||
+               b.year.toString().contains(q) ||
+               (b.techname ?? '').toLowerCase().contains(q);
+      }).toList();
+    }
+
+    filteredBranchs.value = result;
+
+    sumvalueofreport(filteredBranchs);
+  }
+
+  // ================== API CALL ====================
+  Future<void> getReports({
+    required String start,
+    required String end,
+    required String name,
+  }) async {
+    final request = _requests.begin();
+    if (!request.isCurrent) return;
+    try {
+      isLoading.value = true;
+      update();
+
+      branchs.clear();
+      filteredBranchs.clear();
+      _index.clear();
+      clearSearch(); // Clear any existing search
+
+      final res = await postData(
+        "${ApiConfig.baseUrl}/reports",
+        {
+          "report_name": name,
+          "from_date": start,
+          "to_date": end,
+        },
+        isCurrent: () => request.isCurrent,
+      );
+
+      if (!request.isCurrent) return;
+      if (res.statusCode == 200) {
+        final jsonData = json.decode(res.body);
+
+        List<dynamic> responseData;
+        if (jsonData is List) {
+          responseData = jsonData;
+        } else if (jsonData is Map && jsonData.containsKey('data')) {
+          responseData = jsonData['data'] ?? [];
+        } else {
+          responseData = [];
+        }
+
+        for (var i in responseData) {
+          try {
+            branchs.add(ReportBranch.fromJson(i));
+          } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
+            debugPrint("Parsing error: $e");
+          }
+        }
+
+        // Set filtered data
+        filteredBranchs.value = List.from(branchs);
+
+        // Build optimized search index
+        _buildSearchIndex();
+
+        sumvalueofreport(filteredBranchs);
+      }
+
+      isLoading.value = false;
+      update();
+    } catch (e) {
+      if (!request.isCurrent) return;
+      showCustomErrorDialog(errorMessage: e.toString());
+      isLoading.value = false;
+      update();
+      debugPrint("Error fetching reports: $e");
+    }
+  }
+
+  // ================== BUILD SEARCH INDEX ==================
+  void _buildSearchIndex() {
+    _index = branchs.map((b) {
+      return _BranchIndex(
+        branch: b,
+        branchLower: b.branchName.toLowerCase(),
+        stationLower: (b.stationname ?? '').toLowerCase(),
+        monthStr: b.month.toString(),
+        yearStr: b.year.toString(),
+      );
+    }).toList();
+  }
+}
+
+// ================== SEARCH INDEX CLASS ==================
+class _BranchIndex {
+  final ReportBranch branch;
+  final String branchLower;
+  final String stationLower;
+  final String monthStr;
+  final String yearStr;
+
+  _BranchIndex({
+    required this.branch,
+    required this.branchLower,
+    required this.stationLower,
+    required this.monthStr,
+    required this.yearStr,
+  });
+}

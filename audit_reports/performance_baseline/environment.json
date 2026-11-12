@@ -1,0 +1,7 @@
+{
+  "platform": "macOS-26.4.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "git_head": "bf78471b7b4ef8c0254d8e5eba4f79595ca45e2c",
+  "source_hashes": "source_baseline.json",
+  "date": "2026-11-12"
+}

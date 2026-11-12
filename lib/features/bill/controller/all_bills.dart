@@ -1,5 +1,7 @@
+import 'package:power_saving/core/utils/owned_debounce.dart';
 import 'dart:async';
 import 'dart:convert';
+import 'package:power_saving/core/utils/request_guard.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/bill/model/bills_model.dart';
@@ -8,11 +10,13 @@ import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class AllBills extends GetxController {
-  static Map<String, dynamic>? sessionCache;
+  final _requests = RequestGuard();
+  String get _queryKey => jsonEncode([currentPage.value, perPage.value, _searchQuery.value, selectedYear, selectedMonth, selectedFilter, selectedAccountNumber]);
+
   // Data storage - separated for performance
   final List<GuageBill> _allBills = [];  // Master data (non-observable)
   final bills = <GuageBill>[].obs;  // Display data (observable)
-  
+
 
   // Pagination state
   RxInt currentPage = 1.obs;
@@ -27,12 +31,12 @@ class AllBills extends GetxController {
   final isSearching = false.obs;
   final searchError = ''.obs;
   final errorMessage = ''.obs;
-  
+
   // Search management
   final searchController = TextEditingController();
   final _searchQuery = ''.obs;
   Worker? _searchWorker;
-  
+
   // Filter properties
   String selectedFilter = 'all';
   String selectedYear = 'all';
@@ -48,6 +52,7 @@ class AllBills extends GetxController {
 
   @override
   void onClose() {
+    _requests.close();
     _searchWorker?.dispose();
     searchController.dispose();
     super.onClose();
@@ -55,7 +60,7 @@ class AllBills extends GetxController {
 
   // Setup search with debounce using Worker
   void _setupSearchListener() {
-    _searchWorker = debounce(
+    _searchWorker = ownedDebounce(
       _searchQuery,
       (query) => _performSearch(query),
       time: const Duration(milliseconds: 300),
@@ -82,42 +87,13 @@ class AllBills extends GetxController {
   }
 
   Future<void> allbills({bool isBackground = false}) async {
-    final bool isDefaultState = currentPage.value == 1 &&
-        _searchQuery.value.trim().isEmpty &&
-        selectedYear == 'all' &&
-        selectedMonth == 'all' &&
-        selectedFilter == 'all' &&
-        (selectedAccountNumber == 'all' || selectedAccountNumber.isEmpty);
+    final request = _requests.begin();
+    if (!request.isCurrent) return;
 
-    if (!isBackground && isDefaultState && sessionCache != null) {
-      // Restore from cache instantly
-      final jsonData = sessionCache!;
-      _allBills.clear();
-      bills.clear();
 
-      if (jsonData.containsKey('data')) {
-        List<dynamic> responseData = jsonData['data'];
-        _allBills.addAll(responseData.map((bill) => GuageBill.fromJson(bill)).toList());
-        
-        if (jsonData.containsKey('meta')) {
-          final meta = jsonData['meta'];
-          currentPage.value = meta['page'] ?? 1;
-          perPage.value = meta['per_page'] ?? 20;
-          totalItems.value = meta['total'] ?? 0;
-          totalPages.value = meta['total_pages'] ?? 1;
-          hasNext.value = meta['has_next'] ?? false;
-          hasPrev.value = meta['has_prev'] ?? false;
-        }
-      }
 
-      bills.value = List.from(_allBills);
-      searchError.value = '';
-
-      // Trigger silent background refresh
-      _fetchLatestBackground();
-      return;
-    }
-
+    final queryKey = _queryKey;
+    bool canApply() => request.isCurrent && queryKey == _queryKey;
     try {
       if (!isBackground) {
         isLoading.value = true;
@@ -136,11 +112,11 @@ class AllBills extends GetxController {
       if (selectedYear != 'all') {
         queryParams['bill_year'] = selectedYear;
       }
-      
+
       if (selectedMonth != 'all') {
         queryParams['bill_month'] = selectedMonth;
       }
-      
+
       if (selectedFilter != 'all') {
         queryParams['is_paid'] = selectedFilter == 'paid' ? 'true' : 'false';
       }
@@ -150,14 +126,11 @@ class AllBills extends GetxController {
       }
 
       Uri uri = Uri.parse("${ApiConfig.baseUrl}/view-bills").replace(queryParameters: queryParams);
-      final res = await fetchData(uri.toString());
+      final res = await fetchData(uri.toString(), isCurrent: canApply);
+      if (!canApply()) return;
 
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
-        
-        if (isDefaultState) {
-          sessionCache = jsonData;
-        }
 
         _allBills.clear();
         bills.clear();
@@ -165,7 +138,7 @@ class AllBills extends GetxController {
         if (jsonData is Map<String, dynamic> && jsonData.containsKey('data')) {
           List<dynamic> responseData = jsonData['data'];
           _allBills.addAll(responseData.map((bill) => GuageBill.fromJson(bill)).toList());
-          
+
           if (jsonData.containsKey('meta')) {
             final meta = jsonData['meta'];
             currentPage.value = meta['page'] ?? 1;
@@ -184,7 +157,7 @@ class AllBills extends GetxController {
         }
 
         bills.value = List.from(_allBills);
-        
+
         if (bills.isEmpty && _searchQuery.value.isNotEmpty) {
            searchError.value = 'لا توجد نتائج تطابق "${_searchQuery.value}"';
         } else {
@@ -194,25 +167,24 @@ class AllBills extends GetxController {
         errorMessage.value = 'فشل تحميل الفواتير: ${res.statusCode}';
       }
     } catch (e) {
+      if (!canApply()) return;
       if (!isBackground) {
         showCustomErrorDialog(errorMessage: e.toString());
         errorMessage.value = 'خطأ في الاتصال: ${e.toString()}';
       }
     } finally {
-      if (!isBackground) {
+      if (request.isCurrent) {
         isLoading.value = false;
       }
     }
   }
 
-  Future<void> _fetchLatestBackground() async {
-    allbills(isBackground: true);
-  }
+
 
   // Toggle search mode
   void toggleSearch() {
     isSearching.value = !isSearching.value;
-    
+
     if (!isSearching.value) {
       // Clear search state
       searchController.clear();
@@ -242,7 +214,7 @@ class AllBills extends GetxController {
       'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
       'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
     ];
-    
+
     if (month >= 1 && month <= 12) {
       return months[month - 1];
     }
@@ -298,7 +270,7 @@ class AllBills extends GetxController {
   // Refresh bills data
   @override
   Future<void> refresh() async {
-    sessionCache = null;
+
     searchController.clear();
     _searchQuery.value = '';
     searchError.value = '';

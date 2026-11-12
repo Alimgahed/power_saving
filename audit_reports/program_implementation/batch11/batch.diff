@@ -1,0 +1,20 @@
+--- lib/features/stations/view/screens/edit_staion.dart
++++ lib/features/stations/view/screens/edit_staion.dart
+@@ -42,6 +42,7 @@
+           builder: (controller) {
+             /// Initialize once
+             WidgetsBinding.instance.addPostFrameCallback((_) {
++              if (!context.mounted || controller.isClosed) return;
+               if (controller.name.text.isEmpty && station != null) {
+                 controller.name.text = station!.stationName;
+                 controller.capacity.text =
+--- lib/features/planning/view/screens/places/edit_places.dart
++++ lib/features/planning/view/screens/places/edit_places.dart
+@@ -38,6 +38,7 @@
+           builder: (controller) {
+             /// Init values once
+             WidgetsBinding.instance.addPostFrameCallback((_) {
++              if (!context.mounted || controller.isClosed) return;
+               if (controller.name.text.isEmpty && place != null) {
+                 controller.name.text = place!.placeName;
+                 controller.placeTypeId = place!.placeTypeId;

@@ -1,3 +1,4 @@
+import 'package:power_saving/core/utils/request_guard.dart';
 // ignore: camel_case_types
 import 'dart:convert';
 
@@ -7,12 +8,12 @@ import 'package:power_saving/features/Counter/model/Counter_model.dart';
 import 'package:power_saving/features/relations/model/relations.dart';
 import 'package:power_saving/features/stations/model/station_model.dart';
 import 'package:power_saving/features/technology/model/tech_model.dart';
-import 'package:power_saving/features/relations/controller/relations/relation.dart';
 import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class addrelationcontroller extends GetxController {
+  final _lookupRequests0 = RequestGuard();
   RxBool looading=false.obs;
   List<TechnologyModel> technologylist = [];
   List<ElectricMeter> electricMeterList = [];
@@ -31,15 +32,20 @@ class addrelationcontroller extends GetxController {
 
   @override
   void onClose() {
+    _lookupRequests0.close();
     // No need to dispose integers
     super.onClose();
   }
 
   Future<void> new_relations() async {
+    final request = _lookupRequests0.begin();
+    if (!request.isCurrent) return;
     try {
       final res = await fetchData(
         "${ApiConfig.baseUrl}/new-relation",
+        isCurrent: () => request.isCurrent,
       );
+      if (!request.isCurrent) return;
 
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
@@ -68,6 +74,7 @@ class addrelationcontroller extends GetxController {
       } 
     // ignore: empty_catches
     } catch (e) {
+      if (!request.isCurrent) return;
       showCustomErrorDialog(errorMessage: e.toString());
     }
   }
@@ -84,7 +91,6 @@ class addrelationcontroller extends GetxController {
       if (res.statusCode == 200) {
               looading.value=false;
 
-        RelationsController.sessionCache = null;
         showSuccessToast('تمت الاضافة بنجاح');
         // Parse with the existing model
         // Assign to local lists

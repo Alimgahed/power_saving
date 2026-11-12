@@ -1,3 +1,4 @@
+import 'package:power_saving/core/utils/request_guard.dart';
 import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
@@ -5,12 +6,12 @@ import 'package:get/get.dart';
 import 'package:power_saving/features/chemcails/model/chemacial.dart';
 import 'package:power_saving/features/stations/model/station_model.dart';
 import 'package:power_saving/features/technology/model/tech_model.dart';
-import 'package:power_saving/features/chemcails/controller/chemacial.dart';
 import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart' show fetchData, postData;
 
 class addchemical extends GetxController {
+  final _lookupRequests0 = RequestGuard();
   RxBool loading = false.obs;
   List<WaterSource> waterSourceList = [];
   List<TechnologyModel> tech = [];
@@ -39,6 +40,7 @@ class addchemical extends GetxController {
 
   @override
   void onClose() {
+    _lookupRequests0.close();
     // Dispose of all controllers
     chlorineFromController.dispose();
     chlorineToController.dispose();
@@ -56,11 +58,13 @@ class addchemical extends GetxController {
       final res = await postData(
         "${ApiConfig.baseUrl}/new-chemical",
         (reference.toJson()),
+        isCurrent: () => !isClosed,
       );
+      if (isClosed) return;
 
       if (res.statusCode == 200) {
         loading.value = false;
-        Chemacialcontroller.sessionCache = null;
+
         showSuccessToast("تم الاضافة  بنجاح");
         Get.offNamed('/Chemicals');
 
@@ -76,9 +80,10 @@ class addchemical extends GetxController {
       }
     // ignore: empty_catches
     } catch (e) {
+      if (isClosed) return;
       showCustomErrorDialog(errorMessage: e.toString());
       loading.value = false;
-     
+
     }
   }
 
@@ -90,10 +95,12 @@ class addchemical extends GetxController {
       final res = await postData(
         "${ApiConfig.baseUrl}/edit-chemical/$id",
          (reference.toJson()),
+        isCurrent: () => !isClosed,
       );
+      if (isClosed) return;
 
       if (res.statusCode == 200) {
-        Chemacialcontroller.sessionCache = null;
+
         showSuccessToast("تم التعديل  بنجاح");
         Get.offNamed('/Chemicals');
       } else {
@@ -107,17 +114,22 @@ class addchemical extends GetxController {
       }
     // ignore: empty_catches
     } catch (e) {
+      if (isClosed) return;
       showCustomErrorDialog(errorMessage: e.toString());
-    
-     
+
+
     }
   }
 
   void getchemicals() async {
+    final request = _lookupRequests0.begin();
+    if (!request.isCurrent) return;
     try {
       final res = await fetchData(
-       "${ApiConfig.baseUrl}/new-chemical"
+       "${ApiConfig.baseUrl}/new-chemical",
+        isCurrent: () => request.isCurrent,
       );
+      if (!request.isCurrent) return;
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
 
@@ -127,13 +139,14 @@ class addchemical extends GetxController {
         jsonData["techs"].forEach((tech) {
           this.tech.add(TechnologyModel.fromJson(tech));
         });
-     
-     
+
+
 
         update(); // Notify listeners
       }
     // ignore: empty_catches
     } catch (e) {
+      if (!request.isCurrent) return;
       showCustomErrorDialog(errorMessage: e.toString());
     }
   }

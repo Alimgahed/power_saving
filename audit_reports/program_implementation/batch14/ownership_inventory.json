@@ -1,0 +1,1891 @@
+[
+  {
+    "file": "lib/my_widget/sharable.dart",
+    "evidence": [
+      {
+        "line": 110,
+        "source": "final TextEditingController searchController = TextEditingController();"
+      },
+      {
+        "line": 111,
+        "source": "final FocusNode focusNode = FocusNode();"
+      },
+      {
+        "line": 124,
+        "source": "searchController.addListener(() {"
+      },
+      {
+        "line": 129,
+        "source": "focusNode.addListener(() {"
+      },
+      {
+        "line": 186,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 187,
+        "source": "searchController.dispose();"
+      },
+      {
+        "line": 188,
+        "source": "focusNode.dispose();"
+      },
+      {
+        "line": 189,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/controller/voltage/voltage.dart",
+    "evidence": [
+      {
+        "line": 21,
+        "source": "lowcost = TextEditingController();"
+      },
+      {
+        "line": 22,
+        "source": "lowfixed = TextEditingController();"
+      },
+      {
+        "line": 23,
+        "source": "avaargefixed = TextEditingController();"
+      },
+      {
+        "line": 24,
+        "source": "avaragecost = TextEditingController();"
+      },
+      {
+        "line": 30,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 31,
+        "source": "lowcost.dispose();"
+      },
+      {
+        "line": 32,
+        "source": "lowfixed.dispose();"
+      },
+      {
+        "line": 33,
+        "source": "avaargefixed.dispose();"
+      },
+      {
+        "line": 34,
+        "source": "avaragecost.dispose();"
+      },
+      {
+        "line": 36,
+        "source": "super.onClose();"
+      },
+      {
+        "line": 57,
+        "source": "avaargefixed = TextEditingController(text: i.fixedFee.toString());"
+      },
+      {
+        "line": 58,
+        "source": "avaragecost = TextEditingController(text: i.voltageCost.toString());"
+      },
+      {
+        "line": 60,
+        "source": "lowfixed = TextEditingController(text: i.fixedFee.toString());"
+      },
+      {
+        "line": 61,
+        "source": "lowcost = TextEditingController(text: i.voltageCost.toString());"
+      }
+    ]
+  },
+  {
+    "file": "lib/controller/voltage/financial.dart",
+    "evidence": [
+      {
+        "line": 14,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 16,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/reports/controller/reports_controller.dart",
+    "evidence": [
+      {
+        "line": 31,
+        "source": "final TextEditingController searchController = TextEditingController();"
+      },
+      {
+        "line": 33,
+        "source": "Worker? _searchWorker;"
+      },
+      {
+        "line": 34,
+        "source": "Worker? _filterWorker;"
+      },
+      {
+        "line": 74,
+        "source": "startdate = TextEditingController();"
+      },
+      {
+        "line": 75,
+        "source": "enddate = TextEditingController();"
+      },
+      {
+        "line": 77,
+        "source": "_searchWorker = ever(searchQuery, (_) {"
+      },
+      {
+        "line": 79,
+        "source": "_searchTimer = Timer(const Duration(milliseconds: 300), () {"
+      },
+      {
+        "line": 85,
+        "source": "_filterWorker = everAll(["
+      },
+      {
+        "line": 97,
+        "source": "searchController.addListener(_onSearchChanged);"
+      },
+      {
+        "line": 101,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 104,
+        "source": "_filterWorker?.dispose();"
+      },
+      {
+        "line": 105,
+        "source": "searchController.removeListener(_onSearchChanged);"
+      },
+      {
+        "line": 106,
+        "source": "startdate.dispose();"
+      },
+      {
+        "line": 107,
+        "source": "enddate.dispose();"
+      },
+      {
+        "line": 108,
+        "source": "searchController.dispose();"
+      },
+      {
+        "line": 109,
+        "source": "_searchWorker?.dispose();"
+      },
+      {
+        "line": 110,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/reports/view/screens/report.dart",
+    "evidence": [
+      {
+        "line": 30,
+        "source": "final ScrollController verticalController = ScrollController();"
+      },
+      {
+        "line": 31,
+        "source": "final ScrollController horizontalController = ScrollController();"
+      },
+      {
+        "line": 34,
+        "source": "void dispose() {"
+      },
+      {
+        "line": 35,
+        "source": "verticalController.dispose();"
+      },
+      {
+        "line": 36,
+        "source": "horizontalController.dispose();"
+      },
+      {
+        "line": 37,
+        "source": "super.dispose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/predaction/controller/prediaction.dart",
+    "evidence": [
+      {
+        "line": 15,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 17,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/Counter/controller/add_counter_controller.dart",
+    "evidence": [
+      {
+        "line": 28,
+        "source": "Counter_number = TextEditingController();"
+      },
+      {
+        "line": 29,
+        "source": "finalReading = TextEditingController();"
+      },
+      {
+        "line": 30,
+        "source": "meterFactor = TextEditingController();"
+      },
+      {
+        "line": 31,
+        "source": "meterId = TextEditingController();"
+      },
+      {
+        "line": 32,
+        "source": "voltageType = TextEditingController();"
+      },
+      {
+        "line": 37,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 39,
+        "source": "Counter_number.dispose();"
+      },
+      {
+        "line": 40,
+        "source": "meterId.dispose();"
+      },
+      {
+        "line": 41,
+        "source": "meterFactor.dispose();"
+      },
+      {
+        "line": 42,
+        "source": "finalReading.dispose();"
+      },
+      {
+        "line": 43,
+        "source": "voltageType.dispose();"
+      },
+      {
+        "line": 44,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/Counter/controller/edit_counter_controller.dart",
+    "evidence": [
+      {
+        "line": 27,
+        "source": "Counter_number = TextEditingController();"
+      },
+      {
+        "line": 28,
+        "source": "finalReading = TextEditingController();"
+      },
+      {
+        "line": 29,
+        "source": "meterFactor = TextEditingController();"
+      },
+      {
+        "line": 30,
+        "source": "meterId = TextEditingController();"
+      },
+      {
+        "line": 31,
+        "source": "voltageType = TextEditingController();"
+      },
+      {
+        "line": 36,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 38,
+        "source": "Counter_number.dispose();"
+      },
+      {
+        "line": 39,
+        "source": "meterId.dispose();"
+      },
+      {
+        "line": 40,
+        "source": "meterFactor.dispose();"
+      },
+      {
+        "line": 41,
+        "source": "finalReading.dispose();"
+      },
+      {
+        "line": 42,
+        "source": "voltageType.dispose();"
+      },
+      {
+        "line": 43,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/Counter/controller/counter.dart",
+    "evidence": [
+      {
+        "line": 26,
+        "source": "final searchController = TextEditingController();"
+      },
+      {
+        "line": 28,
+        "source": "Worker? _searchWorker;"
+      },
+      {
+        "line": 55,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 57,
+        "source": "_searchWorker?.dispose();"
+      },
+      {
+        "line": 58,
+        "source": "searchController.dispose();"
+      },
+      {
+        "line": 59,
+        "source": "super.onClose();"
+      },
+      {
+        "line": 62,
+        "source": "// Setup search with debounce using Worker"
+      },
+      {
+        "line": 64,
+        "source": "_searchWorker = ownedDebounce("
+      }
+    ]
+  },
+  {
+    "file": "lib/features/Counter/view/screens/Counter.dart",
+    "evidence": [
+      {
+        "line": 391,
+        "source": "TextEditingController("
+      },
+      {
+        "line": 410,
+        "source": "TextEditingController("
+      },
+      {
+        "line": 1280,
+        "source": "Get.find<Bills>().onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/tech_bills/controller/techbills.dart",
+    "evidence": [
+      {
+        "line": 25,
+        "source": "drafts.remove(id)!.dispose();"
+      },
+      {
+        "line": 46,
+        "source": "final searchController = TextEditingController();"
+      },
+      {
+        "line": 53,
+        "source": "final stationFilterController = TextEditingController();"
+      },
+      {
+        "line": 84,
+        "source": "() => TextEditingController(),"
+      },
+      {
+        "line": 90,
+        "source": "() => TextEditingController(),"
+      },
+      {
+        "line": 96,
+        "source": "() => TextEditingController(),"
+      },
+      {
+        "line": 103,
+        "source": "() => TextEditingController(),"
+      },
+      {
+        "line": 110,
+        "source": "() => TextEditingController(),"
+      },
+      {
+        "line": 117,
+        "source": "() => TextEditingController(),"
+      },
+      {
+        "line": 122,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 126,
+        "source": "searchController.removeListener(_onSearchEdited);"
+      },
+      {
+        "line": 128,
+        "source": "searchController.dispose();"
+      },
+      {
+        "line": 129,
+        "source": "stationFilterController.dispose();"
+      },
+      {
+        "line": 140,
+        "source": "controller.dispose();"
+      },
+      {
+        "line": 142,
+        "source": "super.onClose();"
+      },
+      {
+        "line": 148,
+        "source": "_setupSearchWorker();"
+      },
+      {
+        "line": 153,
+        "source": "void _setupSearchWorker() {"
+      },
+      {
+        "line": 154,
+        "source": "searchController.addListener(_onSearchEdited);"
+      },
+      {
+        "line": 159,
+        "source": "_debounceTimer = Timer(const Duration(milliseconds: 300), applyFilters);"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/tech_bills/controller/new_tech_bills.dart",
+    "evidence": [
+      {
+        "line": 79,
+        "source": "chlorineController = TextEditingController();"
+      },
+      {
+        "line": 80,
+        "source": "liquidAlumController = TextEditingController();"
+      },
+      {
+        "line": 81,
+        "source": "solidAlumController = TextEditingController();"
+      },
+      {
+        "line": 82,
+        "source": "waterProducedController = TextEditingController();"
+      },
+      {
+        "line": 83,
+        "source": "yearController = TextEditingController();"
+      },
+      {
+        "line": 84,
+        "source": "monthController = TextEditingController();"
+      },
+      {
+        "line": 85,
+        "source": "calculatedWaterController = TextEditingController();"
+      },
+      {
+        "line": 86,
+        "source": "measuredWaterController = TextEditingController();"
+      },
+      {
+        "line": 88,
+        "source": "measuredWaterController.addListener(updateProducedWater);"
+      },
+      {
+        "line": 89,
+        "source": "calculatedWaterController.addListener(updateProducedWater);"
+      },
+      {
+        "line": 101,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 104,
+        "source": "measuredWaterController.removeListener(updateProducedWater);"
+      },
+      {
+        "line": 105,
+        "source": "calculatedWaterController.removeListener(updateProducedWater);"
+      },
+      {
+        "line": 106,
+        "source": "measuredWaterController.dispose();"
+      },
+      {
+        "line": 107,
+        "source": "calculatedWaterController.dispose();"
+      },
+      {
+        "line": 108,
+        "source": "chlorineController.dispose();"
+      },
+      {
+        "line": 109,
+        "source": "liquidAlumController.dispose();"
+      },
+      {
+        "line": 110,
+        "source": "solidAlumController.dispose();"
+      },
+      {
+        "line": 111,
+        "source": "waterProducedController.dispose();"
+      },
+      {
+        "line": 112,
+        "source": "yearController.dispose();"
+      },
+      {
+        "line": 113,
+        "source": "monthController.dispose();"
+      },
+      {
+        "line": 114,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/tech_bills/controller/tech_bills/techbills.dart",
+    "evidence": [
+      {
+        "line": 56,
+        "source": "() => TextEditingController(),"
+      },
+      {
+        "line": 63,
+        "source": "() => TextEditingController(),"
+      },
+      {
+        "line": 70,
+        "source": "() => TextEditingController(),"
+      },
+      {
+        "line": 77,
+        "source": "() => TextEditingController(),"
+      },
+      {
+        "line": 82,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 90,
+        "source": "controller.dispose();"
+      },
+      {
+        "line": 92,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/tech_bills/controller/tech_bills/edit_techbills.dart",
+    "evidence": [
+      {
+        "line": 25,
+        "source": "chlorineController = TextEditingController();"
+      },
+      {
+        "line": 26,
+        "source": "wateramount = TextEditingController();"
+      },
+      {
+        "line": 27,
+        "source": "liquidAlumController = TextEditingController();"
+      },
+      {
+        "line": 28,
+        "source": "calculatedWaterController = TextEditingController();"
+      },
+      {
+        "line": 29,
+        "source": "measuredWaterController = TextEditingController();"
+      },
+      {
+        "line": 30,
+        "source": "solidAlumController = TextEditingController();"
+      },
+      {
+        "line": 31,
+        "source": "waterProducedController = TextEditingController();"
+      },
+      {
+        "line": 35,
+        "source": "_debounce = Timer(const Duration(milliseconds: 300), () {"
+      },
+      {
+        "line": 42,
+        "source": "calculatedWaterController.addListener(updateWaterProduced);"
+      },
+      {
+        "line": 43,
+        "source": "measuredWaterController.addListener(updateWaterProduced);"
+      },
+      {
+        "line": 49,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 51,
+        "source": "chlorineController.dispose();"
+      },
+      {
+        "line": 52,
+        "source": "liquidAlumController.dispose();"
+      },
+      {
+        "line": 53,
+        "source": "wateramount.dispose();"
+      },
+      {
+        "line": 54,
+        "source": "calculatedWaterController.dispose();"
+      },
+      {
+        "line": 55,
+        "source": "measuredWaterController.dispose();"
+      },
+      {
+        "line": 56,
+        "source": "solidAlumController.dispose();"
+      },
+      {
+        "line": 57,
+        "source": "waterProducedController.dispose();"
+      },
+      {
+        "line": 58,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/planning/controller/place/add_places_controller.dart",
+    "evidence": [
+      {
+        "line": 28,
+        "source": "name = TextEditingController();"
+      },
+      {
+        "line": 39,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 41,
+        "source": "name.dispose();"
+      },
+      {
+        "line": 42,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/planning/controller/place/edit_places_controller.dart",
+    "evidence": [
+      {
+        "line": 28,
+        "source": "name = TextEditingController();"
+      },
+      {
+        "line": 39,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 41,
+        "source": "name.dispose();"
+      },
+      {
+        "line": 42,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/planning/controller/place/edit_place_type_controller.dart",
+    "evidence": [
+      {
+        "line": 17,
+        "source": "final TextEditingController nameController = TextEditingController();"
+      },
+      {
+        "line": 18,
+        "source": "final TextEditingController fromController = TextEditingController();"
+      },
+      {
+        "line": 19,
+        "source": "final TextEditingController toController = TextEditingController();"
+      },
+      {
+        "line": 28,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 30,
+        "source": "nameController.dispose();"
+      },
+      {
+        "line": 31,
+        "source": "fromController.dispose();"
+      },
+      {
+        "line": 32,
+        "source": "toController.dispose();"
+      },
+      {
+        "line": 33,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/planning/controller/place/places_controller.dart",
+    "evidence": [
+      {
+        "line": 25,
+        "source": "final searchController = TextEditingController();"
+      },
+      {
+        "line": 28,
+        "source": "Worker? _searchWorker;"
+      },
+      {
+        "line": 38,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 41,
+        "source": "_searchWorker?.dispose();"
+      },
+      {
+        "line": 42,
+        "source": "searchController.dispose();"
+      },
+      {
+        "line": 43,
+        "source": "super.onClose();"
+      },
+      {
+        "line": 46,
+        "source": "// Setup search with debounce using Worker (correct implementation)"
+      },
+      {
+        "line": 48,
+        "source": "// Worker setup for debounce on search query"
+      },
+      {
+        "line": 49,
+        "source": "_searchWorker = ownedDebounce<String>("
+      },
+      {
+        "line": 155,
+        "source": "// Alternative: Manual filter (without Worker) - for immediate response"
+      },
+      {
+        "line": 161,
+        "source": "_debounceTimer = Timer(const Duration(milliseconds: 300), () {"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/planning/controller/blance_chart/blance_chart.dart",
+    "evidence": [
+      {
+        "line": 22,
+        "source": "})  : yearController = yearController ?? TextEditingController(),"
+      },
+      {
+        "line": 23,
+        "source": "productionController = productionController ?? TextEditingController();"
+      },
+      {
+        "line": 25,
+        "source": "void dispose() {"
+      },
+      {
+        "line": 26,
+        "source": "yearController.dispose();"
+      },
+      {
+        "line": 27,
+        "source": "productionController.dispose();"
+      },
+      {
+        "line": 48,
+        "source": "textControllers.putIfAbsent(type.placeTypeId, () => TextEditingController());"
+      },
+      {
+        "line": 58,
+        "source": "TextEditingController incresableController = TextEditingController();"
+      },
+      {
+        "line": 67,
+        "source": "final TextEditingController yearController = TextEditingController();"
+      },
+      {
+        "line": 104,
+        "source": "item.dispose();"
+      },
+      {
+        "line": 255,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 259,
+        "source": "incresableController.dispose();"
+      },
+      {
+        "line": 260,
+        "source": "yearController.dispose();"
+      },
+      {
+        "line": 262,
+        "source": "item.dispose();"
+      },
+      {
+        "line": 265,
+        "source": "controller.dispose();"
+      },
+      {
+        "line": 267,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/auth/controller/login.dart",
+    "evidence": [
+      {
+        "line": 21,
+        "source": "password = TextEditingController();"
+      },
+      {
+        "line": 22,
+        "source": "name = TextEditingController();"
+      },
+      {
+        "line": 26,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 27,
+        "source": "password.dispose();"
+      },
+      {
+        "line": 28,
+        "source": "name.dispose();"
+      },
+      {
+        "line": 29,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/auth/controller/all_user.dart",
+    "evidence": [
+      {
+        "line": 27,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 29,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/auth/controller/new_user.dart",
+    "evidence": [
+      {
+        "line": 22,
+        "source": "password = TextEditingController();"
+      },
+      {
+        "line": 23,
+        "source": "name = TextEditingController();"
+      },
+      {
+        "line": 24,
+        "source": "confirmpassword = TextEditingController();"
+      },
+      {
+        "line": 25,
+        "source": "username = TextEditingController();"
+      },
+      {
+        "line": 26,
+        "source": "code=TextEditingController();"
+      },
+      {
+        "line": 32,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 34,
+        "source": "password.dispose();"
+      },
+      {
+        "line": 35,
+        "source": "name.dispose();"
+      },
+      {
+        "line": 36,
+        "source": "confirmpassword.dispose();"
+      },
+      {
+        "line": 37,
+        "source": "username.dispose();"
+      },
+      {
+        "line": 38,
+        "source": "code.dispose();"
+      },
+      {
+        "line": 40,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/auth/controller/chang_password.dart",
+    "evidence": [
+      {
+        "line": 10,
+        "source": "final currentPassword = TextEditingController();"
+      },
+      {
+        "line": 11,
+        "source": "final newPassword = TextEditingController();"
+      },
+      {
+        "line": 12,
+        "source": "final confirmPassword = TextEditingController();"
+      },
+      {
+        "line": 20,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 22,
+        "source": "currentPassword.dispose();"
+      },
+      {
+        "line": 23,
+        "source": "newPassword.dispose();"
+      },
+      {
+        "line": 24,
+        "source": "confirmPassword.dispose();"
+      },
+      {
+        "line": 25,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/auth/view/screens/all_user.dart",
+    "evidence": [
+      {
+        "line": 717,
+        "source": "late final name = TextEditingController(text: widget.user.empName);"
+      },
+      {
+        "line": 718,
+        "source": "late final username = TextEditingController(text: widget.user.username);"
+      },
+      {
+        "line": 719,
+        "source": "late final empCode = TextEditingController(text: widget.user.empCode);"
+      },
+      {
+        "line": 720,
+        "source": "late final isActive = ValueNotifier<bool>(widget.user.isActive);"
+      },
+      {
+        "line": 724,
+        "source": "void dispose() {"
+      },
+      {
+        "line": 725,
+        "source": "name.dispose();"
+      },
+      {
+        "line": 726,
+        "source": "username.dispose();"
+      },
+      {
+        "line": 727,
+        "source": "empCode.dispose();"
+      },
+      {
+        "line": 728,
+        "source": "isActive.dispose();"
+      },
+      {
+        "line": 729,
+        "source": "super.dispose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/technology/controller/edit_tech_controller.dart",
+    "evidence": [
+      {
+        "line": 23,
+        "source": "liquid = TextEditingController();"
+      },
+      {
+        "line": 24,
+        "source": "solid = TextEditingController();"
+      },
+      {
+        "line": 25,
+        "source": "power = TextEditingController();"
+      },
+      {
+        "line": 26,
+        "source": "chlorine = TextEditingController();"
+      },
+      {
+        "line": 27,
+        "source": "name = TextEditingController();"
+      },
+      {
+        "line": 32,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 34,
+        "source": "name.dispose();"
+      },
+      {
+        "line": 35,
+        "source": "chlorine.dispose();"
+      },
+      {
+        "line": 36,
+        "source": "liquid.dispose();"
+      },
+      {
+        "line": 37,
+        "source": "solid.dispose();"
+      },
+      {
+        "line": 38,
+        "source": "power.dispose();"
+      },
+      {
+        "line": 39,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/technology/controller/technlogy.dart",
+    "evidence": [
+      {
+        "line": 32,
+        "source": "final searchController = TextEditingController();"
+      },
+      {
+        "line": 34,
+        "source": "Worker? _searchWorker;"
+      },
+      {
+        "line": 36,
+        "source": "final TextEditingController name = TextEditingController();"
+      },
+      {
+        "line": 37,
+        "source": "final TextEditingController chlorine = TextEditingController();"
+      },
+      {
+        "line": 38,
+        "source": "final TextEditingController liquid = TextEditingController();"
+      },
+      {
+        "line": 39,
+        "source": "final TextEditingController solid = TextEditingController();"
+      },
+      {
+        "line": 40,
+        "source": "final TextEditingController power = TextEditingController();"
+      },
+      {
+        "line": 47,
+        "source": "_searchWorker = ownedDebounce("
+      },
+      {
+        "line": 56,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 58,
+        "source": "_searchWorker?.dispose();"
+      },
+      {
+        "line": 59,
+        "source": "searchController.dispose();"
+      },
+      {
+        "line": 60,
+        "source": "name.dispose();"
+      },
+      {
+        "line": 61,
+        "source": "chlorine.dispose();"
+      },
+      {
+        "line": 62,
+        "source": "liquid.dispose();"
+      },
+      {
+        "line": 63,
+        "source": "solid.dispose();"
+      },
+      {
+        "line": 64,
+        "source": "power.dispose();"
+      },
+      {
+        "line": 65,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/technology/controller/add_tech_controller.dart",
+    "evidence": [
+      {
+        "line": 26,
+        "source": "liquid = TextEditingController();"
+      },
+      {
+        "line": 27,
+        "source": "solid = TextEditingController();"
+      },
+      {
+        "line": 28,
+        "source": "power = TextEditingController();"
+      },
+      {
+        "line": 29,
+        "source": "chlorine = TextEditingController();"
+      },
+      {
+        "line": 30,
+        "source": "name = TextEditingController();"
+      },
+      {
+        "line": 35,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 36,
+        "source": "name.dispose();"
+      },
+      {
+        "line": 37,
+        "source": "chlorine.dispose();"
+      },
+      {
+        "line": 38,
+        "source": "liquid.dispose();"
+      },
+      {
+        "line": 39,
+        "source": "solid.dispose();"
+      },
+      {
+        "line": 40,
+        "source": "power.dispose();"
+      },
+      {
+        "line": 43,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/relations/controller/add_relations_controller.dart",
+    "evidence": [
+      {
+        "line": 34,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 37,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/relations/controller/relations/relation.dart",
+    "evidence": [
+      {
+        "line": 27,
+        "source": "final searchController = TextEditingController();"
+      },
+      {
+        "line": 29,
+        "source": "Worker? _searchWorker;"
+      },
+      {
+        "line": 35,
+        "source": "_setupSearchWorker();"
+      },
+      {
+        "line": 39,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 41,
+        "source": "_searchWorker?.dispose();"
+      },
+      {
+        "line": 42,
+        "source": "searchController.dispose();"
+      },
+      {
+        "line": 43,
+        "source": "super.onClose();"
+      },
+      {
+        "line": 47,
+        "source": "// Search Worker (Debounce)"
+      },
+      {
+        "line": 49,
+        "source": "void _setupSearchWorker() {"
+      },
+      {
+        "line": 50,
+        "source": "_searchWorker = ownedDebounce("
+      }
+    ]
+  },
+  {
+    "file": "lib/features/bill/controller/bills.dart",
+    "evidence": [
+      {
+        "line": 64,
+        "source": "settlementsControllerratio = TextEditingController();"
+      },
+      {
+        "line": 65,
+        "source": "notes = TextEditingController();"
+      },
+      {
+        "line": 66,
+        "source": "delayMonthController = TextEditingController();"
+      },
+      {
+        "line": 67,
+        "source": "delayYearController = TextEditingController();"
+      },
+      {
+        "line": 69,
+        "source": "briefReadingController = TextEditingController();"
+      },
+      {
+        "line": 70,
+        "source": "currentReadingController = TextEditingController();"
+      },
+      {
+        "line": 71,
+        "source": "powerConsumpController = TextEditingController();"
+      },
+      {
+        "line": 72,
+        "source": "readingFactorController = TextEditingController();"
+      },
+      {
+        "line": 73,
+        "source": "voltageIdController = TextEditingController();"
+      },
+      {
+        "line": 74,
+        "source": "voltageCostController = TextEditingController();"
+      },
+      {
+        "line": 75,
+        "source": "billMonthController = TextEditingController();"
+      },
+      {
+        "line": 76,
+        "source": "billyearController = TextEditingController();"
+      },
+      {
+        "line": 78,
+        "source": "fixedInstallmentController = TextEditingController();"
+      },
+      {
+        "line": 79,
+        "source": "settlementsController = TextEditingController();"
+      },
+      {
+        "line": 80,
+        "source": "stampController = TextEditingController();"
+      },
+      {
+        "line": 81,
+        "source": "prevPaymentsController = TextEditingController();"
+      },
+      {
+        "line": 82,
+        "source": "roundingController = TextEditingController();"
+      },
+      {
+        "line": 83,
+        "source": "billTotalController = TextEditingController();"
+      },
+      {
+        "line": 89,
+        "source": "briefReadingController.addListener(_calculateFields);"
+      },
+      {
+        "line": 90,
+        "source": "currentReadingController.addListener(_calculateFields);"
+      },
+      {
+        "line": 91,
+        "source": "readingFactorController.addListener(_calculateFields);"
+      },
+      {
+        "line": 92,
+        "source": "fixedInstallmentController.addListener(_calculateFields);"
+      },
+      {
+        "line": 93,
+        "source": "stampController.addListener(_calculateFields);"
+      },
+      {
+        "line": 94,
+        "source": "settlementsController.addListener(_calculateFields);"
+      },
+      {
+        "line": 95,
+        "source": "settlementsControllerratio.addListener(_calculateFields);"
+      },
+      {
+        "line": 96,
+        "source": "prevPaymentsController.addListener(_calculateFields);"
+      },
+      {
+        "line": 226,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 228,
+        "source": "briefReadingController.removeListener(_calculateFields);"
+      },
+      {
+        "line": 229,
+        "source": "currentReadingController.removeListener(_calculateFields);"
+      },
+      {
+        "line": 230,
+        "source": "readingFactorController.removeListener(_calculateFields);"
+      },
+      {
+        "line": 231,
+        "source": "fixedInstallmentController.removeListener(_calculateFields);"
+      },
+      {
+        "line": 232,
+        "source": "settlementsController.removeListener(_calculateFields);"
+      },
+      {
+        "line": 233,
+        "source": "settlementsControllerratio.removeListener(_calculateFields);"
+      },
+      {
+        "line": 234,
+        "source": "prevPaymentsController.removeListener(_calculateFields);"
+      },
+      {
+        "line": 236,
+        "source": "briefReadingController.dispose();"
+      },
+      {
+        "line": 237,
+        "source": "currentReadingController.dispose();"
+      },
+      {
+        "line": 238,
+        "source": "readingFactorController.dispose();"
+      },
+      {
+        "line": 239,
+        "source": "powerConsumpController.dispose();"
+      },
+      {
+        "line": 240,
+        "source": "fixedInstallmentController.dispose();"
+      },
+      {
+        "line": 241,
+        "source": "settlementsController.dispose();"
+      },
+      {
+        "line": 242,
+        "source": "settlementsControllerratio.dispose();"
+      },
+      {
+        "line": 243,
+        "source": "stampController.dispose();"
+      },
+      {
+        "line": 244,
+        "source": "roundingController.dispose();"
+      },
+      {
+        "line": 245,
+        "source": "prevPaymentsController.dispose();"
+      },
+      {
+        "line": 246,
+        "source": "billMonthController.dispose();"
+      },
+      {
+        "line": 247,
+        "source": "billyearController.dispose();"
+      },
+      {
+        "line": 248,
+        "source": "billTotalController.dispose();"
+      },
+      {
+        "line": 249,
+        "source": "delayMonthController.dispose();"
+      },
+      {
+        "line": 250,
+        "source": "delayYearController.dispose();"
+      },
+      {
+        "line": 251,
+        "source": "notes.dispose();"
+      },
+      {
+        "line": 253,
+        "source": "super.onClose();"
+      },
+      {
+        "line": 280,
+        "source": "powerControllers.add(TextEditingController());"
+      },
+      {
+        "line": 281,
+        "source": "moneyControllers.add(TextEditingController());"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/bill/controller/tech_bills.dart",
+    "evidence": [
+      {
+        "line": 13,
+        "source": "Worker? _searchWorker;"
+      },
+      {
+        "line": 16,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 18,
+        "source": "_searchWorker?.dispose();"
+      },
+      {
+        "line": 19,
+        "source": "super.onClose();"
+      },
+      {
+        "line": 44,
+        "source": "_searchWorker = ownedDebounce(searchQuery, (_) {"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/bill/controller/all_bills.dart",
+    "evidence": [
+      {
+        "line": 36,
+        "source": "final searchController = TextEditingController();"
+      },
+      {
+        "line": 38,
+        "source": "Worker? _searchWorker;"
+      },
+      {
+        "line": 54,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 56,
+        "source": "_searchWorker?.dispose();"
+      },
+      {
+        "line": 57,
+        "source": "searchController.dispose();"
+      },
+      {
+        "line": 58,
+        "source": "super.onClose();"
+      },
+      {
+        "line": 61,
+        "source": "// Setup search with debounce using Worker"
+      },
+      {
+        "line": 63,
+        "source": "_searchWorker = ownedDebounce("
+      }
+    ]
+  },
+  {
+    "file": "lib/features/analysis/controller/analysis.dart",
+    "evidence": [
+      {
+        "line": 15,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 17,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/chemcails/controller/add_chemacial.dart",
+    "evidence": [
+      {
+        "line": 33,
+        "source": "chlorineFromController = TextEditingController();"
+      },
+      {
+        "line": 34,
+        "source": "chlorineToController = TextEditingController();"
+      },
+      {
+        "line": 35,
+        "source": "liquidAlumFromController = TextEditingController();"
+      },
+      {
+        "line": 36,
+        "source": "liquidAlumToController = TextEditingController();"
+      },
+      {
+        "line": 37,
+        "source": "solidAlumFromController = TextEditingController();"
+      },
+      {
+        "line": 38,
+        "source": "solidAlumToController = TextEditingController();"
+      },
+      {
+        "line": 42,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 45,
+        "source": "chlorineFromController.dispose();"
+      },
+      {
+        "line": 46,
+        "source": "chlorineToController.dispose();"
+      },
+      {
+        "line": 47,
+        "source": "liquidAlumFromController.dispose();"
+      },
+      {
+        "line": 48,
+        "source": "liquidAlumToController.dispose();"
+      },
+      {
+        "line": 49,
+        "source": "solidAlumFromController.dispose();"
+      },
+      {
+        "line": 50,
+        "source": "solidAlumToController.dispose();"
+      },
+      {
+        "line": 52,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/chemcails/controller/chemacial.dart",
+    "evidence": [
+      {
+        "line": 25,
+        "source": "final searchController = TextEditingController();"
+      },
+      {
+        "line": 27,
+        "source": "Worker? _searchWorker;"
+      },
+      {
+        "line": 33,
+        "source": "_setupSearchWorker();"
+      },
+      {
+        "line": 37,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 39,
+        "source": "_searchWorker?.dispose();"
+      },
+      {
+        "line": 40,
+        "source": "searchController.dispose();"
+      },
+      {
+        "line": 41,
+        "source": "super.onClose();"
+      },
+      {
+        "line": 45,
+        "source": "// Search Worker (Debounce)"
+      },
+      {
+        "line": 47,
+        "source": "void _setupSearchWorker() {"
+      },
+      {
+        "line": 48,
+        "source": "_searchWorker = ownedDebounce("
+      }
+    ]
+  },
+  {
+    "file": "lib/features/home/controller/home.dart",
+    "evidence": [
+      {
+        "line": 35,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 37,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/home/view/screens/home.dart",
+    "evidence": [
+      {
+        "line": 1546,
+        "source": "_controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1200))..repeat(reverse: true);"
+      },
+      {
+        "line": 1550,
+        "source": "void dispose() {"
+      },
+      {
+        "line": 1551,
+        "source": "_controller.dispose();"
+      },
+      {
+        "line": 1552,
+        "source": "super.dispose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/home/view/widgets/over_water_stations.dart",
+    "evidence": [
+      {
+        "line": 123,
+        "source": "final scrollController = ScrollController();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/home/view/widgets/over_consampation.dart",
+    "evidence": [
+      {
+        "line": 122,
+        "source": "final scrollController = ScrollController();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/stations/controller/add_stations_controller.dart",
+    "evidence": [
+      {
+        "line": 31,
+        "source": "name = TextEditingController();"
+      },
+      {
+        "line": 32,
+        "source": "capacity = TextEditingController();"
+      },
+      {
+        "line": 45,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 48,
+        "source": "name.dispose();"
+      },
+      {
+        "line": 49,
+        "source": "capacity.dispose();"
+      },
+      {
+        "line": 50,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/stations/controller/all_stations_controller.dart",
+    "evidence": [
+      {
+        "line": 26,
+        "source": "final searchController = TextEditingController();"
+      },
+      {
+        "line": 28,
+        "source": "Worker? _searchWorker;"
+      },
+      {
+        "line": 34,
+        "source": "_setupSearchWorker();"
+      },
+      {
+        "line": 38,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 40,
+        "source": "_searchWorker?.dispose();"
+      },
+      {
+        "line": 41,
+        "source": "searchController.dispose();"
+      },
+      {
+        "line": 42,
+        "source": "super.onClose();"
+      },
+      {
+        "line": 46,
+        "source": "// Search Worker (Debounce)"
+      },
+      {
+        "line": 48,
+        "source": "void _setupSearchWorker() {"
+      },
+      {
+        "line": 49,
+        "source": "_searchWorker = ownedDebounce("
+      }
+    ]
+  },
+  {
+    "file": "lib/features/stations/controller/edit_stations_controller.dart",
+    "evidence": [
+      {
+        "line": 32,
+        "source": "name = TextEditingController();"
+      },
+      {
+        "line": 33,
+        "source": "capacity = TextEditingController();"
+      },
+      {
+        "line": 46,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 49,
+        "source": "name.dispose();"
+      },
+      {
+        "line": 50,
+        "source": "capacity.dispose();"
+      },
+      {
+        "line": 51,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/features/stations/controller/following_stations_controller.dart",
+    "evidence": [
+      {
+        "line": 52,
+        "source": "void onClose() {"
+      },
+      {
+        "line": 54,
+        "source": "super.onClose();"
+      }
+    ]
+  },
+  {
+    "file": "lib/core/utils/owned_debounce.dart",
+    "evidence": [
+      {
+        "line": 6,
+        "source": "Worker ownedDebounce<T>("
+      },
+      {
+        "line": 13,
+        "source": "final subscription = source.listen((event) {"
+      },
+      {
+        "line": 16,
+        "source": "timer = Timer(time, () {"
+      },
+      {
+        "line": 20,
+        "source": "return Worker(() async {"
+      }
+    ]
+  },
+  {
+    "file": "lib/core/widgets/shimmer_loading.dart",
+    "evidence": [
+      {
+        "line": 27,
+        "source": "_controller = AnimationController("
+      },
+      {
+        "line": 34,
+        "source": "void dispose() {"
+      },
+      {
+        "line": 35,
+        "source": "_controller.dispose();"
+      },
+      {
+        "line": 36,
+        "source": "super.dispose();"
+      }
+    ]
+  }
+]

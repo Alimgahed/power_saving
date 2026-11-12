@@ -1,3 +1,4 @@
+import 'package:power_saving/core/utils/request_guard.dart';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -5,12 +6,12 @@ import 'package:get/get.dart';
 import 'package:power_saving/features/planning/model/all_places_model.dart';
 import 'package:power_saving/features/planning/model/area_model.dart';
 import 'package:power_saving/features/stations/model/station_model.dart';
-import 'package:power_saving/features/planning/controller/place/places_controller.dart';
 import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class AddPlacesController extends GetxController {
+  final _lookupRequests0 = RequestGuard();
   RxBool looading = false.obs;
   late TextEditingController name;
     List<Branch> branchList = [];
@@ -36,6 +37,7 @@ class AddPlacesController extends GetxController {
 
   @override
   void onClose() {
+    _lookupRequests0.close();
     name.dispose();
     super.onClose();
   }
@@ -48,12 +50,12 @@ required   Place  place,
       final res = await postData(
         "${ApiConfig.baseUrl}/new-place",
           (place.toJson()),
-       
+
       );
 
       if (res.statusCode == 200) {
         looading.value = false;
-        PlacesController.sessionCache = null;
+
         showSuccessToast("تم اضافة المكان بنجاح");
       } else {
         looading.value = false;
@@ -69,10 +71,14 @@ required   Place  place,
 
 
   Future<void> allNewData() async {
+    final request = _lookupRequests0.begin();
+    if (!request.isCurrent) return;
     try {
       final res = await fetchData(
         "${ApiConfig.baseUrl}/new-place",
+        isCurrent: () => request.isCurrent,
       );
+      if (!request.isCurrent) return;
 
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
@@ -86,11 +92,12 @@ required   Place  place,
             .map((placeType) => PlaceType.fromJson(placeType))
             .toList();
 update();
-      
+
 
       }
     // ignore: empty_catches
     } catch (e) {
+      if (!request.isCurrent) return;
       showCustomErrorDialog(errorMessage: e.toString());
     }
   }

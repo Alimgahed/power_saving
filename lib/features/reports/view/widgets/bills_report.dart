@@ -1,3 +1,4 @@
+import 'package:power_saving/core/utils/html_encoding.dart';
 import 'package:flutter/material.dart';
 import 'package:power_saving/features/reports/model/report.dart';
 import 'package:power_saving/features/reports/view/screens/report.dart';
@@ -45,11 +46,11 @@ class BillsReportPrinter extends BaseReportPrinter {
     final isPaidText = b.ispaid == true ? "نعم" : "لا";
     final isPaidClass = b.ispaid == true ? "paid-yes" : "paid-no";
     return [
-      '<td class="highlight-cell">${b.accountnumber}</td>',
+      '<td class="highlight-cell">${htmlText(b.accountnumber)}</td>',
       '<td class="highlight-cell">${formatNum(b.totalBill)}</td>',
       '<td>${b.month}</td>',
       '<td>${b.year}</td>',
-      '<td>${b.stationnames?.isNotEmpty == true ? b.stationnames : (b.stationname?.isNotEmpty == true ? b.stationname : "لا يوجد")}</td>',
+      '<td>${htmlText(b.stationnames?.isNotEmpty == true ? b.stationnames : (b.stationname?.isNotEmpty == true ? b.stationname : "لا يوجد"))}</td>',
       '<td class="$isPaidClass">$isPaidText</td>',
       '<td>${b.delleymonth ?? "لا يوجد"}</td>',
       '<td>${b.delleyyear ?? "لا يوجد"}</td>',

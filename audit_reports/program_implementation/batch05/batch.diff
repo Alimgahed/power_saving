@@ -1,0 +1,178 @@
+--- before/lib/features/stations/controller/following_stations_controller.dart
++++ after/lib/features/stations/controller/following_stations_controller.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/utils/request_guard.dart';
+ import 'dart:convert';
+ import 'package:get/get.dart';
+ import 'package:power_saving/features/technology/model/tech_model.dart';
+@@ -42,6 +43,17 @@
+ }
+ 
+ class FollowingStationsController extends GetxController {
++  final _reads = RequestGuard();
++  bool isLoading = false;
++  bool hasLoaded = false;
++  String loadError = '';
++
++  @override
++  void onClose() {
++    _reads.close();
++    super.onClose();
++  }
++
+ 
+   RxList<Station> stations = <Station>[].obs;
+ 
+@@ -58,18 +70,30 @@
+   }
+ 
+   Future<void> stationsTechs({bool isBackground = false}) async {
+-
+-    final res = await fetchData("${ApiConfig.baseUrl}/station-techs");
+-
+-    if (res.statusCode == 200) {
+-      final List data = json.decode(res.body);
+-
+-      stations.value = data.map((e) => Station.fromJson(e)).toList();
+-      update();
++    final request = _reads.begin();
++    if (!request.isCurrent) return;
++    isLoading = true;
++    loadError = '';
++    update();
++    try {
++      final res = await fetchData("${ApiConfig.baseUrl}/station-techs",
++          isCurrent: () => request.isCurrent);
++      if (!request.isCurrent) return;
++      if (res.statusCode == 200) {
++        final List data = json.decode(res.body);
++        stations.value = data.map((e) => Station.fromJson(e)).toList();
++        hasLoaded = true;
++      }
++    } catch (e) {
++      if (!request.isCurrent) return;
++      loadError = 'تعذر تحميل بيانات المحطات. يرجى إعادة المحاولة.';
++    } finally {
++      if (request.isCurrent) {
++        isLoading = false;
++        update();
++      }
+     }
+   }
+-
+-
+ 
+   void onStationChanged(Station? station) {
+     selectedStation = station;
+--- before/lib/features/stations/controller/add_stations_controller.dart
++++ after/lib/features/stations/controller/add_stations_controller.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/utils/request_guard.dart';
+ import 'dart:convert';
+ 
+ import 'package:flutter/material.dart';
+@@ -9,6 +10,11 @@
+ import 'package:power_saving/network/network.dart';
+ 
+ class AddStationController extends GetxController {
++  final _branchReads = RequestGuard();
++  bool branchesLoading = false;
++  bool branchesLoaded = false;
++  String branchLoadError = '';
++
+   RxBool looading = false.obs;
+   late TextEditingController name;
+   late TextEditingController capacity;
+@@ -36,6 +42,7 @@
+ 
+   @override
+   void onClose() {
++    _branchReads.close();
+     name.dispose();
+     capacity.dispose();
+     super.onClose();
+@@ -100,20 +107,34 @@
+   }
+ 
+   Future<void> allBranches() async {
++    final request = _branchReads.begin();
++    if (!request.isCurrent) return;
++    branchesLoading = true;
++    branchLoadError = '';
++    update();
+     try {
+       final res = await fetchData(
+         "${ApiConfig.baseUrl}/new-station",
++        isCurrent: () => request.isCurrent,
+       );
++      if (!request.isCurrent) return;
+ 
+       if (res.statusCode == 200) {
+         final jsonData = json.decode(res.body);
+         final parsedData = AddStationData.fromJson(jsonData);
+         branchList = parsedData.branches;
+         waterSourceList = parsedData.waterSources;
++        branchesLoaded = true;
+         update();
+       }
+-    // ignore: empty_catches
+     } catch (e) {
++      if (!request.isCurrent) return;
++      branchLoadError = 'تعذر تحميل الفروع ومصادر المياه. يرجى إعادة المحاولة.';
++    } finally {
++      if (request.isCurrent) {
++        branchesLoading = false;
++        update();
++      }
+     }
+   }
+   }--- before/lib/features/stations/view/screens/add_station.dart
++++ after/lib/features/stations/view/screens/add_station.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/widgets/request_error_view.dart';
+ // lib/features/stations/view/add_station_screen.dart
+ import 'package:flutter/material.dart';
+ import 'package:get/get.dart';
+@@ -38,6 +39,17 @@
+                 child: Column(
+                   crossAxisAlignment: CrossAxisAlignment.start,
+                   children: [
++                    if (controller.branchesLoading)
++                      const LinearProgressIndicator(),
++                    if (controller.branchLoadError.isNotEmpty)
++                      Padding(
++                        padding: const EdgeInsets.only(bottom: 16),
++                        child: RequestErrorView(message: controller.branchLoadError,
++                          onRetry: () => controller.allBranches()),
++                      )
++                    else if (controller.branchesLoaded && controller.branchList.isEmpty && controller.waterSourceList.isEmpty && !controller.branchesLoading)
++                      const Padding(padding: EdgeInsets.only(bottom: 16),
++                        child: Text('لا توجد فروع أو مصادر مياه متاحة.')),
+                     // Station Information Section
+                     const SectionHeader(
+                       title: 'معلومات المحطة',
+--- before/lib/features/stations/view/screens/following_stations.dart
++++ after/lib/features/stations/view/screens/following_stations.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/widgets/request_error_view.dart';
+ import 'package:flutter/material.dart';
+ import 'package:get/get.dart';
+ import 'package:dropdown_search/dropdown_search.dart';
+@@ -33,6 +34,17 @@
+                   child: Column(
+                     crossAxisAlignment: CrossAxisAlignment.stretch,
+                     children: [
++                      if (controller.isLoading)
++                        const LinearProgressIndicator(),
++                      if (controller.loadError.isNotEmpty)
++                        Padding(
++                          padding: const EdgeInsets.only(bottom: 16),
++                          child: RequestErrorView(message: controller.loadError,
++                            onRetry: () => controller.stationsTechs()),
++                        )
++                      else if (controller.hasLoaded && controller.stations.isEmpty && !controller.isLoading)
++                        const Padding(padding: EdgeInsets.only(bottom: 16),
++                          child: Text('لا توجد محطات متاحة.')),
+                       // ─── Selection Card ───
+                       _buildSelectionCard(controller),
+ 

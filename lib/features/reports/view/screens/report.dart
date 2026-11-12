@@ -1,3 +1,4 @@
+import 'package:power_saving/core/utils/html_encoding.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -18,8 +19,24 @@ import 'package:power_saving/features/reports/model/report.dart';
 import 'package:power_saving/global/html_platform.dart';
 import 'package:power_saving/core/widgets/app_scaffold.dart';
 
-class Reports extends StatelessWidget {
-  Reports({super.key});
+class Reports extends StatefulWidget {
+  const Reports({super.key});
+
+  @override
+  State<Reports> createState() => _ReportsState();
+}
+
+class _ReportsState extends State<Reports> {
+  final ScrollController verticalController = ScrollController();
+  final ScrollController horizontalController = ScrollController();
+
+  @override
+  void dispose() {
+    verticalController.dispose();
+    horizontalController.dispose();
+    super.dispose();
+  }
+
   final GlobalKey<FormState> globalKey = GlobalKey<FormState>();
 
   // ─── Design tokens (page-local) ───
@@ -627,8 +644,6 @@ class Reports extends StatelessWidget {
   //  LEVEL 4: TABLE
   // ═══════════════════════════════════════════════════
   Widget _buildReportTable(ReportsController controller) {
-    final ScrollController verticalController = ScrollController();
-    final ScrollController horizontalController = ScrollController();
     final reportType = controller.reportname ?? '';
 
     Widget table = ReportTableFactory.forType(reportType, controller);
@@ -828,11 +843,15 @@ abstract class BaseReportPrinter {
   }
 
   void print(ReportsController controller) {
+    openHtmlReport(buildHtml(controller));
+  }
+
+  String buildHtml(ReportsController controller) {
     final currentDate = DateTime.now();
     final formattedDate = DateFormat('dd/MM/yyyy').format(currentDate);
-    final reportTitle = title(controller.reportname ?? "");
+    final reportTitle = htmlText(title(controller.reportname ?? ""));
 
-    final th = headers(controller.reportname ?? "").map((h) => '<th>$h</th>').join('');
+    final th = headers(controller.reportname ?? "").map((h) => '<th>${htmlText(h)}</th>').join('');
     final rows = controller.filteredBranchs.map((b) {
       final cells = rowCells(b, controller.reportname ?? "");
       return '<tr>${cells.join('')}</tr>';
@@ -888,7 +907,7 @@ abstract class BaseReportPrinter {
     <div class="info-section">
       <div class="info-item"><div class="info-label">تاريخ الطباعة</div><div class="info-value">$formattedDate</div></div>
       <div class="info-item"><div class="info-label">إجمالي السجلات</div><div class="info-value">${controller.branchs.length}</div></div>
-      <div class="info-item"><div class="info-label">الفترة</div><div class="info-value">${controller.startdate.text} - ${controller.enddate.text}</div></div>
+      <div class="info-item"><div class="info-label">الفترة</div><div class="info-value">${htmlText(controller.startdate.text)} - ${htmlText(controller.enddate.text)}</div></div>
       <div class="info-item"><div class="info-label">نوع التقرير</div><div class="info-value">$reportTitle</div></div>
     </div>
     <div class="table-container">
@@ -897,13 +916,13 @@ abstract class BaseReportPrinter {
         <tbody>$rows$extra</tbody>
       </table>
     </div>
-    <div class="footer"><p>تم إنشاء هذا التقرير تلقائياً بواسطة   ${user?.empName} | ${DateTime.now().year}</p></div>
+    <div class="footer"><p>تم إنشاء هذا التقرير تلقائياً بواسطة   ${htmlText(user?.empName)} | ${DateTime.now().year}</p></div>
   </div>
 </body>
 </html>
 ''';
 
-    openHtmlReport(htmlStr);
+    return htmlStr;
   }
 }
 

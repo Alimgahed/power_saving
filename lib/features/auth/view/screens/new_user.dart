@@ -188,9 +188,9 @@ class NewUser extends StatelessWidget {
                                   ),
                                   child: Material(
                                     color: Colors.transparent,
-                                    child: InkWell(
+                                    child: Obx(() => InkWell(
                                       borderRadius: BorderRadius.circular(12),
-                                      onTap: () {
+                                      onTap: controller.isLoading.value ? null : () {
                                         if (_globalKey.currentState!.validate()) {
                                           if (controller.password.text != controller.confirmpassword.text) {
                                             showCustomErrorDialog(errorMessage: "كلمة المرور غير متطابقة");
@@ -240,7 +240,7 @@ class NewUser extends StatelessWidget {
                                           );
                                         }),
                                       ),
-                                    ),
+                                    )),
                                   ),
                                 ),
 

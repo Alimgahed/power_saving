@@ -1,3 +1,4 @@
+import 'package:power_saving/core/utils/request_guard.dart';
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:power_saving/features/auth/model/login.dart';
@@ -7,7 +8,9 @@ import 'package:power_saving/network/network.dart';
 import 'package:flutter/material.dart';
 
 class AllUserController extends GetxController {
-  static List<dynamic>? sessionCache;
+  final _reads = RequestGuard();
+  bool _readShowsLoading = false;
+
   var users = <User>[].obs;
     RxBool resetPassword = false.obs;
 
@@ -20,25 +23,31 @@ class AllUserController extends GetxController {
     loadUsers();
   }
 
+  @override
+  void onClose() {
+    _reads.close();
+    super.onClose();
+  }
+
   /// Load all users from API
   Future<void> loadUsers({bool isBackground = false}) async {
-    if (!isBackground && sessionCache != null) {
-      users.value = sessionCache!.map((user) => User.fromJson(user)).toList();
-      _fetchLatestBackground();
-      return;
-    }
+    final request = _reads.begin();
+    if (!request.isCurrent) return;
+    _readShowsLoading = !isBackground || _readShowsLoading;
+
     try {
       if (!isBackground) {
         isLoading.value = true;
         errorMessage.value = '';
       }
-      
-      final res = await fetchData("${ApiConfig.baseUrl}/all-users");
+
+      final res = await fetchData("${ApiConfig.baseUrl}/all-users", isCurrent: () => request.isCurrent);
+      if (!request.isCurrent) return;
 
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
         List<dynamic> data = [];
-        
+
         if (jsonData is List) {
           data = jsonData;
         } else if (jsonData['users'] != null) {
@@ -46,26 +55,27 @@ class AllUserController extends GetxController {
         } else {
           data = [jsonData];
         }
-        
-        sessionCache = data;
+
         users.value = data.map((user) => User.fromJson(user)).toList();
       } 
     } catch (e) {
+      if (!request.isCurrent) return;
       if (!isBackground) {
         showCustomErrorDialog(errorMessage: e.toString());
         errorMessage.value = 'خطأ في الاتصال: ${e.toString()}';
       }
     } finally {
-      if (!isBackground) isLoading.value = false;
+      if (request.isCurrent) {
+        if (_readShowsLoading) isLoading.value = false;
+        _readShowsLoading = false;
+      }
     }
   }
 
-  Future<void> _fetchLatestBackground() async {
-    loadUsers(isBackground: true);
-  }
-  
+
+
   Future<void> refreshData() async {
-    sessionCache = null;
+
     await loadUsers(isBackground: false);
   }
 
@@ -127,9 +137,9 @@ class AllUserController extends GetxController {
 
    final res = await postData(
   "${ApiConfig.baseUrl}/edit-user/${editedUser.empCode}",
-  
+
     editedUser.toJson()
-   
+
   );
       users.refresh();
 
@@ -149,7 +159,7 @@ class AllUserController extends GetxController {
       if (res.statusCode == 200) {
         isLoading.value=false;
         showSuccessToast('تم تحديث بيانات المستخدم بنجاح');
-        sessionCache = null;
+
         loadUsers(isBackground: true);
       } else {
                 isLoading.value=false;
@@ -172,7 +182,7 @@ class AllUserController extends GetxController {
 
     try {
       final user = users[index];
-      
+
       // Show confirmation dialog
       final confirm = await Get.dialog<bool>(
         Directionality(
@@ -218,7 +228,7 @@ class AllUserController extends GetxController {
       if (confirm != true) return;
 
       isLoading.value = true;
-      
+
       // Remove from list
       users.removeAt(index);
       users.refresh();
@@ -252,7 +262,7 @@ class AllUserController extends GetxController {
       return user.empName.toLowerCase().contains(query.toLowerCase()) ||
           user.username.toLowerCase().contains(query.toLowerCase()) ||
           user.empCode.toLowerCase().contains(query.toLowerCase());
-       
+
     }).toList();
   }
 

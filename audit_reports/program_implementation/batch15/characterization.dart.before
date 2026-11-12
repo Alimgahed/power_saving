@@ -1,0 +1,56 @@
+// Characterization of current behavior pending an explicit workflow decision.
+// These are not acceptance tests for suppressing mutation completion.
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:power_saving/shared_pref/cache.dart';
+import 'package:power_saving/global/data.dart';
+import 'package:power_saving/features/chemcails/controller/add_chemacial.dart';
+import 'package:power_saving/features/chemcails/model/chemacial.dart';
+import '../state_management/fixtures.dart';
+import '../program/missing_argument_navigation_test.dart' show LocalChemical;
+
+void main() {
+  tearDown(() => Get.reset());
+  for (final status in [200, 400]) {
+    testWidgets('characterize late chemical mutation completion $status after disposal', (tester) async {
+      Get.testMode = true;
+      SharedPreferences.setMockInitialValues({'token':'fixture'});
+      await Cache.init();
+      Get.put(SessionService());
+      await tester.pumpWidget(GetMaterialApp(initialRoute:'/other', getPages:[
+        GetPage(name:'/other',page:()=>const Scaffold(body:Text('other'))),
+        GetPage(name:'/Chemicals',page:()=>const Scaffold(body:Text('chemicals'))),
+      ]));
+      await tester.pumpAndSettle();
+      final c = Get.put<addchemical>(LocalChemical());
+      final data = AlumChlorineReference(technologyId:1,waterSourceId:2,season:'fixture',chlorineRangeFrom:0,chlorineRangeTo:1);
+      final net = PendingHttp();
+      await tester.runAsync(() => http.runWithClient(() async {
+        final result = c.addchemicals(reference:data);
+        await net.started(1);
+        expect(net.requests.single.method, 'POST');
+        expect(net.requests.single.url.path, endsWith('/new-chemical'));
+        expect(jsonDecode(net.requests.single.body), data.toJson());
+        expect(net.requests.single.headers['Authorization'], 'Bearer fixture');
+        Get.delete<addchemical>(force:true);
+        expect(c.isClosed, isTrue);
+        net.finish(0, {'message':'fixture error'},status:status);
+        await result;
+      }, () => net.client));
+      await tester.pumpAndSettle();
+      // Evidence: the closed owner still produces UI on the unrelated route.
+      if (status == 200) {
+        expect(Get.currentRoute, '/Chemicals');
+      } else {
+        expect(find.text('fixture error'), findsOneWidget);
+      }
+      expect(c.loading.value, isFalse);
+      await tester.pumpWidget(const SizedBox());
+      await tester.pumpAndSettle();
+    });
+  }
+}

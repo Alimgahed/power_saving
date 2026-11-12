@@ -39,6 +39,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           Container(
             margin: const EdgeInsets.only(left: AppDimensions.paddingL),
             child: IconButton(
+              tooltip: MaterialLocalizations.of(context).backButtonTooltip,
               icon: const Icon(Icons.arrow_forward, color: AppColors.textWhite),
               onPressed: () {
                 // To avoid lag and rebuilding screens, simply use Get.back()

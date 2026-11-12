@@ -1,0 +1,7 @@
+# Program batch 04 — exclusive fields and deferred initialization
+
+P-LIFE-02 / LIFE-01. Confirmed technology catalog owns five text fields separately from add/edit screen controllers; none is reassigned or shared by consumers. They were allocated in onInit and never disposed. Initialize these five final fields with the instance and dispose them onClose, matching existing search-field ownership. Guard SearchableDropdown post-frame initialization with context.mounted/controller.isClosed, without changing its existing tag, sharing or selection semantics.
+
+Exact files: `lib/features/technology/controller/technlogy.dart`, `lib/my_widget/sharable.dart`; test `test/program/owned_resources_test.dart`. Full diff in `batch.diff`. Before: 1 passed / 2 failed. Initial combined run revealed three pre-existing tests close a directly created controller without onInit; moved exclusive initialization to field declarations, preserving those tests unchanged. Final combined: 171 passed. Analyzer: 59 pre-existing diagnostics. Final Web build passed (132.6s); `git diff --check` passed.
+
+No network/mutation/model/business changes. Existing five allocations occur once per instance and now have deterministic cleanup; no heap reduction magnitude claimed. Dropdown live initialization and selection remain tested. Shared-tag ownership, other edit-screen post-frame navigation and mutation callbacks remain separate investigations. Next: N22 lookup error/retry presentation.

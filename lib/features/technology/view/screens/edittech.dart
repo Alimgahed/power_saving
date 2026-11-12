@@ -23,8 +23,10 @@ class EditTechScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     if (tech == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!context.mounted || ModalRoute.of(context)?.isCurrent != true) return;
         Get.offAllNamed('/Technology');
       });
+      return const SizedBox();
     }
 
     const appBarWidget = CustomAppBar(
@@ -43,6 +45,7 @@ class EditTechScreen extends StatelessWidget {
           builder: (controller) {
             /// Init values once
             WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (!context.mounted || controller.isClosed) return;
               if (controller.name.text.isEmpty && tech != null) {
                 controller.name.text = tech!.technologyName;
                 controller.power.text =

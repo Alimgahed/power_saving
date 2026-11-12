@@ -1,3 +1,4 @@
+import 'package:power_saving/core/widgets/request_error_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/controller/voltage/financial.dart';
@@ -34,14 +35,20 @@ class SunburstPage extends StatelessWidget {
       ),
       body: GetBuilder<FinancialController>(
         builder: (c) {
-          if (c.loading.value || c.waterChartHtml == null) {
+          if (c.loading.value) {
             return const Center(child: CircularProgressIndicator());
           }
 
+          if (c.errorMessage.isNotEmpty) {
+            return RequestErrorView(message: c.errorMessage, onRetry: c.financialAnalysis);
+          }
+          if (c.waterChartHtml == null || c.waterChartHtml!.isEmpty) {
+            return RequestErrorView(message: 'لا توجد رسوم بيانية متاحة', onRetry: c.financialAnalysis);
+          }
           return SizedBox(
             height: MediaQuery.of(context).size.height - kToolbarHeight - 20,
             width: double.infinity,
-            child: buildIframeWidget('sunburst-chart'),
+            child: buildIframeWidget(c.chartViewId),
           );
         },
       ),

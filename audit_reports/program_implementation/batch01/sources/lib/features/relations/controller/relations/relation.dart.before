@@ -1,0 +1,192 @@
+import 'package:power_saving/core/utils/request_guard.dart';
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:power_saving/features/relations/model/relations.dart';
+import 'package:power_saving/global/ip_config.dart';
+import 'package:power_saving/my_widget/sharable.dart';
+import 'package:power_saving/network/network.dart';
+
+class RelationsController extends GetxController {
+  final _requests = RequestGuard();
+  final loadError = ''.obs;
+  final isRefreshing = false.obs;
+
+  // Observable states
+  final loading = false.obs;
+  final isSearching = false.obs;
+  final searchError = ''.obs;
+  final isProcessing = false.obs;
+
+  // Master & display data
+  final List<StationGaugeTechnologyRelation> allRelations = [];  // non-observable
+  final relations = <StationGaugeTechnologyRelation>[].obs;       // observable for UI
+
+  // Search
+  final searchController = TextEditingController();
+  final RxString _searchQuery = ''.obs;
+  Worker? _searchWorker;
+
+  @override
+  void onInit() {
+    super.onInit();
+    getRelations();
+    _setupSearchWorker();
+  }
+
+  @override
+  void onClose() {
+    _requests.close();
+    _searchWorker?.dispose();
+    searchController.dispose();
+    super.onClose();
+  }
+
+  // -------------------------------
+  // Search Worker (Debounce)
+  // -------------------------------
+  void _setupSearchWorker() {
+    _searchWorker = debounce(
+      _searchQuery,
+      (query) => _performSearch(query),
+      time: const Duration(milliseconds: 300),
+    );
+  }
+
+  // Called from UI on text change
+  void onSearchChanged(String query) {
+    _searchQuery.value = query;
+  }
+
+  // -------------------------------
+  // API Call - Get Relations
+  // -------------------------------
+  Future<void> getRelations({bool isBackground = false, bool force = false}) async {
+    final request = _requests.begin();
+    if (!request.isCurrent) return;
+    loadError.value = '';
+    loading.value = !isBackground;
+    isRefreshing.value = !loading.value;
+    update();
+    try {
+
+      final res = await fetchData("${ApiConfig.baseUrl}/stg-relations",
+          isCurrent: () => request.isCurrent);
+      if (!request.isCurrent) return;
+      if (res.statusCode != 200) throw StateError('تعذر تحميل البيانات');
+      final List<dynamic> responseData = jsonDecode(res.body);
+      final parsed = responseData.map((e) => StationGaugeTechnologyRelation.fromJson(e)).toList();
+
+      allRelations.clear();
+      allRelations.addAll(parsed);
+      _performSearch(_searchQuery.value);
+    } catch (e) {
+      if (!request.isCurrent) return;
+      loadError.value = 'تعذر تحديث البيانات. يرجى إعادة المحاولة.';
+    } finally {
+      if (request.isCurrent) {
+        loading.value = false;
+        isRefreshing.value = false;
+        update();
+      }
+    }
+  }
+
+  Future<void> _fetchLatestBackground() async {
+    await getRelations(isBackground: true);
+  }
+
+  Future<void> forceRefresh() async {
+    await getRelations(force: true);
+  }
+
+  // -------------------------------
+  // API Call - Edit Relation
+  // -------------------------------
+  Future<void> editRelation(int id, String successMessage) async {
+    try {
+      isProcessing.value = true;
+
+      final response = await fetchData("${ApiConfig.baseUrl}/edit-relation/$id");
+
+      if (response.statusCode == 200) {
+        // Refresh the active screen after the existing mutation
+
+        await _fetchLatestBackground();
+
+        showSuccessToast(successMessage);
+      } else {
+        final errorBody = jsonDecode(response.body);
+        final errorMessage = errorBody['message'] ?? errorBody['error'] ?? errorBody.toString();
+        showCustomErrorDialog(errorMessage: errorMessage);
+      }
+    } catch (e) {
+      showCustomErrorDialog(errorMessage: e.toString());
+      debugPrint('Edit relation error: $e');
+    } finally {
+      isProcessing.value = false;
+    }
+  }
+
+  // -------------------------------
+  // Search Logic
+  // -------------------------------
+  final RxString selectedFilter = 'all'.obs; // 'all', 'active', 'inactive'
+
+  void setFilter(String filter) {
+    selectedFilter.value = filter;
+    _performSearch(_searchQuery.value);
+  }
+
+  void _performSearch(String query) {
+    final lowerQuery = query.toLowerCase();
+
+    final filtered = allRelations.where((relation) {
+      // 1. Status Filter
+      if (selectedFilter.value == 'active' && relation.relationStatus != true) {
+        return false;
+      }
+      if (selectedFilter.value == 'inactive' && relation.relationStatus == true) {
+        return false;
+      }
+
+      // 2. Text Search
+      if (query.isEmpty) return true;
+
+      final stationName = relation.stationName?.toLowerCase() ?? '';
+      final accountNumber = relation.accountNumber.toLowerCase();
+
+      return stationName.contains(lowerQuery) ||
+             accountNumber.contains(lowerQuery);
+    }).toList();
+
+    if (filtered.isEmpty && (query.isNotEmpty || selectedFilter.value != 'all')) {
+      searchError.value = 'لا توجد نتائج متطابقة';
+      relations.value = [];
+    } else {
+      searchError.value = '';
+      relations.value = filtered;
+    }
+  }
+
+  // -------------------------------
+  // UI Helpers
+  // -------------------------------
+  void toggleSearch() {
+    isSearching.value = !isSearching.value;
+
+    if (!isSearching.value) {
+      searchController.clear();
+      _searchQuery.value = '';
+      searchError.value = '';
+      relations.value = List.from(allRelations);
+    }
+  }
+
+  // Get statistics
+  int get activeCount => 
+      relations.where((r) => r.relationStatus == true).length;
+
+  int get inactiveCount => 
+      relations.where((r) => r.relationStatus == false).length;
+}

@@ -1,3 +1,4 @@
+import 'package:power_saving/core/utils/request_guard.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,7 @@ import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class EditPlaceTypeController extends GetxController {
+  final _lookupRequests0 = RequestGuard();
   final placeTypes = <PlaceType>[].obs;
   final isLoading = false.obs;
   final isSubmitting = false.obs;
@@ -24,6 +26,7 @@ class EditPlaceTypeController extends GetxController {
 
   @override
   void onClose() {
+    _lookupRequests0.close();
     nameController.dispose();
     fromController.dispose();
     toController.dispose();
@@ -31,29 +34,29 @@ class EditPlaceTypeController extends GetxController {
   }
 
   Future<void> fetchPlaceTypes({bool forceRefresh = false}) async {
-    if (!forceRefresh && BalanceChartController.valuesCache != null) {
-      placeTypes.clear();
-      for (var json in BalanceChartController.valuesCache!) {
-        placeTypes.add(PlaceType.fromJson(json));
-      }
-      return;
-    }
+    final request = _lookupRequests0.begin();
+    if (!request.isCurrent) return;
+
 
     isLoading.value = true;
     try {
-      final response = await fetchData("${ApiConfig.baseUrl}/place-types");
+      final response = await fetchData("${ApiConfig.baseUrl}/place-types",
+        isCurrent: () => request.isCurrent,
+      );
+      if (!request.isCurrent) return;
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = jsonDecode(response.body);
-        BalanceChartController.valuesCache = jsonData;
+
         placeTypes.clear();
         for (var json in jsonData) {
           placeTypes.add(PlaceType.fromJson(json));
         }
       }
     } catch (e) {
+      if (!request.isCurrent) return;
       showCustomErrorDialog(errorMessage: e.toString());
     } finally {
-      isLoading.value = false;
+      if (request.isCurrent) isLoading.value = false;
     }
   }
 
@@ -78,8 +81,8 @@ class EditPlaceTypeController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        // Clear caches so the balance chart and other screens reload the updated ranges from route
-        BalanceChartController.valuesCache = null;
+
+
 
         // Refresh our local list
         await fetchPlaceTypes(forceRefresh: true);

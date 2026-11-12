@@ -1,18 +1,22 @@
+import 'package:power_saving/core/utils/owned_debounce.dart';
+import 'package:power_saving/core/utils/request_guard.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/chemcails/model/chemacial.dart';
 import 'package:power_saving/global/ip_config.dart';
-import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class Chemacialcontroller extends GetxController {
+  final _requests = RequestGuard();
+  final loadError = ''.obs;
+  final isRefreshing = false.obs;
+
   // Observable states
   final loading = false.obs;
   final isSearching = false.obs;
   final searchError = ''.obs;
 
-  static List<dynamic>? sessionCache;
   // Master & display data
   final List<AlumChlorineReference> allChemicals = [];
   final chemicals = <AlumChlorineReference>[].obs;
@@ -31,6 +35,7 @@ class Chemacialcontroller extends GetxController {
 
   @override
   void onClose() {
+    _requests.close();
     _searchWorker?.dispose();
     searchController.dispose();
     super.onClose();
@@ -40,7 +45,7 @@ class Chemacialcontroller extends GetxController {
   // Search Worker (Debounce)
   // -------------------------------
   void _setupSearchWorker() {
-    _searchWorker = debounce(
+    _searchWorker = ownedDebounce(
       _searchQuery,
       (query) => _performSearch(query),
       time: const Duration(milliseconds: 300),
@@ -54,60 +59,39 @@ class Chemacialcontroller extends GetxController {
   // -------------------------------
   // API Call - Get Chemicals
   // -------------------------------
-  void getchemicals({bool isBackground = false}) async {
-    if (!isBackground) {
-      if (sessionCache != null) {
-        allChemicals.clear();
-        allChemicals.addAll(sessionCache!.map((e) => AlumChlorineReference.fromJson(e)));
-        chemicals.value = List.from(allChemicals);
-        
-        // Background fetch
-        _fetchLatestBackground();
-        return;
-      } else {
-        loading.value = true;
-      }
-    }
-
+  Future<void> getchemicals({bool isBackground = false, bool force = false}) async {
+    final request = _requests.begin();
+    if (!request.isCurrent) return;
+    loadError.value = '';
+    loading.value = !isBackground;
+    isRefreshing.value = !loading.value;
+    update();
     try {
-      if (!isBackground) {
-        allChemicals.clear();
-        chemicals.clear();
-      }
 
-      final res = await fetchData("${ApiConfig.baseUrl}/chemicals");
-      
-      if (res.statusCode == 200) {
-        final List<dynamic> responseData = json.decode(res.body);
-        
-        sessionCache = responseData;
-        
-        final List<AlumChlorineReference> parsed = responseData.map((e) => AlumChlorineReference.fromJson(e)).toList();
-        
-        allChemicals.clear();
-        allChemicals.addAll(parsed);
-        
-        // Re-apply current search filter instead of unconditionally clearing search
-        _performSearch(_searchQuery.value);
-      }
+      final res = await fetchData("${ApiConfig.baseUrl}/chemicals",
+          isCurrent: () => request.isCurrent);
+      if (!request.isCurrent) return;
+      if (res.statusCode != 200) throw StateError('تعذر تحميل البيانات');
+      final List<dynamic> responseData = jsonDecode(res.body);
+      final parsed = responseData.map((e) => AlumChlorineReference.fromJson(e)).toList();
+
+      allChemicals.clear();
+      allChemicals.addAll(parsed);
+      _performSearch(_searchQuery.value);
     } catch (e) {
-      if (!isBackground) {
-        showCustomErrorDialog(errorMessage: e.toString());
-      }
+      if (!request.isCurrent) return;
+      loadError.value = 'تعذر تحديث البيانات. يرجى إعادة المحاولة.';
     } finally {
-      if (!isBackground) {
+      if (request.isCurrent) {
         loading.value = false;
+        isRefreshing.value = false;
+        update();
       }
     }
-  }
-
-  Future<void> _fetchLatestBackground() async {
-    getchemicals(isBackground: true);
   }
 
   Future<void> forceRefresh() async {
-    loading.value = true;
-    getchemicals(isBackground: false);
+    await getchemicals(force: true);
   }
 
   // -------------------------------
@@ -168,7 +152,7 @@ class Chemacialcontroller extends GetxController {
   // Get statistics
   int get summerCount => 
       allChemicals.where((c) => c.season.toLowerCase() == 'summer').length;
-  
+
   int get winterCount => 
       allChemicals.where((c) => c.season.toLowerCase() == 'winter').length;
 }

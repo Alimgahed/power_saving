@@ -1,3 +1,5 @@
+import 'package:power_saving/core/utils/request_guard.dart';
+import 'package:power_saving/core/utils/owned_debounce.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -8,12 +10,13 @@ import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class PlacesController extends GetxController {
+  final _reads = RequestGuard();
+  bool _readShowsLoading = false;
   // Observable states
   final loading = false.obs;
   final isSearching = false.obs;
   final searchError = ''.obs;
 
-  static List<dynamic>? sessionCache;
   // Data storage - separated for performance
   final List<Place> _allPlaces = [];  // Master data (non-observable)
   final places = <Place>[].obs;  // Display data (observable)
@@ -33,6 +36,7 @@ class PlacesController extends GetxController {
 
   @override
   void onClose() {
+    _reads.close();
     _debounceTimer?.cancel();
     _searchWorker?.dispose();
     searchController.dispose();
@@ -42,7 +46,7 @@ class PlacesController extends GetxController {
   // Setup search with debounce using Worker (correct implementation)
   void _setupSearchListener() {
     // Worker setup for debounce on search query
-    _searchWorker = debounce<String>(
+    _searchWorker = ownedDebounce<String>(
       _searchQuery,  // Observable RxString (not TextEditingController!),
       (query) {
         _performSearch(query);  // Perform search after debounce
@@ -58,18 +62,13 @@ class PlacesController extends GetxController {
 
   // Fetch all places from API
   Future<void> allPlaces({bool isBackground = false}) async {
+    final request = _reads.begin();
+    if (!request.isCurrent) return;
+    _readShowsLoading = !isBackground || _readShowsLoading;
     if (!isBackground) {
-      if (sessionCache != null) {
-        _allPlaces.clear();
-        _allPlaces.addAll(sessionCache!.map((json) => Place.fromJson(json)));
-        places.value = List.from(_allPlaces);
-        
-        // Background fetch
-        _fetchLatestBackground();
-        return;
-      } else {
+
         loading.value = true;
-      }
+
     }
 
     try {
@@ -78,36 +77,36 @@ class PlacesController extends GetxController {
         places.clear();
       }
 
-      final response = await fetchData("${ApiConfig.baseUrl}/places");
+      final response = await fetchData("${ApiConfig.baseUrl}/places", isCurrent: () => request.isCurrent);
+      if (!request.isCurrent) return;
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = jsonDecode(response.body) as List<dynamic>;
-        
-        sessionCache = jsonData;
+
 
         final List<Place> parsed = jsonData.map((json) => Place.fromJson(json)).toList();
 
         _allPlaces.clear();
         _allPlaces.addAll(parsed);
-        
+
         // Apply search filter again to keep current UI state consistent
         _performSearch(_searchQuery.value);
       }
     } catch (e) {
+      if (!request.isCurrent) return;
       if (!isBackground) {
         showCustomErrorDialog(errorMessage: e.toString());
         debugPrint("Error fetching places: $e");
       }
     } finally {
-      if (!isBackground) {
-        loading.value = false;
+      if (request.isCurrent) {
+        if (_readShowsLoading) loading.value = false;
+        _readShowsLoading = false;
       }
     }
   }
 
-  Future<void> _fetchLatestBackground() async {
-    allPlaces(isBackground: true);
-  }
+
 
   // Toggle search mode
   void toggleSearch() {
@@ -136,11 +135,11 @@ class PlacesController extends GetxController {
     final filteredPlaces = _allPlaces.where((place) {
       final name = place.placeName.toLowerCase();
       final branch = place.branchName?.toLowerCase() ?? '';
-     
+
 
       return name.contains(lowerQuery) ||
              branch.contains(lowerQuery) ;
-          
+
     }).toList();
 
     // Update results
@@ -166,7 +165,7 @@ class PlacesController extends GetxController {
 
   @override
   Future<void> refresh() async {
-    sessionCache = null;
+
     searchController.clear();
     _searchQuery.value = '';
     searchError.value = '';

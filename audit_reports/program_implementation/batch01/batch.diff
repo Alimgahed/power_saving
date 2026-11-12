@@ -1,0 +1,128 @@
+--- before/lib/features/Counter/controller/counter.dart
++++ after/lib/features/Counter/controller/counter.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/utils/owned_debounce.dart';
+ import 'dart:async';
+ import 'dart:convert';
+ import 'package:flutter/material.dart';
+@@ -56,7 +57,7 @@
+ 
+   // Setup search with debounce using Worker
+   void _setupSearchListener() {
+-    _searchWorker = debounce(
++    _searchWorker = ownedDebounce(
+       _searchQuery,
+       (query) => _performSearch(query),
+       time: const Duration(milliseconds: 300),
+--- before/lib/features/planning/controller/place/places_controller.dart
++++ after/lib/features/planning/controller/place/places_controller.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/utils/owned_debounce.dart';
+ import 'dart:async';
+ import 'dart:convert';
+ import 'package:flutter/material.dart';
+@@ -41,7 +42,7 @@
+   // Setup search with debounce using Worker (correct implementation)
+   void _setupSearchListener() {
+     // Worker setup for debounce on search query
+-    _searchWorker = debounce<String>(
++    _searchWorker = ownedDebounce<String>(
+       _searchQuery,  // Observable RxString (not TextEditingController!),
+       (query) {
+         _performSearch(query);  // Perform search after debounce
+--- before/lib/features/technology/controller/technlogy.dart
++++ after/lib/features/technology/controller/technlogy.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/utils/owned_debounce.dart';
+ import 'package:power_saving/core/utils/request_guard.dart';
+ import 'dart:async';
+ import 'dart:convert';
+@@ -48,7 +49,7 @@
+     alltechnology();
+ 
+     // Setup search listener with debounce
+-    _searchWorker = debounce(
++    _searchWorker = ownedDebounce(
+       _searchQuery,
+       (query) => _applyFilters(),
+       time: const Duration(milliseconds: 300),
+--- before/lib/features/relations/controller/relations/relation.dart
++++ after/lib/features/relations/controller/relations/relation.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/utils/owned_debounce.dart';
+ import 'package:power_saving/core/utils/request_guard.dart';
+ import 'dart:convert';
+ import 'package:flutter/material.dart';
+@@ -46,7 +47,7 @@
+   // Search Worker (Debounce)
+   // -------------------------------
+   void _setupSearchWorker() {
+-    _searchWorker = debounce(
++    _searchWorker = ownedDebounce(
+       _searchQuery,
+       (query) => _performSearch(query),
+       time: const Duration(milliseconds: 300),
+--- before/lib/features/bill/controller/tech_bills.dart
++++ after/lib/features/bill/controller/tech_bills.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/utils/owned_debounce.dart';
+ import 'dart:convert';
+ import 'package:power_saving/core/utils/request_guard.dart';
+ import 'package:get/get.dart';
+@@ -40,7 +41,7 @@
+     super.onInit();
+ 
+     // Setup debounce worker for smooth searching
+-    _searchWorker = debounce(searchQuery, (_) {
++    _searchWorker = ownedDebounce(searchQuery, (_) {
+       currentPage = 1;
+       allbills();
+     }, time: const Duration(milliseconds: 500));
+--- before/lib/features/bill/controller/all_bills.dart
++++ after/lib/features/bill/controller/all_bills.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/utils/owned_debounce.dart';
+ import 'dart:async';
+ import 'dart:convert';
+ import 'package:power_saving/core/utils/request_guard.dart';
+@@ -59,7 +60,7 @@
+ 
+   // Setup search with debounce using Worker
+   void _setupSearchListener() {
+-    _searchWorker = debounce(
++    _searchWorker = ownedDebounce(
+       _searchQuery,
+       (query) => _performSearch(query),
+       time: const Duration(milliseconds: 300),
+--- before/lib/features/chemcails/controller/chemacial.dart
++++ after/lib/features/chemcails/controller/chemacial.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/utils/owned_debounce.dart';
+ import 'package:power_saving/core/utils/request_guard.dart';
+ import 'dart:convert';
+ import 'package:flutter/material.dart';
+@@ -44,7 +45,7 @@
+   // Search Worker (Debounce)
+   // -------------------------------
+   void _setupSearchWorker() {
+-    _searchWorker = debounce(
++    _searchWorker = ownedDebounce(
+       _searchQuery,
+       (query) => _performSearch(query),
+       time: const Duration(milliseconds: 300),
+--- before/lib/features/stations/controller/all_stations_controller.dart
++++ after/lib/features/stations/controller/all_stations_controller.dart
+@@ -1,3 +1,4 @@
++import 'package:power_saving/core/utils/owned_debounce.dart';
+ import 'dart:convert';
+ import 'package:flutter/material.dart';
+ import 'package:get/get.dart';
+@@ -41,7 +42,7 @@
+   // Search Worker (Debounce)
+   // -------------------------------
+   void _setupSearchWorker() {
+-    _searchWorker = debounce(
++    _searchWorker = ownedDebounce(
+       _searchQuery,
+       (query) => _performSearch(query),
+       time: const Duration(milliseconds: 300),

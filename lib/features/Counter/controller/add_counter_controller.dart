@@ -1,15 +1,16 @@
+import 'package:power_saving/core/utils/request_guard.dart';
 // ignore: camel_case_types
 import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:power_saving/features/Counter/controller/counter.dart';
 import 'package:power_saving/features/Counter/model/Counter_model.dart';
 import 'package:power_saving/global/ip_config.dart';
 import 'package:power_saving/my_widget/sharable.dart';
 import 'package:power_saving/network/network.dart';
 
 class addcounter extends GetxController {
+  final _lookupRequests0 = RequestGuard();
   RxBool looading = false.obs;
   List<VoltageType> allVoltage = [];
   int? voltage;
@@ -34,6 +35,7 @@ class addcounter extends GetxController {
 
   @override
   void onClose() {
+    _lookupRequests0.close();
     Counter_number.dispose();
     meterId.dispose();
     meterFactor.dispose();
@@ -54,7 +56,7 @@ class addcounter extends GetxController {
         looading.value = false;
         showSuccessToast("تم اضافة العداد بنجاح");
         // Refresh the main counter list
-        CounterController.sessionCache = null;
+
       } else {
         looading.value = false;
         final errorBody = jsonDecode(res.body);
@@ -68,10 +70,14 @@ class addcounter extends GetxController {
   }
 
   Future<void> allVoltige() async {
+    final request = _lookupRequests0.begin();
+    if (!request.isCurrent) return;
     try {
       final res = await fetchData(
        "${ApiConfig.baseUrl}/new-gauge",
+        isCurrent: () => request.isCurrent,
       );
+      if (!request.isCurrent) return;
 
       if (res.statusCode == 200) {
         final jsonData = json.decode(res.body);
@@ -84,8 +90,9 @@ class addcounter extends GetxController {
       }
     // ignore: empty_catches
     } catch (e) {
+      if (!request.isCurrent) return;
       showCustomErrorDialog(errorMessage: e.toString());
-      
+
     }
   }
 }

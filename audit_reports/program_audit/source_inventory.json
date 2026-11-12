@@ -1,0 +1,2112 @@
+[
+  {
+    "file": "lib/controller/binding/charts_binding.dart",
+    "lines": 9,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/controller/voltage/financial.dart",
+    "lines": 67,
+    "controllers": [
+      "FinancialController"
+    ],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": true,
+    "guards": true,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/controller/voltage/voltage.dart",
+    "lines": 92,
+    "controllers": [
+      "Voltage"
+    ],
+    "async_count": 2,
+    "owned_resources": 8,
+    "cleanup": true,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/auth/session_manager.dart",
+    "lines": 150,
+    "controllers": [],
+    "async_count": 5,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": [
+      "      final userSaved = await Cache.saveData(key: 'user', value: jsonEncode(parsed.toJson()));",
+      "     final tokenSaved = await Cache.saveData(key: 'token', value: token);"
+    ]
+  },
+  {
+    "file": "lib/core/auth/session_middleware.dart",
+    "lines": 12,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/constant/AppDimensions.dart",
+    "lines": 127,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/constant/colors.dart",
+    "lines": 149,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/constant/styles.dart",
+    "lines": 75,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/errors/exceptions.dart",
+    "lines": 58,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/errors/failures.dart",
+    "lines": 49,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/helpers/extensions.dart",
+    "lines": 16,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/network/api_client.dart",
+    "lines": 130,
+    "controllers": [],
+    "async_count": 5,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/repositories/base_repository.dart",
+    "lines": 75,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/utils/request_guard.dart",
+    "lines": 46,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": true,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/utils/result.dart",
+    "lines": 54,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/widgets/accessible_focus_wrapper.dart",
+    "lines": 66,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/widgets/app_scaffold.dart",
+    "lines": 52,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/widgets/breadcrumbs.dart",
+    "lines": 50,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/widgets/buttons.dart",
+    "lines": 168,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/widgets/custom_app_bar.dart",
+    "lines": 63,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/widgets/empty_widget.dart",
+    "lines": 73,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/widgets/enterprise_card.dart",
+    "lines": 71,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/widgets/form_card.dart",
+    "lines": 32,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/widgets/main_screen/body_widget.dart",
+    "lines": 1,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/widgets/main_screen/main_card_widgets.dart",
+    "lines": 84,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/widgets/main_screen/reuseable_appbar.dart",
+    "lines": 118,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/widgets/main_screen/totl_header.dart",
+    "lines": 78,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/widgets/offline_banner.dart",
+    "lines": 74,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/widgets/request_error_view.dart",
+    "lines": 23,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/widgets/responsive_wrapper.dart",
+    "lines": 44,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/widgets/rtl_scafold.dart",
+    "lines": 27,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/widgets/section_header.dart",
+    "lines": 49,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/widgets/shimmer_loading.dart",
+    "lines": 92,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 1,
+    "cleanup": true,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/core/widgets/widget.dart",
+    "lines": 1,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/Counter/binding/counter_binding.dart",
+    "lines": 9,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/Counter/controller/add_counter_controller.dart",
+    "lines": 91,
+    "controllers": [
+      "addcounter"
+    ],
+    "async_count": 2,
+    "owned_resources": 5,
+    "cleanup": true,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/Counter/controller/counter.dart",
+    "lines": 218,
+    "controllers": [
+      "CounterController"
+    ],
+    "async_count": 4,
+    "owned_resources": 1,
+    "cleanup": true,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/Counter/controller/edit_counter_controller.dart",
+    "lines": 101,
+    "controllers": [
+      "EditCounter"
+    ],
+    "async_count": 2,
+    "owned_resources": 5,
+    "cleanup": true,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/Counter/model/Counter_model.dart",
+    "lines": 82,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/Counter/view/screens/Counter.dart",
+    "lines": 1289,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 2,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/Counter/view/screens/add_Counter.dart",
+    "lines": 166,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/Counter/view/screens/edit_counter.dart",
+    "lines": 161,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/Counter/view/widgets/counter_branch_list.dart",
+    "lines": 54,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/Ploitly.dart",
+    "lines": 57,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/analysis/controller/analysis.dart",
+    "lines": 45,
+    "controllers": [
+      "Analysis"
+    ],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": true,
+    "guards": true,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/analysis/model/analysis.dart",
+    "lines": 24,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/analysis/view/screen/analysis.dart",
+    "lines": 515,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/auth/binding/all_user_binding.dart",
+    "lines": 9,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/auth/controller/all_user.dart",
+    "lines": 261,
+    "controllers": [
+      "AllUserController"
+    ],
+    "async_count": 5,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/auth/controller/chang_password.dart",
+    "lines": 59,
+    "controllers": [
+      "ChangePasswordController"
+    ],
+    "async_count": 1,
+    "owned_resources": 3,
+    "cleanup": true,
+    "guards": true,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/auth/controller/login.dart",
+    "lines": 64,
+    "controllers": [
+      "LoginController"
+    ],
+    "async_count": 1,
+    "owned_resources": 2,
+    "cleanup": true,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/auth/controller/logout.dart",
+    "lines": 0,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/auth/controller/new_user.dart",
+    "lines": 81,
+    "controllers": [
+      "NewUsercontroller"
+    ],
+    "async_count": 1,
+    "owned_resources": 5,
+    "cleanup": true,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/auth/data/repositories/auth_repository_impl.dart",
+    "lines": 69,
+    "controllers": [],
+    "async_count": 4,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/auth/domain/repositories/auth_repository.dart",
+    "lines": 11,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/auth/model/login.dart",
+    "lines": 42,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/auth/view/screens/all_user.dart",
+    "lines": 695,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 3,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/auth/view/screens/change_password.dart",
+    "lines": 227,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/auth/view/screens/login.dart",
+    "lines": 375,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/auth/view/screens/new_user.dart",
+    "lines": 274,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/bill/binding/bills_binding.dart",
+    "lines": 9,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/bill/binding/techbills_binding.dart",
+    "lines": 9,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/bill/controller/all_bills.dart",
+    "lines": 284,
+    "controllers": [
+      "AllBills"
+    ],
+    "async_count": 3,
+    "owned_resources": 1,
+    "cleanup": true,
+    "guards": true,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/bill/controller/bills.dart",
+    "lines": 346,
+    "controllers": [
+      "Bills"
+    ],
+    "async_count": 2,
+    "owned_resources": 20,
+    "cleanup": true,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/bill/controller/tech_bills.dart",
+    "lines": 273,
+    "controllers": [
+      "TechBillscontroller"
+    ],
+    "async_count": 2,
+    "owned_resources": 0,
+    "cleanup": true,
+    "guards": true,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/bill/model/bills_model.dart",
+    "lines": 117,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/bill/view/screens/Tech_bills.dart",
+    "lines": 667,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/bill/view/screens/bills.dart",
+    "lines": 415,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/chemcails/binding/chemicals_binding.dart",
+    "lines": 9,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/chemcails/controller/add_chemacial.dart",
+    "lines": 139,
+    "controllers": [
+      "addchemical"
+    ],
+    "async_count": 3,
+    "owned_resources": 6,
+    "cleanup": true,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/chemcails/controller/chemacial.dart",
+    "lines": 157,
+    "controllers": [
+      "Chemacialcontroller"
+    ],
+    "async_count": 2,
+    "owned_resources": 1,
+    "cleanup": true,
+    "guards": true,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/chemcails/model/chemacial.dart",
+    "lines": 64,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/chemcails/view/screens/add_cemicals.dart",
+    "lines": 294,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/chemcails/view/screens/chemicals.dart",
+    "lines": 56,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/chemcails/view/screens/edit_chemcials.dart",
+    "lines": 511,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/chemcails/view/widgets/chemical_body.dart",
+    "lines": 207,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/chemcails/view/widgets/chemical_card.dart",
+    "lines": 347,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/chemcails/view/widgets/range.dart",
+    "lines": 0,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/home/binding/home_binding.dart",
+    "lines": 9,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/home/controller/home.dart",
+    "lines": 72,
+    "controllers": [
+      "HomeController"
+    ],
+    "async_count": 2,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/home/home_constant/constant.dart",
+    "lines": 139,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": [
+      "  static bool hasAccess(int? userGroupId, List<int> allowedGroups) {"
+    ]
+  },
+  {
+    "file": "lib/features/home/model/home.dart",
+    "lines": 265,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/home/view/screens/home.dart",
+    "lines": 1715,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 1,
+    "cleanup": true,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/home/view/widgets/consumpation_card.dart",
+    "lines": 288,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/home/view/widgets/empaty.dart",
+    "lines": 66,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/home/view/widgets/enterprise_sidebar.dart",
+    "lines": 175,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/home/view/widgets/home_app_bar.dart",
+    "lines": 45,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/home/view/widgets/home_drawer.dart",
+    "lines": 326,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/home/view/widgets/home_header_state.dart",
+    "lines": 162,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/home/view/widgets/navigation_helper.dart",
+    "lines": 39,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/home/view/widgets/over_consampation.dart",
+    "lines": 148,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 1,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/home/view/widgets/over_water_stations.dart",
+    "lines": 147,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 1,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/home/view/widgets/voltaige.dart",
+    "lines": 170,
+    "controllers": [],
+    "async_count": 3,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/home/view/widgets/water_stations_card.dart",
+    "lines": 318,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/binding/blance_binding.dart",
+    "lines": 9,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/binding/place_types_binding.dart",
+    "lines": 9,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/binding/places_binding.dart",
+    "lines": 9,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/controller/blance_chart/blance_chart.dart",
+    "lines": 269,
+    "controllers": [
+      "BalanceChartController"
+    ],
+    "async_count": 3,
+    "owned_resources": 5,
+    "cleanup": true,
+    "guards": true,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/controller/blance_chart/get_blance_cart.dart",
+    "lines": 0,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/controller/place/add_places_controller.dart",
+    "lines": 96,
+    "controllers": [
+      "AddPlacesController"
+    ],
+    "async_count": 2,
+    "owned_resources": 1,
+    "cleanup": true,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/controller/place/edit_place_type_controller.dart",
+    "lines": 101,
+    "controllers": [
+      "EditPlaceTypeController"
+    ],
+    "async_count": 2,
+    "owned_resources": 3,
+    "cleanup": true,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/controller/place/edit_places_controller.dart",
+    "lines": 96,
+    "controllers": [
+      "EditPlacesController"
+    ],
+    "async_count": 2,
+    "owned_resources": 1,
+    "cleanup": true,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/controller/place/places_controller.dart",
+    "lines": 164,
+    "controllers": [
+      "PlacesController"
+    ],
+    "async_count": 3,
+    "owned_resources": 1,
+    "cleanup": true,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/model/all_places_model.dart",
+    "lines": 136,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/model/area_model.dart",
+    "lines": 28,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/model/blance_model.dart",
+    "lines": 199,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": [
+      "  static List<WaterData> fromJsonList(List<dynamic> jsonList) {"
+    ]
+  },
+  {
+    "file": "lib/features/planning/model/ml_forecast_model.dart",
+    "lines": 134,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/model/populations_model.dart",
+    "lines": 43,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/view/screens/blance_chart/blance.dart",
+    "lines": 827,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/view/screens/blance_chart/blance_chart_print_screen.dart",
+    "lines": 675,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/view/screens/blance_chart/ml_forecast_result_screen.dart",
+    "lines": 1097,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/view/screens/places/add_places.dart",
+    "lines": 146,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/view/screens/places/edit_places.dart",
+    "lines": 219,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/view/screens/places/place_types_list_screen.dart",
+    "lines": 561,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/view/screens/places/places.dart",
+    "lines": 128,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/view/widgets/balance_widgets/area_station.dart",
+    "lines": 113,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/view/widgets/balance_widgets/chart_sctions.dart",
+    "lines": 94,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/view/widgets/balance_widgets/header_cell.dart",
+    "lines": 41,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/view/widgets/balance_widgets/places_table.dart",
+    "lines": 89,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/view/widgets/balance_widgets/report_header.dart",
+    "lines": 43,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/view/widgets/balance_widgets/station_table.dart",
+    "lines": 76,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/view/widgets/balance_widgets/summery.dart",
+    "lines": 127,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/view/widgets/balance_widgets/water_table.dart",
+    "lines": 81,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/planning/view/widgets/place_widget/place_card.dart",
+    "lines": 111,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/predaction/binding/prediction_binding.dart",
+    "lines": 11,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/predaction/controller/prediaction.dart",
+    "lines": 34,
+    "controllers": [
+      "Prediactioncontroller"
+    ],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/predaction/model/predication.dart",
+    "lines": 33,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/predaction/predaction.dart",
+    "lines": 264,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/predaction/view/screens/predaction.dart",
+    "lines": 425,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/relations/binding/relations_binding.dart",
+    "lines": 9,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/relations/controller/add_relations_controller.dart",
+    "lines": 109,
+    "controllers": [
+      "addrelationcontroller"
+    ],
+    "async_count": 2,
+    "owned_resources": 0,
+    "cleanup": true,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/relations/controller/relations/relation.dart",
+    "lines": 192,
+    "controllers": [
+      "RelationsController"
+    ],
+    "async_count": 4,
+    "owned_resources": 1,
+    "cleanup": true,
+    "guards": true,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/relations/model/relations.dart",
+    "lines": 51,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/relations/view/screens/add_relation.dart",
+    "lines": 153,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/relations/view/screens/relatiuons.dart",
+    "lines": 39,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/relations/view/widgets/body.dart",
+    "lines": 202,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/relations/view/widgets/grid.dart",
+    "lines": 41,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/relations/view/widgets/header.dart",
+    "lines": 74,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/relations/view/widgets/relations_card.dart",
+    "lines": 291,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/reports/binding/reports_binding.dart",
+    "lines": 9,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/reports/controller/reports_controller.dart",
+    "lines": 291,
+    "controllers": [
+      "ReportsController"
+    ],
+    "async_count": 2,
+    "owned_resources": 3,
+    "cleanup": true,
+    "guards": true,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/reports/model/report.dart",
+    "lines": 125,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/reports/view/screens/report.dart",
+    "lines": 963,
+    "controllers": [],
+    "async_count": 2,
+    "owned_resources": 2,
+    "cleanup": true,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/reports/view/widgets/bills_report.dart",
+    "lines": 58,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/reports/view/widgets/branch_report.dart",
+    "lines": 70,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/reports/view/widgets/over_chlorine_report.dart",
+    "lines": 75,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/reports/view/widgets/over_liquid_report.dart",
+    "lines": 75,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/reports/view/widgets/over_powe_report.dart",
+    "lines": 70,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/reports/view/widgets/over_soild_alum.dart",
+    "lines": 75,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/reports/view/widgets/power_zero_water.dart",
+    "lines": 62,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/reports/view/widgets/station_total.dart",
+    "lines": 72,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/reports/view/widgets/stations_bills_report.dart",
+    "lines": 41,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/reports/view/widgets/tech3_mont_report.dart",
+    "lines": 71,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/reports/view/widgets/technology_report.dart",
+    "lines": 72,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/stations/binding/following_stations_binding.dart",
+    "lines": 9,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/stations/binding/stations_binding.dart",
+    "lines": 9,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/stations/controller/add_stations_controller.dart",
+    "lines": 119,
+    "controllers": [
+      "AddStationController"
+    ],
+    "async_count": 3,
+    "owned_resources": 2,
+    "cleanup": true,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/stations/controller/all_stations_controller.dart",
+    "lines": 148,
+    "controllers": [
+      "StationsController"
+    ],
+    "async_count": 2,
+    "owned_resources": 1,
+    "cleanup": true,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/stations/controller/edit_stations_controller.dart",
+    "lines": 133,
+    "controllers": [
+      "EditStationsController"
+    ],
+    "async_count": 3,
+    "owned_resources": 2,
+    "cleanup": true,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/stations/controller/following_stations_controller.dart",
+    "lines": 109,
+    "controllers": [
+      "FollowingStationsController"
+    ],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/stations/model/station_model.dart",
+    "lines": 125,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/stations/view/screens/add_station.dart",
+    "lines": 187,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/stations/view/screens/edit_staion.dart",
+    "lines": 258,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/stations/view/screens/following_stations.dart",
+    "lines": 476,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/stations/view/screens/stations.dart",
+    "lines": 50,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/stations/view/widgets/branch_list.dart",
+    "lines": 54,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/stations/view/widgets/stations_body.dart",
+    "lines": 199,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/tech_bills/binding/new_tech_bills_binding.dart",
+    "lines": 9,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/tech_bills/binding/techbills_binding.dart",
+    "lines": 9,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/tech_bills/controller/new_tech_bills.dart",
+    "lines": 268,
+    "controllers": [
+      "NewTechBillsController"
+    ],
+    "async_count": 2,
+    "owned_resources": 8,
+    "cleanup": true,
+    "guards": true,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/tech_bills/controller/tech_bills/edit_techbills.dart",
+    "lines": 108,
+    "controllers": [
+      "EditTechbillsController"
+    ],
+    "async_count": 2,
+    "owned_resources": 7,
+    "cleanup": true,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/tech_bills/controller/tech_bills/techbills.dart",
+    "lines": 199,
+    "controllers": [
+      "Techbills"
+    ],
+    "async_count": 2,
+    "owned_resources": 4,
+    "cleanup": true,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/tech_bills/controller/techbills.dart",
+    "lines": 325,
+    "controllers": [
+      "Techbills"
+    ],
+    "async_count": 4,
+    "owned_resources": 8,
+    "cleanup": true,
+    "guards": true,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/tech_bills/model/tech_bill.dart",
+    "lines": 110,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/tech_bills/view/screens/edit_tech_bills.dart",
+    "lines": 452,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/tech_bills/view/screens/new_tech_bills.dart",
+    "lines": 456,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/tech_bills/view/screens/tech_bills.dart",
+    "lines": 762,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/technology/binding/technology_binding.dart",
+    "lines": 9,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/technology/controller/add_tech_controller.dart",
+    "lines": 78,
+    "controllers": [
+      "AddTechController"
+    ],
+    "async_count": 1,
+    "owned_resources": 5,
+    "cleanup": true,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/technology/controller/edit_tech_controller.dart",
+    "lines": 78,
+    "controllers": [
+      "EditTechController"
+    ],
+    "async_count": 1,
+    "owned_resources": 5,
+    "cleanup": true,
+    "guards": true,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/technology/controller/technlogy.dart",
+    "lines": 173,
+    "controllers": [
+      "TechnlogyController"
+    ],
+    "async_count": 4,
+    "owned_resources": 6,
+    "cleanup": true,
+    "guards": true,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/technology/model/tech_model.dart",
+    "lines": 31,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/technology/view/screens/add_tech.dart",
+    "lines": 114,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/technology/view/screens/edittech.dart",
+    "lines": 193,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/technology/view/screens/technology.dart",
+    "lines": 43,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/features/technology/view/widgets/technology_body.dart",
+    "lines": 431,
+    "controllers": [],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/global/app_theme.dart",
+    "lines": 173,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/global/data.dart",
+    "lines": 26,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/global/html_platform.dart",
+    "lines": 9,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/global/html_stub.dart",
+    "lines": 7,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/global/html_web.dart",
+    "lines": 20,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/global/iframe_platform.dart",
+    "lines": 1,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/global/iframe_stub.dart",
+    "lines": 9,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/global/iframe_web.dart",
+    "lines": 26,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/global/ip_config.dart",
+    "lines": 77,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/main.dart",
+    "lines": 183,
+    "controllers": [
+      "ScreenController"
+    ],
+    "async_count": 1,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": [
+      "  // \u2705 Initialize SharedPreferences before running the app"
+    ]
+  },
+  {
+    "file": "lib/model/vlotage.dart",
+    "lines": 33,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/my_widget/home.dart",
+    "lines": 16,
+    "controllers": [],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/my_widget/sharable.dart",
+    "lines": 593,
+    "controllers": [
+      "SearchableDropdownController"
+    ],
+    "async_count": 1,
+    "owned_resources": 2,
+    "cleanup": true,
+    "guards": false,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/network/network.dart",
+    "lines": 77,
+    "controllers": [],
+    "async_count": 2,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": true,
+    "cache_markers": []
+  },
+  {
+    "file": "lib/shared_pref/cache.dart",
+    "lines": 32,
+    "controllers": [],
+    "async_count": 2,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": [
+      "  static late SharedPreferences sharedPreferences;",
+      "    sharedPreferences = await SharedPreferences.getInstance();"
+    ]
+  },
+  {
+    "file": "lib/test.dart",
+    "lines": 103,
+    "controllers": [
+      "GaugeController"
+    ],
+    "async_count": 0,
+    "owned_resources": 0,
+    "cleanup": false,
+    "guards": false,
+    "cache_markers": []
+  }
+]
