@@ -1,3 +1,4 @@
+import 'package:power_saving/core/widgets/form_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/core/constant/AppDimensions.dart';
@@ -22,8 +23,7 @@ class AddPlacesScreen extends StatelessWidget {
         title: "إضافة مكان جديد",
         backRoute: '/Places',
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppDimensions.paddingXL),
+      body: FormPage(
         child: GetBuilder<AddPlacesController>(
           init: AddPlacesController(),
           builder: (controller) {

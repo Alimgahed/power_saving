@@ -608,7 +608,7 @@ class TechBill extends StatelessWidget {
     Get.find<TechBillscontroller>();
     return AppScaffold(
       title: 'فواتير التقنيات',
-      showDrawer: false,
+      showDrawer: true,
       mobileAppBar: const CustomAppBar(title: 'فواتير التقنيات', backRoute: '/home'),
       body: RefreshIndicator(
         onRefresh: () async {

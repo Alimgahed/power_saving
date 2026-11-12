@@ -16,7 +16,7 @@ class PlaceTypesListScreen extends StatelessWidget {
       textDirection: TextDirection.rtl,
       child: AppScaffold(
         title: 'أنواع الأماكن ومعدلات الاستهلاك',
-        showDrawer: false,
+        showDrawer: true,
         mobileAppBar: CustomAppBar(
           title: 'أنواع الأماكن ومعدلات الاستهلاك',
           actions: [

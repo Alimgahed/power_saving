@@ -1,3 +1,4 @@
+import 'package:power_saving/core/widgets/form_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/chemcails/controller/add_chemacial.dart';
@@ -61,8 +62,7 @@ class EditChemcials extends StatelessWidget {
       title: "تعديل المرجع الكيميائي",
       mobileAppBar: appBarWidget,
       desktopHeader: appBarWidget,
-      body: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
+      body: FormPage(
           child: GetBuilder<addchemical>(
             builder: (controller) {
               return Column(

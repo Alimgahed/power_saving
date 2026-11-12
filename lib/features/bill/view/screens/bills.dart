@@ -141,7 +141,7 @@ class Bills extends StatelessWidget {
         const SizedBox(width: 16),
         // Add Bill Button
         ElevatedButton.icon(
-          onPressed: () => Get.offNamed('/addBill'),
+          onPressed: () => Get.toNamed('/Countrts'),
           icon: const Icon(Icons.add, size: 18),
           label: const Text('إضافة فاتورة'),
           style: ElevatedButton.styleFrom(

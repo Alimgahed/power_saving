@@ -1,3 +1,5 @@
+import 'package:power_saving/core/auth/session_manager.dart';
+import 'package:power_saving/features/home/view/widgets/home_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:power_saving/core/constant/colors.dart';
 
@@ -18,6 +20,7 @@ class RTLScaffold extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+        drawer: SessionManager.isAuthenticated ? HomeDrawer() : null,
         backgroundColor: backgroundColor ?? AppColors.background,
         appBar: appBar,
         body: body,

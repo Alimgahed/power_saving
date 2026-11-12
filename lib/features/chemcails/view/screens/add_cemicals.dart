@@ -1,3 +1,4 @@
+import 'package:power_saving/core/widgets/form_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/core/constant/AppDimensions.dart';
@@ -31,8 +32,7 @@ class AddChemicalScreen extends StatelessWidget {
       desktopHeader: appBarWidget,
       body: GetBuilder<addchemical>(
         builder: (controller) {
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(AppDimensions.paddingXL),
+          return FormPage(
             child: FormCard(
               child: Form(
                 key: _formKey,

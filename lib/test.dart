@@ -1,3 +1,6 @@
+import 'package:power_saving/core/auth/session_manager.dart';
+import 'package:power_saving/features/home/view/widgets/home_drawer.dart';
+import 'package:power_saving/core/widgets/custom_app_bar.dart';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -37,9 +40,8 @@ class AnimatedGauge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('عداد انميشين دائري'),
-      ),
+        drawer: SessionManager.isAuthenticated ? HomeDrawer() : null,
+      appBar: const CustomAppBar(title: 'عداد انميشين دائري', backRoute: '/home'),
       body: Center(
         child: Obx(() {
           // استخدام Obx لمراقبة التغييرات في القيمة

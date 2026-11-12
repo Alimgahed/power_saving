@@ -36,10 +36,8 @@ class HomeDrawer extends StatelessWidget {
                   _buildMenuItem(
                     icon: Icons.home_rounded,
                     text: "الرئيسية",
-                    onTap: () {
-                      Get.back(); // close drawer
-                    },
-                    isActive: true,
+                    onTap: () => _navigationHelper.navigateWithAuth('/home'),
+                    isActive: ModalRoute.of(context)?.settings.name == '/home',
                   ),
                   const SizedBox(height: 10),
 
@@ -78,7 +76,7 @@ class HomeDrawer extends StatelessWidget {
                     _buildMenuItem(
                       icon: Icons.place_outlined,
                       text: "المدن والقري",
-                      onTap: () => _navigationHelper.navigateWithAuth('./Places'),
+                      onTap: () => _navigationHelper.navigateWithAuth('/Places'),
                     ),
 
                   const SizedBox(height: 10),
@@ -93,13 +91,13 @@ class HomeDrawer extends StatelessWidget {
                     _buildMenuItem(
                       icon: Icons.receipt_long_rounded,
                       text: "الفواتير",
-                      onTap: () => _navigationHelper.navigateWithAuth('./bills'),
+                      onTap: () => _navigationHelper.navigateWithAuth('/bills'),
                     ),
                   if (_hasAccess([1, 2, 3, 7]))
                     _buildMenuItem(
                       icon: Icons.receipt_rounded,
                       text: "فواتير التقنيات",
-                      onTap: () => _navigationHelper.navigateWithAuth('./techBill'),
+                      onTap: () => _navigationHelper.navigateWithAuth('/techBill'),
                     ),
                   if (_hasAccess([1, 2]))
                     _buildMenuItem(
@@ -116,13 +114,13 @@ class HomeDrawer extends StatelessWidget {
                   _buildMenuItem(
                     icon: Icons.ev_station_rounded,
                     text: "متابعة المحطات",
-                    onTap: () => _navigationHelper.navigateWithAuth('./FollowingStations'),
+                    onTap: () => _navigationHelper.navigateWithAuth('/FollowingStations'),
                   ),
                   if (_hasAccess([1, 2, 6, 7]))
                     _buildMenuItem(
                       icon: Icons.water_drop_rounded,
                       text: "التوقعات",
-                      onTap: () => _navigationHelper.navigateWithAuth('./Predictions'),
+                      onTap: () => _navigationHelper.navigateWithAuth('/Predictions'),
                     ),
 
                   const SizedBox(height: 10),
@@ -130,19 +128,19 @@ class HomeDrawer extends StatelessWidget {
                   _buildMenuItem(
                     icon: Icons.bar_chart_rounded,
                     text: "التحليل الأقتصادي",
-                    onTap: () => _navigationHelper.navigateWithAuth('./Charts'),
+                    onTap: () => _navigationHelper.navigateWithAuth('/Charts'),
                   ),
                   if (_hasAccess([1, 2, 4, 3, 6, 7]))
                     _buildMenuItem(
                       icon: Icons.analytics_rounded,
                       text: "التقارير",
-                      onTap: () => _navigationHelper.navigateWithAuth('./Reports'),
+                      onTap: () => _navigationHelper.navigateWithAuth('/Reports'),
                     ),
                   if (_hasAccess([1, 5]))
                     _buildMenuItem(
                       icon: Icons.show_chart_rounded,
                       text: "منحني الأتزان",
-                      onTap: () => _navigationHelper.navigateWithAuth('./BlanceCart'),
+                      onTap: () => _navigationHelper.navigateWithAuth('/BlanceCart'),
                     ),
 
                   const SizedBox(height: 10),
@@ -280,8 +278,11 @@ class HomeDrawer extends StatelessWidget {
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      child: InkWell(
-        onTap: onTap,
+      child: Builder(builder: (context) => InkWell(
+        onTap: () {
+          Scaffold.of(context).closeDrawer();
+          onTap();
+        },
         borderRadius: BorderRadius.circular(10),
         splashColor: Colors.white10,
         highlightColor: Colors.white10,
@@ -309,7 +310,7 @@ class HomeDrawer extends StatelessWidget {
             ],
           ),
         ),
-      ),
+      )),
     );
   }
 

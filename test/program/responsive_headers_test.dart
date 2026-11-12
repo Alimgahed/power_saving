@@ -73,7 +73,7 @@ void main() {
       const MaterialApp(home: Scaffold(appBar: CustomAppBar(title: 'test'))),
     );
     final button = tester.widget<IconButton>(
-      find.widgetWithIcon(IconButton, Icons.arrow_forward),
+      find.ancestor(of: find.byIcon(Icons.arrow_back), matching: find.byType(IconButton)).first,
     );
     expect(button.tooltip, isNotNull);
   });

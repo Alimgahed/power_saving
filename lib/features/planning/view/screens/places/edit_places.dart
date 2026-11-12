@@ -1,3 +1,4 @@
+import 'package:power_saving/core/widgets/form_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/core/constant/AppDimensions.dart';
@@ -33,8 +34,7 @@ class EditPlacesScreen extends StatelessWidget {
         title: "تعديل مكان",
         backRoute: '/Places',
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppDimensions.paddingXL),
+      body: FormPage(
         child: GetBuilder<EditPlacesController>(
           init: EditPlacesController(),
           builder: (controller) {

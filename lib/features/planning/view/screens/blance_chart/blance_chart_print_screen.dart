@@ -1,3 +1,6 @@
+import 'package:power_saving/core/auth/session_manager.dart';
+import 'package:power_saving/features/home/view/widgets/home_drawer.dart';
+import 'package:power_saving/core/widgets/custom_app_bar.dart';
 import 'package:power_saving/core/utils/html_encoding.dart';
 import 'package:power_saving/global/html_platform.dart';
 import 'package:flutter/material.dart';
@@ -32,20 +35,9 @@ class _BalanceChartPrintScreenState extends State<BalanceChartPrintScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+        drawer: SessionManager.isAuthenticated ? HomeDrawer() : null,
         backgroundColor: Colors.grey.shade200,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-      backgroundColor: const Color(0xFF1E40AF),
-      elevation: 0,
-      title: const Text(
-        'نتائج منحنى الاتزان',
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          color: Colors.white,
-        ),
-      ),
-      centerTitle: true,
+        appBar: CustomAppBar(title: 'نتائج منحنى الاتزان', backRoute: '/BlanceCart',
       actions: [
         Row(
           children: [
@@ -76,24 +68,6 @@ class _BalanceChartPrintScreenState extends State<BalanceChartPrintScreen> {
         ),
       ),
       SizedBox(width: AppDimensions.paddingS),
-            Container(
-                margin: const EdgeInsets.only(left: AppDimensions.paddingL),
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_forward, color: AppColors.textWhite),
-                  onPressed: () {
-                    Get.offNamed('/BlanceCart');
-                    
-                  
-                  
-                  },
-                  style: IconButton.styleFrom(
-                    backgroundColor: AppColors.overlayBackground,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppDimensions.radiusS),
-                    ),
-                  ),
-                ),
-              ),
       
           ],
         ),

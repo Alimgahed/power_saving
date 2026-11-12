@@ -13,7 +13,7 @@ class AllUserScreen extends StatelessWidget {
     final AllUserController controller = Get.find<AllUserController>();
 
     return AppScaffold(
-      title: 'إدارة المستخدمين',
+      title: 'المستخدمين',
       actions: [
         IconButton(
           icon: const Icon(Icons.refresh, color: Colors.white),

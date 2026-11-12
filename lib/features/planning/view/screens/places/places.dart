@@ -1,3 +1,5 @@
+import 'package:power_saving/core/auth/session_manager.dart';
+import 'package:power_saving/features/home/view/widgets/home_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/core/widgets/buttons.dart';
@@ -18,6 +20,7 @@ class PlacesScreen extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+        drawer: SessionManager.isAuthenticated ? HomeDrawer() : null,
         backgroundColor: const Color(0xFFF8FAFC),
         appBar: ReusableAppBar(
           title: 'قائمة الأماكن',

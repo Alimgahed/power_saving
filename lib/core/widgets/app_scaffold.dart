@@ -1,3 +1,5 @@
+import 'package:power_saving/core/auth/session_manager.dart';
+import 'package:power_saving/core/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:power_saving/core/constant/colors.dart';
 
@@ -33,17 +35,14 @@ class AppScaffold extends StatelessWidget {
       child: Scaffold(
         key: _scaffoldKey,
         backgroundColor: AppColors.background,
-        appBar: mobileAppBar ?? AppBar(
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(gradient: AppGradients.header),
-          ),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          title: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
-          actions: actions,
-          foregroundColor: Colors.white,
-        ),
-        drawer: showDrawer ? HomeDrawer() : null,
+        appBar:
+            mobileAppBar ??
+            CustomAppBar(
+              title: title,
+              backRoute: '/home',
+              actions: actions,
+            ),
+        drawer: showDrawer && SessionManager.isAuthenticated ? HomeDrawer() : null,
         body: SafeArea(child: body),
         floatingActionButton: floatingActionButton,
       ),

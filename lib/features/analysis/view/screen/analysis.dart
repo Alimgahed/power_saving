@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/core/widgets/request_error_view.dart';
 import 'package:power_saving/core/widgets/app_scaffold.dart';
-import 'package:power_saving/core/widgets/custom_app_bar.dart';
 import 'package:power_saving/features/analysis/controller/analysis.dart';
 import 'package:power_saving/features/analysis/model/analysis.dart';
 import 'package:power_saving/features/home/model/home.dart';
@@ -37,8 +36,9 @@ class _AnalysisViewState extends State<AnalysisView> {
         if (!mounted || ModalRoute.of(context)?.isCurrent != true) return;
         Get.back();
       });
-      return const Scaffold(
-        body: Center(
+      return AppScaffold(
+        title: 'التحليل الاقتصادي',
+        body: const Center(
           child: CircularProgressIndicator(),
         ),
       );
@@ -47,14 +47,7 @@ class _AnalysisViewState extends State<AnalysisView> {
     return PopScope(
       canPop: true,
       child: AppScaffold(
-        title: 'التحليل الاقتصادي والإحصاءات',
-        showDrawer: false,
-        mobileAppBar: const CustomAppBar(
-          title: 'التحليل الاقتصادي والإحصاءات',
-        ),
-        desktopHeader: const CustomAppBar(
-          title: 'التحليل الاقتصادي والإحصاءات',
-        ),
+        title: 'التحليل الاقتصادي',
         body: GetBuilder<Analysis>(
           builder: (controller) {
             if (controller.errorMessage.isNotEmpty) {

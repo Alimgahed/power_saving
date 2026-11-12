@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:power_saving/core/constant/AppDimensions.dart';
-import 'package:power_saving/core/constant/colors.dart';
+import 'package:power_saving/core/widgets/app_back_button.dart';
+import 'package:power_saving/core/widgets/app_toolbar.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -19,43 +18,22 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      flexibleSpace: Container(
-        decoration: const BoxDecoration(gradient: AppGradients.header),
-      ),
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      title: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: AppColors.textWhite,
-        ),
-      ),
+    return AppToolbar(
+      title: Text(title),
       centerTitle: true,
-      actions: [
-        if (showBackButton)
-          Container(
-            margin: const EdgeInsets.only(left: AppDimensions.paddingL),
-            child: IconButton(
-              tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-              icon: const Icon(Icons.arrow_forward, color: AppColors.textWhite),
-              onPressed: () {
-                // To avoid lag and rebuilding screens, simply use Get.back()
-                Get.back();
-              },
-              style: IconButton.styleFrom(
-                backgroundColor: Colors.white.withOpacity(0.2),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-                ),
-              ),
-            ),
-          ),
-        if (actions != null) ...actions!,
-      ],
-      automaticallyImplyLeading: false,
+      leading:
+          showBackButton
+              ? AppBackButton(
+                onRootBack: () {
+                  // Public registration retains its public login destination.
+                  final destination = backRoute == '/Login' ? '/Login' : '/home';
+                  if (ModalRoute.of(context)?.settings.name != destination) {
+                    Navigator.of(context).pushReplacementNamed(destination);
+                  }
+                },
+              )
+              : null,
+      actions: actions,
     );
   }
 

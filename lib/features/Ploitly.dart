@@ -1,3 +1,6 @@
+import 'package:power_saving/core/auth/session_manager.dart';
+import 'package:power_saving/features/home/view/widgets/home_drawer.dart';
+import 'package:power_saving/core/widgets/custom_app_bar.dart';
 import 'package:power_saving/core/widgets/request_error_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,28 +14,8 @@ class SunburstPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "نسبة توزيع انتاج المياة",
-          style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: const Color(0xFF1E40AF),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.arrow_forward, color: Colors.white),
-            onPressed: () {
-              Get.offNamed('/home');
-            },
-            style: IconButton.styleFrom(
-              backgroundColor: Colors.white.withOpacity(0.1),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-        ],
-      ),
+        drawer: SessionManager.isAuthenticated ? HomeDrawer() : null,
+      appBar: const CustomAppBar(title: 'التحليل الاقتصادي', backRoute: '/home'),
       body: GetBuilder<FinancialController>(
         builder: (c) {
           if (c.loading.value) {

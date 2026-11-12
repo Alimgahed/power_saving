@@ -1,3 +1,5 @@
+import 'package:power_saving/core/widgets/app_toolbar.dart';
+import 'package:power_saving/core/widgets/app_back_button.dart';
 import 'package:power_saving/core/utils/html_encoding.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -40,8 +42,6 @@ class _ReportsState extends State<Reports> {
   final GlobalKey<FormState> globalKey = GlobalKey<FormState>();
 
   // ─── Design tokens (page-local) ───
-  static const _kHeaderPaddingH = 24.0;
-  static const _kHeaderPaddingV = 16.0;
   static const _kSectionMargin = 16.0;
   static const _kCardRadius = 10.0;
   static const _kInputRadius = 8.0;
@@ -49,20 +49,20 @@ class _ReportsState extends State<Reports> {
   static final _kBorderColor = Colors.grey.shade300;
   static final _kNeutralBg = const Color(0xFFF8FAFC);
   static final _kHeaderBlue = const Color(0xFF1E40AF);
-  static final _kHeaderBlueDark = const Color(0xFF1E3A8A);
 
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
       title: 'التقارير',
       desktopHeader: const SizedBox.shrink(),
-      mobileAppBar: const PreferredSize(preferredSize: Size.zero, child: SizedBox.shrink()),
+      mobileAppBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: GetBuilder<ReportsController>(builder: _buildHeader),
+      ),
       body: GetBuilder<ReportsController>(
         builder: (controller) {
           return Column(
             children: [
-              // ── Level 1: Header ──
-              _buildHeader(controller),
               // ── Level 2: Filters ──
               _buildFiltersSection(controller),
               // ── Level 3+4: Report card (toolbar + table) ──
@@ -119,46 +119,16 @@ class _ReportsState extends State<Reports> {
   //  LEVEL 1: HEADER
   // ═══════════════════════════════════════════════════
   Widget _buildHeader(ReportsController controller) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: _kHeaderPaddingH, vertical: _kHeaderPaddingV),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [_kHeaderBlueDark, _kHeaderBlue],
-          begin: Alignment.centerRight,
-          end: Alignment.centerLeft,
-        ),
-      ),
-      child: Row(
+    return AppToolbar(
+      leading: const AppBackButton(),
+      title: const Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          // ── Report icon ──
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: const Icon(Icons.assessment_outlined, color: Colors.white, size: 22),
-          ),
-          const SizedBox(width: 12),
-          // ── Title + Subtitle ──
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'تقارير الفروع',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white, height: 1.2),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  'عرض شامل لبيانات جميع الفروع',
-                  style: TextStyle(fontSize: 13, color: Colors.white.withOpacity(0.8), height: 1.3),
-                ),
-              ],
-            ),
-          ),
-          // ── Print button ──
+          Text('تقارير الفروع'),
+          Text('عرض شامل لبيانات جميع الفروع', style: TextStyle(fontSize: 11, color: Colors.white70)),
+        ],
+      ),
+      actions: [
           ElevatedButton.icon(
             onPressed: () async {
               controller.sumvalueofreport(controller.filteredBranchs);
@@ -174,22 +144,8 @@ class _ReportsState extends State<Reports> {
             icon: const Icon(Icons.print_outlined, size: 16),
             label: const Text('طباعة التقرير', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
           ),
-          const SizedBox(width: 10),
-          // ── Back button ──
-          Material(
-            color: Colors.white.withOpacity(0.12),
-            borderRadius: BorderRadius.circular(8),
-            child: InkWell(
-              borderRadius: BorderRadius.circular(8),
-              onTap: () => Get.offNamed("/home"),
-              child: const Padding(
-                padding: EdgeInsets.all(8),
-                child: Icon(Icons.arrow_forward, color: Colors.white, size: 20),
-              ),
-            ),
-          ),
-        ],
-      ),
+        const SizedBox(width: 8),
+      ],
     );
   }
 

@@ -1,3 +1,4 @@
+import 'package:power_saving/core/widgets/form_page.dart';
 import 'package:power_saving/core/widgets/request_error_view.dart';
 // lib/features/stations/view/add_station_screen.dart
 import 'package:flutter/material.dart';
@@ -28,8 +29,7 @@ class AddStationScreen extends StatelessWidget {
       title: "إضافة محطة جديدة",
       mobileAppBar: appBarWidget,
       desktopHeader: appBarWidget,
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppDimensions.paddingXL),
+      body: FormPage(
         child: GetBuilder<AddStationController>(
           init: AddStationController(),
           builder: (controller) {

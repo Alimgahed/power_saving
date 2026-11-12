@@ -12,7 +12,11 @@ class FormCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: padding ?? const EdgeInsets.all(AppDimensions.paddingXXL),
+      padding: padding ?? EdgeInsets.all(
+        MediaQuery.sizeOf(context).width < 600
+            ? AppDimensions.paddingM
+            : AppDimensions.paddingL,
+      ),
       decoration: BoxDecoration(
         color: AppColors.cardBackground,
         borderRadius: BorderRadius.circular(AppDimensions.radiusL),

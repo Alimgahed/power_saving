@@ -1,3 +1,4 @@
+import 'package:power_saving/features/home/view/widgets/home_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -42,6 +43,7 @@ class HomeScreen extends StatelessWidget {
       textDirection: ui.TextDirection.rtl,
       child: Scaffold(
         key: _scaffoldKey,
+        appBar: HomeAppBar(scaffoldKey: _scaffoldKey),
         backgroundColor: AppColors.background,
         drawer: HomeDrawer(),
         body: Stack(

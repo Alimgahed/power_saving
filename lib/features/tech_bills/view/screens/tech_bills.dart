@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:power_saving/core/widgets/main_screen/reuseable_appbar.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/tech_bills/controller/techbills.dart';
 import 'package:power_saving/my_widget/sharable.dart';
@@ -11,7 +12,7 @@ class TechBills extends StatelessWidget {
     final controller = Get.find<Techbills>();
 
     return AppScaffold(
-      title: 'قائمة فواتير التقنيات',
+      title: 'المكتب الفني',
       mobileAppBar: _buildAppBar(controller),
       desktopHeader: _buildAppBar(controller),
       body: RefreshIndicator(
@@ -24,85 +25,15 @@ class TechBills extends StatelessWidget {
   }
 
   PreferredSizeWidget _buildAppBar(Techbills controller) {
-    return AppBar(
-      flexibleSpace: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF1E3A8A), Color(0xFF3B82F6)], // Similar to AppGradients.header
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-          ),
-        ),
-      ),
-      title: Obx(() => controller.isSearching.value
-          ? TextField(
-              controller: controller.searchController,
-              autofocus: true,
-              style: const TextStyle(color: Colors.white),
-              decoration: const InputDecoration(
-                hintText: 'ابحث في الفواتير...',
-                hintStyle: TextStyle(color: Colors.white70),
-                border: InputBorder.none,
-              ),
-              onChanged: (value) {
-                controller.onSearchChanged(value);
-              },
-            )
-          : const Text(
-              'قائمة فواتير التقنيات',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              ),
-            )),
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      actions: [
-        Container(
-          margin: const EdgeInsets.only(left: 16),
-          child: Obx(() => Row(
-                children: [
-                  if (!controller.isSearching.value) ...[
-                    IconButton(
-                      icon: const Icon(Icons.search, color: Colors.white),
-                      onPressed: controller.toggleSearch,
-                      style: IconButton.styleFrom(
-                        backgroundColor: Colors.white.withOpacity(0.1),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                  ] else ...[
-                    IconButton(
-                      icon: const Icon(Icons.close, color: Colors.white),
-                      onPressed: controller.toggleSearch,
-                      style: IconButton.styleFrom(
-                        backgroundColor: Colors.white.withOpacity(0.1),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                  ],
-                  const SizedBox(width: 12),
-                  IconButton(
-                    icon: const Icon(Icons.arrow_forward, color: Colors.white),
-                    onPressed: () => Get.back(),
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.white.withOpacity(0.1),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                ],
-              )),
-        ),
-      ],
-      automaticallyImplyLeading: false,
+    return ReusableAppBar(
+      title: 'المكتب الفني',
+      isSearching: controller.isSearching,
+      searchController: controller.searchController,
+      onSearchChanged: controller.onSearchChanged,
+      hintText: 'ابحث في الفواتير...',
+      onSearchToggle: controller.toggleSearch,
+      onNavigateHome: () => Get.offNamed('/home'),
+
     );
   }
 

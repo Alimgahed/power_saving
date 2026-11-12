@@ -1,3 +1,6 @@
+import 'package:power_saving/core/widgets/custom_app_bar.dart';
+import 'package:power_saving/core/auth/session_manager.dart';
+import 'package:power_saving/features/home/view/widgets/home_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/features/planning/model/ml_forecast_model.dart';
@@ -21,6 +24,8 @@ class _MLForecastResultScreenState extends State<MLForecastResultScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+        appBar: const CustomAppBar(title: 'نتائج التنبؤ (تعلم الآلة)'),
+        drawer: SessionManager.isAuthenticated ? HomeDrawer() : null,
         backgroundColor: const Color(0xFFF1F5F9), // light slate background
         body: SafeArea(
           child: SingleChildScrollView(

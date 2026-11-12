@@ -20,7 +20,7 @@ class FollowingStationsScreen extends StatelessWidget {
 
     return AppScaffold(
       title: 'متابعة المحطات',
-      showDrawer: false,
+      showDrawer: true,
       desktopHeader: appBarWidget,
       mobileAppBar: appBarWidget,
       body: GetBuilder<FollowingStationsController>(

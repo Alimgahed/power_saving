@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:power_saving/core/widgets/app_toolbar.dart';
 import 'package:get/get.dart';
 import 'package:power_saving/core/constant/AppDimensions.dart';
 import 'package:power_saving/core/constant/colors.dart';
+import 'package:power_saving/core/widgets/app_back_button.dart';
 
 class ReusableAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -30,13 +32,13 @@ class ReusableAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => AppBar(
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(gradient: AppGradients.header),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        automaticallyImplyLeading: false,
+      () => AppToolbar(
+        centerTitle: !isSearching.value,
+        leading: AppBackButton(onRootBack: () {
+          if (ModalRoute.of(context)?.settings.name != '/home') {
+            Navigator.of(context).pushReplacementNamed('/home');
+          }
+        }),
         title:
             isSearching.value
                 ? TextFormField(
@@ -59,7 +61,9 @@ class ReusableAppBar extends StatelessWidget implements PreferredSizeWidget {
                       vertical: AppDimensions.paddingXS,
                     ),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.radiusM,
+                      ),
                       borderSide: BorderSide.none,
                     ),
                     errorStyle: const TextStyle(color: Colors.red),
@@ -82,10 +86,14 @@ class ReusableAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
         actions: [
           ...customActions,
-          if (!isSearching.value)
-            _IconAction(icon: Icons.search, onTap: onSearchToggle),
-          if (!isSearching.value) const SizedBox(width: AppDimensions.paddingS),
-          _IconAction(icon: Icons.arrow_forward, onTap: () => Get.back()),
+          _IconAction(
+            icon: isSearching.value ? Icons.close : Icons.search,
+            tooltip:
+                isSearching.value
+                    ? MaterialLocalizations.of(context).closeButtonTooltip
+                    : MaterialLocalizations.of(context).searchFieldLabel,
+            onTap: onSearchToggle,
+          ),
           const SizedBox(width: AppDimensions.paddingS),
         ],
       ),
@@ -99,12 +107,18 @@ class ReusableAppBar extends StatelessWidget implements PreferredSizeWidget {
 class _IconAction extends StatelessWidget {
   final IconData icon;
   final VoidCallback onTap;
+  final String tooltip;
 
-  const _IconAction({required this.icon, required this.onTap});
+  const _IconAction({
+    required this.icon,
+    required this.onTap,
+    required this.tooltip,
+  });
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
+      tooltip: tooltip,
       icon: Icon(icon, color: AppColors.textWhite),
       onPressed: onTap,
       style: IconButton.styleFrom(
