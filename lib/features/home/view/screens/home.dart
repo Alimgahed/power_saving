@@ -1,4 +1,4 @@
-import 'package:power_saving/features/home/view/widgets/home_app_bar.dart';
+import 'package:power_saving/core/widgets/app_drawer_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -43,7 +43,6 @@ class HomeScreen extends StatelessWidget {
       textDirection: ui.TextDirection.rtl,
       child: Scaffold(
         key: _scaffoldKey,
-        appBar: HomeAppBar(scaffoldKey: _scaffoldKey),
         backgroundColor: AppColors.background,
         drawer: HomeDrawer(),
         body: Stack(
@@ -192,16 +191,8 @@ class HomeScreen extends StatelessWidget {
 
     return Row(
       children: [
-        Container(
-          decoration: BoxDecoration(
-            color: AppColors.primary.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: IconButton(
-            icon: Icon(Icons.menu, color: AppColors.primary, size: 28),
-            onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-            tooltip: 'القائمة الرئيسية',
-          ),
+        AppDrawerButton(
+          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
         ),
         const SizedBox(width: 16),
         Expanded(

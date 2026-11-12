@@ -78,14 +78,15 @@ class ReusableAppBar extends StatelessWidget implements PreferredSizeWidget {
                 )
                 : Text(
                   title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: AppColors.textWhite,
                   ),
                 ),
-        actions: [
-          ...customActions,
+        leftActions: [
           _IconAction(
             icon: isSearching.value ? Icons.close : Icons.search,
             tooltip:
@@ -95,6 +96,7 @@ class ReusableAppBar extends StatelessWidget implements PreferredSizeWidget {
             onTap: onSearchToggle,
           ),
           const SizedBox(width: AppDimensions.paddingS),
+          ...customActions,
         ],
       ),
     );
